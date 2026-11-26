@@ -152,5 +152,78 @@
     "symbol": "memmap_init_range+0xfe",
     "scratch_restored_and_hart_resumed": true,
     "interactive_shell": "not verified"
+  },
+  "rom4_fpga_implementation": {
+    "tool": "Vivado 2024.2",
+    "part": "xcvu9p-flga2104-2L-e",
+    "target_mhz": 100,
+    "post_route_physopt": true,
+    "route": {
+      "routable": 113426,
+      "fully_routed": 113426,
+      "routing_errors": 0
+    },
+    "timing": {
+      "setup": {
+        "slack_ns": -0.631,
+        "total_negative_ns": -294.418,
+        "failed": 1228,
+        "count": 129561
+      },
+      "hold": {
+        "slack_ns": 0.001,
+        "total_negative_ns": 0.0,
+        "failed": 0,
+        "count": 128859
+      },
+      "pulse_width": {
+        "slack_ns": 0.143,
+        "total_negative_ns": 0.0,
+        "failed": 0,
+        "count": 50937
+      }
+    },
+    "resources": {
+      "CLB LUTs": 60107.0,
+      "CLB Registers": 42501.0,
+      "Block RAM Tile": 203.5,
+      "DSPs": 28.0,
+      "URAM": 0.0
+    },
+    "check_timing": {
+      "no_clock": 0,
+      "constant_clock": 0,
+      "pulse_width_clock": 0,
+      "unconstrained_internal_endpoints": 0,
+      "no_input_delay": 5,
+      "no_output_delay": 6,
+      "multiple_clock": 0,
+      "generated_clocks": 0,
+      "loops": 0,
+      "partial_input_delay": 0,
+      "partial_output_delay": 0,
+      "latch_loops": 0
+    },
+    "post_route_reports_sha256": {
+      "route-status.rpt": "37783986fadbfcb33ef6f520c4cb013b1a339a5c656ce2cd6d3aa60da4cfb30a",
+      "full-timing.rpt": "216d5a778e6e1cb49c0729c0d5183345ffccda52125937ebf923fea3c5072adf",
+      "check-timing.rpt": "faae2d8c9a19c4e9dde86f5da29a7efbd7e279ed97e0db40b62ff0fc4b20ce0c",
+      "routed-utilization.rpt": "58527975d33d578a7c3f5692d641ac0392001696ec8f651172eb99f1f1e99164",
+      "cdc.rpt": "26e564d1e19ea139d737c7aab33aac8cae4aaef2ce9fcc2a2af34c38e468fdf4",
+      "clock-interaction.rpt": "ba3c0a88cc931f5ba60d7d838ac3e84272e95c2d42d895043b4d25aa2ff9d919",
+      "pulse-width.rpt": "51972e02abad251b0ec27e563a6b29be1471366d4d91374117bc631f9e6e955c",
+      "methodology.rpt": "08bc0f64e22b9bab5ced9531205632538575e97d19fcfa1abe95c48f3500f6d3",
+      "routed-clocks.rpt": "72d6791a3fb2cb1047d0ab94b39ccf403dfade758535a16efe9ee5ff3b8024f7",
+      "routed-drc.rpt": "1b60d45389590ccccec0d4d5881cbc6fd809a521ae5acbfecc925ad3f2daae4c"
+    },
+    "critical_setup_path": {
+      "from": "chiptop0/system/cbus/buffer/nodeOut_a_q/wrap_1_reg/C",
+      "to": "chiptop0/system/tlDM/dmInner/dmInner/abstractDataMem_7_reg[2]/CE",
+      "logic_levels": 10,
+      "datapath_ns": 12.383,
+      "route_ns": 11.587
+    },
+    "bit_written": false,
+    "timing_met": false
   }
 }

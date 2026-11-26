@@ -9,6 +9,7 @@
 | 基线 Linux · Rocket ChipTop | 模拟 JTAG 预载固件。第 40,000,000 周期停核读回 DPC `0xffffffff8018fe8e`、S 态、`satp=0x8000000000080522`（Sv39）。在该固件对应的 `vmlinux` 匹配 `memmap_init_range+0xfe`；恢复借用的 x5 并恢复执行 | 证明 Linux 已执行内存初始化，单次取样不证明已完成初始化，也不是 shell、SD 启动或实板 DDR 验收 |
 | QEMU virt 基线 Linux | 10 个独立进程：initramfs、16 MiB 用户内存以及交互命令回显全部成功；基线载荷 SHA-256 `7a8f9932796747be2cd54390af7adf88ba5b156e54069884946185fef47b41c9` | 非板级现场测试 |
 | 可选 Dot4 · Rocket ChipTop | JTAG 设置 PC、预装模拟 RAM，Rocket 自己访问 `0x64002000`。695,296 个模拟周期，完整 UART 标志 `DOT4_MMIO_PASS vectors=257 protocol_errors_checked=2`；空取、重复提交均被识别 | 不是从卡加载；此数包含启动和打印，不是算术单元延迟或加速比。Linux ioctl 和实板仍未验证 |
+| ROM4 · 完整 VCU118 布线后 | Vivado 2024.2：113,426 / 113,426 个网络完全布线。100 MHz 时最差建立 −0.631 ns，1,228 个端点失败（TNS −294.418 ns）；最差保持 +0.001 ns，脉宽裕量 +0.143 ns | **时序不通过**，构建拒绝生成 bit。最差路径是控制总线至调试寄存器写使能，不据此更改 CPU 级数或宣称达到目标频率 |
 | 物理板，只读 | Vivado 2024.2 识别单一 XCVU9P，读取 3 个 SLR 的配置状态；Windows 打开 FPGA 侧 CP2105 Standard 串口（115200、8N1），6 秒被动窗口收到 0 字节 | 当前板内设计归属未知；不能作为本工程的启动、双向 UART 或 DDR 测试 |
 
 ## 如何复核
