@@ -39,6 +39,18 @@ python scripts/review-coremark-matrix.py artifacts/split5h-impl-a $capture artif
 
 每份程序三轮，每轮两套种子，各 12,000 次；所有 CRC 通过。距目标仍差 4.05 倍。[逐次实板记录](coremark-1000-board.json)。
 
+## 第二组实板对照：编译器和链接优化
+
+同一块 VCU118、同一 100 MHz Rocket bitstream。新镜像中保留字节相同的 GCC 13.3 对照 ELF；同一次 Linux 启动按 ABC / BCA / CAB 交错执行九次。每次都是一个上下文、性能与验证种子各 12,000 轮。
+
+| 配置 | 性能种子中位数（次/秒） | 验证中位数 | 相对本次对照 |
+|---|---:|---:|---:|
+| o3-zb | 246.715599 | 244.992956 | +0.000% |
+| g15-zb-lto | 254.231902 | 252.812540 | +3.047% |
+| o3-zb-lto-unroll | 251.366807 | 250.579465 | +1.885% |
+
+最快配置的三次性能种子：**254.285775 / 254.215744 / 254.231902** 次/秒，非认证成绩。三次验证种子均通过，所有 18 次计时均超过 10 秒，主机墙钟与客机相符。对同批次对照快 3.047%，还需 3.93 倍才到单核 1,000。参见[完整记录](coremark-1000-compilers-board.json)和[复现命令](performance-first.md#复现实验)。本实验比较组合，不把收益全部归给 GCC 版本或 LTO。
+
 ## 硬件候选和预算
 
 第一个对照是单 hart 的 BOOM v3 Medium（两路译码、乱序），板级时钟目标仍为 100 MHz；用 `bash scripts/generate-perf-boom.sh` 独立生成。即使生成 RTL 也不是实板成绩。优先比较同一通用 `rv64gc` ELF，再做专门优化；不假设该核也支持 Rocket 的 Zba/Zbb。

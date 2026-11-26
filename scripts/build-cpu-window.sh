@@ -40,6 +40,9 @@ for t,expected in [('performance',('e9f5','e714','1fd7','8e3a')),('validation',(
 PY
 flags=("${opts[@]}" -ffunction-sections -fdata-sections -fno-pie -no-pie -fno-stack-protector -nostdlib -static -ffreestanding -fno-builtin -mcmodel=medany -march="$arch" -mabi=lp64 -I"$src/posix" -I"$src" -DFLAGS_STR='"diagnostic"' -DITERATIONS=4)
 printf '%s\n' "$profile" "${flags[@]}" >"$out/build-flags.txt"
-"${cc}gcc" "${flags[@]}" -include "$out/reference.h" -T software/bare/layout.ld -Wl,--gc-sections,--build-id=none software/bare/entry.S software/cpu-window/window.c "$src"/{core_list_join,core_main,core_matrix,core_state,core_util}.c -o "$out/window.elf"
+# GCC otherwise leaves its randomized temporary assembler object name in the
+# ELF symbol table. A fixed basename preserves both code and reproducible ELF IDs.
+"${cc}gcc" "${flags[@]}" -c software/bare/entry.S -o "$out/entry.o"
+"${cc}gcc" "${flags[@]}" -include "$out/reference.h" -T software/bare/layout.ld -Wl,--gc-sections,--build-id=none "$out/entry.o" software/cpu-window/window.c "$src"/{core_list_join,core_main,core_matrix,core_state,core_util}.c -o "$out/window.elf"
 "${cc}objcopy" -O binary "$out/window.elf" "$out/window.bin"; "${cc}objdump" -d "$out/window.elf" >"$out/disasm.txt"; "${cc}nm" -n "$out/window.elf" >"$out/symbols.txt"; if [[ $profile != *lto* ]]; then grep -q ' T iterate$' "$out/symbols.txt"; fi; grep -q '0000000080000000 T _start$' "$out/symbols.txt"
 (cd "$out" && sha256sum window.bin window.elf > inputs.sha256); echo CPU_WINDOW_BUILT_NOT_A_SCORE

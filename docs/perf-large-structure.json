@@ -1,0 +1,17 @@
+{
+  "rob_banks": 3,
+  "rob_rows_per_bank": 32,
+  "rob_entries": 96,
+  "rtl_sha256": {
+    "ChipTop.sv": "f074cdb530c7197a6fe17e473ed72add543ac12276cd631b724afc223e79b0fb",
+    "DigitalTop.sv": "ccff61fa66ad261ab306f3fe54052445d622f4b481a4095450a04dc8cf417cc1",
+    "TilePRCIDomain.sv": "56e9771d2d013788c435b66f2c31e7d27fa85537ba8fe1830e5a942e6c87749f",
+    "BoomTile.sv": "6a5f32c883a82437ee5d38ee0ddc00d503f7314bf3892530c4537871c9c67541",
+    "BoomCore.sv": "617cbcd7fc40e5f0c075d3275ea84405989dc8e42e0ed4dd00577f8ab2a13637",
+    "Rob.sv": "8cab31a95167da2c0e77bf9acb91ae1f80bc7108175a7899652904287ae58c37"
+  },
+  "core": "ChipTop.system.tile_prci_domain.element_reset_domain_boom_tile.core",
+  "decoder_count": 3,
+  "architectural_commit_lanes": 3,
+  "scope": "generated structure only; not sustained IPC, pipeline depth, clock signoff or board performance"
+}
