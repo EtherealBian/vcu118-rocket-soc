@@ -1,0 +1,95 @@
+{
+  "scope": "Functional ChipTop pin simulation, behavioral TL memory, ROM and DT checked against HDL. Not board, PLL, physical DDR or Linux validation.",
+  "harts": 4,
+  "uart_pbus_design_mhz": 150,
+  "ticks_per_bit": 1302,
+  "first_byte_edge_intervals": 9,
+  "wrong_rate_ticks_rejected": 868,
+  "rom_dtb_sha256": "b10237a68abd937a6fc125e8be1eaa5549437b6bb9e052e47cd11b38f9a035e0",
+  "inputs": {
+    "model": "7ab356e9760e955e7bf662f99af3c1f77eeac6cc210394a0b5877f50aafd7968",
+    "CANDIDATE.sha256": "74aa8f0aa280284ef7b04fd721c82cda0639e2b3e5c809cda62ef8c9f4fcdd35",
+    "sdboot.bin": "5502250cf7624d1086c4ab791636174cb56f9c41e99576dec835009a6d81ae14",
+    "VChipTop__ALL.a": "84e30e47ea4f43973bf96978277266de7f59fd4d00b169d2d1efb8600945a121",
+    "probe.elf": "584e11d88598e3fa5bbcd690637589bf85289b1ed6bdef01b0f99d8f96b2de05",
+    "probe.frame": "51faa0033f553d4da6bc56f0c740c0b309c20f86c6a57cc83ec963f845f5519f",
+    "crc.frame": "397175d673f49fdf3e4e0e374bcd822d25f236bcf394314ac3eb5d3a3ad736e7",
+    "rom_link.cpp": "adf047c2485e90e0fb8fda49702408dc9282cad2ba06e4b67c429cea6609ad4c",
+    "rocket_chiptop.cpp": "9fd708b984cd078932d1727a881bced76a745a5819f0073a7020b1b9d0ac0ea6",
+    "chiptop_address.hpp": "1a79c1e91ac8f1b34e4922f5b9069115a19b7f1e53d36274a332bf17a50c2315",
+    "chiptop_debug.hpp": "aaa4817843798f11cf68f41dcffc0c2dfde059cc7f79b7273ecf020f7e0be78f",
+    "chiptop_debug_slave.hpp": "070f4c91a7ef46f329b12584093c2d65a0e0082bfce605c734c4a84b4b0da18b",
+    "chiptop_recovery.hpp": "f44541458bb364bf1e0d5039562406530a5280fc6801ff7a79c08724a21e1cd9",
+    "chiptop_sba.hpp": "ab2f34bd3025d4d0c012a7f48f3177e1a0b396207a3b10e183a0cb2717050417",
+    "chiptop_sd.hpp": "a5f5d11134f1b40dadc7b58cd749d47e09dafd1fdda6f9ac25b1f6e7329f57d4",
+    "quad_stage_observer.hpp": "d5d078db3136e4568cbde2958a56e1b33cc8c51ec3c5d864a0f32a7ad940d04b"
+  },
+  "valid_frame": {
+    "mode": "quad",
+    "frame_bytes": 548,
+    "cycles": 8284241
+  },
+  "corrupt_frame": {
+    "mode": "crc",
+    "frame_bytes": 20,
+    "cycles": 706556
+  },
+  "pipeline_trace": {
+    "halfword_decode_rows": 8,
+    "halfword_issue_kills": 8,
+    "scope": "Warm, aligned integer loop only; read-only samples after rising edges. Stalls, misses, RVC and traps are not assigned a fixed latency.",
+    "stages": [
+      "F0 request",
+      "F1",
+      "F2",
+      "A fetch queue head",
+      "D aligned instruction",
+      "I decoded instruction",
+      "X",
+      "M",
+      "W valid retirement"
+    ],
+    "harts": [
+      {
+        "hart": 0,
+        "retirements": 256,
+        "contiguous_witnesses": 251,
+        "first": {
+          "pc": "0x80000084",
+          "first_cycle": 7424667,
+          "retire_cycle": 7424675
+        }
+      },
+      {
+        "hart": 1,
+        "retirements": 256,
+        "contiguous_witnesses": 251,
+        "first": {
+          "pc": "0x80000084",
+          "first_cycle": 7424660,
+          "retire_cycle": 7424668
+        }
+      },
+      {
+        "hart": 2,
+        "retirements": 256,
+        "contiguous_witnesses": 251,
+        "first": {
+          "pc": "0x80000084",
+          "first_cycle": 7424683,
+          "retire_cycle": 7424691
+        }
+      },
+      {
+        "hart": 3,
+        "retirements": 256,
+        "contiguous_witnesses": 251,
+        "first": {
+          "pc": "0x80000084",
+          "first_cycle": 7424675,
+          "retire_cycle": 7424683
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "scope": "Sealed HDL inputs, including the board harness. PLL constraints, generated ROM/DT semantics, routed frequency, and board performance require separate checks.",
+  "hdl_files": 535,
+  "byte_identical_hdl_files": 531,
+  "ordered_list_preserved_after_renaming": true,
+  "changes": {
+    "rtl/AsyncResetRegVec_w14_i0.sv": [
+      "b6d5ccf81e9ad7e7f950399e74e3d9f1450efce4c448e508d1aea23a34cfd61f",
+      "5e5410088f012ef18ba6d9fc2e052b87fbb1f79749dc2a326346f818acd5b7d7"
+    ],
+    "rtl/ResetWrangler.sv": [
+      "3c7d279e814fa41290b206d6e799fea0014c705b53196652f21e0b42dbecd526",
+      "4b2df154f1a255df77fb697284c8aa026f1737d3d8c627a7f664725fd6b43724"
+    ],
+    "rtl/TLROM.sv": [
+      "f80133f041e64408e795ca849f43aa2486863b4f1e4159557c6907e2dc35f813",
+      "400f626bdbf92c73d6e10bcf2ad652ed779f8e57ced0cd7abb1f09f5f84ff728"
+    ],
+    "rtl/TLUART.sv": [
+      "83ec21767c347f8f2ba7797287445952b6974ac9c118d814f90a1fcb3cc410b8",
+      "1be569d1a8877b938086172b8481f2a2b1e7365c5a01a41234eba89bdb53c4b1"
+    ]
+  },
+  "renamed": {
+    "rtl/AsyncResetRegVec_w14_i0.sv": "rtl/AsyncResetRegVec_w15_i0.sv",
+    "rtl/chipyard.fpga.vcu118.VCU118FPGATestHarness.PerfLargeBoomVCU118Config.top.mems.v": "rtl/chipyard.fpga.vcu118.VCU118FPGATestHarness.Perf175LargeBoomVCU118Config.top.mems.v",
+    "rtl/chipyard.fpga.vcu118.VCU118FPGATestHarness.PerfLargeBoomVCU118Config.model.mems.v": "rtl/chipyard.fpga.vcu118.VCU118FPGATestHarness.Perf175LargeBoomVCU118Config.model.mems.v"
+  },
+  "inputs": [
+    "9bd04af0410dbad475d7898c438094785fb232c3178fc225a0e38bcaa476d8a1",
+    "748fb6f56d189910df256774a23cd17c1785b596eb216f05e39a7387c2b4a1d0"
+  ]
+}

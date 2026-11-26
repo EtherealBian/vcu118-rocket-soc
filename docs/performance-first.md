@@ -6,7 +6,7 @@
 |---|---|---|
 | 单核 Rocket，顺序单发射 | 只换编译器、LTO 或循环展开，实板速度会变多少？ | 使用已验证的 100 MHz 系统；同一次 Linux 启动交错测量 |
 | 单核 BOOM v3 Medium，双路 | 在不改变 ELF 时，乱序执行能省多少周期？ | 已有 RTL 计数，100 MHz 整机实现尚未经布线签核 |
-| **单核 BOOM v3 Large，三路译码/提交，96 项 ROB** | 和双路相比，省下的周期能否抵消更宽设计的频率损失？ | 同一 `-O3` ELF 在 100 MHz 对照 RTL 中的六个窗口均比双路快；已启动独立的 175 MHz 候选生成。175 MHz 不是已实现频率 |
+| **单核 BOOM v3 Large，三路译码/提交，96 项 ROB** | 和双路相比，省下的周期能否抵消更宽设计的频率损失？ | 同一 `-O3` ELF 在 100 MHz 对照 RTL 中的六个窗口均比双路快；175 MHz 候选 RTL 已生成并核对三路/96 项 ROB；尚无该频率的整机布线签核。175 MHz 不是已实现频率 |
 | 四核九级 Rocket | 九级短路径是否正确？多核 Linux 和共享内存是否正确？ | [SMP 与九级验证](quad-nine.md)独立推进，不把总吞吐计为单核成绩 |
 
 ## 为什么从三路开始
@@ -54,3 +54,9 @@
 ```bash
 python3 scripts/test-coremark-qemu.py <产物>/fw_payload.bin <产物>/coremark-g15-gc-lto.elf logs/qemu-portable-new --profile g15-gc-lto
 ```
+
+### 175 MHz 改了哪些逻辑？
+
+将两套封存的生成输入[逐文件核对](perf175-hdl-delta.json)：535 份 HDL 中，映射配置类文件名后，531 份逐字节相同（含 BOOM 核和存储器模型），源顺序相同。其余四份是 ROM/DT、UART 复位分频、复位去抖逻辑与其 14 → 15 位计数器。最初“只会变 ROM”的假设被文件比较否定；报告检查其余三份的精确文本差异，ROM 内容用独立 DT/引脚测试核验。**生成的 PLL 请求不是板上频率。**
+
+另设一个单核四路对照（`bash scripts/generate-perf-wide.sh mega`）：使用 BOOM v3 Mega，四路译码、128 项 ROB、两路访存发射的配置，在相同 ELF 下检验较强的访存并行性是否值得增加资源。它不是四核。目前不拿配置值当作测得的 IPC、时钟或跑分。

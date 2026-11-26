@@ -4,6 +4,7 @@ set -euo pipefail
 source "$(dirname "$0")/generator-env.sh"; cd "$root"
 case ${VCU_BOOM_MODEL:-medium} in
  medium) cfg=PerfMediumBoomVCU118Config; overlay=PerfMediumBoom.scala;;
+ mega) cfg=PerfMegaBoomVCU118Config; overlay=PerfMegaBoom.scala;;
  large) cfg=PerfLargeBoomVCU118Config; overlay=PerfLargeBoom.scala;;
  *) echo 'unknown BOOM model' >&2; exit 2;;
 esac
