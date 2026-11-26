@@ -1,0 +1,19 @@
+{
+  "scope": "QEMU virt SMP Linux guest only; not Rocket RTL, board boot or throughput",
+  "firmware_sha256": "ef67649d0128122caa619acf245c2dce6b4a61c717d19c900cce03abccf0aa59",
+  "probe_sha256": "045bd300ad8be6e9f9fb38ac5b9ba588f982907d110225e66a77d5fb608e580f",
+  "runs": [
+    {
+      "harts": 4,
+      "online": "0-3",
+      "probe_exit": 0,
+      "uart_sha256": "22c24b9da26678bc40abca71b3f6b79f3fa6830e02bae7d72e3cd2a7e69cd96f"
+    },
+    {
+      "harts": 1,
+      "online": "0",
+      "probe_exit": 2,
+      "uart_sha256": "e63a689b7d8941beb44f2705e1c1d8922e054efb27b88d5d442b092ed6451e51"
+    }
+  ]
+}

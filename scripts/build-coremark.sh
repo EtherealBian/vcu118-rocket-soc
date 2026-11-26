@@ -1,10 +1,16 @@
 #!/usr/bin/env bash
 # Build the unmodified upstream POSIX port. Do not run or publish host timing as a board result.
 set -euo pipefail
-root=$(cd "$(dirname "$0")/.." && pwd); out=${1:?fresh output directory}; profile=${2:-baseline}; opt=-O2; arch=rv64gc
-case "$profile" in baseline) ;; o3) opt=-O3;; o3-zb) opt=-O3; arch=rv64gc_zba_zbb;; *) echo "unknown profile" >&2; exit 2;; esac
+root=$(cd "$(dirname "$0")/.." && pwd); out=${1:?fresh output directory}; profile=${2:-baseline}; opt=-O2; arch=rv64gc; sdk=bootlin; ver=13.3.0
+case "$profile" in baseline) ;; o3) opt=-O3;; o3-zb) opt=-O3; arch=rv64gc_zba_zbb;;
+ o3-zb-lto|o3-zb-lto-unroll|g15-zb|g15-zb-lto|g15-zb-lto-unroll)
+   arch=rv64gc_zba_zbb; opt=-O3
+   if [[ $profile == g15-* ]]; then sdk=bootlin-cpu-2025.08-1;ver=15.1.0;fi
+   if [[ $profile == *-lto* ]]; then opt+=" -flto";fi
+   if [[ $profile == *-unroll ]]; then opt+=" -funroll-loops";fi;;
+ *) echo "unknown profile" >&2; exit 2;; esac
  mkdir "$out"; out=$(realpath "$out")
-native=${VCU_BUILD:-$HOME/.cache/vcu118-build}; tools=${VCU_TOOLS:-$HOME/.local/share/vcu118-tools}; cc=$tools/bootlin/bin/riscv64-linux-
+native=${VCU_BUILD:-$HOME/.cache/vcu118-build}; tools=${VCU_TOOLS:-$HOME/.local/share/vcu118-tools}; cc=$tools/$sdk/bin/riscv64-linux-; test "$("${cc}gcc" -dumpfullversion)" = "$ver"
 bash "$root/scripts/fetch-image-sources.sh" coremark
 src=$native/src/coremark
 # Check against the same pinned archive, including the POSIX port and Makefile.

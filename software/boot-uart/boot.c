@@ -6,7 +6,13 @@
 #define MTIME (*(volatile const uint64_t *)0x0200bff8ul)
 #define DDR ((uint8_t *)0x80000000ul)
 #define MAX_BYTES (30u * 1024u * 1024u)
-#define RX_TIMEOUT_TICKS 200000u /* 2 s at this board's 100 kHz */
+#ifndef UART_PBUS_HZ
+#define UART_PBUS_HZ 100000000u
+#endif
+#ifndef UART_TIMEBASE_HZ
+#define UART_TIMEBASE_HZ 100000u
+#endif
+#define RX_TIMEOUT_TICKS (2u * UART_TIMEBASE_HZ) /* 2 s at this board's 100 kHz */
 
 static void line(const char *s) {
     while (*s) { while ((int32_t)UART[0] < 0) {} UART[0] = (uint8_t)*s++; }
@@ -55,7 +61,7 @@ static const char *receive(uint8_t *dst) {
 }
 
 int load_uart(void) {
-    UART[6]=867; UART[2]=1; UART[3]=1;
+    UART[6]=(UART_PBUS_HZ+57600u)/115200u-1u; UART[2]=1; UART[3]=1;
     line("UART5_READY v1\r\n");
     const char *err=receive(DDR);
     if (err) { line("UART5_STOP "); line(err); line("\r\n"); return -1; }

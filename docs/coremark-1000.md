@@ -29,8 +29,18 @@ python3 scripts/test-coremark-qemu.py artifacts/cm-ab/fw_payload.bin artifacts/c
 python scripts/review-coremark-matrix.py artifacts/split5h-impl-a $capture artifacts/cm-pack/stage.bin artifacts/cm-ab logs/cm-ab-board
 ```
 
+### 同一块板、同一次启动的结果
+
+| 配置 | 性能种子中位数（次/秒） | 验证种子中位数 | 性能相对对照 |
+|---|---:|---:|---:|
+| `-O2` | 216.974650 | 215.683808 | — |
+| `-O3` | 223.738673 | 222.758493 | +3.117% |
+| `-O3 -march=rv64gc_zba_zbb` | **246.654745** | **244.992956** | **+13.679%** |
+
+每份程序三轮，每轮两套种子，各 12,000 次；所有 CRC 通过。距目标仍差 4.05 倍。[逐次实板记录](coremark-1000-board.json)。
+
 ## 硬件候选和预算
 
 第一个对照是单 hart 的 BOOM v3 Medium（两路译码、乱序），板级时钟目标仍为 100 MHz；用 `bash scripts/generate-perf-boom.sh` 独立生成。即使生成 RTL 也不是实板成绩。优先比较同一通用 `rv64gc` ELF，再做专门优化；不假设该核也支持 Rocket 的 Zba/Zbb。
 
-达到 1,000 的频率–效率预算举例：100 MHz 需要 10.00 次/秒/MHz；150 MHz 需要 6.67；200 MHz 需要 5.00。它们是算术门槛，不是 FPGA 时序或性能预测。后续用实测筛选提高每 MHz 工作量和提高时钟的路线；不直接规定流水线必须为十级。
+达到 1,000 的频率–效率预算举例：100 MHz 需要 10.00 次/秒/MHz；150 MHz 需要 6.67；200 MHz 需要 5.00。它们是算术门槛，不是 FPGA 时序或性能预测。后续用实测筛选提高每 MHz 工作量和提高时钟的路线；新目标为[四核、150 MHz、九级](quad-nine.md)，只用一个物理 hart 验收单核性能。

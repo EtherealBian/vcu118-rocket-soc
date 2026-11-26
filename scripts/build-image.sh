@@ -6,8 +6,12 @@ for s in busybox linux opensbi; do bash "$root/scripts/fetch-image-sources.sh" "
 src=$native/src; obj=${VCU_IMAGE_OBJ:-$native/image}; release=${VCU_RELEASE_OUT:-$root/artifacts}; mkdir -p "$obj"/{bb,kernel,opensbi} "$release"; export LC_ALL=C TZ=UTC SOURCE_DATE_EPOCH=1733011200 KBUILD_BUILD_TIMESTAMP='2024-12-01 00:00:00 UTC' KBUILD_BUILD_USER=vcu KBUILD_BUILD_HOST=builder KBUILD_BUILD_VERSION=1
 dot4=${VCU_DOT4_ENABLE:-0}; case "$dot4" in 0) ;; 1) test -n "${VCU_BUILD:-}" && test -n "${VCU_IMAGE_OBJ:-}" && test -n "${VCU_RELEASE_OUT:-}" && test "$release" != "$root/artifacts" && cmp "$src/linux/drivers/misc/vcu_dot4.c" "$root/software/dot4/vcu_dot4.c" || { echo 'use build-dot4-linux.sh with isolated directories'; exit 2; } ;; *) exit 2;; esac
 oscheck=${VCU_OSCHECK_ENABLE:-0}; case "$oscheck" in 0) ;; 1) [[ -n ${VCU_IMAGE_OBJ:-} && -n ${VCU_RELEASE_OUT:-} && "$obj" != "$native/image" && "$release" != "$root/artifacts" ]] || { echo 'use a separate object directory and release for oscheck'; exit 2; } ;; *) exit 2;; esac
+quad=${VCU_QUAD_SMP:-0}; case "$quad" in 0) ;; 1) [[ -n ${VCU_IMAGE_OBJ:-} && -n ${VCU_RELEASE_OUT:-} && "$obj" != "$native/image" && "$release" != "$root/artifacts" ]] || exit 2;; *) exit 2;; esac
 coremark=${VCU_COREMARK_ENABLE:-0}; case "$coremark" in 0) ;; 1) [[ -n ${VCU_IMAGE_OBJ:-} && -n ${VCU_RELEASE_OUT:-} && "$obj" != "$native/image" && "$release" != "$root/artifacts" ]] || { echo 'CoreMark requires isolated build and release directories'; exit 2; } ;; *) exit 2;; esac
 profiles=${VCU_COREMARK_AB:-0}; case "$profiles:$coremark" in 0:0|0:1|1:1) ;; *) echo 'profile matrix requires isolated CoreMark image' >&2; exit 2;; esac
+compiler_profiles=(); case ${VCU_COREMARK_COMPILERS:-0}:$profiles in
+ 0:*) ;; 1:1) compiler_profiles=(o3-zb-lto o3-zb-lto-unroll g15-zb g15-zb-lto g15-zb-lto-unroll);;
+ *) echo 'compiler comparisons require the complete controlled baseline image' >&2; exit 2;; esac
 cross=$tools/bootlin/bin/riscv64-linux-; test -x "${cross}gcc"; jobs=${JOBS:-4}
 gcc -std=c11 -D_POSIX_C_SOURCE=200809L -Wall -Wextra -Werror -O2 "$root/software/soc-check.c" -o "$obj/host-check"; "$obj/host-check" 0
 "${cross}gcc" -std=c11 -D_POSIX_C_SOURCE=200809L -Wall -Wextra -Werror -Os -static -s "$root/software/soc-check.c" -o "$obj/soc-check"
@@ -45,17 +49,23 @@ if [[ $oscheck == 1 ]]; then
   grep -q '^/bin/os-check ' "$stage/init"
   touch -d @"$SOURCE_DATE_EPOCH" "$stage"/{init,os-check}
 fi
+if [[ $quad == 1 ]]; then
+  "${cross}gcc" -std=c11 -O2 -Wall -Wextra -Werror -static -s -pthread -march=rv64gc -mabi=lp64d "$root/software/smp/check.c" -o "$stage/quad-check"
+  sed -i '/^# Lab-only/i /bin/quad-check || { echo QUAD_SMP_FAILED; exec /bin/sh -i; }' "$stage/init"
+  touch -d @"$SOURCE_DATE_EPOCH" "$stage"/{init,quad-check}; cp "$stage/quad-check" "$release/quad-check.elf"
+fi
 if [[ $coremark == 1 ]]; then
   bash "$root/scripts/build-coremark.sh" "$obj/coremark-build"
   install -m755 "$obj/coremark-build/coremark.exe" "$stage/coremark"; touch -d @"$SOURCE_DATE_EPOCH" "$stage/coremark"
   cp "$stage/coremark" "$release/coremark.elf"; cmp "$stage/coremark" "$release/coremark.elf"
   (cd "$release" && sha256sum coremark.elf > coremark.sha256 && sha256sum -c coremark.sha256)
   if [[ $profiles == 1 ]]; then
-    for p in o3 o3-zb; do
+    for p in o3 o3-zb "${compiler_profiles[@]}"; do
       bash "$root/scripts/build-coremark.sh" "$obj/coremark-build-$p" "$p"
       install -m755 "$obj/coremark-build-$p/coremark.exe" "$stage/coremark-$p"; touch -d @"$SOURCE_DATE_EPOCH" "$stage/coremark-$p"
       cp "$stage/coremark-$p" "$release/coremark-$p.elf"; cmp "$stage/coremark-$p" "$release/coremark-$p.elf"
     done
+    if (( ${#compiler_profiles[@]} )); then (cd "$release" && sha256sum coremark-g15-*.elf coremark-o3-zb-lto*.elf > compiler-profiles.sha256 && sha256sum -c compiler-profiles.sha256); fi
     (cd "$release" && sha256sum coremark{,-o3,-o3-zb}.elf > profiles.sha256 && sha256sum -c profiles.sha256)
   fi
 fi
@@ -64,12 +74,15 @@ manifest=$obj/kernel/initramfs.list
   echo 'nod /dev/console 0600 0 0 c 5 1'; echo 'nod /dev/null 0666 0 0 c 1 3'; echo "file /init $stage/init 0755 0 0"; echo "file /bin/busybox $stage/busybox 0755 0 0"; echo "file /bin/soc-check $stage/soc-check 0755 0 0";
   if [[ $dot4 == 1 ]]; then echo "file /bin/dot4-check $stage/dot4-check 0755 0 0"; fi
   if [[ $oscheck == 1 ]]; then echo "file /bin/os-check $stage/os-check 0755 0 0"; fi
+  if [[ $quad == 1 ]]; then echo "file /bin/quad-check $stage/quad-check 0755 0 0"; fi
   if [[ $coremark == 1 ]]; then echo "file /bin/coremark $stage/coremark 0755 0 0"; fi
-  if [[ $profiles == 1 ]]; then for p in o3 o3-zb; do echo "file /bin/coremark-$p $stage/coremark-$p 0755 0 0"; done; fi
+  if [[ $profiles == 1 ]]; then for p in o3 o3-zb "${compiler_profiles[@]}"; do echo "file /bin/coremark-$p $stage/coremark-$p 0755 0 0"; done; fi
   for cmd in sh ash cat echo ls mount mkdir sleep uname dmesg dd cmp sha256sum sync head poweroff reboot setsid cttyhack; do echo "slink /bin/$cmd busybox 0777 0 0"; done; } > "$manifest"
 k=(make -C "$src/linux" O="$obj/kernel" ARCH=riscv CROSS_COMPILE="$cross"); KCONFIG_ALLCONFIG="$root/software/kernel.fragment" "${k[@]}" allnoconfig
 "$src/linux/scripts/config" --file "$obj/kernel/.config" --set-str INITRAMFS_SOURCE initramfs.list
+if [[ $quad == 1 ]]; then "$src/linux/scripts/config" --file "$obj/kernel/.config" -e SMP --set-val NR_CPUS 4; fi
 "${k[@]}" olddefconfig
+if [[ $quad == 1 ]]; then grep -qx CONFIG_SMP=y "$obj/kernel/.config"; grep -qx CONFIG_NR_CPUS=4 "$obj/kernel/.config"; fi
 for cap in MMU RISCV_SBI FPU SIFIVE_PLIC SERIAL_SIFIVE_CONSOLE SERIAL_8250_CONSOLE BINFMT_ELF BINFMT_SCRIPT BLK_DEV_INITRD PROC_FS SYSFS DEVTMPFS MMC_SPI SPI_SIFIVE VFAT_FS EXT4_FS VIRTIO_BLK; do grep -qx "CONFIG_$cap=y" "$obj/kernel/.config" || { echo "missing required kernel option $cap"; exit 1; }; done
 "${k[@]}" -j"$jobs" Image
 image=$obj/kernel/arch/riscv/boot/Image

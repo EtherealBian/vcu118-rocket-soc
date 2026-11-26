@@ -9,3 +9,6 @@ Firmware and freeware development tools are distinct: AMD Vivado/Vitis, board fi
 The optional benchmark is fetched from `eembc/coremark` at `9d07b05523c16754a214a40224018a4ee908e091`. Its source files carry Apache-2.0 notices; see also the upstream `LICENSE.md` acceptable-use/trademark terms and `README.md` reporting rules. CoreMark® is a registered trademark of the Embedded Microprocessor Benchmark Consortium. This repository contains our build and measurement scripts, not the benchmark sources or binary. Results are independent engineering measurements, not a certification or an endorsement.
 
 The optional packed loader uses the host system’s LZ4 library (BSD-2-Clause library code) for block compression and a host round trip. The target uses the small project decoder in `software/boot-pack`; neither an upstream LZ4 library binary nor its source is distributed in this repository.
+
+
+BOOM v3 is used at Chipyard submodule `d2a64f7ca9fd914d9c686cb23edcd32d3465a02e`; keep its original notices when rebuilding. The optional GCC 15.1 SDK is independently hash-pinned by `scripts/fetch-cpu-cross.sh`. Neither the SDK nor third-party RTL/binaries are redistributed here.

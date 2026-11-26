@@ -8,6 +8,7 @@ from pathlib import Path
 from uart_frame import encode
 from dotbench_report import review as review_dotbench
 from counter_report import review as review_counters
+from cpu_window_report import windows as review_cpu_windows
 from sweep_report import review as review_sweep
 
 
@@ -49,6 +50,9 @@ def check_uart(raw, mode, nonce):
     elif mode == 'sweep':
         if nonce is not None:raise ValueError('unexpected shell challenge')
         return {'memory_sweep':review_sweep(guest.splitlines())}
+    elif mode == 'cpu-window':
+        if nonce is not None:raise ValueError('unexpected shell challenge')
+        return {'cpu_window_diagnostic':review_cpu_windows(guest.splitlines())}
     elif mode == 'counters':
         if nonce is not None:raise ValueError('unexpected shell challenge')
         return {'counter_windows':review_counters(guest.splitlines())}

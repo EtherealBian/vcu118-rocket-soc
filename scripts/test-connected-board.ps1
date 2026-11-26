@@ -1,10 +1,10 @@
-[CmdletBinding()] param([ValidateSet('bare','address','linux','dot4','dotbench','linux-dot4','linux-oscheck','counters','sweep')][string]$Mode='bare',[string]$Run,[ValidatePattern('^[0-9a-fA-F]{64}$')][string]$ReviewedBitSha256,[switch]$Program,[ValidateRange(30,7200)][int]$TimeoutSeconds=240,[string]$UartPayload,[string]$Vivado='D:\Xilinx\Vivado\2024.2\bin\vivado.bat',[string]$BoardDefinition,[string]$Cable=$env:VCU_CABLE_SERIAL,[string]$Bridge=$env:VCU_UART_SERIAL,[string]$Slr0Dna=$env:VCU_SLR0_DNA)
+[CmdletBinding()] param([ValidateSet('bare','address','linux','dot4','dotbench','linux-dot4','linux-oscheck','counters','sweep','cpu-window')][string]$Mode='bare',[string]$Run,[ValidatePattern('^[0-9a-fA-F]{64}$')][string]$ReviewedBitSha256,[switch]$Program,[ValidateRange(30,7200)][int]$TimeoutSeconds=240,[string]$UartPayload,[string]$Vivado='D:\Xilinx\Vivado\2024.2\bin\vivado.bat',[string]$BoardDefinition,[string]$Cable=$env:VCU_CABLE_SERIAL,[string]$Bridge=$env:VCU_UART_SERIAL,[string]$Slr0Dna=$env:VCU_SLR0_DNA)
 # Default preflight never writes to the board. -Program requires prior manual review of CDC/IO/DRC and exact bit SHA.
 $ErrorActionPreference='Stop'; . (Join-Path $PSScriptRoot board-console.ps1); $root=Split-Path $PSScriptRoot -Parent
 if (!$Bridge -or ($Program -and (!$Cable -or $Slr0Dna -notmatch '^0x[0-9a-fA-F]+$'))) {throw 'Pass -Bridge for preflight; -Program also requires -Cable and -Slr0Dna from local enumeration'}
 $port=Find-VcuFpgaUart $Bridge; Write-Output "FPGA_SCI_PORT=$port bridge=$Bridge cable=$Cable"
 if (!$Program) {Write-Output 'PREFLIGHT_ONLY_NO_PROGRAM'; return}
-if ($Mode -in 'address','dot4','dotbench','linux-dot4','linux-oscheck','counters','sweep' -and !$UartPayload) {throw 'this mode requires a fresh framed payload; never run on top of an existing OS'}
+if ($Mode -in 'address','dot4','dotbench','linux-dot4','linux-oscheck','counters','sweep','cpu-window' -and !$UartPayload) {throw 'this mode requires a fresh framed payload; never run on top of an existing OS'}
 if (!$Run -or !$ReviewedBitSha256) {throw '-Program requires -Run and manually reviewed -ReviewedBitSha256'}
 $runDir=(Resolve-Path -LiteralPath $Run).Path; $bit=Join-Path $runDir 'obj\VCU118FPGATestHarness.bit'; if (!(Test-Path -LiteralPath $bit -PathType Leaf)) {throw 'missing routed bitstream'}
 $logDir=Join-Path $root ('logs\hw-'+$Mode+'-'+[guid]::NewGuid().ToString('N')); [void][IO.Directory]::CreateDirectory($logDir)

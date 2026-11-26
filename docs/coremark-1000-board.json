@@ -1,0 +1,318 @@
+{
+  "scope": "Independent physical board measurement, one hart and one context, same boot; not certified.",
+  "target_single_context_iterations_per_s": 1000,
+  "clock_mhz": 100,
+  "total_buffer_bytes": 2000,
+  "iterations_each_seed_set": 12000,
+  "boot": {
+    "utc": "2026-11-26T09:03:08.6724026Z",
+    "mode": "linux-oscheck",
+    "bit_sha256": "d77b13dbf75b4773e33ba48f7b177f320572cb62ffe8a9cd930ab196edd6f520",
+    "payload_sha256": "f1ae3c740ea34337eecb545b3154eb3891960415976de9d9053244ec095b8598",
+    "uart_sha256": "574b427ce68967234967d70f5c2a665616f9aed57337670828635487aab5f621"
+  },
+  "order": [
+    "baseline",
+    "o3",
+    "o3-zb",
+    "o3",
+    "o3-zb",
+    "baseline",
+    "o3-zb",
+    "baseline",
+    "o3"
+  ],
+  "profiles": {
+    "baseline": {
+      "flags": "-O2 -static -s -march=rv64gc -mabi=lp64d -Wl,--build-id=none -lrt",
+      "elf_sha256": "beafaa8dbebe44215cbc142639c4dd5d46eb0feaf9f14356078d035742cad3ec",
+      "performance_median": "216.974650",
+      "validation_median": "215.683808",
+      "performance_min": "216.974650",
+      "performance_max": "216.998192",
+      "coremark_per_mhz": "2.1697465",
+      "gain_vs_control_pct": "0.000",
+      "all_three_at_least_1000": false,
+      "measurements": [
+        {
+          "sequence": 1,
+          "uart_sha256": "53ed745084d2f2a5ecd93466cbb0baf8f2d2107875e6ae2a3a967e23137c9e98",
+          "runs": {
+            "performance": {
+              "iterations": 12000,
+              "elapsed_s": "55.306000",
+              "iterations_per_s": "216.974650",
+              "seedcrc": "0xe9f5",
+              "list_crc": "0xe714",
+              "matrix_crc": "0x1fd7",
+              "state_crc": "0x8e3a",
+              "final_crc": "0xd340",
+              "host_observed_ms": 55398
+            },
+            "validation": {
+              "iterations": 12000,
+              "elapsed_s": "55.637000",
+              "iterations_per_s": "215.683808",
+              "seedcrc": "0x18f2",
+              "list_crc": "0xe3c1",
+              "matrix_crc": "0x0747",
+              "state_crc": "0x8d84",
+              "final_crc": "0xbc68",
+              "host_observed_ms": 55647
+            }
+          }
+        },
+        {
+          "sequence": 6,
+          "uart_sha256": "c842763f32404c6f875d07c73d0deec057bcde580f3e17bc750246381a8dfe8c",
+          "runs": {
+            "performance": {
+              "iterations": 12000,
+              "elapsed_s": "55.300000",
+              "iterations_per_s": "216.998192",
+              "seedcrc": "0xe9f5",
+              "list_crc": "0xe714",
+              "matrix_crc": "0x1fd7",
+              "state_crc": "0x8e3a",
+              "final_crc": "0xd340",
+              "host_observed_ms": 55363
+            },
+            "validation": {
+              "iterations": 12000,
+              "elapsed_s": "55.653000",
+              "iterations_per_s": "215.621799",
+              "seedcrc": "0x18f2",
+              "list_crc": "0xe3c1",
+              "matrix_crc": "0x0747",
+              "state_crc": "0x8d84",
+              "final_crc": "0xbc68",
+              "host_observed_ms": 55668
+            }
+          }
+        },
+        {
+          "sequence": 8,
+          "uart_sha256": "10a18098d5bb084a02c14cf4609d8f9a12419cc2ba48ed232d79c80af6815f65",
+          "runs": {
+            "performance": {
+              "iterations": 12000,
+              "elapsed_s": "55.306000",
+              "iterations_per_s": "216.974650",
+              "seedcrc": "0xe9f5",
+              "list_crc": "0xe714",
+              "matrix_crc": "0x1fd7",
+              "state_crc": "0x8e3a",
+              "final_crc": "0xd340",
+              "host_observed_ms": 55375
+            },
+            "validation": {
+              "iterations": 12000,
+              "elapsed_s": "55.634000",
+              "iterations_per_s": "215.695438",
+              "seedcrc": "0x18f2",
+              "list_crc": "0xe3c1",
+              "matrix_crc": "0x0747",
+              "state_crc": "0x8d84",
+              "final_crc": "0xbc68",
+              "host_observed_ms": 55667
+            }
+          }
+        }
+      ]
+    },
+    "o3": {
+      "flags": "-O3 -static -s -march=rv64gc -mabi=lp64d -Wl,--build-id=none -lrt",
+      "elf_sha256": "45ff8489abbae8c54d13c7155e4c0397c981b34fffb351c9cc1344e694b72113",
+      "performance_median": "223.738673",
+      "validation_median": "222.758493",
+      "performance_min": "223.709476",
+      "performance_max": "223.792917",
+      "coremark_per_mhz": "2.23738673",
+      "gain_vs_control_pct": "3.117",
+      "all_three_at_least_1000": false,
+      "measurements": [
+        {
+          "sequence": 2,
+          "uart_sha256": "55a4387efb08c29058893672bb1d6924cc0a3b8c90d378d5257be5277ac9865a",
+          "runs": {
+            "performance": {
+              "iterations": 12000,
+              "elapsed_s": "53.634000",
+              "iterations_per_s": "223.738673",
+              "seedcrc": "0xe9f5",
+              "list_crc": "0xe714",
+              "matrix_crc": "0x1fd7",
+              "state_crc": "0x8e3a",
+              "final_crc": "0xd340",
+              "host_observed_ms": 53706
+            },
+            "validation": {
+              "iterations": 12000,
+              "elapsed_s": "53.857000",
+              "iterations_per_s": "222.812262",
+              "seedcrc": "0x18f2",
+              "list_crc": "0xe3c1",
+              "matrix_crc": "0x0747",
+              "state_crc": "0x8d84",
+              "final_crc": "0xbc68",
+              "host_observed_ms": 53890
+            }
+          }
+        },
+        {
+          "sequence": 4,
+          "uart_sha256": "f7d9da084fb22ca045827153f3082d7adbc4e8bc19bae6613b4bbac54963258e",
+          "runs": {
+            "performance": {
+              "iterations": 12000,
+              "elapsed_s": "53.621000",
+              "iterations_per_s": "223.792917",
+              "seedcrc": "0xe9f5",
+              "list_crc": "0xe714",
+              "matrix_crc": "0x1fd7",
+              "state_crc": "0x8e3a",
+              "final_crc": "0xd340",
+              "host_observed_ms": 53696
+            },
+            "validation": {
+              "iterations": 12000,
+              "elapsed_s": "53.876000",
+              "iterations_per_s": "222.733685",
+              "seedcrc": "0x18f2",
+              "list_crc": "0xe3c1",
+              "matrix_crc": "0x0747",
+              "state_crc": "0x8d84",
+              "final_crc": "0xbc68",
+              "host_observed_ms": 53916
+            }
+          }
+        },
+        {
+          "sequence": 9,
+          "uart_sha256": "30e0128298185be79a733eb55a94b40ccee90e10b49be024004944d7e41f0c23",
+          "runs": {
+            "performance": {
+              "iterations": 12000,
+              "elapsed_s": "53.641000",
+              "iterations_per_s": "223.709476",
+              "seedcrc": "0xe9f5",
+              "list_crc": "0xe714",
+              "matrix_crc": "0x1fd7",
+              "state_crc": "0x8e3a",
+              "final_crc": "0xd340",
+              "host_observed_ms": 53716
+            },
+            "validation": {
+              "iterations": 12000,
+              "elapsed_s": "53.870000",
+              "iterations_per_s": "222.758493",
+              "seedcrc": "0x18f2",
+              "list_crc": "0xe3c1",
+              "matrix_crc": "0x0747",
+              "state_crc": "0x8d84",
+              "final_crc": "0xbc68",
+              "host_observed_ms": 53891
+            }
+          }
+        }
+      ]
+    },
+    "o3-zb": {
+      "flags": "-O3 -static -s -march=rv64gc_zba_zbb -mabi=lp64d -Wl,--build-id=none -lrt",
+      "elf_sha256": "327d504dab206371a52e3483c487da75cffb355aa8bcd247d33de75c1c484882",
+      "performance_median": "246.654745",
+      "validation_median": "244.992956",
+      "performance_min": "246.654745",
+      "performance_max": "246.720671",
+      "coremark_per_mhz": "2.46654745",
+      "gain_vs_control_pct": "13.679",
+      "all_three_at_least_1000": false,
+      "measurements": [
+        {
+          "sequence": 3,
+          "uart_sha256": "ee01c46aa6bf4522be670a1f18c4c8cad26ac7fc10ac500faf123e6158021718",
+          "runs": {
+            "performance": {
+              "iterations": 12000,
+              "elapsed_s": "48.651000",
+              "iterations_per_s": "246.654745",
+              "seedcrc": "0xe9f5",
+              "list_crc": "0xe714",
+              "matrix_crc": "0x1fd7",
+              "state_crc": "0x8e3a",
+              "final_crc": "0xd340",
+              "host_observed_ms": 48720
+            },
+            "validation": {
+              "iterations": 12000,
+              "elapsed_s": "48.980000",
+              "iterations_per_s": "244.997958",
+              "seedcrc": "0x18f2",
+              "list_crc": "0xe3c1",
+              "matrix_crc": "0x0747",
+              "state_crc": "0x8d84",
+              "final_crc": "0xbc68",
+              "host_observed_ms": 48994
+            }
+          }
+        },
+        {
+          "sequence": 5,
+          "uart_sha256": "15828ad18c5b34203dd372090e3c73995d34f6500d593b9917b20c023116208e",
+          "runs": {
+            "performance": {
+              "iterations": 12000,
+              "elapsed_s": "48.638000",
+              "iterations_per_s": "246.720671",
+              "seedcrc": "0xe9f5",
+              "list_crc": "0xe714",
+              "matrix_crc": "0x1fd7",
+              "state_crc": "0x8e3a",
+              "final_crc": "0xd340",
+              "host_observed_ms": 48719
+            },
+            "validation": {
+              "iterations": 12000,
+              "elapsed_s": "48.993000",
+              "iterations_per_s": "244.932950",
+              "seedcrc": "0x18f2",
+              "list_crc": "0xe3c1",
+              "matrix_crc": "0x0747",
+              "state_crc": "0x8d84",
+              "final_crc": "0xbc68",
+              "host_observed_ms": 49029
+            }
+          }
+        },
+        {
+          "sequence": 7,
+          "uart_sha256": "9870afd07435c7a1494345ac1bb3d3d72ae6b95e2e43a43bcd24a5e380ac5a8c",
+          "runs": {
+            "performance": {
+              "iterations": 12000,
+              "elapsed_s": "48.651000",
+              "iterations_per_s": "246.654745",
+              "seedcrc": "0xe9f5",
+              "list_crc": "0xe714",
+              "matrix_crc": "0x1fd7",
+              "state_crc": "0x8e3a",
+              "final_crc": "0xd340",
+              "host_observed_ms": 48755
+            },
+            "validation": {
+              "iterations": 12000,
+              "elapsed_s": "48.981000",
+              "iterations_per_s": "244.992956",
+              "seedcrc": "0x18f2",
+              "list_crc": "0xe3c1",
+              "matrix_crc": "0x0747",
+              "state_crc": "0x8d84",
+              "final_crc": "0xbc68",
+              "host_observed_ms": 48977
+            }
+          }
+        }
+      ]
+    }
+  }
+}
