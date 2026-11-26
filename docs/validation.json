@@ -105,5 +105,27 @@
     "rtl_truncated_timeout": "in progress",
     "linux_over_serial": "not verified",
     "physical_serial_download": "not verified"
+  },
+  "dot4": {
+    "config": "Dot4RocketVCU118Config",
+    "generated_hdl_files": 373,
+    "mmio_base": "0x64002000",
+    "portable_rtl_sha256": "655bfa8efa51c0fa56cff9e212eee697802c504ccfd4200db64b8d542c5aca55",
+    "embedded_rom_plus_dtb_sha256": "fd95f3bb233e62dfdc2a422fee8198bfe227029d502fe1a55211b1c100799a09",
+    "bare_payload_sha256": "1b7f87a2f594cb6156654fa3d5c8bbcb700d0f6b81e1a05fbf4b5f8afe2cbae8",
+    "chiptop_debug_preload": {
+      "cycles": 695296,
+      "reference_vectors_passed": 257,
+      "illegal_commands_checked": [
+        "pop_empty",
+        "duplicate_submit"
+      ],
+      "uart_marker": "DOT4_MMIO_PASS vectors=257 protocol_errors_checked=2",
+      "offchip_tl_reads": 16,
+      "offchip_tl_writes": 0
+    },
+    "linux_ioctl_on_rocket": "not verified",
+    "integrated_fpga_timing": "not verified",
+    "physical_execution": "not verified"
   }
 }

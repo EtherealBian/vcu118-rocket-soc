@@ -85,3 +85,22 @@ bash scripts/test-uart5-rtl.sh logs/recovery5-next artifacts/bare-next.img artif
 测试台在 `ChipTop` 的 RX 引脚逐位送入真实帧，在 TX 引脚解码输出；卡仅为通用测试台夹具，ROM5 模式要求零个 SD 命令。正例不经调试接口预装 RAM。失败用例只在错误码出现后才用模拟 JTAG 读停机 PC。截断用例按真实 100 kHz mtime 等待（约 2 亿个模型周期），未跑完不能判通过。
 
 **实板操作仅在 ROM5 对应的 bit 已签核时执行。** Windows 使用前述 `test-connected-board.ps1 -Program ...`，另加 `-UartPayload <裸机或固件.bin>`。Linux 建议 `-Mode linux -TimeoutSeconds 1500`：5.3 MB 载荷光串行线传输就需要约 8 分钟，还要留编程、DDR 启动、shell 自检的时间。脚本先验证 bit、线缆和 FPGA 身份；只有编程完成且捕获 `UART5_READY v1` 才开始发送。没有名单明确的签核 bit 或没有本次载荷的最终串口验收标志，均不记录板测通过。
+
+## 可选的四路 INT8 点积外设
+
+`RocketVCU118Config` 不含 Dot4。选择 `Dot4RocketVCU118Config` 后，处理器仍是五级 Rocket；CPU 把两个 32 位字各自拆成四个有符号 8 位数的工作交给 `0x64002000` 的外设，读回四项乘积之和。集成测试用软件标量参考核对边界值和伪随机向量，同时检查没有结果时取数、上次结果未取时再次提交这两个错误。测试路径经过 CPU 和 TileLink，不使用主机替代乘加输出。
+
+```bash
+# 先完成基线生成、交叉工具链和 Verilator 安装。输出目录都需选未使用的名称。
+VCU_GEN_HEAP=3G VCU_GEN_CPUS=2 bash scripts/generate-dot4.sh
+bash scripts/build-dot4-sw.sh artifacts/dot4-bare-next
+# 只验裸机，不必重编 Linux：
+VCU_SIM_OBJ=$HOME/.cache/vcu118-build/verilated-dot4-next \
+  bash scripts/test-generated-dot4.sh logs/dot4-next artifacts/dot4-bare-next
+# 若要验 Linux，再建独立驱动内核；下面最后一项会启动长周期 Linux 验收。
+bash scripts/build-dot4-linux.sh "$HOME/.cache/vcu118-build/dot4-linux-next" artifacts/dot4-linux-next
+VCU_SIM_OBJ=$HOME/.cache/vcu118-build/verilated-dot4-linux-next \
+  bash scripts/test-generated-dot4.sh logs/dot4-linux-next artifacts/dot4-bare-next artifacts/dot4-linux-next
+```
+
+打包时逐字节检验 firtool 导出的乘加 RTL（仅允许固定版本生成器的单行注释及文件末尾换行差异），然后从这个包重建模拟器。每例分开记录实际 UART、模型日志和输入哈希；只有进程正常退出且匹配本模式 PASS 才写 `.ok`。Linux 验收另外需要真实设备 ioctl、16 MiB 自检、交互 shell 回答；QEMU virt 打印 `LINUX_DOT4_NO_PLATFORM_DEVICE` 不算通过。

@@ -6,6 +6,7 @@
 | ROM4 错误注入 | 主 GPT 头、分区表 CRC、分区超出 30 MiB、载荷扇区传输 CRC 各自单独测试；通过模拟 JTAG 读取异常停机 DPC `0x1003c`，未执行 DDR 载荷 | 能查传输错误，不提供固件签名认证 |
 | ROM5，真实 Rocket 双向 UART 引脚 | 发送 422 B 裸机程序，未预装模型 RAM、未读 SD；13,049,856 模拟周期后收到完整两轮 1 MiB 读写及 mtime PASS。坏魔数、超长、错误 CRC 三项分别拒绝，调试端实读 DPC `0x1003c` | 帧中断的 2 秒超时已有原生 C 测试；长周期 RTL 用例进行中。不证明整份 Linux 已通过串口启动或实板 DDR 正常 |
 | QEMU virt 基线 Linux | 10 个独立进程：initramfs、16 MiB 用户内存以及交互命令回显全部成功；基线载荷 SHA-256 `7a8f9932796747be2cd54390af7adf88ba5b156e54069884946185fef47b41c9` | 非板级现场测试 |
+| 可选 Dot4 · Rocket ChipTop | JTAG 设置 PC、预装模拟 RAM，Rocket 自己访问 `0x64002000`。695,296 个模拟周期，完整 UART 标志 `DOT4_MMIO_PASS vectors=257 protocol_errors_checked=2`；空取、重复提交均被识别 | 不是从卡加载；此数包含启动和打印，不是算术单元延迟或加速比。Linux ioctl 和实板仍未验证 |
 | 物理板，只读 | Vivado 2024.2 识别单一 XCVU9P，读取 3 个 SLR 的配置状态；Windows 打开 FPGA 侧 CP2105 Standard 串口（115200、8N1），6 秒被动窗口收到 0 字节 | 当前板内设计归属未知；不能作为本工程的启动、双向 UART 或 DDR 测试 |
 
 ## 如何复核
