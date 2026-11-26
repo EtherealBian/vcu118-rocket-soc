@@ -15,7 +15,7 @@
 - **真实 Rocket RTL**：候选 ROM 通过 SPI 读取主 GPT 并装入裸机自检程序；UART 报告两轮 1 MiB 内存读写和定时器前进。GPT 头、分区表、分区越界、载荷扇区 CRC 四种异常都停在 ROM。外部 RAM 和卡为模型，不验证 DDR PHY。
 - **不用 SD 的启动路径**：另一版 600 B 恢复 ROM 已在真实 Rocket RTL 中，通过 UART 引脚接收并执行 422 B 裸机诊断；魔数、长度、CRC 错误分别被拒绝。板上的串口下载及 Linux 启动仍待验收。
 - **QEMU virt**：同一基线固件通过 10 次独立启动，每次执行 16 MiB 用户态自检并返回交互 shell 挑战。这个机器模型与 VCU118 的板级互连不同。
-- **Rocket 上的 Linux 进度（RTL）**：模拟 JTAG 预载基线固件后，第 40,000,000 周期读到 hart 已在 S 态执行 Linux 的 `memmap_init_range`，Sv39 已开启。这证明已进入内核；不是交互 shell 或实板启动记录。
+- **Rocket 上的 Linux 进度（RTL）**：模拟 JTAG 预载基线固件后，第 40,000,000 周期读到 hart 已在 S 态执行 Linux 的 `memmap_init_range`，Sv39 已开启。另一个限制为 128 MiB 的诊断配置还通过 RTL 串口输出了 Linux 6.6.65、机器型号和早期控制台地址。两者都不是实板 shell 记录。
 - **实板**：已用 JTAG 读回 XCVU9P 配置状态，已打开 FPGA 侧 USB-UART。串口可打开不等于收到了本工程的启动日志。**尚无板上 Linux shell 验收；未宣称 100 MHz 时序收敛。**
 - **可选实验**：四路有符号 INT8 点积已接入可选配置的 TileLink 总线。Rocket 裸机通过 MMIO 核对 257 组结果，另验空取、重复提交两种错误。Linux 驱动已编入可选内核，尚未通过 Rocket 上的 ioctl 验收；没有实板加速比。
 

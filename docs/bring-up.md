@@ -123,3 +123,17 @@ bash scripts/build-linux-diagnostic.sh "$HOME/.cache/vcu118-build/diag128-next" 
 ### JTAG 系统总线读写与 CPU 回包（模拟 TAP）
 
 `bash scripts/test-debug-sba.sh logs/sba-next artifacts/bare-compact.img` 使用 `VCU_SIM_OBJ` 和 `VCU_SIM_KIT` 指向同一套已编译的 ChipTop 和生成清单；脚本核对 Verilator 的原始文件清单路径。不要把来自另一解压目录的清单与旧模型混用。本测试不预装 RAM：通过 SBA 加载一个小程序、写入 32 个输入、检查非对齐错误和清除操作，再让 Rocket 启动并计算。宿主检查 UART 和 SBA 读回的一致性。磁盘仅为仿真器固定输入，没有发起扇区访问。
+
+## 为什么先保留五级：调试时钟的对照实验
+
+ROM4 的 100 MHz 目标未达成，关键建立路径经过控制总线和调试从设备，并非 Rocket 的五级算术流水线。保留原配置，另行生成 `AlwaysClockedDebugRocketVCU118Config`：去掉调试模块的 FPGA fabric 门控时钟，保留调试功能，在生成 RTL 中检查实际连到原始门输入、reset 和 dmactiveAck 保持一致，另比对板级 DTS。
+
+```bash
+VCU_GEN_CPUS=2 VCU_GEN_HEAP=3G bash scripts/generate-debug-clock.sh
+python3 scripts/package-rtl.py --config AlwaysClockedDebugRocketVCU118Config --out artifacts/clock-test.zip
+python3 scripts/prepare-candidate.py artifacts/clock-test.zip artifacts/rom5-next cache/clock-test --boot uart5
+export VCU_SIM_KIT=$PWD/cache/clock-test VCU_SIM_OBJ=$HOME/.cache/vcu118-build/verilated-clock-test
+bash scripts/build-rtl-sim.sh && bash scripts/test-debug-sba.sh logs/sba-clock-test artifacts/bare-next.img
+```
+
+该分支归档还在布线后物理优化前保存一个可恢复的检查点，最终另存各时钟域最差端点。如果最终实现没有同时通过建立、保持、脉宽及 CDC/IO/DRC 人工复核，不把仿真通过当作上板许可。

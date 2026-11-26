@@ -4,9 +4,9 @@ import argparse,hashlib,os,re,tempfile,zipfile
 from pathlib import Path as P
 from collections import OrderedDict
 root=P(__file__).resolve().parents[1]; cy=root/'third_party/chipyard'; shell=cy/'fpga/fpga-shells'; fp=cy/'fpga'
-ap=argparse.ArgumentParser();ap.add_argument('--out',type=P);ap.add_argument('--config',choices=['RocketVCU118Config','Dot4RocketVCU118Config'],default='RocketVCU118Config');args=ap.parse_args(); members={}
+ap=argparse.ArgumentParser();ap.add_argument('--out',type=P);ap.add_argument('--config',choices=['RocketVCU118Config','Dot4RocketVCU118Config','AlwaysClockedDebugRocketVCU118Config'],default='RocketVCU118Config');args=ap.parse_args(); members={}
 if args.out is None:
- if args.config!='RocketVCU118Config':ap.error('an explicit fresh --out is required for the accelerator variant')
+ if args.config!='RocketVCU118Config':ap.error('an explicit fresh --out is required for a non-baseline variant')
  args.out=root/'artifacts/vcu118-generated-rtl.zip'
 if args.config!='RocketVCU118Config' and args.out.exists():ap.error('variant output exists')
 cfg='chipyard.fpga.vcu118.VCU118FPGATestHarness.'+args.config; gen=fp/'generated-src'/cfg
@@ -51,6 +51,30 @@ if args.config=='Dot4RocketVCU118Config':
  if b'vcu118lab,dot4-i8-v1' not in members['board/'+cfg+'.dts']:raise ValueError('missing accelerator in device tree')
  for source in ('Dot4Rocket.scala','Dot4Peripheral.scala'):put('overlay/'+source,root/'rtl/accel/chipyard'/source)
  members['README.txt']+=b'Optional Dot4RocketVCU118Config: MMIO at 0x64002000. This archive initially retains the stock board ROM.\n'
+if args.config=='AlwaysClockedDebugRocketVCU118Config':
+ import subprocess,sys
+ base=fp/'generated-src'/'chipyard.fpga.vcu118.VCU118FPGATestHarness.RocketVCU118Config'
+ subprocess.run([sys.executable, str(root/'scripts/check-debug-clock.py'), str(base/'gen-collateral/ChipTop.sv'), str(gen/'gen-collateral/ChipTop.sv')],check=True)
+ if members['board/'+cfg+'.dts']!=(base/(base.name+'.dts')).read_bytes():raise ValueError('clock candidate changed board description')
+ put('overlay/AlwaysClockedDebugRocket.scala',root/'rtl/clocking/AlwaysClockedDebugRocket.scala')
+ # Keep the pinned route + physical optimization, but persist a recoverable DCP
+ # before the optimization begins. This applies only to this new archive type.
+ route_path='shell/xilinx/common/tcl/route.tcl'; route=members[route_path]
+ if hashlib.sha256(route).hexdigest()!='7130014d70130776967d591797e4b34a64c8c4d4c26d955db629d828463b54b3':raise ValueError('unexpected original route stage')
+ original=b'route_design -directive Explore\n'; assert route.count(original)==1
+ members[route_path]=route.replace(original,original+b'''write_checkpoint [file join $wrkdir routed_before_physopt.dcp]
+puts ROUTE_CHECKPOINT_SAVED_BEFORE_PHYSOPT
+report_route_status -file [file join $wrkdir before_physopt_route_status.rpt]
+report_timing_summary -file [file join $wrkdir before_physopt_timing.rpt]
+''')+b'''\n# All endpoint reports below use the final optimized design.
+report_bus_skew -file [file join $wrkdir routed-bus-skew.rpt]
+report_io -file [file join $wrkdir routed-io.rpt]
+source [file join $scriptdir vcu-endpoints.tcl]
+vcu_endpoint_reports [file join $wrkdir routed-endpoints]
+'''
+ put('shell/xilinx/common/tcl/vcu-endpoints.tcl',root/'scripts/diagnose-routed.tcl')
+
+ members['README.txt']+=b'AlwaysClockedDebugRocketVCU118Config: JTAG and system bus access retained, debug clock gating disabled for FPGA routing. Requires independent timing and debug validation.\n'
 dig=lambda b:hashlib.sha256(b).hexdigest();manifest=''.join(dig(b)+'  '+k+'\n' for k,b in sorted(members.items()));put('RTL_ROOT_SHA256.txt',manifest)
 fd,tmp=tempfile.mkstemp(suffix='.part',dir=args.out.parent);os.close(fd)
 try:

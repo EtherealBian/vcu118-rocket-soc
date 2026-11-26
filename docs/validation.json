@@ -225,5 +225,81 @@
     },
     "bit_written": false,
     "timing_met": false
+  },
+  "stock_route_only": {
+    "route": {
+      "routable": 113436,
+      "fully_routed": 113436,
+      "routing_errors": 0
+    },
+    "timing": {
+      "setup": {
+        "slack_ns": -3.977,
+        "total_negative_ns": -4494.079,
+        "failed": 2341,
+        "count": 129544
+      },
+      "hold": {
+        "slack_ns": 0.01,
+        "total_negative_ns": 0.0,
+        "failed": 0,
+        "count": 128842
+      },
+      "pulse_width": {
+        "slack_ns": 0.143,
+        "total_negative_ns": 0.0,
+        "failed": 0,
+        "count": 50928
+      }
+    },
+    "resources": {
+      "CLB LUTs": 60278.0,
+      "CLB Registers": 42493.0,
+      "Block RAM Tile": 203.5,
+      "DSPs": 28.0,
+      "URAM": 0.0
+    },
+    "reports_sha256": {
+      "route-status.rpt": "51152bcf8e17e9eda9c68fc5856c9a083d148d54a27346f0ec58918e314893ef",
+      "full-timing.rpt": "20d079f6dee52ae999c6e00b0cdbfd681b1908c9ae5366fa16f609f0770aa815",
+      "check-timing.rpt": "e19f610f65e2d1b6141015ba0fe62a7ceb6126fe635832df83010e9195438ad8",
+      "routed-utilization.rpt": "d0a4c616396fe0bdaaa6e0bd1d9a7ade817018d978bc24ccd0cd80dfba2343d8",
+      "cdc.rpt": "b995fced86f904776f65edb4d4e469c82d5996666a6706c489e046a77acab12b",
+      "clock-interaction.rpt": "4ab99ffbab6945ea968a009d0dcddff43b725458b1e1a10c65af711a84fa2d86",
+      "pulse-width.rpt": "bd39ca25745c786ffa84187849d4d7d7c69e53c718769d290e6bea742bdc101b",
+      "methodology.rpt": "a48bcbc08114819326173a4f7576def028ec094171906591330da6e50800822f",
+      "routed-clocks.rpt": "8e2288dd09e62943d5abdcca2fe0e0337d29952f754897a791a398851769f5c0",
+      "routed-drc.rpt": "90cd11a546984f7a4c495a359a4cdfbab0c14ad83935c4f8b118191c5d9b30fc"
+    },
+    "bit_sha256": null,
+    "stage": "Explore route from original placed checkpoint; no post-route phys_opt, no bitstream"
+  },
+  "debug_clock_experiment": {
+    "config": "AlwaysClockedDebugRocketVCU118Config",
+    "cpu_bus_target_mhz": 100,
+    "stock_compared": "same exact debug gate input, no gate on debug_clock; elaborated DTS unchanged",
+    "generated_rtl_archive_sha256": "1df1d3481b5201c38ef84ab59daccabf082f711eefcfef3b8c2027572c82c4aa",
+    "uart5_kit_sha256": "0d0f4c905c4b6aaeff06cf77a743961c7bfe35b2c78730d9e37e2abe446393e0",
+    "sba_mailbox": {
+      "guest_bytes": 177,
+      "input_words": 32,
+      "cycles": 1041532,
+      "guest_result": "0xc0ff8be1",
+      "unaligned_sberror": 3,
+      "clear_recovered": true,
+      "stock_and_clock_only_functional_results_match": true
+    },
+    "fpga_timing": "not verified",
+    "physical_execution": "not verified"
+  },
+  "linux_diagnostic_128m": {
+    "mode": "debug-linux-console; preload via simulated memory, handoff via simulated JTAG",
+    "firmware_sha256": "af9c7b2ae6539e825fe329ca3b739d2f255eb0a46215914dab68aa7d7418b283",
+    "observed_linux_version": "6.6.65",
+    "observed_platform": "ucb-bar,chipyard",
+    "early_console": "sifive0 @ 0x64000000",
+    "kernel_reported_memory_limit_mib": 128,
+    "shell_observed_at_this_checkpoint": false,
+    "hardware_execution": false
   }
 }

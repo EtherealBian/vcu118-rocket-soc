@@ -3,7 +3,7 @@
 set -euo pipefail
 root=$(cd "$(dirname "$0")/.." && pwd); cd "$root"; tools=${VCU_TOOLS:-$HOME/.local/share/vcu118-tools}; v=$tools/verilator; native=${VCU_BUILD:-$HOME/.cache/vcu118-build}; obj=${VCU_SIM_OBJ:-$native/verilated-stock}; mkdir -p "$obj"
 export LD_LIBRARY_PATH="$v/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" VERILATOR_ROOT="$v/share/verilator"; "$v/bin/verilator_bin" --version
-case ${VCU_SIM_CONFIG:-RocketVCU118Config} in RocketVCU118Config|Dot4RocketVCU118Config) ;; *) echo 'unknown simulator configuration' >&2; exit 2;; esac
+case ${VCU_SIM_CONFIG:-RocketVCU118Config} in RocketVCU118Config|Dot4RocketVCU118Config|AlwaysClockedDebugRocketVCU118Config) ;; *) echo 'unknown simulator configuration' >&2; exit 2;; esac
 if [[ -n ${VCU_SIM_KIT:-} ]]; then manifest=$VCU_SIM_KIT/sources.f
 else cfg=chipyard.fpga.vcu118.VCU118FPGATestHarness.${VCU_SIM_CONFIG:-RocketVCU118Config}; manifest=$root/third_party/chipyard/fpga/generated-src/$cfg/$cfg.vsrcs.f; fi
 test -s "$manifest"
