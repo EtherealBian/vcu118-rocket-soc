@@ -21,6 +21,15 @@ class BenchmarkTests(unittest.TestCase):
         return ('\r\n'.join(lines+[f'CM_DONE_42_{self.nonce}'])+'\r\n').encode()
     def test_check_both_runs(self):
         s=cm.inspect(self.fixture(),self.nonce,self.elf,6000,dict(performance=20105,validation=20123));self.assertEqual(s['runs']['performance']['iterations_per_s'],'300.000000')
+    def test_profiles_bind_flags_and_executable(self):
+        for profile,(path,flags) in cm.PROFILES.items():
+            data=self.fixture().replace(b'/bin/coremark',path.encode()).replace(cm.FLAGS.encode(),flags.encode())
+            self.assertEqual(cm.inspect(data,self.nonce,self.elf,6000,profile=profile)['profile'],profile)
+            self.assertIn('sha256sum '+path+';',cm.command(self.nonce,6000,profile))
+            if profile!='baseline':
+                for change in [(flags.encode(),cm.FLAGS.encode()),(path.encode(),b'/bin/coremark')]:
+                    with self.assertRaises(ValueError):cm.inspect(data.replace(*change),self.nonce,self.elf,6000,profile=profile)
+        with self.assertRaises(ValueError):cm.command(self.nonce,6000,'baseline; echo oops')
     def test_summary_must_agree_with_build_fields(self):
         data=self.fixture()
         for old,new in [(b'/ GCC13.3.0 ',b'/ GCC99.0 '),(b'-lrt / Heap',b'-lm / Heap'),(b'300.000000 /',b'301.000000 /')]:
