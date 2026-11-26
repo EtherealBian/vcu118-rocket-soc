@@ -1,0 +1,4 @@
+[repositories]
+local
+central: https://repo.maven.apache.org/maven2/
+sbt-plugins: https://scala.jfrog.io/artifactory/api/download/sbt-plugin-releases/, [organization]/[module]/(scala_[scalaVersion]/)(sbt_[sbtVersion]/)[revision]/[type]s/[artifact](-[classifier]).[ext]

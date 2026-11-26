@@ -1,0 +1,67 @@
+{
+  "observed_date": "2026-11-26",
+  "rtl_context": "ChipTop, simulated off-chip TL memory and SPI card",
+  "rtl": {
+    "gpt-bare": {
+      "cycles": 12780544,
+      "sectors_started": 34,
+      "tl_reads": 56937,
+      "tl_writes": 30865,
+      "uart_marker": "VCU118_DIAG_PASS memory_bytes=1048576 passes=2 timer=advanced"
+    },
+    "gpt-badcrc": {
+      "cycles": 4044444,
+      "sectors_started": 34,
+      "tl_reads": 20,
+      "tl_writes": 0,
+      "uart_marker": "ROM4_STOP PAYLOAD_IO_CRC",
+      "debug_halt_pc": "0x1003c"
+    },
+    "gpt-badheader": {
+      "cycles": 538268,
+      "sectors_started": 1,
+      "tl_reads": 12,
+      "tl_writes": 0,
+      "uart_marker": "ROM4_STOP GPT_HEADER",
+      "debug_halt_pc": "0x1003c"
+    },
+    "gpt-badtable": {
+      "cycles": 3949212,
+      "sectors_started": 33,
+      "tl_reads": 12,
+      "tl_writes": 0,
+      "uart_marker": "ROM4_STOP GPT_BOUNDS_CRC",
+      "debug_halt_pc": "0x1003c"
+    },
+    "gpt-bounds": {
+      "cycles": 3949212,
+      "sectors_started": 33,
+      "tl_reads": 12,
+      "tl_writes": 0,
+      "uart_marker": "ROM4_STOP GPT_BOUNDS_CRC",
+      "debug_halt_pc": "0x1003c"
+    }
+  },
+  "qemu_virt": {
+    "independent_shell_challenges": 10,
+    "firmware_sha256": "7a8f9932796747be2cd54390af7adf88ba5b156e54069884946185fef47b41c9"
+  },
+  "physical": {
+    "device": "xcvu9p",
+    "jtag_config_readback": true,
+    "slr_done": [
+      1,
+      1,
+      1
+    ],
+    "slr_crc_error": [
+      0,
+      0,
+      0
+    ],
+    "uart_opened": true,
+    "rx_bytes_in_6s": 0,
+    "programmed_by_this_run": false,
+    "linux_shell_observed": false
+  }
+}
