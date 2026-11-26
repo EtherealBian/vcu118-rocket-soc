@@ -43,4 +43,4 @@ python scripts/review-coremark-matrix.py artifacts/split5h-impl-a $capture artif
 
 第一个对照是单 hart 的 BOOM v3 Medium（两路译码、乱序），板级时钟目标仍为 100 MHz；用 `bash scripts/generate-perf-boom.sh` 独立生成。即使生成 RTL 也不是实板成绩。优先比较同一通用 `rv64gc` ELF，再做专门优化；不假设该核也支持 Rocket 的 Zba/Zbb。
 
-达到 1,000 的频率–效率预算举例：100 MHz 需要 10.00 次/秒/MHz；150 MHz 需要 6.67；200 MHz 需要 5.00。它们是算术门槛，不是 FPGA 时序或性能预测。后续用实测筛选提高每 MHz 工作量和提高时钟的路线；新目标为[四核、150 MHz、九级](quad-nine.md)，只用一个物理 hart 验收单核性能。
+达到 1,000 的频率–效率预算举例：100 MHz 需要 10.00 次/秒/MHz；150 MHz 需要 6.67；200 MHz 需要 5.00。它们是算术门槛，不是 FPGA 时序或性能预测。[性能主线](performance-first.md)先比较双路与三路乱序单核的每轮周期，再用实际通过布线的时钟决定取舍。[四核、150 MHz、九级](quad-nine.md)保留为独立对照。无论整机有几个核，单核验收始终只用一个物理 hart。

@@ -7,9 +7,9 @@ want=$(git -C "$cy" ls-tree HEAD generators/boom | awk '{print $3}'); test "$(gi
 export VCU_BUFFER_ORIGINAL=$cy/generators/rocket-chip/src/main/scala/devices/debug/Periphery.scala
 export VCU_BUFFER_PATCHED=$native/vcu-buffered-src-v1/Periphery.scala VCU_BUFFER_CONFIG=$root/rtl/multicore/Quad150NineRocket.scala VCU_BUFFER_MK=$root/scripts/vcu-quad-nine.mk
 python3 scripts/prepare-debug-buffer.py "$VCU_BUFFER_ORIGINAL" "$VCU_BUFFER_PATCHED"
-export VCU_DEEP_ORIGINAL=$cy/generators/rocket-chip/src/main/scala/rocket/RocketCore.scala VCU_DEEP_PATCHED=$native/vcu-quad-nine-v1/RocketCore.scala
+export VCU_DEEP_ORIGINAL=$cy/generators/rocket-chip/src/main/scala/rocket/RocketCore.scala VCU_DEEP_PATCHED=$native/vcu-quad-nine-v2/RocketCore.scala
 python3 scripts/prepare-nine-rocket.py "$VCU_DEEP_ORIGINAL" "$VCU_DEEP_PATCHED"
-export VCU_FE_ORIGINAL=$cy/generators/rocket-chip/src/main/scala/rocket/Frontend.scala VCU_FE_PATCHED=$native/vcu-quad-nine-v1/Frontend.scala
+export VCU_FE_ORIGINAL=$cy/generators/rocket-chip/src/main/scala/rocket/Frontend.scala VCU_FE_PATCHED=$native/vcu-quad-nine-v2/Frontend.scala
 python3 scripts/prepare-nine-rocket.py --frontend "$VCU_FE_ORIGINAL" "$VCU_FE_PATCHED"
 romdir=$(mktemp -d "$native/quad-nine-rom.XXXXXXXX"); bash scripts/build-boot-gpt.sh "$romdir/uart" quad150
 export VCU_QUAD_ROM_BIN=$romdir/uart/sdboot.bin

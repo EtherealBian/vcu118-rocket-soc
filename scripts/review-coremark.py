@@ -19,6 +19,13 @@ PROFILES = {
     'o3-zb': ('/bin/coremark-o3-zb', FLAGS.replace('-O2 ', '-O3 ').replace('rv64gc ', 'rv64gc_zba_zbb ')),
 }
 
+for _name in ('o3-zb-lto','o3-zb-lto-unroll','g15-zb','g15-zb-lto','g15-zb-lto-unroll'):
+    opts = '-O3' + (' -flto' if '-lto' in _name else '') + (' -funroll-loops' if _name.endswith('-unroll') else '')
+    PROFILES[_name] = ('/bin/coremark-'+_name, PROFILES['o3-zb'][1].replace('-O3',opts))
+
+def expected_compiler(profile):
+    return 'GCC15.1.0' if profile.startswith('g15-') else 'GCC13.3.0'
+
 def binary(profile):
     if profile not in PROFILES: raise ValueError('unknown build profile')
     return PROFILES[profile][0]
@@ -61,7 +68,7 @@ def inspect(data, nonce, elf_sha, iterations, host_ms=None, profile='baseline'):
         if ([field(k) for k in ('seedcrc','[0]crclist','[0]crcmatrix','[0]crcstate')] != [seed,lst,mat,state] or field('CoreMark Size')!='666' or any(line.startswith('Parallel ') for line in lines)):
             raise ValueError('wrong CRC, data size or context count')
         flags=' '.join(field('Compiler flags').split());compiler=field('Compiler version');ticks=int(field('Total ticks'));secs=Decimal(field('Total time (secs)'));rate=Decimal(field('Iterations/Sec'));n=int(field('Iterations'));final=field('[0]crcfinal')
-        if (compiler!='GCC13.3.0' or flags!=PROFILES[profile][1] or not re.fullmatch('0x[0-9a-f]{4}',final) or not secs.is_finite() or not rate.is_finite() or secs<10 or ticks!=secs*1000 or n<=0 or (iterations and n!=iterations) or abs(rate - n/secs)>Decimal('.000002')):raise ValueError('invalid build, duration or rate')
+        if (compiler!=expected_compiler(profile) or flags!=PROFILES[profile][1] or not re.fullmatch('0x[0-9a-f]{4}',final) or not secs.is_finite() or not rate.is_finite() or secs<10 or ticks!=secs*1000 or n<=0 or (iterations and n!=iterations) or abs(rate - n/secs)>Decimal('.000002')):raise ValueError('invalid build, duration or rate')
         score=[x for x in lines if x.startswith('CoreMark 1.0 : ')]
         if name=='performance':
             if len(score)!=1:raise ValueError('missing or repeated performance summary')

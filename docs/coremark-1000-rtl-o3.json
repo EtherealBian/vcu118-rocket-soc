@@ -1,0 +1,139 @@
+{
+  "scope": "Whole-core comparison of two generated ChipTop models, same preloaded executable and behavioral RAM. Different cache/predictor/issue organizations; not a board measurement or a CoreMark score.",
+  "reference": {
+    "scope": "Functional ChipTop RTL, behavioral memory, debug-preloaded, bare-metal; not a board or Linux CoreMark score.",
+    "inputs": {
+      "sim": "5afc59fefb06b0172fed2c5572f0103600f482322ff32997e9024e5aff52c802",
+      "CANDIDATE.sha256": "e28f9b3cbadbff993bf9d0861776490e841e1b613dfc5bc81ed194b4c2db571e",
+      "window.bin": "ed67f11e0e92adc0d03ae020401cfd1101c802dc75613a9e644093fc1b4125b9",
+      "window.elf": "ed00d06bae6bfd11c484d19882cc06f038b6fa22840d0c40bcddd1d6becb90e5",
+      "sdboot.elf": "611d2fa735781659922ae3f538f49dad741e78337f031943bdf5a7c73c0f3a76",
+      "rocket_chiptop.cpp": "9fd708b984cd078932d1727a881bced76a745a5819f0073a7020b1b9d0ac0ea6"
+    },
+    "console_sha256": "a1afea7febcc4d41400be5a41e45d8742252294aa4a3e687bbec7f1c330ea56d",
+    "performance_seed": {
+      "samples": [
+        {
+          "sample": 0,
+          "cycles": 1759085,
+          "retired": 1376429
+        },
+        {
+          "sample": 1,
+          "cycles": 1756674,
+          "retired": 1376429
+        },
+        {
+          "sample": 2,
+          "cycles": 1756244,
+          "retired": 1376429
+        }
+      ],
+      "median_cycles_per_iteration": 439168.5,
+      "median_retired_per_iteration": 344107.25,
+      "median_ipc": 0.783543
+    },
+    "validation_seed": {
+      "samples": [
+        {
+          "sample": 0,
+          "cycles": 1764745,
+          "retired": 1378998
+        },
+        {
+          "sample": 1,
+          "cycles": 1765089,
+          "retired": 1378998
+        },
+        {
+          "sample": 2,
+          "cycles": 1765088,
+          "retired": 1378998
+        }
+      ],
+      "median_cycles_per_iteration": 441272.0,
+      "median_retired_per_iteration": 344749.5,
+      "median_ipc": 0.781263
+    },
+    "model_cycles": 16987136,
+    "backing_reads": 176,
+    "backing_writes": 0
+  },
+  "candidate": {
+    "scope": "Functional ChipTop RTL, behavioral memory, debug-preloaded, bare-metal; not a board or Linux CoreMark score.",
+    "inputs": {
+      "sim": "629a2ef1ac1974ec08ea863ebd46e8d1fc8a1435d2d562c54c6ccf3011843fe3",
+      "CANDIDATE.sha256": "889949b8e2a6231ba0859c8f6569df8258dc46aacd2d6e9bf3dacba481aff592",
+      "window.bin": "ed67f11e0e92adc0d03ae020401cfd1101c802dc75613a9e644093fc1b4125b9",
+      "window.elf": "ed00d06bae6bfd11c484d19882cc06f038b6fa22840d0c40bcddd1d6becb90e5",
+      "sdboot.elf": "dc616579418d120f53fde6ae60e918166d13df4570bd14bb7efb56f4c7131d2b",
+      "rocket_chiptop.cpp": "9fd708b984cd078932d1727a881bced76a745a5819f0073a7020b1b9d0ac0ea6"
+    },
+    "console_sha256": "059251908403dcf3a50efeb70d932053b1423faa3641afd552335048500c4f3c",
+    "performance_seed": {
+      "samples": [
+        {
+          "sample": 0,
+          "cycles": 913145,
+          "retired": 1376429
+        },
+        {
+          "sample": 1,
+          "cycles": 904681,
+          "retired": 1376429
+        },
+        {
+          "sample": 2,
+          "cycles": 900885,
+          "retired": 1376429
+        }
+      ],
+      "median_cycles_per_iteration": 226170.25,
+      "median_retired_per_iteration": 344107.25,
+      "median_ipc": 1.521452
+    },
+    "validation_seed": {
+      "samples": [
+        {
+          "sample": 0,
+          "cycles": 915664,
+          "retired": 1378998
+        },
+        {
+          "sample": 1,
+          "cycles": 912074,
+          "retired": 1378998
+        },
+        {
+          "sample": 2,
+          "cycles": 910201,
+          "retired": 1378998
+        }
+      ],
+      "median_cycles_per_iteration": 228018.5,
+      "median_retired_per_iteration": 344749.5,
+      "median_ipc": 1.511937
+    },
+    "model_cycles": 11788288,
+    "backing_reads": 176,
+    "backing_writes": 0
+  },
+  "comparison": {
+    "performance_seed": {
+      "reference_cycles_per_iteration": 439168.5,
+      "candidate_cycles_per_iteration": 226170.25,
+      "retired_per_iteration": 344107.25,
+      "reference_ipc": 0.783543,
+      "candidate_ipc": 1.521452,
+      "reference_to_candidate_cycle_ratio": 1.941761
+    },
+    "validation_seed": {
+      "reference_cycles_per_iteration": 441272.0,
+      "candidate_cycles_per_iteration": 228018.5,
+      "retired_per_iteration": 344749.5,
+      "reference_ipc": 0.781263,
+      "candidate_ipc": 1.511937,
+      "reference_to_candidate_cycle_ratio": 1.935246
+    }
+  }
+}

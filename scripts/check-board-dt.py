@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Check the *generated* board device-tree and the linked ROM's handoff ABI in WSL."""
 import argparse, hashlib, pathlib, re, subprocess, tempfile
-P=pathlib.Path; ap=argparse.ArgumentParser();ap.add_argument('dts',type=P);ap.add_argument('--rom',type=P,required=True,help='sdboot.elf whose adjacent .bin was used for elaboration'); ap.add_argument('--harts',type=int,choices=(1,4),default=1); ap.add_argument('--mhz',type=int,choices=(100,150),default=100); args=ap.parse_args()
+P=pathlib.Path; ap=argparse.ArgumentParser();ap.add_argument('dts',type=P);ap.add_argument('--rom',type=P,required=True,help='sdboot.elf whose adjacent .bin was used for elaboration'); ap.add_argument('--harts',type=int,choices=(1,4),default=1); ap.add_argument('--mhz',type=int,choices=(100,150,175),default=100); args=ap.parse_args()
 def need(ok,msg):
  if not ok: raise SystemExit('DT_CONTRACT_FAIL: '+msg)
 with tempfile.TemporaryDirectory() as td:

@@ -23,9 +23,11 @@ class BenchmarkTests(unittest.TestCase):
         s=cm.inspect(self.fixture(),self.nonce,self.elf,6000,dict(performance=20105,validation=20123));self.assertEqual(s['runs']['performance']['iterations_per_s'],'300.000000')
     def test_profiles_bind_flags_and_executable(self):
         for profile,(path,flags) in cm.PROFILES.items():
-            data=self.fixture().replace(b'/bin/coremark',path.encode()).replace(cm.FLAGS.encode(),flags.encode())
+            data=self.fixture().replace(b'/bin/coremark',path.encode()).replace(cm.FLAGS.encode(),flags.encode()).replace(b'GCC13.3.0',cm.expected_compiler(profile).encode())
             self.assertEqual(cm.inspect(data,self.nonce,self.elf,6000,profile=profile)['profile'],profile)
             self.assertIn('sha256sum '+path+';',cm.command(self.nonce,6000,profile))
+            if profile.startswith('g15-'):
+                with self.assertRaises(ValueError):cm.inspect(data.replace(b'GCC15.1.0', b'GCC13.3.0'),self.nonce,self.elf,6000,profile=profile)
             if profile!='baseline':
                 for change in [(flags.encode(),cm.FLAGS.encode()),(path.encode(),b'/bin/coremark')]:
                     with self.assertRaises(ValueError):cm.inspect(data.replace(*change),self.nonce,self.elf,6000,profile=profile)

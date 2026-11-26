@@ -1,0 +1,31 @@
+# VCU118 性能主线：先做快一个 hart
+
+验收指标只有一个：在 VCU118 上启动 Linux，以一个上下文运行标准 2 kB CoreMark，三次性能种子**每次**达到 1,000 次/秒；另三次验证种子与 CRC 通过。多核并发另报总吞吐。旧版 [100 MHz 单核 Rocket 实板记录](coremark-1000-board.json)中，最佳配置中位数为 246.655 次/秒。这是实测起点，不是新核的成绩。
+
+| 配置 | 本轮要回答的问题 | 时钟和结果的边界 |
+|---|---|---|
+| 单核 Rocket，顺序单发射 | 只换编译器、LTO 或循环展开，实板速度会变多少？ | 使用已验证的 100 MHz 系统；同一次 Linux 启动交错测量 |
+| 单核 BOOM v3 Medium，双路 | 在不改变 ELF 时，乱序执行能省多少周期？ | 已有 RTL 计数，100 MHz 整机实现尚未经布线签核 |
+| **单核 BOOM v3 Large，三路译码/提交，96 项 ROB** | 和双路相比，省下的周期能否抵消更宽设计的频率损失？ | 100 MHz 作同条件对照；另备 175 MHz 挑战配置及相匹配的 UART ROM。175 MHz 不是已实现频率 |
+| 四核九级 Rocket | 九级短路径是否正确？多核 Linux 和共享内存是否正确？ | [SMP 与九级验证](quad-nine.md)独立推进，不把总吞吐计为单核成绩 |
+
+## 为什么从三路开始
+
+在[同一 `rv64gc` ELF 的裸机热区](coremark-1000-rtl.json)中，性能种子每轮退休 358,881.75 条指令。单发射 Rocket 用 445,246.5 周期，双路 BOOM 用 223,562 周期。若这个窗口要在 **175 MHz** 达到每秒 1,000 轮，预算是 **175,000 周期/轮**：双路的周期数还须下降 **21.72%**，且平均须退休 **2.051 条/拍**，超过两路提交的理论上限。改进编译器可能减少指令数，所以软件对照也保留。这是 M 模式行为内存窗口的预算，不是 Linux 分数预测。
+
+换成第二份通用 `rv64gc -O3` ELF 后，两颗核在性能种子每轮均退休 344,107.25 条指令。Rocket 用 **439,168.5** 周期，双路 BOOM 用 **226,170.25** 周期；验证种子分别为 441,272 和 228,018.5 周期。[两种子的原始计数及 ELF 身份](coremark-1000-rtl-o3.json)。相对各自 `-O2`，指令少 4.12%，Rocket 周期少 1.37%，双路 BOOM 却多用 1.17%。因此按每轮时间选编译配置，不能只看指令数量或选项等级。
+
+选择实现按 `通过时序且经核对的时钟频率 / 每轮周期数` 比较：三路若只用双路周期数的 85%，它的时钟就必须**高于**双路的 85% 才能更快。先用同一二进制比较两套种子，再审查整机时序、CDC、DRC、时钟、管脚及 ROM；过关才通过 JTAG 易失配置，最后以 Linux 板测为准。若新增一个核能提高并发吞吐但降低单核频率，报告两项，不用核数弥补单核差距。
+
+## 复现实验
+
+- 三路配置来自锁定的 [BOOM v3 `WithNLargeBooms`](https://github.com/riscv-boom/riscv-boom/blob/d2a64f7ca9fd914d9c686cb23edcd32d3465a02e/src/main/scala/v3/common/config-mixins.scala)：TAGE-L 预测器，整数/访存/浮点发射队列分别最多 3/1/1 路。不是任何三条指令都能同时发射。对比 [SonicBOOM 论文和另外两个开源内核](quad-nine.md#谁做到了什么)时，引用值都不作为本板数据。
+- WSL 按 [bring-up](bring-up.md)准备工具。依次运行 `bash scripts/generate-perf-boom.sh`（双路）、`bash scripts/generate-perf-wide.sh control`（三路 100 MHz）；对同一窗口用 `scripts/compare-cpu-window.py` 复核两份模型、ELF、阶段计数及逐轮退休数。不要并行改写同一 Chipyard 生成目录。三路周期有收益，再运行 `bash scripts/generate-perf-wide.sh perf175`；该目标使用独立的类、生成目录、ROM 与时间基准。
+- `scripts/check-boom-shape.py` 从 ChipTop 逐层定位唯一 BOOM 核，在生成的 RTL 里数译码单元、检查 ROB 各提交端口与驱动。它不测持续 IPC，也不认定 BOOM 是九级。
+- 编译器实验镜像：`VCU_COREMARK_COMPILERS=1 VCU_COREMARK_AB=1 bash scripts/build-lab-linux.sh "$HOME/.cache/vcu118-build/compiler-test" artifacts/compiler-test`。先打包、验证镜像并启动。已评审的 100 MHz Rocket 上，用 `test-board-coremark-matrix.ps1 -Experiment compilers`（其余参数见[实板步骤](coremark-1000.md)），交错比较 GCC 13.3 的 `-O3 + Zba/Zbb`、GCC 15.1 的 `-O3 + LTO + Zba/Zbb` 与 GCC 13.3 的 `-O3 + LTO + unroll + Zba/Zbb`。每种配置三次、每次两套种子各 12,000 轮；复核 SHA、版本、flags、Linux 报告的 ISA 扩展、CRC 和主机墙钟。固定同一份对照 ELF。编译器和编译选项组合的差值不能归因于其中的某一项。
+
+### 定位瓶颈，而不是猜
+
+`bash scripts/build-cpu-window.sh <新目录> boom-events` 构建独立的 M 模式诊断程序；运行 `scripts/run-cpu-window.sh` 时在五个常规参数后加 `--boom-events`。只接受带匹配配置的 BOOM v3 Medium 模型，读回五个硬件事件选择器。报告分支误预测、间接跳转误预测、ROB 清空、L1 指令/数据缓存 acquire 的事件周期数及每千条退休指令的中位数。它们不能直接相加为停顿，也不提供“分支预测命中率”的分母。带计数器的 ELF 不参与上述同 ELF 架构比较。
+
+175 MHz 的串口链路须两端匹配。现有 100 MHz 诊断程序会重写 UART 分频，旧模拟器也按 100 MHz 接收；不能只替换 PLL、复用旧模拟器或固件，就把输出算作 175 MHz 的验证。Linux 板测仍须检查匹配的时钟设备树、独立的时基和主机墙钟。

@@ -6,6 +6,9 @@
 
 #define UART ((volatile uint32_t *)0x64000000ul)
 #define ROUNDS 4u
+#ifdef VCU_BOOM_EVENTS
+#include "boom_events.h"
+#endif
 static _Alignas(64) unsigned char buf[2000];
 static volatile const uint16_t seeds[] = {0, 0x3415};
 static void text(const char *s) { while (*s) {while ((int32_t)UART[0]<0) {} UART[0]=(unsigned char)*s++;} }
@@ -22,9 +25,19 @@ static int one(unsigned k, unsigned sample) {
     core_init_matrix(r.size,r.memblock[2],(int32_t)((uint32_t)(uint16_t)r.seed2<<16)|(uint16_t)r.seed1,&r.mat);
     core_init_state(r.size,r.seed1,r.memblock[3]);
     uint64_t c0,i0,c1,i1;
+#ifdef VCU_BOOM_EVENTS
+    if(!hpm_setup()) return 0;
+    const struct hpm_values h0=hpm_read();
+#endif
     __asm__ volatile ("fence rw,rw\n\tcsrr %0,mcycle\n\tcsrr %1,minstret" : "=&r"(c0),"=&r"(i0) :: "memory");
     iterate(&r);
     __asm__ volatile ("csrr %0,minstret\n\tcsrr %1,mcycle" : "=&r"(i1),"=&r"(c1) :: "memory");
+#ifdef VCU_BOOM_EVENTS
+    const struct hpm_values h1=hpm_read();
+    field("BOOM_HPM seed=",r.seed1);field(" sample=",sample);field(" br_misp=",h1.br-h0.br);
+    field(" jalr_misp=",h1.jalr-h0.jalr);field(" flush=",h1.flush-h0.flush);
+    field(" ic_acq=",h1.ic-h0.ic);field(" dc_acq=",h1.dc-h0.dc);text("\r\n");
+#endif
     field("CPUWIN seed=",r.seed1);field(" sample=",sample);field(" iterations=",r.iterations);
     field(" cycles=",c1-c0);field(" retired=",i1-i0);field(" list=",r.crclist);field(" matrix=",r.crcmatrix);field(" state=",r.crcstate);field(" final=",r.crc);text("\r\n");
     return c1>c0 && i1>i0 && r.crclist==(k?0xe3c1:0xe714) && r.crcmatrix==(k?0x0747:0x1fd7) && r.crcstate==(k?0x8d84:0x8e3a) && r.crc==(k?EXPECTED_VALIDATION:EXPECTED_PERFORMANCE);

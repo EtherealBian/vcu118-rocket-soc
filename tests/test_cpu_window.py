@@ -35,6 +35,20 @@ class WindowTests(unittest.TestCase):
         for bad in (wire+b'junk',wire.replace(b'final=40853',b'final=1'),wire.replace(b'UART5_HANDOFF',b'NO_HANDOFF')):
             with self.assertRaises(ValueError):board.check_uart(bad,'cpu-window',None)
 
+    def test_boom_event_windows_not_a_generic_core_metric(self):
+        suffix='\nCPU_WINDOW_MODEL_PASS mode=debug-cpu-window cycles=3000 sectors_started=0 tl_read_transactions=2 tl_write_transactions=1 (behavioral RAM/card, no physical DDR)\n'
+        rows=[]
+        for row in guest().splitlines():
+            if row.startswith('CPUWIN seed='):
+                rows.append('BOOM_HPM '+' '.join(row.split()[1:3])+' br_misp=20 jalr_misp=3 flush=0 ic_acq=0 dc_acq=0')
+            rows.append(row)
+        report='\n'.join(rows)+'\n'+suffix
+        r=model.decode(report,True)['performance_seed']
+        self.assertAlmostEqual(r['median_event_cycles_per_1000_retired']['br_misp'],20*1000/301,places=5)
+        for bad in (report.replace('BOOM_HPM seed=0','BOOM_HPM seed=13333',1),report.replace('br_misp=20','br_misp=9999',1),report.replace('final=40853','final=0',1),guest()+suffix):
+            with self.assertRaises(ValueError):model.decode(bad,True)
+        with self.assertRaises(ValueError):model.decode(report,False)
+
     def test_comparison_requires_same_work_different_hardware(self):
         spec=importlib.util.spec_from_file_location('compare_window',S/'compare-cpu-window.py'); compare=importlib.util.module_from_spec(spec);spec.loader.exec_module(compare)
         a=windows(guest().splitlines()); a['inputs']={k:k for k in ('window.elf','window.bin','rocket_chiptop.cpp','sim','CANDIDATE.sha256')}; b=copy.deepcopy(a)

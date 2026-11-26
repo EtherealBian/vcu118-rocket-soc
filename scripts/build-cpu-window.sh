@@ -5,6 +5,7 @@ root=$(cd "$(dirname "$0")/.." && pwd); cd "$root"; out=${1:?fresh directory}; m
 profile=${2:-control}; arch=rv64imac_zicsr; opts=(-O2)
 case "$profile" in
  control) ;;
+ boom-events) opts+=(-DVCU_BOOM_EVENTS=1);;
  o3) opts=(-O3);;
  o3-zb) opts=(-O3); arch=rv64imac_zba_zbb_zicsr;;
  o3-zb-lto) opts=(-O3 -flto -Wl,--undefined=memset); arch=rv64imac_zba_zbb_zicsr;;

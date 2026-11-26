@@ -20,7 +20,10 @@
   fetched.btb := ibuf.io.btb_resp
   val aligned = RegEnable(fetched, ibuf.io.inst(0).fire)
   val decoded = RegEnable(aligned, alignValid && decodeReady)
-  val decodedCtrl = RegEnable(Wire(new IntCtrlSigs).decode(aligned.insn.inst.bits, decode_table), alignValid && decodeReady)
+  val scalarCtrl = Wire(new IntCtrlSigs).decode(aligned.insn.inst.bits, decode_table)
+  // IntCtrlSigs.decode drives scalar fields only; vector legality is decided at issue.
+  scalarCtrl.vec := false.B
+  val decodedCtrl = RegEnable(scalarCtrl, alignValid && decodeReady)
   when (take_pc) { alignValid := false.B; decodeValid := false.B }
   .otherwise {
     when (alignReady) { alignValid := ibuf.io.inst(0).valid }
