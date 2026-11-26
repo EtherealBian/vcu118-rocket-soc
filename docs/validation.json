@@ -724,6 +724,258 @@
           ],
           "volatile_configuration": true,
           "shell_challenge_verified": true
+        },
+        "linux": {
+          "mode": "linux",
+          "utc": "2026-11-26T08:29:19.2915402Z",
+          "bit_sha256": "d77b13dbf75b4773e33ba48f7b177f320572cb62ffe8a9cd930ab196edd6f520",
+          "uart": "115200 8N1",
+          "format": "VCU118U5",
+          "payload_bytes": 5341704,
+          "payload_sha256": "7a8f9932796747be2cd54390af7adf88ba5b156e54069884946185fef47b41c9",
+          "frame_sha256": "ad1ba8c403340cb3cf9f6e4da1e5471db65ffce24f0a7553f6bbcb03579b6aee",
+          "uart_sha256": "e906e53c7e5d4e8ccba1d901384993fe8127022095bd79d381b1d9e1689f213e",
+          "slr_done": [
+            1,
+            1,
+            1
+          ],
+          "slr_crc_error": [
+            0,
+            0,
+            0
+          ],
+          "volatile_configuration": true,
+          "shell_challenge_verified": true,
+          "host_elapsed_ms": {
+            "rom_handoff": 491110,
+            "shell_prompt": 495003,
+            "accept": 495050
+          }
+        },
+        "linux_profile": {
+          "host_observation_ms": 15581,
+          "kernel": "6.6.65",
+          "machine": "riscv64",
+          "hart": 0,
+          "mmu": "sv39",
+          "uarch": "sifive,rocket0",
+          "linux_reported_isa": "rv64imafdcb_zicntr_zicsr_zifencei_zihpm_zba_zbb_zbs",
+          "memtotal_kib": 2061808,
+          "userspace_bytes": 16777216,
+          "write_read_passes": 13,
+          "guest_elapsed_integer_seconds": 15,
+          "uptime_window_seconds": "15.57",
+          "timer_interrupt_delta": 3894,
+          "console_sha256": "a9665d1b0d8577c38d91ac0d000de6b4efde9cd61b94b020d5d790585b57ee1d",
+          "scope": "one Linux process touching an allocated 16 MiB buffer, not a peak memory bandwidth or full capacity test"
+        },
+        "tty_integrity_same_boot": {
+          "first_attempt": {
+            "strict_result": "REJECTED",
+            "first_rejection": "wrong echo, digest or acknowledgement at record 27",
+            "affected": [
+              {
+                "record": 27,
+                "expected_chars": 256,
+                "echo_chars": 233,
+                "timestamped_kernel_lines": 1,
+                "guest_digest_matches_full_line": false,
+                "guest_digest_matches_reconstructed_echo": true
+              }
+            ],
+            "console_sha256": "c5693ce7483aae651f6c059ab0e05f64f891d74410c1b62b9607980b82f93711",
+            "scope": "Diagnosis only. A reconstructed echo never substitutes for strict byte/digest acceptance; does not identify the hardware or software cause."
+          },
+          "second_attempt": {
+            "records": 32,
+            "ascii_payload_bytes": 8192,
+            "line_terminators": 32,
+            "matching_sha256": 32,
+            "plic_source": 1,
+            "driver": "64000000.serial",
+            "plic_serial_before": 13394,
+            "plic_serial_after": 25051,
+            "plic_serial_delta": 11657,
+            "console_sha256": "2a547d52b46e36651f9307453685e380b06f0bc68bcfde58ef39119b403ecadb",
+            "scope": "single Linux console; includes input, terminal echo and output; not an RX-only IRQ count or peak link rate"
+          },
+          "boot_uart_sha256": "e906e53c7e5d4e8ccba1d901384993fe8127022095bd79d381b1d9e1689f213e"
+        },
+        "integrated_packed_linux": {
+          "mode": "linux-oscheck",
+          "utc": "2026-11-26T08:40:09.3118201Z",
+          "bit_sha256": "d77b13dbf75b4773e33ba48f7b177f320572cb62ffe8a9cd930ab196edd6f520",
+          "uart": "115200 8N1",
+          "format": "VCU118U5",
+          "payload_bytes": 2077328,
+          "payload_sha256": "cc36629b0396e32b7c58f5c810a5f163b93db9ff59d7acb4b52279bbe4e75279",
+          "frame_sha256": "2a492365720b048720a977a8e72c4e9bedc236db18d754f7cc7b4116ee0f7ddd",
+          "uart_sha256": "a681fa8faa1dcb55386f723f6a93cc8a53b8ac604e0874ab159a0048e06a2873",
+          "slr_done": [
+            1,
+            1,
+            1
+          ],
+          "slr_crc_error": [
+            0,
+            0,
+            0
+          ],
+          "volatile_configuration": true,
+          "shell_challenge_verified": true,
+          "host_elapsed_ms": {
+            "rom_handoff": 190901,
+            "shell_prompt": 199988,
+            "accept": 200037
+          },
+          "packed_stage": {
+            "raw_bytes": 5407752,
+            "raw_sha256": "38be155760b246941a09aa60366ab557bcd586618bd2a7d70ff2da7ae3484022",
+            "raw_crc32": "ce0f0698",
+            "block_bytes": 2076359,
+            "block_sha256": "8fd1a5e51013e89b2e56c5954c4020bf53d58feb3c5935fb1944dc04e9be81c1",
+            "stage_bytes": 2077328,
+            "stage_sha256": "cc36629b0396e32b7c58f5c810a5f163b93db9ff59d7acb4b52279bbe4e75279",
+            "wire_bytes_saved": 3330424,
+            "stage_copy_address": "0x84000000",
+            "output_address": "0x80000000",
+            "stage_stack": "0x87fff000"
+          },
+          "dot4": "No platform device on this baseline; not a driver pass."
+        },
+        "coremark": {
+          "upstream": "9d07b05523c16754a214a40224018a4ee908e091",
+          "elf_sha256": "beafaa8dbebe44215cbc142639c4dd5d46eb0feaf9f14356078d035742cad3ec",
+          "compiler": "GCC13.3.0",
+          "flags": "-O2 -static -s -march=rv64gc -mabi=lp64d -Wl,--build-id=none -lrt",
+          "context_count": 1,
+          "total_buffer_bytes": 2000,
+          "allocation": "heap",
+          "runs": {
+            "performance": {
+              "iterations": 6000,
+              "elapsed_s": "27.664000",
+              "iterations_per_s": "216.888375",
+              "seedcrc": "0xe9f5",
+              "list_crc": "0xe714",
+              "matrix_crc": "0x1fd7",
+              "state_crc": "0x8e3a",
+              "final_crc": "0xa14c",
+              "host_observed_ms": 27741
+            },
+            "validation": {
+              "iterations": 6000,
+              "elapsed_s": "27.816000",
+              "iterations_per_s": "215.703192",
+              "seedcrc": "0x18f2",
+              "list_crc": "0xe3c1",
+              "matrix_crc": "0x0747",
+              "state_crc": "0x8d84",
+              "final_crc": "0x18e1",
+              "host_observed_ms": 27821
+            }
+          },
+          "uart_sha256": "5a824392490217eaf0580ada842e86cc00d936de2fdb3f39305a1b373dd7cd35",
+          "boot": {
+            "utc": "2026-11-26T08:40:09.3118201Z",
+            "mode": "linux-oscheck",
+            "bit_sha256": "d77b13dbf75b4773e33ba48f7b177f320572cb62ffe8a9cd930ab196edd6f520",
+            "payload_sha256": "cc36629b0396e32b7c58f5c810a5f163b93db9ff59d7acb4b52279bbe4e75279",
+            "uart_sha256": "a681fa8faa1dcb55386f723f6a93cc8a53b8ac604e0874ab159a0048e06a2873"
+          },
+          "iterations_requested": 6000,
+          "scope": "One physical VCU118, one RV64GC hart, under Linux; independent measurement, not certified."
+        },
+        "coremark_same_boot_repeats": {
+          "scope": "Three distinct invocations on the same live Linux shell and same ELF, not independent board boots. First invocation also shown in coremark.",
+          "median_iterations_per_s": {
+            "performance": 216.990344,
+            "validation": 215.610177
+          },
+          "invocations": [
+            {
+              "runs": {
+                "performance": {
+                  "iterations": 6000,
+                  "elapsed_s": "27.664000",
+                  "iterations_per_s": "216.888375",
+                  "seedcrc": "0xe9f5",
+                  "list_crc": "0xe714",
+                  "matrix_crc": "0x1fd7",
+                  "state_crc": "0x8e3a",
+                  "final_crc": "0xa14c",
+                  "host_observed_ms": 27741
+                },
+                "validation": {
+                  "iterations": 6000,
+                  "elapsed_s": "27.816000",
+                  "iterations_per_s": "215.703192",
+                  "seedcrc": "0x18f2",
+                  "list_crc": "0xe3c1",
+                  "matrix_crc": "0x0747",
+                  "state_crc": "0x8d84",
+                  "final_crc": "0x18e1",
+                  "host_observed_ms": 27821
+                }
+              },
+              "uart_sha256": "5a824392490217eaf0580ada842e86cc00d936de2fdb3f39305a1b373dd7cd35"
+            },
+            {
+              "runs": {
+                "performance": {
+                  "iterations": 6000,
+                  "elapsed_s": "27.651000",
+                  "iterations_per_s": "216.990344",
+                  "seedcrc": "0xe9f5",
+                  "list_crc": "0xe714",
+                  "matrix_crc": "0x1fd7",
+                  "state_crc": "0x8e3a",
+                  "final_crc": "0xa14c",
+                  "host_observed_ms": 27719
+                },
+                "validation": {
+                  "iterations": 6000,
+                  "elapsed_s": "27.833000",
+                  "iterations_per_s": "215.571444",
+                  "seedcrc": "0x18f2",
+                  "list_crc": "0xe3c1",
+                  "matrix_crc": "0x0747",
+                  "state_crc": "0x8d84",
+                  "final_crc": "0x18e1",
+                  "host_observed_ms": 27861
+                }
+              },
+              "uart_sha256": "9687b653e24e17573e36d2392a43cf2b1a4cc8cd621eb751328072de0c246ed8"
+            },
+            {
+              "runs": {
+                "performance": {
+                  "iterations": 6000,
+                  "elapsed_s": "27.644000",
+                  "iterations_per_s": "217.045290",
+                  "seedcrc": "0xe9f5",
+                  "list_crc": "0xe714",
+                  "matrix_crc": "0x1fd7",
+                  "state_crc": "0x8e3a",
+                  "final_crc": "0xa14c",
+                  "host_observed_ms": 27712
+                },
+                "validation": {
+                  "iterations": 6000,
+                  "elapsed_s": "27.828000",
+                  "iterations_per_s": "215.610177",
+                  "seedcrc": "0x18f2",
+                  "list_crc": "0xe3c1",
+                  "matrix_crc": "0x0747",
+                  "state_crc": "0x8d84",
+                  "final_crc": "0x18e1",
+                  "host_observed_ms": 27851
+                }
+              },
+              "uart_sha256": "4ca72a44db80b3a25bfe83f60c7f74f470017a2797df3dadc4e67cd37f01ddb4"
+            }
+          ]
         }
       },
       "ddr4_live_calibration": {
@@ -773,7 +1025,7 @@
       "offchip_tl_writes": 0
     },
     "linux_ioctl_on_rocket": "not verified",
-    "integrated_fpga_timing": "not verified",
+    "integrated_fpga_timing": "Legacy buffered candidate: routed but DRC rejected; no bitstream.",
     "physical_execution": "not verified",
     "buffered_uart_rtl": {
       "mode": "uart5-dot4",
@@ -864,6 +1116,18 @@
       },
       "payload_sha256": "19193fc1c77468078dacacfac28688dd53e3b7f0c4f9eeb1e818d600f8249ff2",
       "interpretation": "v1 per-vector MMIO, including command/status/fences, took longer than this scalar implementation in this model. No physical speedup claim."
+    },
+    "buffered_fpga_route": {
+      "candidate_kit_sha256": "b9eef3c40fd039948562a982cf37d4a9964fc21c94c205db7214c542875cd420",
+      "wns_ns": 0.491,
+      "whs_ns": 0.01,
+      "wpws_ns": 0.143,
+      "system_setup_ns": 0.777,
+      "check_timing_loops": 1,
+      "drc": "LUTLP-1 (3 LUTs)",
+      "bitstream_written": false,
+      "physical_execution": false,
+      "waiver": false
     }
   },
   "linux_chiptop_debug": {
@@ -1611,6 +1875,80 @@
     "qemu_virt": [
       "baseline 16 MiB and shell",
       "OS variant 16 MiB, two-process workload and shell"
-    ]
+    ],
+    "physical_same_firmware_pair": {
+      "mode": "linux",
+      "utc": "2026-11-26T08:36:05.2330818Z",
+      "bit_sha256": "d77b13dbf75b4773e33ba48f7b177f320572cb62ffe8a9cd930ab196edd6f520",
+      "uart": "115200 8N1",
+      "format": "VCU118U5",
+      "payload_bytes": 2018528,
+      "payload_sha256": "6e473783628df2b5e9d2642f101a893a3bddf8cf86344fd65de76daf517e0929",
+      "frame_sha256": "f99b20d11739a3c162e8b5a3d493dc14c76a8c913c8e3bbdbec081de0eac91f0",
+      "uart_sha256": "1a2a9886170321eff37d76e5ddb3692e52a30f88124cb1053751b57b4cc67131",
+      "slr_done": [
+        1,
+        1,
+        1
+      ],
+      "slr_crc_error": [
+        0,
+        0,
+        0
+      ],
+      "volatile_configuration": true,
+      "shell_challenge_verified": true,
+      "host_elapsed_ms": {
+        "rom_handoff": 185470,
+        "shell_prompt": 194436,
+        "accept": 194469
+      },
+      "packed_stage": {
+        "raw_bytes": 5341704,
+        "raw_sha256": "7a8f9932796747be2cd54390af7adf88ba5b156e54069884946185fef47b41c9",
+        "raw_crc32": "8ef3edd6",
+        "block_bytes": 2017559,
+        "block_sha256": "de1877d760fdf334cfbaa8caa89cd7bea8384576abbabab93c5fade047b1bc3f",
+        "stage_bytes": 2018528,
+        "stage_sha256": "6e473783628df2b5e9d2642f101a893a3bddf8cf86344fd65de76daf517e0929",
+        "wire_bytes_saved": 3323176,
+        "stage_copy_address": "0x84000000",
+        "output_address": "0x80000000",
+        "stage_stack": "0x87fff000"
+      },
+      "same_firmware_comparison": {
+        "raw_host_elapsed_ms": {
+          "rom_handoff": 491110,
+          "shell_prompt": 495003,
+          "accept": 495050
+        },
+        "packed_host_elapsed_ms": {
+          "rom_handoff": 185470,
+          "shell_prompt": 194436,
+          "accept": 194469
+        },
+        "elapsed_ratio_packed_over_raw": 0.39283,
+        "milliseconds_saved_to_shell_response": 300581,
+        "scope": "first byte queued to verified live shell result; host monotonic observations, excludes JTAG programming"
+      }
+    },
+    "bare_chiptop": {
+      "good": {
+        "cycles": 21141504,
+        "tl_reads": 56866,
+        "tl_writes": 30758,
+        "sd_commands": 0,
+        "diagnostic_bytes": 1048576,
+        "passes": 2
+      },
+      "bad_inner_crc_valid_outer_frame": {
+        "cycles": 12167488,
+        "tl_reads": 49,
+        "tl_writes": 4,
+        "sd_commands": 0,
+        "observation_cycles_after_stop": 200000,
+        "guest_started": false
+      }
+    }
   }
 }

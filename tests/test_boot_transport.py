@@ -78,6 +78,15 @@ class SerialTests(unittest.TestCase):
         s=self.inspect(self.rows)
         self.assertEqual((s['records'],s['ascii_payload_bytes'],s['plic_serial_delta']),(32,8192,10))
 
+    def test_explain_interrupted_record_but_never_accept_it(self):
+        diagnose=load('diagnose-linux-serial');rows=self.rows.copy();original=self.v[26];idx=4+26*3
+        shortened=original[:74]+original[97:]
+        rows[idx:idx+2]=[original[:74]+'[   36.100000] random: crng init done',original[97:],hashlib.sha256((shortened+'\n').encode()).hexdigest()+'  -']
+        with self.assertRaises(ValueError):self.inspect(rows)
+        encode=lambda r:('\r\n'.join(r)+'\r\n').encode()
+        r=diagnose.explain(encode(rows),self.v,self.n);x=r['affected'][0]
+        self.assertEqual((x['record'],x['echo_chars'],x['timestamped_kernel_lines']),(27,233,1));self.assertFalse(x['guest_digest_matches_full_line']);self.assertTrue(x['guest_digest_matches_reconstructed_echo'])
+        with self.assertRaises(ValueError):diagnose.explain(encode(self.rows),self.v,self.n)
     def test_echo_hash_ack_and_boundary(self):
         for i,bad in ((4,self.v[1]),(5,'e'*64+'  -'),(6,'LINK_ACK_2_'+self.n),(2,'none'),(-2,self.rows[2]),(-1,'# stale')):
             rows=self.rows.copy();rows[i]=bad

@@ -296,3 +296,24 @@ bash scripts/test-packed-rtl.sh logs/packed-rtl-next artifacts/packed-bare-next 
 实板分别用同一已审 bit、同一 `-Mode linux` 和同一固件，先发送原始文件，再发送 `stage.bin`。发送方须独占 J4 串口；对两次新采集运行 `python scripts/verify-packed-boot.py <run> <packed-capture> artifacts/packed-next artifacts/fw_payload.bin --raw-capture <raw-capture>`。两个捕获都要有本次采集器的单调计时字段。时间从开始发送到本次 shell 回答，不含 JTAG；不要把文件压缩率说成实测加速。
 
 在未重新配置、已完成随机挑战的 Linux 上还可运行 `./scripts/test-linux-serial.ps1 -Run $run -Capture $capture -Payload $payload -Out logs/tty-next`（预先设置 `VCU_UART_SERIAL`）。它在 shell 的 read 循环中发送 32 行各 256 个随机十六进制字符，逐行检查 tty 回显、guest 计算的 SHA-256 和 ACK，并要求真实 SiFive PLIC 串口中断行计数前进，不写 guest 文件。`scripts/test-linux-serial-qemu.py` 是命令协议的对照，不能替代板上 PLIC 验证。
+
+### 同一实验镜像：Linux 驱动、进程自检与按需 CPU 基准
+
+Windows 不需要额外上传用户态程序。在 WSL 用全新的构建和发布目录，在同一 initramfs 内加入 `/bin/os-check`、`/bin/dot4-check`、`/bin/coremark`。自检随 `/init` 运行，基准只在明确调用时启动。无 Dot4 的设备树应报告 `LINUX_DOT4_NO_PLATFORM_DEVICE`，这不能验证加速器；在含 Dot4 的配置上必须看到实际运算及 ioctl 通过。
+
+```bash
+work="$HOME/.cache/vcu118-build/lab-next"
+bash scripts/build-lab-linux.sh "$work" artifacts/lab-next
+bash scripts/build-packed-boot.sh artifacts/lab-next/fw_payload.bin artifacts/pack-lab-next
+python3 scripts/test-coremark-qemu.py artifacts/pack-lab-next/stage.bin artifacts/lab-next/coremark.elf logs/lab-qemu-next
+```
+
+QEMU 只验证命令、ELF 身份与算法 CRC，不用于推算实板性能。`artifacts/lab-next/coremark.elf` 是同次构建时从 initramfs 暂存目录复制并逐字节核对的本地 ELF。实板先通过上文相应的 `linux-oscheck` 或 `linux-dot4` 启动复核和 shell 挑战，再使用同一 UART 运行：
+
+```powershell
+./scripts/test-board-coremark.ps1 -Run $run -Capture $capture -Payload $stageBin -Elf $elf -Out logs/coremark-next -Iterations 6000
+```
+
+脚本在运行前核对板上 `/bin/coremark` 的 SHA-256；依次跑性能/校验两套种子，核对原厂算法 CRC、单上下文、编译器和选项、退出码、每次至少 10 秒及宿主单调时钟。原厂 POSIX 端口未修改；各组使用 2,000 字节的堆缓冲区。保留封装镜像、同次 ELF、构建参数、验证摘要及上板记录，勿将单机数据当成官方认证或其他频率的成绩。
+
+串口压力测试被拒绝时，保留原始 `uart.txt`、`nonce.txt` 和 `vectors.txt` 在本机，按 `python scripts/diagnose-linux-serial.py --help` 指定采集目录。诊断对比已回显数据、发送内容与 guest 摘要；不能将重建的回显当成严格通过。
