@@ -197,3 +197,18 @@ vivado -mode batch -source scripts/inspect-integrated-irq.tcl -tclargs <split-ru
 ```
 
 新逻辑针对固定的未门控调试时钟和单 hart。先核对九个已追溯的生成模块摘要；不接受不同版本静默替换。物理审核要求 JTCK 寄存器 Q 到第一级 D 之间无组合逻辑、亚稳态级只驱动第二级、两路在目标域寄存后才进入 OR，并复核原 tile 接收链。测试中 `io_hartIsInReset_0` 是调试模块的状态输入，而不是 VCU118 上可独立复位 hart 的证明。
+
+### 审核外部接口约束
+
+`review-fpga.py` 从同一个 `check_timing -verbose` 报告逐项核对缺少 I/O 延迟的引脚名称、方向和个数。未识别的引脚，或新增的非零豁免类别，会阻止自动下载。`board_io_inventory_known=true` 只表示都能识别，**不表示外部接口时序达标**。下面是 ROM4 的 5 个输入和 6 个输出，不是通用的时序豁免列表：
+
+| 接口 | 报告中的端口 | 还需审什么 |
+|---|---|---|
+| FPGA 串口 | 输入 `uart_rxd`，输出 `uart_txd` | 两级 RX 的第一级是否直接接引脚、级间有无扇出和实际时序；TX 和波特率须做 J4 双向实板测试。异步串口没有外部同步参考时钟。 |
+| 软核调试 TAP | 输入 `jtag_jtag_TDI/TMS`，输出 `jtag_jtag_TDO` | `JTCK` 自身为 100 ns 周期约束；数据的输入建立/保持和 TDO 返回必须按外部调试器、连线和采样边沿预算。J106 配置下载不经过此 TAP。 |
+| SPI/SD | 输入 `sdio_spi_dat_0` (MISO)，输出 `sdio_spi_clk`、`sdio_spi_cs` (MOSI)、`sdio_spi_dat_3` (CS_n) | shell 的 `cs` 名称不是 SPI 片选。核对生成 HDL 后再对照 UG1224 表 3-30：J52.1/3/5/7 对应 CS_n/MOSI/MISO/SCLK，U41 在 FPGA 的 1.8 V 和接口的 3.3 V 之间转换。外部卡及连接的发射/返回延迟、选定 SCLK 速率要单独验证；UART 载荷的通过不能验证 SD。 |
+| 系统与 DDR 复位 | 输入 `reset`，输出 `ddr_c0_ddr4_reset_n` | 前者进入 POR/PLL/复位整形，需检查断言/释放以及各域复位接收；后者由 MIG 驱动，不是 DDR 数据线。须核查复位保持/释放、校准及真实内存读写，不能用 SoC RTL 的 RAM 模型代替。 |
+
+缺少硬件预算时保留未验证状态，不填零延迟或添加全局假路径来让报告变绿。
+
+对实现所用 kit 的板级复位行为运行 `VCU_SIM_KIT=$PWD/cache/clock5 bash scripts/test-board-wrangler.sh logs/wrangler-new`（替换为实际 kit 路径）。无需连接实板；不能替代 DCP 复位树检查。

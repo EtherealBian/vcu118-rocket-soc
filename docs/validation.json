@@ -509,6 +509,36 @@
     },
     "integrated_netlist_verified": false,
     "routed_timing_met": null,
-    "physical_execution": false
+    "physical_execution": false,
+    "chiptop_debug_slave_lanes": {
+      "mode": "debug-slave-lanes",
+      "cycles": 7688092,
+      "store_cases": 180,
+      "load_cases": 180,
+      "debug_data_bytes": 32,
+      "transfer_sizes": [
+        1,
+        2,
+        4,
+        8
+      ],
+      "prehalt_external_get": {
+        "bytes": 64,
+        "address": "0x8fffefc0"
+      },
+      "posthalt_external_reads": 0,
+      "external_writes": 0,
+      "spi_commands": 0
+    }
+  },
+  "reset_wrangler_clock_only_kit": {
+    "level": "generated ResetWrangler RTL with actual debounce register and per-domain reset catchers, not a MIG/PLL or physical reset test",
+    "clock_cases": 9,
+    "ticks_per_case": 367174,
+    "reset_releases_per_domain_per_case": 4,
+    "debounce_counter_edges": 10000,
+    "domain_release_stages": 3,
+    "source": "3c7d279e814fa41290b206d6e799fea0014c705b53196652f21e0b42dbecd526",
+    "qualifies_analog_recovery_removal": false
   }
 }

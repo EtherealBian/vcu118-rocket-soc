@@ -2,6 +2,9 @@
 """Extract routed implementation evidence, NOT board qualification or a timing waiver."""
 import argparse, hashlib, json, re
 from pathlib import Path
+import sys
+sys.path.insert(0,str(Path(__file__).resolve().parent))
+from board_io_inventory import check_io
 
 def route(text):
     def value(key):
@@ -36,7 +39,7 @@ def main():
     ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('run',type=Path);a=ap.parse_args();d=a.run.resolve();r=d/'obj/report';files={}
     def read(name):
         b=(r/name).read_bytes();files[name]=hashlib.sha256(b).hexdigest();return b.decode(errors='replace')
-    rt=route(read('route-status.rpt'));tm=timing(read('full-timing.rpt'));ct=counters(read('check-timing.rpt'));resources={}
+    rt=route(read('route-status.rpt'));tm=timing(read('full-timing.rpt'));ct_text=read('check-timing.rpt');ct=counters(ct_text);io,io_known=check_io(ct_text,ct);resources={}
     util=read('routed-utilization.rpt');
     for k in ['CLB LUTs','CLB Registers','Block RAM Tile','DSPs','URAM']:
         m=re.search(r'^\|\s*'+k+r'\s*\|\s*([\d.]+)\s*\|',util,re.M)
@@ -44,6 +47,6 @@ def main():
     for n in ['cdc.rpt','clock-interaction.rpt','pulse-width.rpt','methodology.rpt','routed-clocks.rpt','routed-drc.rpt']:read(n)
     bit=d/'obj/VCU118FPGATestHarness.bit';routable=gates(rt,tm)
     print(json.dumps(dict(run=d.name,route=rt,timing=tm,check_timing=ct,resources=resources,route_and_constrained_timing_met=routable,
-       board_internal_coverage_met=board_coverage(ct),nonzero_coverage_checks={k:v for k,v in ct.items() if v},reports_sha256=files,bit_sha256=(hashlib.sha256(bit.read_bytes()).hexdigest() if bit.is_file() else None),qualification='manual CDC/DRC/clock/IO coverage and physical testing separate'),indent=2))
+       board_internal_coverage_met=board_coverage(ct),board_io_inventory_known=io_known,io_detail=io,nonzero_coverage_checks={k:v for k,v in ct.items() if v},reports_sha256=files,bit_sha256=(hashlib.sha256(bit.read_bytes()).hexdigest() if bit.is_file() else None),qualification='manual CDC/DRC/clock/IO coverage and physical testing separate'),indent=2))
     return 0 if routable else 1
 if __name__=='__main__':raise SystemExit(main())
