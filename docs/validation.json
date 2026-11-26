@@ -204,7 +204,19 @@
     "satp": "0x8000000000080522",
     "symbol": "memmap_init_range+0xfe",
     "scratch_restored_and_hart_resumed": true,
-    "interactive_shell": "not verified"
+    "interactive_shell": "not verified",
+    "additional_pc_samples": [
+      {
+        "cycle": 80000000,
+        "dpc": "0xffffffff8005bff8",
+        "symbol": "__free_pages_ok+0x148"
+      },
+      {
+        "cycle": 100000000,
+        "dpc": "0xffffffff8005c478",
+        "symbol": "__free_pages_core+0x64"
+      }
+    ]
   },
   "rom4_fpga_implementation": {
     "tool": "Vivado 2024.2",
@@ -277,7 +289,19 @@
       "route_ns": 11.587
     },
     "bit_written": false,
-    "timing_met": false
+    "timing_met": false,
+    "cdc_inventory": {
+      "detailed_rows": 580,
+      "critical_rows": 9,
+      "endpoint_families": {
+        "DMI async queue validity reset": 2,
+        "dmactive request received by two synchronizers": 2,
+        "debug interrupt enters tile through a shift LUT": 1,
+        "MIG/POR to reset-wrangler asynchronous preset": 2,
+        "DDR AXI async queue validity reset": 2
+      },
+      "waivers_added": 0
+    }
   },
   "stock_route_only": {
     "route": {
@@ -353,6 +377,78 @@
     "early_console": "sifive0 @ 0x64000000",
     "kernel_reported_memory_limit_mib": 128,
     "shell_observed_at_this_checkpoint": false,
-    "hardware_execution": false
+    "hardware_execution": false,
+    "kernel_reported_available_kib": 125148,
+    "plic_contexts": 2,
+    "sched_clock_hz_reported": 100000
+  },
+  "debug_buffer_experiment": {
+    "config": "BufferedDebugRocketVCU118Config",
+    "target_mhz": 100,
+    "cpu_pipeline_stages": 5,
+    "generated_sources": 375,
+    "uart5_kit_sha256": "186a13436491d53951ae81df56d6e99b63c43434b52d5d1ba6179d595e69f51c",
+    "rom_with_board_dtb_sha256": "eff2f384d5a1d2a9d4f1f7eec2716a0b48ad371fb9010e4b5cfce91468892d23",
+    "changes_vs_clock_only": [
+      "registered depth-2 TileLink A/D queues on the debug slave",
+      "explicit three-flop receiver attributes for tile debug interrupt"
+    ],
+    "generated_ad_buffer_unit": {
+      "cycles": 4112,
+      "stimulus": "independent ready/valid patterns, directed full-queue synchronous resets, final drain",
+      "request": {
+        "push": 2611,
+        "pop": 2607,
+        "stall_cycles": 902,
+        "reset_discarded": 4
+      },
+      "response": {
+        "push": 1955,
+        "pop": 1951,
+        "stall_cycles": 1920,
+        "reset_discarded": 4
+      }
+    },
+    "chiptop_sba_mailbox": {
+      "cycles": 1041532,
+      "result": "0xc0ff8be1",
+      "nonaligned_sberror": 3,
+      "recovered": true
+    },
+    "chiptop_uart_faults": {
+      "badmagic": {
+        "cycles": 462604,
+        "halt_dpc": "0x1003c"
+      },
+      "badlength": {
+        "cycles": 471820,
+        "halt_dpc": "0x1003c"
+      },
+      "badcrc": {
+        "cycles": 454412,
+        "halt_dpc": "0x1003c"
+      }
+    },
+    "integrated_post_synth_irq": {
+      "clock_only": [
+        "FDRE",
+        "SRL16E"
+      ],
+      "buffer_and_irq_attributes": [
+        "FDRE",
+        "FDRE",
+        "FDRE"
+      ],
+      "all_three_marked": true,
+      "intermediate_fanout_one": true,
+      "first_stage_driver": "LUT2 INIT=4'hE",
+      "lut_inputs": [
+        "debugIntRegs_0_reg/Q (JTCK)",
+        "hrDebugIntReg_0_reg/Q (clk_out1_harnessSysPLL)"
+      ],
+      "disposition": "SRL removed, mixed-clock OR still present; no CDC signoff"
+    },
+    "postroute_timing_met": null,
+    "physical_execution": false
   }
 }

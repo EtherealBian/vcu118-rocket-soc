@@ -156,3 +156,29 @@ python scripts/verify-probe-capture.py artifacts/probe-route-next logs/probe-hw-
 ```
 
 约束只把 UART 异步边界和 MMCM LOCKED 第一级的 D 当作异步；LOCKED 不是时钟发射端，例外报告里该条的已计时端点数为零，不当作额外覆盖。构建脚本检查它是第一级 D 的唯一驱动，以及两条同步链的两级之间都仍有经过 STA 的路径。响应格式是 `56 31 <序号> <ROL8(请求,3) XOR A7>`，主机收完四字节才发下一条。公开验证 JSON 同时记录采集 CSV 和 bit 的 SHA-256，以及构建时原始源文件与 Git 规范化 LF 源文件的摘要；本机串口号、线缆标识、DNA 和原始日志不公开。
+
+### 复现调试从设备缓冲和中断同步器检查
+
+先按上一节生成未门控的对照配置并准备 UART5 ROM。下列命令用独立的生成器 JAR 和目录，不修改上游受版本控制的 Periphery.scala。两个实现并非只差一个因素：缓冲候选另有中断同步属性。不要把最终时序的任何差值都归因于缓冲。
+
+```bash
+bash scripts/generate-buffered-debug.sh
+python3 scripts/package-rtl.py --config BufferedDebugRocketVCU118Config --out artifacts/buffer-base.zip
+python3 scripts/prepare-candidate.py artifacts/buffer-base.zip artifacts/rom5-next cache/buffer5i --boot uart5 --irq-sync
+export VCU_SIM_KIT=$PWD/cache/buffer5i VCU_SIM_OBJ=$HOME/.cache/vcu118-build/verilated-buffer5i
+bash scripts/build-rtl-sim.sh
+bash scripts/test-debug-buffer-stalls.sh logs/buffer-stalls
+bash scripts/test-debug-sba.sh logs/buffer-sba artifacts/bare-next.img
+bash scripts/test-debug-slave.sh logs/buffer-lanes artifacts/bare-next.img
+```
+
+`test-debug-buffer-stalls.sh` 只编译所选 kit 中真实的 A/D 缓冲层次，特意阻塞下游，在装满时复位。`test-debug-slave.sh` 则用整个 ChipTop，经 TAP 停核，用 program buffer 发起 hart 的各宽度访存，并从外部 DMI 交叉读回。测试严格区分取得停核控制前的 ROM 栈填充与停核后的端点测试。`check-model-kit.py` 对照 Verilator 5.022 记录的 `-F` 和每个输入的文件身份、时间戳及当前 kit 校验和；复制、替换或改动生成目录后应重建，不将旧可执行文件冒认为新 RTL。
+
+```bash
+# 用所选实现自己的报告，不跨 run 拼接。此命令只列出问题，不豁免任何一项。
+python3 scripts/inventory-cdc.py <run>/obj/report/cdc.rpt
+# Vivado 打开整个 post_synth.dcp。检查属性、级间扇出、接收时钟，以及第一级的实际驱动与来源。
+vivado -mode batch -source scripts/inspect-integrated-irq.tcl -tclargs <run>/obj/post_synth.dcp audit-marked irq-audit.tsv
+```
+
+只看到三个真实触发器还不够。`audit-marked` 可报告已识别的跨时钟 OR 门；`require-marked` 会拒绝该结构。两者均不提供整机 CDC 通过结论。板测采集器仅在当前 ROM 完整 `UART5_HANDOFF` 行之后接受客体标记；Linux 还需准确的 16 MiB 自检和本次挑战回复。

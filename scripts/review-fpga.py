@@ -16,9 +16,18 @@ def timing(text):
     a=m[1].split();return {n:dict(slack_ns=float(a[k]),total_negative_ns=float(a[k+1]),failed=int(a[k+2]),count=int(a[k+3])) for k,n in [(0,'setup'),(4,'hold'),(8,'pulse_width')]}
 
 def counters(text):
-    result=dict((k,int(v)) for k,v in re.findall(r'^\s*\d+\. checking (\w+) \((\d+)\)',text,re.M));
-    if not {'no_clock','unconstrained_internal_endpoints','no_input_delay','no_output_delay'}<=set(result):raise ValueError('missing check_timing coverage summary')
+    result={}
+    for k, v in re.findall(r'^\s*\d+\. checking (\w+) \((\d+)\)',text,re.M):
+        if k in result and result[k]!=int(v):raise ValueError('inconsistent check_timing count: '+k)
+        result[k]=int(v)
+    if not {'no_clock','unconstrained_internal_endpoints','no_input_delay','no_output_delay',
+            'generated_clocks','multiple_clock','loops','latch_loops','partial_input_delay','partial_output_delay'}<=set(result):raise ValueError('missing check_timing coverage summary')
     return result
+
+def board_coverage(ct):
+    # I/O still needs a per-pin review. No unconstrained internal endpoints,
+    # missing clocks, loops, or unknown nonzero checks can pass this gate.
+    return all(not n or k in ('no_input_delay','no_output_delay') for k,n in ct.items())
 
 def gates(rt,tm):
     return rt['routable']>0 and rt['routable']==rt['fully_routed'] and rt['routing_errors']==0 and all(v['slack_ns']>=0 and v['failed']==0 and v['count']>0 and v['total_negative_ns']==0 for v in tm.values())
@@ -35,6 +44,6 @@ def main():
     for n in ['cdc.rpt','clock-interaction.rpt','pulse-width.rpt','methodology.rpt','routed-clocks.rpt','routed-drc.rpt']:read(n)
     bit=d/'obj/VCU118FPGATestHarness.bit';routable=gates(rt,tm)
     print(json.dumps(dict(run=d.name,route=rt,timing=tm,check_timing=ct,resources=resources,route_and_constrained_timing_met=routable,
-       nonzero_coverage_checks={k:v for k,v in ct.items() if v},reports_sha256=files,bit_sha256=(hashlib.sha256(bit.read_bytes()).hexdigest() if bit.is_file() else None),qualification='manual CDC/DRC/clock/IO coverage and physical testing separate'),indent=2))
+       board_internal_coverage_met=board_coverage(ct),nonzero_coverage_checks={k:v for k,v in ct.items() if v},reports_sha256=files,bit_sha256=(hashlib.sha256(bit.read_bytes()).hexdigest() if bit.is_file() else None),qualification='manual CDC/DRC/clock/IO coverage and physical testing separate'),indent=2))
     return 0 if routable else 1
 if __name__=='__main__':raise SystemExit(main())

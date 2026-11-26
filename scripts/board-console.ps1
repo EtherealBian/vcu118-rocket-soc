@@ -16,7 +16,15 @@ function Get-VcuConsoleEvent([string]$Text,[string]$Mode,[string]$Nonce,[bool]$C
         if ($Text -match '(?ms)^VCU118_DIAG_START v1\r?\n.*?^VCU118_DIAG_PASS memory_bytes=1048576 passes=2 timer=advanced\r?\n') {return 'PASS'}
     } elseif ($Mode -eq 'linux') {
         if ($ChallengeSent -and $Text -match "(?m)^(?:# )?BOARD_42_${Nonce}\r?\n") {return 'PASS'}
-        if (!$ChallengeSent -and $Text -match '(?ms)^VCU118_INITRAMFS_READY\r?\n.*?^SOC_CHECK_PASS bytes=16777216[^\r\n]*\r?\n.*?(?:^|\n)# ') {return 'CHALLENGE'}
+        if (!$ChallengeSent -and $Text -match '(?ms)^VCU118_INITRAMFS_READY\r?\n.*?^SOC_CHECK_PASS bytes=16777216 passes=[1-9]\d* elapsed_s=\d+\r?\n.*?(?:^|\n)# ') {return 'CHALLENGE'}
     } else {throw 'unknown console test'}
     return 'WAIT'
+}
+
+# Return $null until an entire ROM marker arrives. Keep bytes following that
+# marker: the guest may already have printed its first line in the same read.
+function Get-VcuPostHandoffText([string]$Text) {
+    $m=[regex]::Match($Text,'(?m)^UART5_HANDOFF\r?\n')
+    if (!$m.Success) {return $null}
+    return $Text.Substring($m.Index+$m.Length)
 }

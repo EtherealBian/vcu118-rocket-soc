@@ -4,7 +4,7 @@ set -euo pipefail
 root=$(cd "$(dirname "$0")/.." && pwd); cd "$root"
 obj=${VCU_SIM_OBJ:?select matching ROM5 simulator}; kit=${VCU_SIM_KIT:?select ROM5 kit}
 out=${1:?fresh output directory}; card=${2:?existing SD fixture, never accessed in ROM5}; bare=${3:?diagnostic binary}
-test -s "$card"; test -s "$kit/CANDIDATE.sha256"; grep -aqF 'UART5_READY v1' "$kit/rom/sdboot.bin"; mkdir "$out"; out=$(realpath "$out")
+python3 scripts/check-model-kit.py "$obj" "$kit"; test -s "$card"; test -s "$kit/CANDIDATE.sha256"; grep -aqF 'UART5_READY v1' "$kit/rom/sdboot.bin"; mkdir "$out"; out=$(realpath "$out")
 python3 tests/make-uart5-faults.py "$bare" "$out/frames"
 export VERILATOR_ROOT=${VCU_TOOLS:-$HOME/.local/share/vcu118-tools}/verilator/share/verilator
 flock "$obj/.build-lock" make -C "$obj" -f VChipTop.mk -j2 CXX=g++ LINK=g++ AR=ar VChipTop

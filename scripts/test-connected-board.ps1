@@ -8,7 +8,7 @@ if (!$Run -or !$ReviewedBitSha256) {throw '-Program requires -Run and manually r
 $runDir=(Resolve-Path -LiteralPath $Run).Path; $bit=Join-Path $runDir 'obj\VCU118FPGATestHarness.bit'; if (!(Test-Path -LiteralPath $bit -PathType Leaf)) {throw 'missing routed bitstream'}
 $logDir=Join-Path $root ('logs\hw-'+$Mode+'-'+[guid]::NewGuid().ToString('N')); [void][IO.Directory]::CreateDirectory($logDir)
 $review=& python (Join-Path $PSScriptRoot review-fpga.py) $runDir; if ($LASTEXITCODE -ne 0) {throw 'route/timing evidence rejected; no programming'}; $review|Set-Content "$logDir\implementation.json"; $r=$review -join "`n"|ConvertFrom-Json
-if (!$r.route_and_constrained_timing_met -or $r.bit_sha256 -ne $ReviewedBitSha256 -or (Get-FileHash -LiteralPath $bit).Hash -ne $ReviewedBitSha256) {throw 'review or bit hash mismatch'}
+if (!$r.route_and_constrained_timing_met -or !$r.board_internal_coverage_met -or $r.bit_sha256 -ne $ReviewedBitSha256 -or (Get-FileHash -LiteralPath $bit).Hash -ne $ReviewedBitSha256) {throw 'review or bit hash mismatch'}
 # Generate the exact bounded wire image before opening any serial port or programming.
 # The collector remains the sole owner of the port; no terminal can race its reads.
 $frame=$null; $frameMeta=$null; $offset=0; $txStarted=$false; $handoff=$false
@@ -36,11 +36,14 @@ try {
     if($text -match '(?m)^UART5_STOP [^\r\n]+'){throw "UART loader rejected payload; $logDir"}
     if(!$txStarted -and $text -match '(?m)^UART5_READY v1\r?\n'){$txStarted=$true; $text=''}
     if($txStarted -and $offset -lt $frame.Length){$n=[Math]::Min(2048,$frame.Length-$offset); $sp.Write($frame,$offset,$n); $offset+=$n}
-    if(!$handoff -and $offset -eq $frame.Length -and $text -match '(?m)^UART5_HANDOFF\r?\n'){$handoff=$true}
+    if(!$handoff -and $offset -eq $frame.Length){
+     $guest=Get-VcuPostHandoffText $text
+     if($null -ne $guest){$handoff=$true; $text=$guest}
+    }
     if(!$handoff){Start-Sleep -Milliseconds 10; continue}
    }
    $event=Get-VcuConsoleEvent $text $Mode $nonce $sent; if($event -eq 'FAIL'){throw "Guest failure; $logDir"}
-   if($event -eq 'CHALLENGE'){$sp.Write('echo BOARD_$((40+2))_'+$nonce+"`n"); $sent=$true}
+   if($event -eq 'CHALLENGE'){$sp.Write('echo BOARD_$((40+2))_'+$nonce+"`n"); $text=''; $sent=$true}
    if($event -eq 'PASS'){$accepted=$true; break}
   }; Start-Sleep -Milliseconds 30
  }; if(!$accepted){throw "Timeout: not a board PASS. Evidence: $logDir"}

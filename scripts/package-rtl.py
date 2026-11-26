@@ -4,7 +4,7 @@ import argparse,hashlib,os,re,tempfile,zipfile
 from pathlib import Path as P
 from collections import OrderedDict
 root=P(__file__).resolve().parents[1]; cy=root/'third_party/chipyard'; shell=cy/'fpga/fpga-shells'; fp=cy/'fpga'
-ap=argparse.ArgumentParser();ap.add_argument('--out',type=P);ap.add_argument('--config',choices=['RocketVCU118Config','Dot4RocketVCU118Config','AlwaysClockedDebugRocketVCU118Config'],default='RocketVCU118Config');args=ap.parse_args(); members={}
+ap=argparse.ArgumentParser();ap.add_argument('--out',type=P);ap.add_argument('--config',choices=['RocketVCU118Config','Dot4RocketVCU118Config','AlwaysClockedDebugRocketVCU118Config','BufferedDebugRocketVCU118Config'],default='RocketVCU118Config');args=ap.parse_args(); members={}
 if args.out is None:
  if args.config!='RocketVCU118Config':ap.error('an explicit fresh --out is required for a non-baseline variant')
  args.out=root/'artifacts/vcu118-generated-rtl.zip'
@@ -51,7 +51,7 @@ if args.config=='Dot4RocketVCU118Config':
  if b'vcu118lab,dot4-i8-v1' not in members['board/'+cfg+'.dts']:raise ValueError('missing accelerator in device tree')
  for source in ('Dot4Rocket.scala','Dot4Peripheral.scala'):put('overlay/'+source,root/'rtl/accel/chipyard'/source)
  members['README.txt']+=b'Optional Dot4RocketVCU118Config: MMIO at 0x64002000. This archive initially retains the stock board ROM.\n'
-if args.config=='AlwaysClockedDebugRocketVCU118Config':
+if args.config in ('AlwaysClockedDebugRocketVCU118Config','BufferedDebugRocketVCU118Config'):
  import subprocess,sys
  base=fp/'generated-src'/'chipyard.fpga.vcu118.VCU118FPGATestHarness.RocketVCU118Config'
  subprocess.run([sys.executable, str(root/'scripts/check-debug-clock.py'), str(base/'gen-collateral/ChipTop.sv'), str(gen/'gen-collateral/ChipTop.sv')],check=True)
@@ -75,6 +75,17 @@ vcu_endpoint_reports [file join $wrkdir routed-endpoints]
  put('shell/xilinx/common/tcl/vcu-endpoints.tcl',root/'scripts/diagnose-routed.tcl')
 
  members['README.txt']+=b'AlwaysClockedDebugRocketVCU118Config: JTAG and system bus access retained, debug clock gating disabled for FPGA routing. Requires independent timing and debug validation.\n'
+ if args.config=='BufferedDebugRocketVCU118Config':
+  clock=gen.with_name('chipyard.fpga.vcu118.VCU118FPGATestHarness.AlwaysClockedDebugRocketVCU118Config')
+  subprocess.run([sys.executable,str(root/'scripts/check-debug-buffer.py'),str(clock/'gen-collateral'),str(gen/'gen-collateral')],check=True)
+  for k in ('prepare-debug-buffer.py','vcu-buffered.mk','generate-buffered-debug.sh','check-debug-buffer.py'):
+   put('overlay/'+k,root/'scripts'/k)
+  put('overlay/BufferedDebugRocket.scala',root/'rtl/clocking/BufferedDebugRocket.scala')
+  with tempfile.TemporaryDirectory() as temp:
+   patched=P(temp)/'Periphery.scala'
+   subprocess.run([sys.executable,str(root/'scripts/prepare-debug-buffer.py'),str(cy/'generators/rocket-chip/src/main/scala/devices/debug/Periphery.scala'),str(patched)],check=True)
+   put('overlay/Periphery.patched.sha256',hashlib.sha256(patched.read_bytes()).hexdigest()+'  Periphery.scala\n')
+  members['README.txt']+=b'BufferedDebugRocketVCU118Config: registered two-entry A and D queues between the debug fragmenter and slave. No change to CPU stages or board address map.\n'
 dig=lambda b:hashlib.sha256(b).hexdigest();manifest=''.join(dig(b)+'  '+k+'\n' for k,b in sorted(members.items()));put('RTL_ROOT_SHA256.txt',manifest)
 fd,tmp=tempfile.mkstemp(suffix='.part',dir=args.out.parent);os.close(fd)
 try:
