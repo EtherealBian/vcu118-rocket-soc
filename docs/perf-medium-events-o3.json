@@ -1,0 +1,116 @@
+{
+  "scope": "Functional ChipTop RTL, behavioral memory, debug-preloaded, bare-metal; not a board or Linux CoreMark score.",
+  "inputs": {
+    "sim": "629a2ef1ac1974ec08ea863ebd46e8d1fc8a1435d2d562c54c6ccf3011843fe3",
+    "CANDIDATE.sha256": "889949b8e2a6231ba0859c8f6569df8258dc46aacd2d6e9bf3dacba481aff592",
+    "window.bin": "a47f9f874818b64665f3015f5fdd2d8bdadd0335771d96b81c897c656275963a",
+    "window.elf": "0fcb620e5d1d81ef4be6f311ab75615f59fa5227a296c01937e1841b9f6041eb",
+    "sdboot.elf": "dc616579418d120f53fde6ae60e918166d13df4570bd14bb7efb56f4c7131d2b",
+    "rocket_chiptop.cpp": "9fd708b984cd078932d1727a881bced76a745a5819f0073a7020b1b9d0ac0ea6"
+  },
+  "console_sha256": "ec156007ace29d47154e86a0a274f49c16902a0662edd569ad0d0a5582583eb6",
+  "performance_seed": {
+    "samples": [
+      {
+        "sample": 0,
+        "cycles": 912521,
+        "retired": 1376430,
+        "event_cycles": {
+          "br_misp": 2505,
+          "jalr_misp": 1,
+          "flush": 17,
+          "ic_acq": 81,
+          "dc_acq": 6
+        }
+      },
+      {
+        "sample": 1,
+        "cycles": 902829,
+        "retired": 1376430,
+        "event_cycles": {
+          "br_misp": 1732,
+          "jalr_misp": 0,
+          "flush": 22,
+          "ic_acq": 0,
+          "dc_acq": 0
+        }
+      },
+      {
+        "sample": 2,
+        "cycles": 901210,
+        "retired": 1376430,
+        "event_cycles": {
+          "br_misp": 1569,
+          "jalr_misp": 0,
+          "flush": 22,
+          "ic_acq": 0,
+          "dc_acq": 0
+        }
+      }
+    ],
+    "median_cycles_per_iteration": 225707.25,
+    "median_retired_per_iteration": 344107.5,
+    "median_ipc": 1.524574,
+    "median_event_cycles_per_1000_retired": {
+      "br_misp": 1.258328,
+      "jalr_misp": 0.0,
+      "flush": 0.015983,
+      "ic_acq": 0.0,
+      "dc_acq": 0.0
+    }
+  },
+  "validation_seed": {
+    "samples": [
+      {
+        "sample": 0,
+        "cycles": 910336,
+        "retired": 1378999,
+        "event_cycles": {
+          "br_misp": 2069,
+          "jalr_misp": 0,
+          "flush": 18,
+          "ic_acq": 7,
+          "dc_acq": 0
+        }
+      },
+      {
+        "sample": 1,
+        "cycles": 907155,
+        "retired": 1378999,
+        "event_cycles": {
+          "br_misp": 1750,
+          "jalr_misp": 0,
+          "flush": 17,
+          "ic_acq": 0,
+          "dc_acq": 0
+        }
+      },
+      {
+        "sample": 2,
+        "cycles": 905509,
+        "retired": 1378999,
+        "event_cycles": {
+          "br_misp": 1622,
+          "jalr_misp": 0,
+          "flush": 17,
+          "ic_acq": 0,
+          "dc_acq": 0
+        }
+      }
+    ],
+    "median_cycles_per_iteration": 226788.75,
+    "median_retired_per_iteration": 344749.75,
+    "median_ipc": 1.520136,
+    "median_event_cycles_per_1000_retired": {
+      "br_misp": 1.269036,
+      "jalr_misp": 0.0,
+      "flush": 0.012328,
+      "ic_acq": 0.0,
+      "dc_acq": 0.0
+    }
+  },
+  "event_scope": "BOOM v3 Medium M-mode, five selector readbacks, event-bearing cycles around iterate(); not a branch miss rate or a decomposition of stall cycles.",
+  "model_cycles": 15948800,
+  "backing_reads": 195,
+  "backing_writes": 0
+}

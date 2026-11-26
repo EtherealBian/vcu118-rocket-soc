@@ -17,7 +17,7 @@ class CaptureTest(unittest.TestCase):
         n='0a0b0c0d0e0f22'; reply=f'BOARD_42_{n}\r\n'; cmd=f'# echo BOARD_$((40+2))_{n}\r\n'
         text='UART5_READY v1\r\nUART5_HANDOFF\r\nOpenSBI\r\nVCU118_INITRAMFS_READY\r\nSOC_CHECK_PASS bytes=16777216 passes=1 elapsed_s=3\r\n'+cmd+reply
         c.check_uart(text.encode(),'linux',n)
-        for bad in (text.removesuffix(reply),text.replace('bytes=16777216','bytes=1677'),text.replace('HANDOFF','OTHER'),text+'Kernel panic',text.replace(reply,'old-session\r\n')):
+        for bad in (text[:-len(reply)],text.replace('bytes=16777216','bytes=1677'),text.replace('HANDOFF','OTHER'),text+'Kernel panic',text.replace(reply,'old-session\r\n')):
             with self.assertRaises(ValueError): c.check_uart(bad.encode(),'linux',n)
 
     def test_oscheck_requires_guest_proof_before_prompt(self):

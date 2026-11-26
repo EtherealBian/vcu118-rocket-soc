@@ -18,20 +18,26 @@
 
 ## 九级到底怎么数
 
-短路径：普通整数指令，I$、ITLB 命中，取指队列没有积压，不停顿、不重放。顺序为 **F0 发取指 → F1 地址翻译/预测 → F2 接收 I$ 结果 → A 对齐/压缩指令展开 → D 静态译码 → I 读寄存器/冒险/发射 → X 执行 → M 访存/分支校正 → W 写回/退休**。前端原本为 flow-through 的 fetch queue 改为不可旁路；主核在对齐后、静态译码后各有一组带 valid、反压和重定向清空的寄存器。队列深度 5 不是五级，访存 miss 的等待周期也不是流水级。这是设计口径，仍需逐拍退休轨迹核验，特别是跨取指包 RVC、异常和错误路径。
+短路径：普通整数指令，I$、ITLB 命中，取指队列没有积压，不停顿、不重放。顺序为 **F0 发取指 → F1 地址翻译/预测 → F2 接收 I$ 结果 → A 对齐/压缩指令展开 → D 静态译码 → I 读寄存器/冒险/发射 → X 执行 → M 访存/分支校正 → W 写回/退休**。前端原本为 flow-through 的 fetch queue 改为不可旁路；主核在对齐后、静态译码后各有一组带 valid、反压和重定向清空的寄存器。队列深度 5 不是五级，访存 miss 的等待周期也不是流水级。这是短路径口径。对每个 hart 分别核验同一 PC 在九个相邻时钟上的有效位及写回退休，另查 RVC、异常返回和错误路径；不能把有停顿的所有指令都说成九拍。
 
 ## 已验证与未验证
 
 - 已上板：100 MHz 旧单核 Linux，第一轮编译对照最快配置的三次性能种子为 **246.654745 / 246.720671 / 246.654745**。[物理测量与 CRC](coremark-1000-board.json)。第二轮的 GCC 15.1 + LTO 中位数为 **254.232**，仍是同一个旧核，详见[逐次记录](coremark-1000-compilers-board.json)。
 - 已生成：100 MHz 四核参考 RTL。逐层查到四个独立核实例；生成的设备树检查四个 hart、每 hart 的 CLINT/PLIC、中断与共享 L2。不是上板验证。
 - 已通过软件仿真：同一 OpenSBI/Linux 镜像在 QEMU virt `-smp 4` 上有 0–3 四个在线 CPU，四个固定线程做 4096 次共享交接；`-smp 1` 反例按预期拒绝。[软件验收摘要](quad-linux-qemu.json)。QEMU 不使用本板的 UART ROM，也不证明 Rocket 的一致性或频率。
-- 九级候选：首次生成在 firtool 因新增译码寄存器的 `vec` 位未驱动而停止；现已在寄存前显式赋值，保留发射段的向量合法性检查。提供四 hart ROM 探针源码（含 RVC、陷入返回和原子交接），已交叉编译，尚未据此通过动态验证。有独立生成器、150 MHz 时钟配置及四核 UART ROM；不得在候选未经波形、时序/CDC/DRC/引脚、原始未压缩 SMP 启动及板上验证时发布其 Fmax 或分数。
+- 九级候选已生成：首版因 `vec` 未驱动而失败；修复后，RTL 中有四个独立 hart，712 字节 UART ROM 和 5,704 字节 DTB 与生成的 ROM 内容一致。150 MHz 是设计请求，未做整机布线签核。
+- 串口引脚仿真：首版探针能走完 ROM 交接，却没有四核成功回执；反汇编查到直接模式 `mtvec` 地址未按 4 字节对齐。把陷阱入口移入单独对齐节，并在写 CSR 后读回校验。同一 RTL 和行为存储器上，修复后的 548 字节帧收到了 `QUAD_ROM_PASS`：四核到齐，64 次共享交接求和 2,080，四次陷入返回。首字节测到 1,302 拍/bit，错钟和 CRC 负控均通过。
+- 逐拍观察器另外发现 16 行落在对齐整数指令中间的半字 PC，不把它们当作有效的九级见证。要逐条验证译码、发射前取消以及下一拍执行空泡；来自串口的通过回执不能替代这项检查。尚无该候选的 Linux 实板启动、并发吞吐或单核分数。
 
 重建（WSL，前置工具和锁定的源码见 [bring-up](bring-up.md)，两个生成器顺序运行，不共享输出）：
 
 ```bash
 bash scripts/generate-quad-rocket.sh
 bash scripts/generate-quad150-nine.sh
+kit="$HOME/.cache/vcu118-build/quad-nine-kit"; obj="$HOME/.cache/vcu118-build/quad-nine-obj"
+bash scripts/build-clocked-rom-model.sh quad150 "$kit" "$obj"
+bash scripts/test-clocked-rom-link.sh "$kit" "$obj" 150 quad logs/quad-nine-new
+python3 scripts/review-clocked-rom-link.py logs/quad-nine-new "$kit" 150 quad
 bash scripts/build-quad-linux.sh "$HOME/.cache/vcu118-build/quad-new" artifacts/quad-new
 python3 scripts/test-quad-linux.py artifacts/quad-new logs/quad-new-qemu
 ```

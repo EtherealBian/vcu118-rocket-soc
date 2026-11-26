@@ -12,8 +12,10 @@ _start:
   lwu t0,0(a1)
   li t1,0xedfe0dd0
   bne t0,t1,.Lbad
-  la t0,.Ltrap
+  la t0,quad_trap_entry
   csrw mtvec,t0
+  csrr t1,mtvec
+  bne t0,t1,.Lbad
   li s1,1
   sll s1,s1,s0
   la s2,state
@@ -96,8 +98,12 @@ quad_trace_end:
 .Lpark:
   wfi
   j .Lpark
-  .balign 4
-.Ltrap:
+  /* A separate input section lets the linker insert two-byte padding even
+     after the deliberately halfword-shifted .option norvc instruction stream. */
+  .section .text.trap,"ax",@progbits
+  .p2align 2
+  .globl quad_trap_entry
+quad_trap_entry:
   csrr t0,mcause
   li t1,11
   bne t0,t1,.Lbad

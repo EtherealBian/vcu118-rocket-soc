@@ -1,0 +1,35 @@
+{
+  "profile": "g15-gc-lto",
+  "upstream": "9d07b05523c16754a214a40224018a4ee908e091",
+  "elf_sha256": "0ab2e1c3baf03a98c23383268e1f792c9d955e6fe54b15c0e536ac21f22a4232",
+  "compiler": "GCC15.1.0",
+  "flags": "-O3 -flto -static -s -march=rv64gc -mabi=lp64d -Wl,--build-id=none -lrt",
+  "context_count": 1,
+  "total_buffer_bytes": 2000,
+  "allocation": "heap",
+  "runs": {
+    "performance": {
+      "iterations": 110000,
+      "seedcrc": "0xe9f5",
+      "list_crc": "0xe714",
+      "matrix_crc": "0x1fd7",
+      "state_crc": "0x8e3a",
+      "final_crc": "0x33ff"
+    },
+    "validation": {
+      "iterations": 110000,
+      "seedcrc": "0x18f2",
+      "list_crc": "0xe3c1",
+      "matrix_crc": "0x0747",
+      "state_crc": "0x8d84",
+      "final_crc": "0x0956"
+    }
+  },
+  "uart_sha256": "a584ff59afa9bcc92398339ef8299314eebd553f73775d1e48d3c9459d52e6e8",
+  "guest_isa": "rv64imafdc_zicntr_zicsr_zifencei_zihpm",
+  "qemu_cpu": "rv64gcsu-v1.10.0",
+  "isa_control": "ISA_CONTROL_PASS addi=7 sh1add=illegal andn=illegal",
+  "isa_control_binary_sha256": "be6987cdcb4013d771b0ca7dafa7157c904a66e8026f4e1622484381c9aefb2a",
+  "scope": "QEMU virt command and CRC validation only; not an FPGA benchmark",
+  "firmware_sha256": "6e6262b7241ae3f67e608af8b8c6e09ffa2c245bd60a02ef26488ce337ab7318"
+}

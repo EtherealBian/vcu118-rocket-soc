@@ -1,7 +1,7 @@
 [CmdletBinding()] param(
  [Parameter(Mandatory)][string]$Run,[Parameter(Mandatory)][string]$Capture,[Parameter(Mandatory)][string]$Payload,
  [Parameter(Mandatory)][string]$Elf,[Parameter(Mandatory)][string]$Out,[string]$Bridge=$env:VCU_UART_SERIAL,
- [ValidateSet('baseline','o3','o3-zb','o3-zb-lto','o3-zb-lto-unroll','g15-zb','g15-zb-lto','g15-zb-lto-unroll')][string]$Profile='baseline',
+ [ValidateSet('baseline','o3','g15-gc-lto','o3-zb','o3-zb-lto','o3-zb-lto-unroll','g15-zb','g15-zb-lto','g15-zb-lto-unroll')][string]$Profile='baseline',
  [ValidatePattern('^[a-f0-9]{16}$')][string]$SessionTag,[switch]$StartSession,
  [ValidateRange(1000,20000)][int]$Iterations=6000)
 # Runs the already-installed, profile-specific benchmark on an independently verified live shell.
