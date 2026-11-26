@@ -22,6 +22,11 @@ CDC Type: No Common Phase
         r=cdc.inventory(self.report); self.assertEqual(r['critical_families'],{'unclassified':1}); self.assertEqual(r['total_rows'],1)
         self.assertEqual((r['critical'][0]['source_clock'],r['critical'][0]['destination_clock']),('A','B'))
 
+    def test_clock_only_mig_capture_is_exact_not_wildcard(self):
+        row={'rule':'CDC-7','from':'mig/island/blackbox/inst/u_ddr4_mem_intfc/u_ddr_mc/rst_r1_reg/C','to':'dutWrangler/deglitched_deglitch/reg_0_reg/PRE'}
+        self.assertEqual(cdc.family(row),'MIG/POR to reset-wrangler asynchronous preset')
+        self.assertEqual(cdc.family(dict(row,to=row['to'].replace('/PRE','/D'))),'unclassified')
+
     def test_mismatched_summary_or_truncated_detail(self):
         for s in [self.report.replace('Critical      1','Critical      2'),self.report.replace('  1  CDC-99','  2  CDC-99'),self.report.replace('Source Clock: A','Source: A')]:
             with self.assertRaises(ValueError): cdc.inventory(s)

@@ -7,7 +7,7 @@ proc vcu_endpoint_reports {out} {
   foreach kind {max min} {
    set paths [get_timing_paths -quiet -to $clock -delay_type $kind -max_paths 40 -nworst 1]; if {![llength $paths]} continue
    foreach path $paths {puts $f [join [list $name $kind [get_property SLACK $path] [get_property LOGIC_LEVELS $path] [get_property STARTPOINT_PIN $path] [get_property ENDPOINT_PIN $path]] "\t"]}; flush $f
-   report_timing -to $clock -delay_type $kind -max_paths 8 -nworst 1 -input_pins -nets -file [file join $out "$slug-$kind.rpt"]
+   report_timing -to $clock -delay_type $kind -max_paths 8 -nworst 1 -input_pins -file [file join $out "$slug-$kind.rpt"]
   }
  }; close $f
 }
