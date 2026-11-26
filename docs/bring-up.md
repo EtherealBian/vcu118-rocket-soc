@@ -246,3 +246,11 @@ python scripts/verify-soc-capture.py $run <本轮采集目录> <本轮载荷>
 
 - 校准：在同一配置保持不变时，运行 `vivado -mode batch -source scripts/read-board-mig.tcl -tclargs <cable> xcvu9p_0 <dna> present <新目录>`，随后 `python scripts/review-live-mig.py <新目录>`。同时核对实机状态报告和每阶段属性；不复位 MIG、不开流量发生器、不启动眼图扫描。`absent` 用于**已知没有 MIG 的设计**，不能据此声称物理校准失败。
 - 布线复核：`vivado -mode batch -source scripts/measure-mig-gray.tcl -tclargs <post_route.dcp> <新目录>` 后运行 `python scripts/review-mig-gray.py <新目录>`。只对打开的内存设计临时施加 5 ns 的 bus-skew 参考值，既不写 DCP，也不回灌实现约束或改变 bit。
+
+在 Linux 捕获成功后，不重配板卡，保持 J4 控制台空闲，运行：
+
+```powershell
+./scripts/profile-board-linux.ps1 -Run $run -Capture $capture -Payload artifacts/fw_payload.bin -Out logs/linux-profile-next
+```
+
+脚本先核验该次启动证据与 FPGA 侧串口，再发新的 shell 运算挑战，读取 hart、MMU、内存、uptime 和中断计数，请 guest 运行至少 15 秒用户态自检。两次 uptime 与主机单调计时相互核对。它不重新下载、不写存储介质；返回的摘要不含线缆标识或挑战串。

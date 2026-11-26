@@ -1,6 +1,6 @@
 # VCU118 Rocket Linux SoC
 
-在 AMD VCU118（XCVU9P）上实现一颗能启动 Linux 的 64 位 RISC-V 软核。从上游 Chipyard 生成板级 RTL；本仓库提供启动 ROM、诊断固件、Linux 镜像构建、真实 Rocket RTL 测试和实板自动验收脚本。这里发布的是**源码和构建方法**，不分发 bitstream。五级 Rocket 已在真实 VCU118 运行，DDR4 校准和两种裸机诊断已通过；Linux 独立验收。
+在 AMD VCU118（XCVU9P）上实现一颗能启动 Linux 的 64 位 RISC-V 软核。从上游 Chipyard 生成板级 RTL；本仓库提供启动 ROM、诊断固件、Linux 镜像构建、真实 Rocket RTL 测试和实板自动验收脚本。这里发布的是**源码和构建方法**，不分发 bitstream。**五级 Rocket 已在真实 VCU118 上启动 Linux 6.6.65 并进入 BusyBox shell。** 不用 SD：通过 JTAG 易失配置 FPGA，然后通过 J4 串口上传固件。
 
 | 配置 | 基线 |
 |---|---|
@@ -17,7 +17,8 @@
 - **QEMU virt**：同一基线固件通过 10 次独立启动，每次执行 16 MiB 用户态自检并返回交互 shell 挑战。这个机器模型与 VCU118 的板级互连不同。
 - **Rocket 上的 Linux 进度（RTL）**：模拟 JTAG 预载基线固件后，第 40,000,000 周期读到 hart 已在 S 态执行 Linux 的 `memmap_init_range`，Sv39 已开启。另一个限制为 128 MiB 的诊断配置已执行 `/init`，通过 RTL 串口输出 `VCU118_INITRAMFS_READY` 与 Linux 6.6.65 的 `uname`。两者都不是实板 shell 记录。
 - **调试总线与时序**：已在生成的 RTL 上对调试从设备缓冲做 4,112 拍双向反压测试；整机综合网表仍发现一路跨时钟域的组合停核信号。未门控调试时钟的整机对照版首次在 100 MHz 约束下完成布线，建立/保持/脉宽裕量分别为 **+0.349 / +0.011 / +0.143 ns**，已生成 bitstream。该版仍有 7 条 Critical CDC 记录，未获准上板。
-- **VCU118 实板**：独立串口探针的 260/260 随机问答后，已换上完整的 100 MHz Rocket 调试缓冲版。串口上传两种裸机程序：1 MiB 两轮读写及定时器通过；在四个分隔 512 MiB 的位置，各刷出并校验 4 KiB，两轮通过。板上 DDR4 MIG 报告 **CAL PASS**。这不是全 2 GiB 扫描，Linux shell 另行验收。
+- **VCU118 实板**：独立串口探针的 260/260 随机问答后，已换上完整的 100 MHz Rocket 调试缓冲版。串口上传两种裸机程序：1 MiB 两轮读写及定时器通过；在四个分隔 512 MiB 的位置，各刷出并校验 4 KiB，两轮通过。板上 DDR4 MIG 报告 **CAL PASS**。这是抽测，并非全 2 GiB 扫描。
+- **Linux 实板启动**：J4 收到完整 5,341,704 字节 OpenSBI + Linux 载荷，经 ROM 校验后跳转。Linux 执行 `/init`，完成 16 MiB 用户态校验；BusyBox 1.36.1 `ash` 正确计算并返回主机本轮的随机命令结果。
 - **可选实验**：四路有符号 INT8 点积已接入可选配置的 TileLink 总线。Rocket 裸机通过 MMIO 核对 257 组结果，另验空取、重复提交两种错误。Linux 驱动已编入可选内核，尚未通过 Rocket 上的 ioctl 验收；没有实板加速比。
 
 [验证摘要与边界](docs/validation.md) · [重建与连接指南](docs/bring-up.md) · [设计需求与扩展顺序](VCU118-SOC-v0.1.md)

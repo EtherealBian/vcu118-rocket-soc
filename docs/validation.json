@@ -158,7 +158,7 @@
       "test_scope": "independent electrical UART/configuration fixture; no Rocket, DDR, SD or Linux"
     },
     "soc_bit_programmed": true,
-    "linux_shell_observed": false,
+    "linux_shell_observed": true,
     "buffered_soc": {
       "configuration": "buffer5i / ROM5",
       "tests": {
@@ -207,6 +207,39 @@
           ],
           "volatile_configuration": true,
           "shell_challenge_verified": false
+        },
+        "linux": {
+          "mode": "linux",
+          "utc": "2026-11-26T07:49:02.8726546Z",
+          "bit_sha256": "6ba0338375d89049f57e57ba2e38f96d7e8a2fc96a61c26948d980d0479203d6",
+          "uart": "115200 8N1",
+          "format": "VCU118U5",
+          "payload_bytes": 5341704,
+          "payload_sha256": "7a8f9932796747be2cd54390af7adf88ba5b156e54069884946185fef47b41c9",
+          "frame_sha256": "ad1ba8c403340cb3cf9f6e4da1e5471db65ffce24f0a7553f6bbcb03579b6aee",
+          "uart_sha256": "3f94bf1a25d61b6a7bce8d322f4b48341af874bfdb72c1e3da0065446184b942",
+          "slr_done": [
+            1,
+            1,
+            1
+          ],
+          "slr_crc_error": [
+            0,
+            0,
+            0
+          ],
+          "volatile_configuration": true,
+          "shell_challenge_verified": true,
+          "observed_console": {
+            "opensbi_banner": "v1.5",
+            "kernel": "6.6.65",
+            "machine": "riscv64",
+            "busybox_ash": "1.36.1",
+            "initramfs_ready": true,
+            "userspace_bytes": 16777216,
+            "passes": 1,
+            "guest_elapsed_integer_seconds": 2
+          }
         }
       },
       "ddr4_live_calibration": {
@@ -224,7 +257,24 @@
           "live-mig-properties.rpt": "5fa2833cd2d0e9a155b0fca5ad92969fb864def5684e3dc25c0f5e15fc34823d"
         }
       },
-      "scope": "Volatile, isolated J106 configuration + J4 UART. No external soft TAP, SD or other FMC traffic; not a qualification of all I/O, CDC or 2 GiB of memory."
+      "scope": "Volatile, isolated J106 configuration + J4 UART. No external soft TAP, SD or other FMC traffic; not a qualification of all I/O, CDC or 2 GiB of memory.",
+      "linux_runtime": {
+        "host_observation_ms": 15556,
+        "kernel": "6.6.65",
+        "machine": "riscv64",
+        "hart": 0,
+        "mmu": "sv39",
+        "uarch": "sifive,rocket0",
+        "linux_reported_isa": "rv64imafdcb_zicntr_zicsr_zifencei_zihpm_zba_zbb_zbs",
+        "memtotal_kib": 2061808,
+        "userspace_bytes": 16777216,
+        "write_read_passes": 13,
+        "guest_elapsed_integer_seconds": 16,
+        "uptime_window_seconds": "15.57",
+        "timer_interrupt_delta": 3893,
+        "console_sha256": "a19da12a910d72dba87e7adc5ed57bba3e963e5535a5bb705ea9084c2a1b755a",
+        "scope": "one Linux process touching an allocated 16 MiB buffer, not a peak memory bandwidth or full capacity test"
+      }
     }
   },
   "uart5": {
@@ -235,7 +285,7 @@
     "serial_positive_payload_bytes": 422,
     "native_receiver_cases_passed": 8,
     "rtl_truncated_timeout": "stock UART5 simulator case complete: UART5_STOP TIMEOUT, DPC=0x1003c at 200487692 cycles. Original matrix wrapper returned nonzero due to trailing CR in its exit argument; not a clean whole-suite exit.",
-    "linux_over_serial": "not verified",
+    "linux_over_serial": "verified on VCU118: buffer5i, full baseline firmware, see physical.buffered_soc.tests.linux",
     "physical_serial_download": "verified; buffered kit, see physical.buffered_soc"
   },
   "dot4": {
