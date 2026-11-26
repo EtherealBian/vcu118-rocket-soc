@@ -429,6 +429,238 @@
         "console_sha256": "a19da12a910d72dba87e7adc5ed57bba3e963e5535a5bb705ea9084c2a1b755a",
         "scope": "one Linux process touching an allocated 16 MiB buffer, not a peak memory bandwidth or full capacity test"
       }
+    },
+    "split_halt_soc": {
+      "configuration": "Buffered five-stage Rocket, 100 MHz; halt inputs registered separately before OR; UART5. J106/J4 volatile bring-up only.",
+      "kit_sha256": "c62a48abd43f0b6753c95bb6e51ad70a49879a428baa1ad9f798bcde6d276562",
+      "implementation": {
+        "route": {
+          "routable": 113460,
+          "fully_routed": 113460,
+          "routing_errors": 0
+        },
+        "timing": {
+          "setup": {
+            "slack_ns": 0.822,
+            "total_negative_ns": 0.0,
+            "failed": 0,
+            "count": 130109
+          },
+          "hold": {
+            "slack_ns": 0.01,
+            "total_negative_ns": 0.0,
+            "failed": 0,
+            "count": 129407
+          },
+          "pulse_width": {
+            "slack_ns": 0.143,
+            "total_negative_ns": 0.0,
+            "failed": 0,
+            "count": 51152
+          }
+        },
+        "resources": {
+          "CLB LUTs": 59971.0,
+          "CLB Registers": 42510.0,
+          "Block RAM Tile": 203.5,
+          "DSPs": 28.0,
+          "URAM": 0.0
+        },
+        "bit_sha256": "d77b13dbf75b4773e33ba48f7b177f320572cb62ffe8a9cd930ab196edd6f520",
+        "reports_sha256": {
+          "route-status.rpt": "721ff7b20197fdc6bb023b73d8f0d650c29f585669e6dcb536fb127d62b3b1bc",
+          "full-timing.rpt": "92f6928ce9a3e7b865f2df92fae10c23b68f034766d557b061f38326a2d378cb",
+          "check-timing.rpt": "0740dce39a9a30c6e6df173fc0140a80d6459446442fdb45b375f2d00da73322",
+          "routed-utilization.rpt": "918139d12928192bde7998c3022798dab431a6a622747be6bfc8698193a00ccd",
+          "cdc.rpt": "bc7f1e8ac06ef9f02af742d5a7c1a4702feb13a5629cc4be8f87cc4d52e0482d",
+          "clock-interaction.rpt": "bb5cca52e5d2a99298c8b87a3dbfb60d7f0a8e801253e984a3a5a0e8104dd6b4",
+          "pulse-width.rpt": "6ea6d7b6fcb2313538f45b833b366fc85123ed4de803b8ca7039aef841038270",
+          "methodology.rpt": "7b9656d13d2d646053a5e99ec9d6a11cbbc8abb8f51b3ca2578f3bf21558fc61",
+          "routed-clocks.rpt": "2b135964b838898b80065e8243824b82ab66cf71df5d952a00d0b3a1eeeaa1b5",
+          "routed-drc.rpt": "2a4c66731b1d2e695bf0588d9799f7d59494bd3516e340b2a21d9f398f5460e1"
+        }
+      },
+      "system_clock_setup_ns": 1.063,
+      "physical_io": {
+        "matched": 133,
+        "ddr_c1": 115
+      },
+      "critical_cdc": {
+        "DMI async queue validity reset": 2,
+        "MIG/POR to reset-wrangler asynchronous preset": 2,
+        "DDR AXI async queue validity reset": 2
+      },
+      "drc_warnings": 58,
+      "timing_47": 2,
+      "uart_stage_data_ns": 0.421,
+      "gray": {
+        "four_bit_groups": 10,
+        "datapath_range_ns": [
+          0.084,
+          1.069
+        ],
+        "temporary_5ns_reference_worst_skew_slack_ns": 4.878
+      },
+      "tests": {
+        "bare": {
+          "mode": "bare",
+          "utc": "2026-11-26T08:06:14.0697924Z",
+          "bit_sha256": "d77b13dbf75b4773e33ba48f7b177f320572cb62ffe8a9cd930ab196edd6f520",
+          "uart": "115200 8N1",
+          "format": "VCU118U5",
+          "payload_bytes": 422,
+          "payload_sha256": "bf0f48f177cd41b044091daadedcc3ca1389aef25a75d289b5e20eb221c91410",
+          "frame_sha256": "5dc516a7bf6e291c92985dbdac1a539442bc4ee27eb6901ae896253eb3e164ed",
+          "uart_sha256": "e30d859a828b0781d2b6e20b31a08f261770b0f292c0d9a7d29657f0d6fd9ffb",
+          "slr_done": [
+            1,
+            1,
+            1
+          ],
+          "slr_crc_error": [
+            0,
+            0,
+            0
+          ],
+          "volatile_configuration": true,
+          "shell_challenge_verified": false
+        },
+        "address": {
+          "mode": "address",
+          "utc": "2026-11-26T08:07:04.5285764Z",
+          "bit_sha256": "d77b13dbf75b4773e33ba48f7b177f320572cb62ffe8a9cd930ab196edd6f520",
+          "uart": "115200 8N1",
+          "format": "VCU118U5",
+          "payload_bytes": 564,
+          "payload_sha256": "7f1e8613ff500748ad50f0aea29ef4d0bbcf2018e91a4b7e33b80d7000b6b274",
+          "frame_sha256": "4334353b2439aa4d964ffba3190e55c9d6faf7a7d37b91f2773c5ebc0c0cb7fa",
+          "uart_sha256": "b340745b82ef04cc098d84430cc17152200e47efa5046c6c3f904a555a9e034c",
+          "slr_done": [
+            1,
+            1,
+            1
+          ],
+          "slr_crc_error": [
+            0,
+            0,
+            0
+          ],
+          "volatile_configuration": true,
+          "shell_challenge_verified": false
+        },
+        "counters": {
+          "mode": "counters",
+          "utc": "2026-11-26T08:07:40.6783746Z",
+          "bit_sha256": "d77b13dbf75b4773e33ba48f7b177f320572cb62ffe8a9cd930ab196edd6f520",
+          "uart": "115200 8N1",
+          "format": "VCU118U5",
+          "payload_bytes": 1073,
+          "payload_sha256": "d24de717d9341fa09ab3ec74035c764a1d79441e7c6bd6de3131af1c5ba25989",
+          "frame_sha256": "ba68ae780e56ed0182986436483d84aba677e5ad6be0755606c4a8d02a834fe5",
+          "uart_sha256": "fc0d91a8602515caaf1252f479fcb7a50880fa7838cd749f6f5f9ccbc3526f59",
+          "slr_done": [
+            1,
+            1,
+            1
+          ],
+          "slr_crc_error": [
+            0,
+            0,
+            0
+          ],
+          "volatile_configuration": true,
+          "shell_challenge_verified": false,
+          "counter_windows": [
+            {
+              "kernel": "chain-add",
+              "round": 0,
+              "retired": 393217,
+              "cycles": 393225,
+              "mtime_ticks": 394,
+              "cpi": 1.00002
+            },
+            {
+              "kernel": "load-use",
+              "round": 0,
+              "retired": 524289,
+              "cycles": 655378,
+              "mtime_ticks": 655,
+              "cpi": 1.25003
+            },
+            {
+              "kernel": "branch-alt",
+              "round": 0,
+              "retired": 589825,
+              "cycles": 983037,
+              "mtime_ticks": 983,
+              "cpi": 1.66666
+            },
+            {
+              "kernel": "chain-add",
+              "round": 1,
+              "retired": 393217,
+              "cycles": 393225,
+              "mtime_ticks": 393,
+              "cpi": 1.00002
+            },
+            {
+              "kernel": "load-use",
+              "round": 1,
+              "retired": 524289,
+              "cycles": 655369,
+              "mtime_ticks": 656,
+              "cpi": 1.25001
+            },
+            {
+              "kernel": "branch-alt",
+              "round": 1,
+              "retired": 589825,
+              "cycles": 983037,
+              "mtime_ticks": 983,
+              "cpi": 1.66666
+            },
+            {
+              "kernel": "chain-add",
+              "round": 2,
+              "retired": 393217,
+              "cycles": 393225,
+              "mtime_ticks": 393,
+              "cpi": 1.00002
+            },
+            {
+              "kernel": "load-use",
+              "round": 2,
+              "retired": 524289,
+              "cycles": 655369,
+              "mtime_ticks": 656,
+              "cpi": 1.25001
+            },
+            {
+              "kernel": "branch-alt",
+              "round": 2,
+              "retired": 589825,
+              "cycles": 983037,
+              "mtime_ticks": 983,
+              "cpi": 1.66666
+            }
+          ]
+        }
+      },
+      "ddr4_live_calibration": {
+        "overall": "CAL PASS",
+        "microblaze": "PASS",
+        "dqs_gate_tracking": "RUNNING",
+        "rank0_stages_passed": 12,
+        "rank0_stages_skipped": 15,
+        "ranks": 1,
+        "data_bits": 64,
+        "reported_memory_clock_mhz": 800,
+        "active_margin_scan": false,
+        "input_sha256": {
+          "live-mig.rpt": "225b2ca03a45d0c02af9b5a13d08be93d1fe57d8ef7b49fb93c48cde03006a56",
+          "live-mig-properties.rpt": "63a5c22ecd0b8ec3e28a068091a26795526d1601bf50339850594cdc5967670f"
+        }
+      }
     }
   },
   "uart5": {
@@ -462,7 +694,20 @@
     },
     "linux_ioctl_on_rocket": "not verified",
     "integrated_fpga_timing": "not verified",
-    "physical_execution": "not verified"
+    "physical_execution": "not verified",
+    "buffered_uart_rtl": {
+      "mode": "uart5-dot4",
+      "cpu": "generated ChipTop; external RAM/card modeled",
+      "kit_sha256": "b9eef3c40fd039948562a982cf37d4a9964fc21c94c205db7214c542875cd420",
+      "payload_bytes": 896,
+      "payload_sha256": "1b7f87a2f594cb6156654fa3d5c8bbcb700d0f6b81e1a05fbf4b5f8afe2cbae8",
+      "cycles": 8812544,
+      "external_TL_reads": 17,
+      "external_TL_writes": 0,
+      "SD_commands": 0,
+      "vectors": 257,
+      "protocol_errors_tested": 2
+    }
   },
   "linux_chiptop_debug": {
     "mode": "debug-profile-linux",
@@ -1142,6 +1387,29 @@
       "external_ram_alias_bit29": "guest data FAIL",
       "external_ram_alias_bit30": "guest data FAIL"
     },
-    "physical_kit": "buffered only; see separately verified board capture"
+    "physical_kit": "buffered and split-halt; independent captures under physical"
+  },
+  "os_workload": {
+    "scope": "single-hart Linux user processes, shared mapping + atomic, private mapping + fork, live S/D FP state between pipe exchanges; not ISA certification or SMP",
+    "firmware_bytes": 5358088,
+    "firmware_sha256": "ef6ddfcc69cabcaca6ea9310795063f199da72c21d7f4df9322835621eb988c5",
+    "qemu_variant_shell": true,
+    "qemu_controls": {
+      "firmware_sha256": "7a8f9932796747be2cd54390af7adf88ba5b156e54069884946185fef47b41c9",
+      "guest_sha256": {
+        "good": "4ab1c29d4584820db1c3953208e529bc6f4cc6f43ba4d43389d1044c12bf4b65",
+        "bad-fp": "486bd30a0770411cd3ca00dbddb812a681dd4f3ccbd75c6de176b55a4faeb983",
+        "bad-page": "1611b55f6a6e447314448372e3d7ab3aaf5abe39f1a133f29ce55caa5f08f470",
+        "bad-atomic": "6da238a1a5aba2e8730d5f16fdc8859696c177c0c6225cb3b80220a18717975c"
+      },
+      "expected_exit_codes": {
+        "good": 0,
+        "bad-fp": 5,
+        "bad-page": 5,
+        "bad-atomic": 5
+      },
+      "uart_sha256": "7c72df49c1c6d26710bddbbdfe81a5f73cdf10f72f4f1b7cc1f292db8c39c8db",
+      "machine": "QEMU virt, single hart, read-only ext4 fixture"
+    }
   }
 }

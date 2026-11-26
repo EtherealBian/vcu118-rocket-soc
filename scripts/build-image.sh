@@ -5,6 +5,7 @@ root=$(cd "$(dirname "$0")/.." && pwd); native=${VCU_BUILD:-$HOME/.cache/vcu118-
 for s in busybox linux opensbi; do bash "$root/scripts/fetch-image-sources.sh" "$s"; done
 src=$native/src; obj=${VCU_IMAGE_OBJ:-$native/image}; release=${VCU_RELEASE_OUT:-$root/artifacts}; mkdir -p "$obj"/{bb,kernel,opensbi} "$release"; export LC_ALL=C TZ=UTC SOURCE_DATE_EPOCH=1733011200 KBUILD_BUILD_TIMESTAMP='2024-12-01 00:00:00 UTC' KBUILD_BUILD_USER=vcu KBUILD_BUILD_HOST=builder KBUILD_BUILD_VERSION=1
 dot4=${VCU_DOT4_ENABLE:-0}; case "$dot4" in 0) ;; 1) test -n "${VCU_BUILD:-}" && test -n "${VCU_IMAGE_OBJ:-}" && test -n "${VCU_RELEASE_OUT:-}" && test "$release" != "$root/artifacts" && cmp "$src/linux/drivers/misc/vcu_dot4.c" "$root/software/dot4/vcu_dot4.c" || { echo 'use build-dot4-linux.sh with isolated directories'; exit 2; } ;; *) exit 2;; esac
+oscheck=${VCU_OSCHECK_ENABLE:-0}; case "$oscheck" in 0) ;; 1) [[ -n ${VCU_IMAGE_OBJ:-} && -n ${VCU_RELEASE_OUT:-} && "$obj" != "$native/image" && "$release" != "$root/artifacts" ]] || { echo 'use a separate object directory and release for oscheck'; exit 2; } ;; *) exit 2;; esac
 cross=$tools/bootlin/bin/riscv64-linux-; test -x "${cross}gcc"; jobs=${JOBS:-4}
 gcc -std=c11 -D_POSIX_C_SOURCE=200809L -Wall -Wextra -Werror -O2 "$root/software/soc-check.c" -o "$obj/host-check"; "$obj/host-check" 0
 "${cross}gcc" -std=c11 -D_POSIX_C_SOURCE=200809L -Wall -Wextra -Werror -Os -static -s "$root/software/soc-check.c" -o "$obj/soc-check"
@@ -35,10 +36,18 @@ p.write_text(s.replace(key, '''/bin/dot4-check --if-present || { echo LINUX_DOT4
 DOTINIT
   touch -d @"$SOURCE_DATE_EPOCH" "$stage"/{init,dot4-check}
 fi
+if [[ $oscheck == 1 ]]; then
+  "${cross}gcc" -Os -Wall -Wextra -Werror -march=rv64gc -mabi=lp64d -static -s -Wl,--build-id=none "$root/software/oscheck/check.c" "$root/software/oscheck/exchange.S" -o "$stage/os-check"
+  # Run after the regular memory self-test, but before the local shell is offered.
+  sed -i '/^# Lab-only/i /bin/os-check || { echo LINUX_OSCHECK_FAILED; exec /bin/sh -i; }' "$stage/init"
+  grep -q '^/bin/os-check ' "$stage/init"
+  touch -d @"$SOURCE_DATE_EPOCH" "$stage"/{init,os-check}
+fi
 manifest=$obj/kernel/initramfs.list
 { for d in bin sbin proc sys dev tmp; do echo "dir /$d 0755 0 0"; done
   echo 'nod /dev/console 0600 0 0 c 5 1'; echo 'nod /dev/null 0666 0 0 c 1 3'; echo "file /init $stage/init 0755 0 0"; echo "file /bin/busybox $stage/busybox 0755 0 0"; echo "file /bin/soc-check $stage/soc-check 0755 0 0";
   if [[ $dot4 == 1 ]]; then echo "file /bin/dot4-check $stage/dot4-check 0755 0 0"; fi
+  if [[ $oscheck == 1 ]]; then echo "file /bin/os-check $stage/os-check 0755 0 0"; fi
   for cmd in sh ash cat echo ls mount mkdir sleep uname dmesg dd cmp sha256sum sync head poweroff reboot setsid cttyhack; do echo "slink /bin/$cmd busybox 0777 0 0"; done; } > "$manifest"
 k=(make -C "$src/linux" O="$obj/kernel" ARCH=riscv CROSS_COMPILE="$cross"); KCONFIG_ALLCONFIG="$root/software/kernel.fragment" "${k[@]}" allnoconfig
 "$src/linux/scripts/config" --file "$obj/kernel/.config" --set-str INITRAMFS_SOURCE initramfs.list

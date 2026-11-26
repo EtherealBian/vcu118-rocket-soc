@@ -20,6 +20,13 @@ class CaptureTest(unittest.TestCase):
         for bad in (text.removesuffix(reply),text.replace('bytes=16777216','bytes=1677'),text.replace('HANDOFF','OTHER'),text+'Kernel panic',text.replace(reply,'old-session\r\n')):
             with self.assertRaises(ValueError): c.check_uart(bad.encode(),'linux',n)
 
+    def test_oscheck_requires_guest_proof_before_prompt(self):
+        nonce='abcd0000000042'; marker='LINUX_OSCHECK_PASS rounds=64 processes=2 cow_bytes=4096 shared_amoadds=128 fp=s,d'
+        sample='UART5_READY v1\nUART5_HANDOFF\nVCU118_INITRAMFS_READY\nSOC_CHECK_PASS bytes=16777216 passes=1 elapsed_s=1\n'+marker+'\n# uname\nBOARD_42_'+nonce+'\n'
+        c.check_uart(sample.encode(),'linux-oscheck',nonce)
+        for bad in (sample.replace(marker,'LINUX_OSCHECK_FAILED'),sample.replace(marker,''),sample.replace('128 fp','127 fp'),sample.replace(marker,'# echo '+marker),sample.replace(marker,'')+marker+'\n'):
+            with self.assertRaises(ValueError):c.check_uart(bad.encode(),'linux-oscheck',nonce)
+
     def test_only_current_bare_epoch(self):
         text=b'UART5_READY v1\r\nUART5_HANDOFF\r\nVCU118_DIAG_START v1\r\nVCU118_DIAG_PASS memory_bytes=1048576 passes=2 timer=advanced\r\n'
         c.check_uart(text,'bare',None)

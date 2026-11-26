@@ -11,7 +11,7 @@ function Find-VcuFpgaUart([string]$BridgeSerial) {
     if ($port -notmatch '^COM\d+$' -or $port -notin [IO.Ports.SerialPort]::GetPortNames()) {throw "No live COM port for $id"}; return $port
 }
 function Get-VcuConsoleEvent([string]$Text,[string]$Mode,[string]$Nonce,[bool]$ChallengeSent) {
-    if ($Text -match 'Kernel panic|VCU118_DIAG_FAIL|VCU118_ADDR_FAIL|SOC_SELFTEST_FAILED|VCU118_COUNTER_FAIL|VCU118_SWEEP_FAIL|DOT4_MMIO_FAIL|DOT4_FAIL|LINUX_DOT4_FAILED|ROM4_STOP|UART5_STOP') {return 'FAIL'}
+    if ($Text -match 'Kernel panic|VCU118_DIAG_FAIL|VCU118_ADDR_FAIL|SOC_SELFTEST_FAILED|VCU118_COUNTER_FAIL|VCU118_SWEEP_FAIL|DOTBENCH_FAIL|DOT4_MMIO_FAIL|DOT4_FAIL|LINUX_DOT4_FAILED|LINUX_OSCHECK_FAILED|ROM4_STOP|UART5_STOP') {return 'FAIL'}
     if ($Mode -eq 'bare') {
         if ($Text -match '(?ms)^VCU118_DIAG_START v1\r?\n.*?^VCU118_DIAG_PASS memory_bytes=1048576 passes=2 timer=advanced\r?\n') {return 'PASS'}
     } elseif ($Mode -eq 'address') {
@@ -20,13 +20,16 @@ function Get-VcuConsoleEvent([string]$Text,[string]$Mode,[string]$Nonce,[bool]$C
         if ($Text -cmatch '(?ms)^VCU118_SWEEP_START v1 block_mib=8 blocks=254\r?\n.*?^VCU118_SWEEP_PASS bytes=2130706432 passes=2\r?\n') {return 'PASS'}
     } elseif ($Mode -eq 'counters') {
         if ($Text -cmatch '(?ms)^VCU118_COUNTER_START v1 n=131072\r?\n.*?^VCU118_COUNTER_PASS kernels=3 rounds=3\r?\n') {return 'PASS'}
+    } elseif ($Mode -eq 'dotbench') {
+        if ($Text -cmatch '(?ms)^DOTBENCH_START v1 vectors=257\r?\n.*?^DOTBENCH_PASS vectors=257 rounds=4\r?\n') {return 'PASS'}
     } elseif ($Mode -eq 'dot4') {
         if ($Text -cmatch '(?m)^DOT4_MMIO_START\r?\nDOT4_MMIO_PASS vectors=257 protocol_errors_checked=2\r?\n') {return 'PASS'}
-    } elseif ($Mode -in 'linux','linux-dot4') {
+    } elseif ($Mode -in 'linux','linux-dot4','linux-oscheck') {
         if ($Mode -eq 'linux-dot4' -and $Text.Contains('LINUX_DOT4_NO_PLATFORM_DEVICE')) {return 'FAIL'}
         if ($ChallengeSent -and $Text -match "(?m)^(?:# )?BOARD_42_${Nonce}\r?\n") {return 'PASS'}
         if (!$ChallengeSent -and $Text -match '(?ms)^VCU118_INITRAMFS_READY\r?\n.*?^SOC_CHECK_PASS bytes=16777216 passes=[1-9]\d* elapsed_s=\d+\r?\n.*?(?:^|\n)# ') {
             if ($Mode -eq 'linux-dot4' -and $Text -cnotmatch '(?ms)^SOC_CHECK_PASS [^\n]+\n.*?^LINUX_DOT4_PASS vectors=257 reserved_rejected=1\r?\n.*?^# ') {return 'WAIT'}
+            if ($Mode -eq 'linux-oscheck' -and $Text -cnotmatch '(?ms)^SOC_CHECK_PASS [^\n]+\n.*?^LINUX_OSCHECK_PASS rounds=64 processes=2 cow_bytes=4096 shared_amoadds=128 fp=s,d\r?\n.*?^# ') {return 'WAIT'}
             return 'CHALLENGE'
         }
     } else {throw 'unknown console test'}

@@ -4,7 +4,7 @@ import argparse,hashlib,os,re,tempfile,zipfile
 from pathlib import Path as P
 from collections import OrderedDict
 root=P(__file__).resolve().parents[1]; cy=root/'third_party/chipyard'; shell=cy/'fpga/fpga-shells'; fp=cy/'fpga'
-ap=argparse.ArgumentParser();ap.add_argument('--out',type=P);ap.add_argument('--config',choices=['RocketVCU118Config','Dot4RocketVCU118Config','AlwaysClockedDebugRocketVCU118Config','BufferedDebugRocketVCU118Config'],default='RocketVCU118Config');args=ap.parse_args(); members={}
+ap=argparse.ArgumentParser();ap.add_argument('--out',type=P);ap.add_argument('--config',choices=['RocketVCU118Config','Dot4RocketVCU118Config','AlwaysClockedDebugRocketVCU118Config','BufferedDebugRocketVCU118Config','BufferedDot4RocketVCU118Config'],default='RocketVCU118Config');args=ap.parse_args(); members={}
 if args.out is None:
  if args.config!='RocketVCU118Config':ap.error('an explicit fresh --out is required for a non-baseline variant')
  args.out=root/'artifacts/vcu118-generated-rtl.zip'
@@ -41,7 +41,8 @@ set here [file dirname [file normalize [info script]]];if {[regexp {\\s} $here]}
 set argv [list [file join $here sources.f] [file join $here shell xilinx common tcl] [file join $here run-[clock seconds]]];set argc 3
 source [file join $here implement.tcl]
 ''');put('README.txt', '''VCU118 Rocket baseline, generated files from Chipyard 1.13.0, Vivado 2024.2. Extract to an empty short path without spaces. In that path run: vivado -mode batch -source build.tcl\nThe file list and the embedded ROM are the actual generated board design; generated AMD IP must be recreated using a licensed installation. This package is neither a verified board boot nor a timing waiver. RTL_ROOT_SHA256.txt authenticates content not origin. Do not unpack different versions in the same folder.\n''');
-if args.config=='Dot4RocketVCU118Config':
+combined=args.config=='BufferedDot4RocketVCU118Config'
+if args.config=='Dot4RocketVCU118Config' or combined:
  # firtool 1.75.0 adds a fixed provenance line, and omits exactly the final LF.
  # Compare all remaining bytes; no whitespace, comment, or logic normalization.
  source=(root/'rtl/accel/dot4_i8.sv').read_bytes(); emitted=members.get('rtl/dot4_i8.sv')
@@ -51,9 +52,10 @@ if args.config=='Dot4RocketVCU118Config':
  if b'vcu118lab,dot4-i8-v1' not in members['board/'+cfg+'.dts']:raise ValueError('missing accelerator in device tree')
  for source in ('Dot4Rocket.scala','Dot4Peripheral.scala'):put('overlay/'+source,root/'rtl/accel/chipyard'/source)
  members['README.txt']+=b'Optional Dot4RocketVCU118Config: MMIO at 0x64002000. This archive initially retains the stock board ROM.\n'
-if args.config in ('AlwaysClockedDebugRocketVCU118Config','BufferedDebugRocketVCU118Config'):
+if combined or args.config in ('AlwaysClockedDebugRocketVCU118Config','BufferedDebugRocketVCU118Config'):
  import subprocess,sys
- base=fp/'generated-src'/'chipyard.fpga.vcu118.VCU118FPGATestHarness.RocketVCU118Config'
+ prefix='chipyard.fpga.vcu118.VCU118FPGATestHarness.'
+ base=gen.with_name(prefix+('Dot4RocketVCU118Config' if combined else 'RocketVCU118Config'))
  subprocess.run([sys.executable, str(root/'scripts/check-debug-clock.py'), str(base/'gen-collateral/ChipTop.sv'), str(gen/'gen-collateral/ChipTop.sv')],check=True)
  if members['board/'+cfg+'.dts']!=(base/(base.name+'.dts')).read_bytes():raise ValueError('clock candidate changed board description')
  put('overlay/AlwaysClockedDebugRocket.scala',root/'rtl/clocking/AlwaysClockedDebugRocket.scala')
@@ -75,8 +77,8 @@ vcu_endpoint_reports [file join $wrkdir routed-endpoints]
  put('shell/xilinx/common/tcl/vcu-endpoints.tcl',root/'scripts/diagnose-routed.tcl')
 
  members['README.txt']+=b'AlwaysClockedDebugRocketVCU118Config: JTAG and system bus access retained, debug clock gating disabled for FPGA routing. Requires independent timing and debug validation.\n'
- if args.config=='BufferedDebugRocketVCU118Config':
-  clock=gen.with_name('chipyard.fpga.vcu118.VCU118FPGATestHarness.AlwaysClockedDebugRocketVCU118Config')
+ if args.config=='BufferedDebugRocketVCU118Config' or combined:
+  clock=base if combined else gen.with_name(prefix+'AlwaysClockedDebugRocketVCU118Config')
   subprocess.run([sys.executable,str(root/'scripts/check-debug-buffer.py'),str(clock/'gen-collateral'),str(gen/'gen-collateral')],check=True)
   for k in ('prepare-debug-buffer.py','vcu-buffered.mk','generate-buffered-debug.sh','check-debug-buffer.py'):
    put('overlay/'+k,root/'scripts'/k)
@@ -86,6 +88,10 @@ vcu_endpoint_reports [file join $wrkdir routed-endpoints]
    subprocess.run([sys.executable,str(root/'scripts/prepare-debug-buffer.py'),str(cy/'generators/rocket-chip/src/main/scala/devices/debug/Periphery.scala'),str(patched)],check=True)
    put('overlay/Periphery.patched.sha256',hashlib.sha256(patched.read_bytes()).hexdigest()+'  Periphery.scala\n')
   members['README.txt']+=b'BufferedDebugRocketVCU118Config: registered two-entry A and D queues between the debug fragmenter and slave. No change to CPU stages or board address map.\n'
+if combined:
+ put('overlay/BufferedDot4Rocket.scala',root/'rtl/accel/chipyard/BufferedDot4Rocket.scala')
+ for f in ('generate-buffered-dot4.sh','vcu-dot4-buffered.mk'):put('overlay/'+f,root/'scripts'/f)
+ members['README.txt']+=b'BufferedDot4RocketVCU118Config combines both overlays; checked against the unbuffered Dot4 RTL and exact Devicetree, not the non-accelerated baseline.\n'
 dig=lambda b:hashlib.sha256(b).hexdigest();manifest=''.join(dig(b)+'  '+k+'\n' for k,b in sorted(members.items()));put('RTL_ROOT_SHA256.txt',manifest)
 fd,tmp=tempfile.mkstemp(suffix='.part',dir=args.out.parent);os.close(fd)
 try:

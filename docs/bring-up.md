@@ -265,3 +265,18 @@ python scripts/verify-soc-capture.py $run <本轮采集目录> <本轮载荷>
 ```
 
 每次必须从新一轮配置开始，**不能在已有 Linux 系统下运行内存覆盖程序**。分别把该轮采集目录和对应 `.bin` 交给 `scripts/verify-soc-capture.py`。串口出现 PASS 只是第一道判断；离线复核还检查所有计数窗口，以及每个图样、操作、块数和时间戳。扫描会覆盖被测 RAM，若要回到 shell，请重新上传 Linux 载荷。
+
+### 组合版 Dot4、Linux 扩展与串行验收
+
+保持五级/100 MHz。在生成普通 Dot4 以及时钟和调试缓冲对照版后，单独生成 `bash scripts/generate-buffered-dot4.sh`；以 `python3 scripts/package-rtl.py --config BufferedDot4RocketVCU118Config --out artifacts/dot4-buffer-ref.zip` 打包。用前面的 ROM5 构建及 `prepare-candidate.py ... --boot uart5 --irq-sync` 流程创建专用 `VCU_SIM_KIT`（不要与 `--irq-front-end` 候选混用）。指定新 `VCU_SIM_OBJ` 和 `VCU_SIM_CONFIG=BufferedDot4RocketVCU118Config` 后运行 `bash scripts/build-rtl-sim.sh`。
+
+```bash
+bash scripts/build-dot4-bench.sh artifacts/bench-next
+bash scripts/test-uart-dot4-rtl.sh logs/dot4-next artifacts/bare-compact.img uart5-dot4 artifacts/dot4-sw1/dot4.bin
+bash scripts/test-uart-dot4-rtl.sh logs/bench-next artifacts/bare-compact.img uart5-dotbench artifacts/bench-next/dotbench.bin
+bash scripts/build-oscheck-linux.sh "$HOME/.cache/vcu118-build/oscheck-next" artifacts/oscheck-next
+VCU_FIRMWARE=artifacts/oscheck-next/fw_payload.bin VCU_QEMU_LOG=oscheck-next.txt python3 scripts/qemu-smoke.py --oscheck
+python3 scripts/test-oscheck-qemu.py artifacts/fw_payload.bin logs/oscheck-controls-next
+```
+
+在 Windows 中给 `scripts/run-board-suite.ps1` 指定 `-Program -Run $run -ReviewedBitSha256 $sha -Out <新目录> -Payloads $表 -Modes $顺序`。表的键与模式名称对应，值为本机构建的 `.bin`；器件身份来自本地环境变量或显式参数。每项均重新易失配置、收包并独立复查后才写 `<mode>.json`。`-ReadMigAfterBare` 在 bare 成功后立即只读校准状态；仅在已审核的同一板级运行使用。含 2,032 MiB 写读扫描的组不得与另一个串口用户或已有 Linux 会话并行。`linux-oscheck` 和 `linux-dot4` 均拒绝仅有普通 Linux shell 的启动。
