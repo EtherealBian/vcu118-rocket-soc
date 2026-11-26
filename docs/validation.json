@@ -367,7 +367,27 @@
       "stock_and_clock_only_functional_results_match": true
     },
     "fpga_timing": "not verified",
-    "physical_execution": "not verified"
+    "physical_execution": "not verified",
+    "chiptop_debug_slave_lanes": {
+      "mode": "debug-slave-lanes",
+      "cycles": 7688092,
+      "store_cases": 180,
+      "load_cases": 180,
+      "debug_data_bytes": 32,
+      "transfer_sizes": [
+        1,
+        2,
+        4,
+        8
+      ],
+      "prehalt_external_get": {
+        "bytes": 64,
+        "address": "0x8fffefc0"
+      },
+      "posthalt_external_reads": 0,
+      "external_writes": 0,
+      "spi_commands": 0
+    }
   },
   "linux_diagnostic_128m": {
     "mode": "debug-linux-console; preload via simulated memory, handoff via simulated JTAG",
@@ -449,6 +469,46 @@
       "disposition": "SRL removed, mixed-clock OR still present; no CDC signoff"
     },
     "postroute_timing_met": null,
+    "physical_execution": false,
+    "chiptop_debug_slave_lanes": {
+      "mode": "debug-slave-lanes",
+      "cycles": 7688092,
+      "store_cases": 180,
+      "load_cases": 180,
+      "debug_data_bytes": 32,
+      "transfer_sizes": [
+        1,
+        2,
+        4,
+        8
+      ],
+      "prehalt_external_get": {
+        "bytes": 64,
+        "address": "0x8fffefc0"
+      },
+      "posthalt_external_reads": 0,
+      "external_writes": 0,
+      "spi_commands": 0
+    }
+  },
+  "halt_source_experiment": {
+    "kit_sha256": "c62a48abd43f0b6753c95bb6e51ad70a49879a428baa1ad9f798bcde6d276562",
+    "generated_hdl_inputs": 376,
+    "change_vs_buffered": "split JTCK ordinary halt and debug-clock halt-on-reset; register both for two receiver edges before OR; keep original three tile receiver stages",
+    "debug_module_clock_cases_each": 9,
+    "dmi_transactions_each_case": 16,
+    "checked_events": 110205,
+    "events_distinct_from_zero_delay_pin": 536,
+    "original_trace_sha256": "6d4c6b06b6a6ef064a0a460b667bdf87f403dfd3f51b4936c1f42f3084e6d853",
+    "split_trace_sha256": "bd301ed2ad049ddd98b9c48f3e071506a5a7284bf8072b7e2c6dc3b244dc8e2b",
+    "scope": "real generated TLDebugModule, driven via DMI; hart reset status input supplied by fixture, not physical hart reset",
+    "chiptop_sba_mailbox": {
+      "cycles": 1041532,
+      "result": "0xc0ff8be1",
+      "recovered_sberror": 3
+    },
+    "integrated_netlist_verified": false,
+    "routed_timing_met": null,
     "physical_execution": false
   }
 }

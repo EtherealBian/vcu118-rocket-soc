@@ -182,3 +182,18 @@ vivado -mode batch -source scripts/inspect-integrated-irq.tcl -tclargs <run>/obj
 ```
 
 只看到三个真实触发器还不够。`audit-marked` 可报告已识别的跨时钟 OR 门；`require-marked` 会拒绝该结构。两者均不提供整机 CDC 通过结论。板测采集器仅在当前 ROM 完整 `UART5_HANDOFF` 行之后接受客体标记；Linux 还需准确的 16 MiB 自检和本次挑战回复。
+
+### 比较两路停核请求（可选，不改变 CPU 级数）
+
+在生成前述 `buffer-base.zip` 后，从同一输入派生另一个独立目录：
+
+```bash
+python3 scripts/prepare-candidate.py artifacts/buffer-base.zip artifacts/rom5-next cache/split-halt --boot uart5 --irq-sync --irq-front-end
+VCU_SIM_KIT=$PWD/cache/buffer5i bash scripts/test-debug-halt-sources.sh logs/halt-original
+VCU_SIM_KIT=$PWD/cache/split-halt bash scripts/test-debug-halt-sources.sh logs/halt-split
+python3 scripts/compare-halt-traces.py logs/halt-original logs/halt-split
+# 只对这个候选自己的整机 DCP 核验结构，不能用单模块仿真替代。
+vivado -mode batch -source scripts/inspect-integrated-irq.tcl -tclargs <split-run>/obj/post_synth.dcp require-split irq-split.tsv
+```
+
+新逻辑针对固定的未门控调试时钟和单 hart。先核对九个已追溯的生成模块摘要；不接受不同版本静默替换。物理审核要求 JTCK 寄存器 Q 到第一级 D 之间无组合逻辑、亚稳态级只驱动第二级、两路在目标域寄存后才进入 OR，并复核原 tile 接收链。测试中 `io_hartIsInReset_0` 是调试模块的状态输入，而不是 VCU118 上可独立复位 hart 的证明。

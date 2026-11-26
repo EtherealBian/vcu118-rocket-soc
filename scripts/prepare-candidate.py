@@ -5,7 +5,8 @@ from zipfile import ZipFile
 from hashlib import sha256
 import argparse,re,subprocess,sys,struct,tempfile
 
-def apply(stock,romdir,out,boot="gpt",irq_sync=False):
+def apply(stock,romdir,out,boot="gpt",irq_sync=False,irq_front_end=False):
+ if irq_front_end and not irq_sync: raise ValueError("--irq-front-end requires --irq-sync")
  label={"gpt":"ROM4 SDHC primary GPT/checksum boot", "uart5":"ROM5 UART-only framed recovery boot (no SD access)"}[boot]
  h=lambda b:sha256(b).hexdigest(); get=lambda k:out/k
  if out.exists():raise ValueError('fresh candidate output directory required')
@@ -49,8 +50,12 @@ def apply(stock,romdir,out,boot="gpt",irq_sync=False):
   overlay=runpy.run_path(str(P(__file__).with_name('annotate-irq-sync.py')))
   leaf=get('rtl/'+overlay['NAME']); leaf.write_bytes(overlay['annotated'](leaf.read_bytes()))
   label += '; IRQ synchronizer ASYNC_REG and SRL extraction disabled (check integrated netlist)'
+ if irq_front_end:
+  overlay=runpy.run_path(str(P(__file__).with_name('prepare-halt-merge.py')))
+  overlay['install'](out); label += '; independently registered halt request levels (+2 debug clock edges)'
  get('README.txt').write_text(f'VCU118 candidate: {label} and two-flop UART receive synchronizer. No authentication; no board signoff. Rebuild: vivado -mode batch -source build.tcl. See project README.\n');get('CANDIDATE.sha256').write_text(''.join(h(p.read_bytes())+'  '+p.relative_to(out).as_posix()+'\n' for p in sorted(out.rglob('*')) if p.is_file()));print('CANDIDATE_PREPARED',out,'firmware_bytes',len(newrom),'dtb',hex(addr),'rom_with_dtb_sha256',h(body),'stock_zip_sha256',h(stock.read_bytes()))
 if __name__=='__main__':
  parser=argparse.ArgumentParser(description=__doc__)
  for name in ('stock','romdir','out'):parser.add_argument(name,type=P)
+ parser.add_argument('--irq-front-end',action='store_true',help='buffered ungated kit only: synchronize halt before OR; adds two cycles')
  parser.add_argument('--irq-sync',action='store_true',help='mark the exact pinned IRQ synchronizer leaf; independent variant');parser.add_argument('--boot',choices=('gpt','uart5'),default='gpt');apply(**vars(parser.parse_args()))

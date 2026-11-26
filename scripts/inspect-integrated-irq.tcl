@@ -1,8 +1,8 @@
 # Read-only inspection of the *integrated* tile interrupt receiver in one DCP.
 # It is not a whole-design CDC waiver. No design, constraint, or hardware writes.
-if {$argc != 3} {error {usage: <checkpoint> <inspect|audit-marked|require-marked> <fresh TSV>}}
+if {$argc != 3} {error {usage: <checkpoint> <inspect|audit-marked|require-marked|require-split> <fresh TSV>}}
 lassign $argv file mode out
-if {![file isfile $file] || [file exists $out] || $mode ni {inspect audit-marked require-marked}} {error {invalid inputs}}
+if {![file isfile $file] || [file exists $out] || $mode ni {inspect audit-marked require-marked require-split}} {error {invalid inputs}}
 set_param general.maxThreads 2
 open_checkpoint $file
 set chain chiptop0/system/tile_prci_domain/intsink/chain/output_chain
@@ -38,7 +38,10 @@ if {$mode ne "inspect"} {
  }
  puts INTEGRATED_IRQ_MARKED_INTERSTAGES_VERIFIED
  set srcpin [leafpins $stage(2)/D OUT]; if {[llength $srcpin]!=1} {error "ambiguous receiver launch pins: $srcpin"}
- if {$srcpin eq "$launch/Q"} {
+ if {$mode eq "require-split"} {
+  source [file join [file dirname [info script]] require-split-irq.tcl]
+  require_split_irq $stage(2)/D $launch
+ } elseif {$srcpin eq "$launch/Q"} {
   puts INTEGRATED_IRQ_THREE_MARKED_FFS_CHAIN_VERIFIED
  } else {
   set comb [get_cells -of_objects [get_pins $srcpin]]; set ref [get_property REF_NAME $comb]; set init [get_property -quiet INIT $comb]
