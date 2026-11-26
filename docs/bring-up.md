@@ -119,3 +119,7 @@ bash scripts/build-linux-diagnostic.sh "$HOME/.cache/vcu118-build/diag128-next" 
 ```
 
 128 MiB 配置将诊断 DTB 嵌入独立 OpenSBI，覆盖 ROM 提供的 DTB；完整硬件地址图仍有 2 GiB。本轮两个新目录重建的载荷 SHA-256 一致：`af9c7b2ae6539e825fe329ca3b739d2f255eb0a46215914dab68aa7d7418b283`。它用于观察早期串口并缩短页描述符初始化；其结果不能代替默认 2 GiB 固件、整段 DDR 自检或实板运行。为防止用错内核，符号化工具核对日志中的固件哈希，从两个 ELF 重新导出二进制，并核对嵌入载荷的位置和内容；不会把无法归属的 PC 自动解释成内核函数。
+
+### JTAG 系统总线读写与 CPU 回包（模拟 TAP）
+
+`bash scripts/test-debug-sba.sh logs/sba-next artifacts/bare-compact.img` 使用 `VCU_SIM_OBJ` 和 `VCU_SIM_KIT` 指向同一套已编译的 ChipTop 和生成清单；脚本核对 Verilator 的原始文件清单路径。不要把来自另一解压目录的清单与旧模型混用。本测试不预装 RAM：通过 SBA 加载一个小程序、写入 32 个输入、检查非对齐错误和清除操作，再让 Rocket 启动并计算。宿主检查 UART 和 SBA 读回的一致性。磁盘仅为仿真器固定输入，没有发起扇区访问。

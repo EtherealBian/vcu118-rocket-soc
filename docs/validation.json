@@ -71,6 +71,18 @@
       "tl_writes": 0,
       "uart_marker": "UART5_STOP CRC",
       "debug_halt_pc": "0x1003c"
+    },
+    "sba-mailbox": {
+      "cycles": 1041532,
+      "load": "simulated TAP/DMI SBA word writes and readback; no preloading",
+      "program_bytes": 177,
+      "mailbox_words": 32,
+      "misaligned_sberror": 3,
+      "verified_w1c_recovery": true,
+      "expected": "0xc0ff8be1",
+      "observed": "0xc0ff8be1",
+      "sectors_started": 0,
+      "uart_marker": "SBA_GUEST_REPLIED v1"
     }
   },
   "qemu_virt": {

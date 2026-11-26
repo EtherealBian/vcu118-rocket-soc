@@ -24,9 +24,9 @@ struct DebugPort {
   for(auto x:{1u,2u,10u,11u}) {auto v=readGpr(x);std::cerr<<" x"<<std::dec<<x<<"=0x"<<std::hex<<v;}
   writeReg(0x1005,scratch); need(readGpr(5)==scratch,"scratch restoration failed");resumeHart();std::cerr<<std::dec<<" resumed\n";
  }
- void boot(uint64_t entry,uint64_t dtb){connectHalt();uint32_t status=0;
+ void boot(uint64_t entry,uint64_t dtb,bool viaSba=false){connectHalt();uint32_t status=0;
  // Firmware link addresses come from the built payload and the board's ROM symbol.
  writeReg(0x100a,0);writeReg(0x100b,dtb);writeReg(0x1005,entry); /* Rocket supports GPR abstract writes; use progbuf for CSRs. */ wr(0x20,0x7b129073); /* csrw dpc,t0 */ wr(0x21,0x00100073); /* ebreak */ wr(0x17,(1u<<18)); uint32_t cs=0;for(unsigned n=0;n<32;n++){cs=rd(0x16);if(!(cs&0x1000))break;}need(!(cs&0x1700),"setting dpc via progbuf failed");
- wr(0x10,0x40000001);for(unsigned i=0;i<64;i++){status=rd(0x11);if(status&(1u<<17))break;}need(status&(1u<<17),"hart did not resume");wr(0x10,1);std::cerr<<"JTAG_PRELOADED_HANDOFF entry=0x"<<std::hex<<entry<<" dtb=0x"<<dtb<<std::dec<<" (not SD handoff)\n";
+ wr(0x10,0x40000001);for(unsigned i=0;i<64;i++){status=rd(0x11);if(status&(1u<<17))break;}need(status&(1u<<17),"hart did not resume");wr(0x10,1);std::cerr<<(viaSba?"JTAG_SBA_HANDOFF entry=0x":"JTAG_PRELOADED_HANDOFF entry=0x")<<std::hex<<entry<<" dtb=0x"<<dtb<<std::dec<<" (not SD handoff)\n";
  }
 };
