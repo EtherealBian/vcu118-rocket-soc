@@ -1,4 +1,4 @@
-[CmdletBinding()] param([ValidateSet('bare','linux')][string]$Mode='bare',[string]$Run,[ValidatePattern('^[0-9a-fA-F]{64}$')][string]$ReviewedBitSha256,[switch]$Program,[ValidateRange(30,7200)][int]$TimeoutSeconds=240,[string]$UartPayload,[string]$Vivado='D:\Xilinx\Vivado\2024.2\bin\vivado.bat',[string]$Cable=$env:VCU_CABLE_SERIAL,[string]$Bridge=$env:VCU_UART_SERIAL,[string]$Slr0Dna=$env:VCU_SLR0_DNA)
+[CmdletBinding()] param([ValidateSet('bare','linux')][string]$Mode='bare',[string]$Run,[ValidatePattern('^[0-9a-fA-F]{64}$')][string]$ReviewedBitSha256,[switch]$Program,[ValidateRange(30,7200)][int]$TimeoutSeconds=240,[string]$UartPayload,[string]$Vivado='D:\Xilinx\Vivado\2024.2\bin\vivado.bat',[string]$BoardDefinition,[string]$Cable=$env:VCU_CABLE_SERIAL,[string]$Bridge=$env:VCU_UART_SERIAL,[string]$Slr0Dna=$env:VCU_SLR0_DNA)
 # Default preflight never writes to the board. -Program requires prior manual review of CDC/IO/DRC and exact bit SHA.
 $ErrorActionPreference='Stop'; . (Join-Path $PSScriptRoot board-console.ps1); $root=Split-Path $PSScriptRoot -Parent
 if (!$Bridge -or ($Program -and (!$Cable -or $Slr0Dna -notmatch '^0x[0-9a-fA-F]+$'))) {throw 'Pass -Bridge for preflight; -Program also requires -Cable and -Slr0Dna from local enumeration'}
@@ -9,6 +9,11 @@ $runDir=(Resolve-Path -LiteralPath $Run).Path; $bit=Join-Path $runDir 'obj\VCU11
 $logDir=Join-Path $root ('logs\hw-'+$Mode+'-'+[guid]::NewGuid().ToString('N')); [void][IO.Directory]::CreateDirectory($logDir)
 $review=& python (Join-Path $PSScriptRoot review-fpga.py) $runDir; if ($LASTEXITCODE -ne 0) {throw 'route/timing evidence rejected; no programming'}; $review|Set-Content "$logDir\implementation.json"; $r=$review -join "`n"|ConvertFrom-Json
 if (!$r.route_and_constrained_timing_met -or !$r.board_internal_coverage_met -or !$r.board_io_inventory_known -or $r.bit_sha256 -ne $ReviewedBitSha256 -or (Get-FileHash -LiteralPath $bit).Hash -ne $ReviewedBitSha256) {throw 'review or bit hash mismatch'}
+# Derive the standard board-store location from the selected Vivado; allow an explicit copy of the same pinned files.
+if(!$BoardDefinition){$BoardDefinition=Join-Path (Split-Path (Split-Path $Vivado -Parent) -Parent) 'data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu118/2.4'}
+$pins=& python (Join-Path $PSScriptRoot audit-board-pins.py) $runDir $BoardDefinition
+if($LASTEXITCODE -ne 0){throw 'routed package pins or generated MIG configuration differ from reviewed board data; no programming'}
+$pins|Set-Content "$logDir/board-io.json"
 # Generate the exact bounded wire image before opening any serial port or programming.
 # The collector remains the sole owner of the port; no terminal can race its reads.
 $frame=$null; $frameMeta=$null; $offset=0; $txStarted=$false; $handoff=$false

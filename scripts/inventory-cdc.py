@@ -10,11 +10,13 @@ import re
 
 def family(row):
     src, dst, rule = row['from'], row['to'], row['rule']
-    if rule=='CDC-7' and dst=='dutWrangler/deglitched_deglitch/reg_0_reg/PRE' and src in ('mig/island/blackbox/inst/div_clk_rst_r1_reg/C','mig/island/blackbox/inst/u_ddr4_mem_intfc/u_ddr_mc/rst_r1_reg/C','fpga_power_on/power_on_reset_reg/C'):
+    if rule=='CDC-7' and dst=='dutWrangler/deglitched_deglitch/reg_0_reg/PRE' and src in ('mig/island/blackbox/inst/div_clk_rst_r1_reg/C','mig/island/blackbox/inst/u_ddr4_mem_intfc/u_ddr_cal_top/rst_r1_reg/C','mig/island/blackbox/inst/u_ddr4_mem_intfc/u_ddr_mc/rst_r1_reg/C','fpga_power_on/power_on_reset_reg/C'):
         return 'MIG/POR to reset-wrangler asynchronous preset'
     if rule=='CDC-10' and re.search(r'/(?:source|sink)_valid_0/io_out_sink_valid_0/output_chain/sync_2_reg/CLR$',dst):
         if dst.startswith('chiptop0/system/tlDM/'): return 'DMI async queue validity reset'
         if dst.startswith(('mig/axi4asource/','mig/island/axi4asink/')): return 'DDR AXI async queue validity reset'
+    if rule=='CDC-10' and src=='chiptop0/system/tlDM/dmOuter/dmOuter/debugIntRegs_0_reg/C' and dst=='chiptop0/system/tile_prci_domain/intsink/chain/output_chain/sync_2_reg/D':
+        return 'debug halt reaches tile receiver via combinational logic'
     if rule=='CDC-11' and src=='chiptop0/system/tlDM/dmOuter/dmOuter/DMCONTROLReg_dmactive_reg/C' and dst in ('chiptop0/dmactiveAck_dmactiveAck/output_chain/sync_2_reg/D','chiptop0/system/tlDM/dmInner/dmactive_synced_dmactive_synced_dmactiveSync/output_chain/sync_2_reg/D'):
         return 'dmactive request received by two synchronizers'
     if rule=='CDC-13' and src=='chiptop0/system/tlDM/dmOuter/dmOuter/debugIntRegs_0_reg/C' and re.fullmatch(r'chiptop0/system/tile_prci_domain/intsink/chain/output_chain/sync_\d+_reg_srl\d+/D',dst):

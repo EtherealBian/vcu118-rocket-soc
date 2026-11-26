@@ -212,3 +212,13 @@ vivado -mode batch -source scripts/inspect-integrated-irq.tcl -tclargs <split-ru
 缺少硬件预算时保留未验证状态，不填零延迟或添加全局假路径来让报告变绿。
 
 对实现所用 kit 的板级复位行为运行 `VCU_SIM_KIT=$PWD/cache/clock5 bash scripts/test-board-wrangler.sh logs/wrangler-new`（替换为实际 kit 路径）。无需连接实板；不能替代 DCP 复位树检查。
+
+### 从板卡参考文件独立审查连线
+
+对一个已完成的实现运行 `python scripts/audit-board-pins.py <run> <Vivado安装目录>/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vcu118/2.4`。输入是该次路由的 `routed-io.rpt` 和生成的 MIG XCI；按逻辑口逐位查 AMD 板数据，而不是按封装位置反查来猜端口名。UART 参考 UG1224 表 3-26，PMOD/FMC 位置参考表 3-30/31。FMC 为单端调试用的标称 1.8 V 配置，程序不测 VADJ、不验证外接探头。正式整机下载前也执行此审查；Vivado 标准安装放在其他目录时可传 `-BoardDefinition`，哈希仍须匹配。单独用 `vivado -mode batch -source scripts/inspect-board-uart.tcl -tclargs <post_route.dcp> <新.tsv>` 追踪真实收发寄存器和级间路径。
+
+DDR 路径分三层检查：
+
+1. 对生成的板级数字适配器：WSL 中 `VCU_SIM_KIT=$PWD/cache/<候选> bash scripts/test-board-mig-adapter.sh logs/<新目录>`。通过标志是 12 个场景及两个故障对照都得到预期结果，脚本正常退出并生成 `test.ok`。
+2. 对完整路由 DCP：`vivado -mode batch -source scripts/inspect-mig-crossings.tcl -tclargs <post_route.dcp> <新目录>`，再运行 `python scripts/inventory-mig-crossings.py <新目录>/endpoints.tsv <同次实现>/obj/report/clock-interaction.rpt`。逐方向核对 max/min 集合、总数、端点类型；不能把未设约束的路径改写为时序通过。
+3. 对真实物理 DDR：使用易失配置和 UART 载荷，保留本轮握手、内存比较和计时器证据；有物理校准或内存测量后才报告板测结果。

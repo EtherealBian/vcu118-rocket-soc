@@ -471,6 +471,14 @@
       "global_worst_setup_clock": "200 MHz DDR UI",
       "bit_bytes": 26599968,
       "approved_for_programming": false
+    },
+    "uart_bare_rtl": {
+      "cycles": 13049856,
+      "tl_reads": 56791,
+      "tl_writes": 30757,
+      "sd_commands": 0,
+      "handoff": true,
+      "two_pass_1mib_timer": true
     }
   },
   "linux_diagnostic_128m": {
@@ -552,7 +560,7 @@
       ],
       "disposition": "SRL removed, mixed-clock OR still present; no CDC signoff"
     },
-    "postroute_timing_met": null,
+    "postroute_timing_met": true,
     "physical_execution": false,
     "chiptop_debug_slave_lanes": {
       "mode": "debug-slave-lanes",
@@ -573,6 +581,112 @@
       "posthalt_external_reads": 0,
       "external_writes": 0,
       "spi_commands": 0
+    },
+    "postroute": {
+      "route": {
+        "routable": 113460,
+        "fully_routed": 113460,
+        "routing_errors": 0
+      },
+      "timing": {
+        "setup": {
+          "slack_ns": 0.403,
+          "total_negative_ns": 0.0,
+          "failed": 0,
+          "count": 130170
+        },
+        "hold": {
+          "slack_ns": 0.011,
+          "total_negative_ns": 0.0,
+          "failed": 0,
+          "count": 129468
+        },
+        "pulse_width": {
+          "slack_ns": 0.143,
+          "total_negative_ns": 0.0,
+          "failed": 0,
+          "count": 51154
+        }
+      },
+      "resources": {
+        "CLB LUTs": 59973.0,
+        "CLB Registers": 42512.0,
+        "Block RAM Tile": 203.5,
+        "DSPs": 28.0,
+        "URAM": 0.0
+      },
+      "check_timing": {
+        "no_clock": 0,
+        "constant_clock": 0,
+        "pulse_width_clock": 0,
+        "unconstrained_internal_endpoints": 0,
+        "no_input_delay": 5,
+        "no_output_delay": 6,
+        "multiple_clock": 0,
+        "generated_clocks": 0,
+        "loops": 0,
+        "partial_input_delay": 0,
+        "partial_output_delay": 0,
+        "latch_loops": 0
+      },
+      "bit_sha256": "6ba0338375d89049f57e57ba2e38f96d7e8a2fc96a61c26948d980d0479203d6",
+      "reports_sha256": {
+        "route-status.rpt": "a67fbbb299d270ffd21c3bf78fb9ca5b1f918488cbc2b683d20eb04f3576fe2f",
+        "full-timing.rpt": "7f0a84686241e62484e1da568b25e5ccb978452799ada9ef56fab594d06780f4",
+        "check-timing.rpt": "a5727021181bca28507306fc88717258728de24fc488c3282ce34a1bc642756a",
+        "routed-utilization.rpt": "aca55a492881c457189041e3ee91498d8e241152e5c20c83f8b01156d5751847",
+        "cdc.rpt": "8682c3f7ff15817a66e39a4aa40777f5b696c4d9aa66f60b9979242ce41dc90b",
+        "clock-interaction.rpt": "e8040688821e187e66ea702b1dc2677a28cb58e704c9657b60ce22ded963dabd",
+        "pulse-width.rpt": "0dc231bc96f8c06a167c67caaab6473664cec98de0628823a025a9a4d0ade0da",
+        "methodology.rpt": "ad332fb0d127a6265dc1f8e8ec5fb3cabb1b7bc36f77c577d869f6f23037d0e8",
+        "routed-clocks.rpt": "e5acf2db40950613d25def784ac2f5d522b40c0cb648de558792e23e767749db",
+        "routed-drc.rpt": "7d1f43dc54653de1ae90e1c6ebda69485c4c1a2883562e520804a9e9d81a91ce"
+      },
+      "cdc_inventory": {
+        "CDC-10 Critical": 5,
+        "CDC-15 Warning": 335,
+        "CDC-2 Warning": 52,
+        "CDC-3 Info": 179,
+        "CDC-7 Critical": 2,
+        "CDC-8 Warning": 3,
+        "CDC-9 Info": 3
+      },
+      "critical_families": {
+        "DMI async queue validity reset": 2,
+        "debug halt reaches tile receiver via combinational logic": 1,
+        "MIG/POR to reset-wrangler asynchronous preset": 2,
+        "DDR AXI async queue validity reset": 2
+      },
+      "routed_drc_warnings": 59,
+      "methodology_TIMING_47": 2,
+      "system_same_clock_wns_ns": 1.205,
+      "global_worst_setup_clock": "200 MHz DDR UI calibration",
+      "bit_bytes": 26091512,
+      "approved_for_programming": false
+    },
+    "routed_uart": {
+      "raw_pad_fanout": "only meta/D",
+      "stages": [
+        "FDRE",
+        "FDRE"
+      ],
+      "both_async_reg": true,
+      "same_slice": true,
+      "meta_q_loads": 1,
+      "clean_q_loads": 6,
+      "interstage_logic_levels": 0,
+      "interstage_setup_slack_ns": 9.58,
+      "interstage_datapath_ns": 0.302,
+      "tx_launch": "single system-clock FDSE",
+      "physical_execution": false
+    },
+    "uart_bare_rtl": {
+      "cycles": 13049856,
+      "tl_reads": 56791,
+      "tl_writes": 30757,
+      "sd_commands": 0,
+      "handoff": true,
+      "two_pass_1mib_timer": true
     }
   },
   "halt_source_experiment": {
@@ -624,5 +738,102 @@
     "domain_release_stages": 3,
     "source": "3c7d279e814fa41290b206d6e799fea0014c705b53196652f21e0b42dbecd526",
     "qualifies_analog_recovery_removal": false
+  },
+  "board_io_audit": {
+    "runs": [
+      "clock-only",
+      "buffer-and-irq-attributes"
+    ],
+    "reference": "XilinxBoardStore VCU118 2.4 and UG1224 v1.4 tables 3-2, 3-26, 3-30 and 3-31",
+    "total": 133,
+    "ddr_c1": 115,
+    "io_banks": {
+      "64": 4,
+      "67": 11,
+      "71": 39,
+      "72": 34,
+      "73": 45
+    },
+    "board_reference_sha256": {
+      "board.xml": "c8ac84d9a89d1527b8465e95617bb695e5dba0e3313d7608db78a8936cf3bf6e",
+      "part0_pins.xml": "3ae9e6fc8cb2bb59de49c6b30238a5e1fd74a9318399de658d85ba6d349402fa"
+    },
+    "mig": {
+      "component": "xilinx.com:ip:ddr4:2.2",
+      "device": "MT40A256M16GE-083E",
+      "axi_address_bits": 31,
+      "axi_data_bits": 64,
+      "ddr_data_bits": 64,
+      "ddr_ck_ps": 1250,
+      "cal_input_clock_ps": 4000
+    },
+    "scope": "Pad assignments and generated IP configuration only; not active IOB directions, external timing, supply voltage, calibration or board execution.",
+    "xci_sha256": "be47ca3d0594b66ea2d1a1afe97b6ba7bf29f6db512fccb1b02539e4c734bd28"
+  },
+  "mig_adapter_rtl": {
+    "kits": [
+      "clock-only",
+      "split-halt"
+    ],
+    "clock_phase_cases_per_kit": 12,
+    "all_five_axi_channels_per_case": {
+      "AW": 128,
+      "W": 480,
+      "B": 128,
+      "AR": 128,
+      "R": 480
+    },
+    "TL_D_each": 608,
+    "peak_TL_outstanding": 8,
+    "negative_controls": [
+      "lost AXI address bit 30",
+      "ignored byte enable"
+    ],
+    "scope": "generated board TL-to-AXI chain including async queues; simulated AXI slave substitutes vendor MIG. No PHY or physical DDR."
+  },
+  "clock_only_ignored_ddr_endpoints": {
+    "directions": {
+      "clk_out1_harnessSysPLL -> mmcm_clkout0": {
+        "endpoints": 188,
+        "captures": {
+          "valid_reset": 9,
+          "payload": 155,
+          "gray": 20,
+          "wrangler_release_reset": 3,
+          "valid_data": 1
+        },
+        "max_reported_datapath_ns": {
+          "valid_reset": 2.468,
+          "payload": 1.436,
+          "gray": 1.25,
+          "wrangler_release_reset": 0.433,
+          "valid_data": 0.378
+        }
+      },
+      "mmcm_clkout0 -> clk_out1_harnessSysPLL": {
+        "endpoints": 118,
+        "captures": {
+          "wrangler_preset": 1,
+          "wrangler_counter_reset": 14,
+          "payload": 73,
+          "valid_reset": 9,
+          "gray": 20,
+          "valid_data": 1
+        },
+        "max_reported_datapath_ns": {
+          "wrangler_preset": 2.801,
+          "wrangler_counter_reset": 2.789,
+          "payload": 1.353,
+          "valid_reset": 1.361,
+          "gray": 1.137,
+          "valid_data": 0.261
+        }
+      }
+    },
+    "input_sha256": [
+      "731699859e43da84dac2b1e3b3b190cdbb0a0c43b598eed2da6f7d276fbf0838",
+      "f4f07fe298be9a86ecfea90e51481023a6f95c1f2e1793951b65c319bdab3553"
+    ],
+    "scope": "One max and one min path per ignored endpoint. Not every launch/capture pair, skew, routed slack or a CDC waiver."
   }
 }
