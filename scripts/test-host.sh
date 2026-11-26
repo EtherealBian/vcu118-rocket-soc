@@ -5,4 +5,6 @@ gcc -std=c11 -D_POSIX_C_SOURCE=200809L -Wall -Wextra -Werror -O2 software/soc-ch
 "$native/host/soc-check" 0
 if "$native/host/soc-check" -1; then exit 1; fi
 if "$native/host/soc-check" 'xyz'; then exit 1; fi
+gcc -std=c11 -Wall -Wextra -Werror -Os tests/boot_uart_native.c -o "$native/host/boot-uart-native"
+"$native/host/boot-uart-native"
 echo HOST_SELFTEST_PASS

@@ -40,6 +40,37 @@
       "tl_writes": 0,
       "uart_marker": "ROM4_STOP GPT_BOUNDS_CRC",
       "debug_halt_pc": "0x1003c"
+    },
+    "uart5-bare": {
+      "cycles": 13049856,
+      "sectors_started": 0,
+      "tl_reads": 56791,
+      "tl_writes": 30757,
+      "uart_marker": "VCU118_DIAG_PASS memory_bytes=1048576 passes=2 timer=advanced"
+    },
+    "uart5-badmagic": {
+      "cycles": 462604,
+      "sectors_started": 0,
+      "tl_reads": 1,
+      "tl_writes": 0,
+      "uart_marker": "UART5_STOP MAGIC",
+      "debug_halt_pc": "0x1003c"
+    },
+    "uart5-badlength": {
+      "cycles": 471820,
+      "sectors_started": 0,
+      "tl_reads": 1,
+      "tl_writes": 0,
+      "uart_marker": "UART5_STOP LENGTH",
+      "debug_halt_pc": "0x1003c"
+    },
+    "uart5-badcrc": {
+      "cycles": 454412,
+      "sectors_started": 0,
+      "tl_reads": 2,
+      "tl_writes": 0,
+      "uart_marker": "UART5_STOP CRC",
+      "debug_halt_pc": "0x1003c"
     }
   },
   "qemu_virt": {
@@ -63,5 +94,16 @@
     "rx_bytes_in_6s": 0,
     "programmed_by_this_run": false,
     "linux_shell_observed": false
+  },
+  "uart5": {
+    "dtb_address": "0x10258",
+    "rom_bytes": 600,
+    "rom_sha256": "525555c10e205917faa053ea9b45d64e5265745de4a38af724973e519d157fb1",
+    "two_independent_portable_kits_sha256": "b964ee61cdf7f3ca35762b071bd3a6e91470130a8929b8555a0abcaef74fa0ef",
+    "serial_positive_payload_bytes": 422,
+    "native_receiver_cases_passed": 8,
+    "rtl_truncated_timeout": "in progress",
+    "linux_over_serial": "not verified",
+    "physical_serial_download": "not verified"
   }
 }

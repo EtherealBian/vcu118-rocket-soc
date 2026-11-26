@@ -1,4 +1,5 @@
 /* Single-hart VCU118. No operating system, no writable ROM, no gp or BSS dependency. */
+.file "entry.S"
 .section .text.start,"ax",@progbits
 .globl _start
 _start:
@@ -6,7 +7,10 @@ _start:
   csrr a0, mhartid
   bnez a0, .Lpark
   li sp, 0x8ffff000
-  call load_gpt
+#ifndef BOOT_ROUTINE
+#define BOOT_ROUTINE load_gpt
+#endif
+  call BOOT_ROUTINE
   bnez a0, .Lpark
   fence rw,rw
   fence.i

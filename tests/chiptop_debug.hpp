@@ -13,6 +13,17 @@ struct DebugPort {
  }
  uint64_t peekDpc(){wr(0x20,0x7b1022f3); /* csrr t0,dpc */ wr(0x21,0x00100073);wr(0x17,1u<<18);syncAbstract();wr(0x17,(3u<<20)|(1u<<17)|0x1005);syncAbstract();return uint64_t(rd(5))<<32|rd(4);}
  void syncAbstract(){uint32_t c=0;for(unsigned k=0;k<32;k++){c=rd(0x16);if(!(c&0x1000))break;}need(!(c&0x1700),"abstract command busy/error");}
+ // Diagnostic profile only: sample via the real external JTAG port. The progbuf
+ // borrows x5; restore it while still halted before acknowledging resume.
+ uint64_t readGpr(unsigned n){wr(0x17,(3u<<20)|(1u<<17)|(0x1000+n));syncAbstract();uint32_t hi=rd(5),lo=rd(4);return (uint64_t(hi)<<32)|lo;}
+ uint64_t csrViaScratch(unsigned csr){wr(0x20,(csr<<20)|0x22f3u);wr(0x21,0x00100073);wr(0x17,1u<<18);syncAbstract();return readGpr(5);}
+ void resumeHart(){wr(0x10,0x40000001);uint32_t status=0;for(unsigned i=0;i<64;i++){status=rd(0x11);if(status&(1u<<17))break;}need(status&(1u<<17),"hart did not resume");wr(0x10,1);}
+ void profile(uint64_t cycle){connectHalt();const uint64_t scratch=readGpr(5);
+  std::cerr<<"LINUX_JTAG_SAMPLE cycle="<<cycle<<std::hex;
+  for(auto x:{0x7b1u,0x7b0u,0x180u,0x142u,0x141u,0x143u,0x342u,0x341u,0x343u}) {auto v=csrViaScratch(x);std::cerr<<" csr"<<x<<"=0x"<<v;}
+  for(auto x:{1u,2u,10u,11u}) {auto v=readGpr(x);std::cerr<<" x"<<std::dec<<x<<"=0x"<<std::hex<<v;}
+  writeReg(0x1005,scratch); need(readGpr(5)==scratch,"scratch restoration failed");resumeHart();std::cerr<<std::dec<<" resumed\n";
+ }
  void boot(uint64_t entry,uint64_t dtb){connectHalt();uint32_t status=0;
  // Firmware link addresses come from the built payload and the board's ROM symbol.
  writeReg(0x100a,0);writeReg(0x100b,dtb);writeReg(0x1005,entry); /* Rocket supports GPR abstract writes; use progbuf for CSRs. */ wr(0x20,0x7b129073); /* csrw dpc,t0 */ wr(0x21,0x00100073); /* ebreak */ wr(0x17,(1u<<18)); uint32_t cs=0;for(unsigned n=0;n<32;n++){cs=rd(0x16);if(!(cs&0x1000))break;}need(!(cs&0x1700),"setting dpc via progbuf failed");

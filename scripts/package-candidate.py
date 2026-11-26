@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Archive exactly the ROM4 kit passed to Vivado; reject unlisted/missing/changed inputs."""
+"""Archive exactly the candidate kit passed to Vivado; reject unlisted/missing/changed inputs."""
 import argparse, hashlib, zipfile, os, tempfile
 from pathlib import Path, PurePosixPath
 
