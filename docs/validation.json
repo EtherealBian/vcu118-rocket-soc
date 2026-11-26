@@ -157,8 +157,75 @@
       },
       "test_scope": "independent electrical UART/configuration fixture; no Rocket, DDR, SD or Linux"
     },
-    "soc_bit_programmed": false,
-    "linux_shell_observed": false
+    "soc_bit_programmed": true,
+    "linux_shell_observed": false,
+    "buffered_soc": {
+      "configuration": "buffer5i / ROM5",
+      "tests": {
+        "bare": {
+          "mode": "bare",
+          "utc": "2026-11-26T07:39:26.5107544Z",
+          "bit_sha256": "6ba0338375d89049f57e57ba2e38f96d7e8a2fc96a61c26948d980d0479203d6",
+          "uart": "115200 8N1",
+          "format": "VCU118U5",
+          "payload_bytes": 422,
+          "payload_sha256": "bf0f48f177cd41b044091daadedcc3ca1389aef25a75d289b5e20eb221c91410",
+          "frame_sha256": "5dc516a7bf6e291c92985dbdac1a539442bc4ee27eb6901ae896253eb3e164ed",
+          "uart_sha256": "e30d859a828b0781d2b6e20b31a08f261770b0f292c0d9a7d29657f0d6fd9ffb",
+          "slr_done": [
+            1,
+            1,
+            1
+          ],
+          "slr_crc_error": [
+            0,
+            0,
+            0
+          ],
+          "volatile_configuration": true,
+          "shell_challenge_verified": false
+        },
+        "address": {
+          "mode": "address",
+          "utc": "2026-11-26T07:40:15.1410296Z",
+          "bit_sha256": "6ba0338375d89049f57e57ba2e38f96d7e8a2fc96a61c26948d980d0479203d6",
+          "uart": "115200 8N1",
+          "format": "VCU118U5",
+          "payload_bytes": 564,
+          "payload_sha256": "7f1e8613ff500748ad50f0aea29ef4d0bbcf2018e91a4b7e33b80d7000b6b274",
+          "frame_sha256": "4334353b2439aa4d964ffba3190e55c9d6faf7a7d37b91f2773c5ebc0c0cb7fa",
+          "uart_sha256": "b340745b82ef04cc098d84430cc17152200e47efa5046c6c3f904a555a9e034c",
+          "slr_done": [
+            1,
+            1,
+            1
+          ],
+          "slr_crc_error": [
+            0,
+            0,
+            0
+          ],
+          "volatile_configuration": true,
+          "shell_challenge_verified": false
+        }
+      },
+      "ddr4_live_calibration": {
+        "overall": "CAL PASS",
+        "microblaze": "PASS",
+        "dqs_gate_tracking": "RUNNING",
+        "rank0_stages_passed": 12,
+        "rank0_stages_skipped": 15,
+        "ranks": 1,
+        "data_bits": 64,
+        "reported_memory_clock_mhz": 800,
+        "active_margin_scan": false,
+        "input_sha256": {
+          "live-mig.rpt": "233a08e510889cf4405efe31424bcd574b4fba1be606855d8a162268b9d688d6",
+          "live-mig-properties.rpt": "5fa2833cd2d0e9a155b0fca5ad92969fb864def5684e3dc25c0f5e15fc34823d"
+        }
+      },
+      "scope": "Volatile, isolated J106 configuration + J4 UART. No external soft TAP, SD or other FMC traffic; not a qualification of all I/O, CDC or 2 GiB of memory."
+    }
   },
   "uart5": {
     "dtb_address": "0x10258",
@@ -167,9 +234,9 @@
     "two_independent_portable_kits_sha256": "b964ee61cdf7f3ca35762b071bd3a6e91470130a8929b8555a0abcaef74fa0ef",
     "serial_positive_payload_bytes": 422,
     "native_receiver_cases_passed": 8,
-    "rtl_truncated_timeout": "in progress",
+    "rtl_truncated_timeout": "stock UART5 simulator case complete: UART5_STOP TIMEOUT, DPC=0x1003c at 200487692 cycles. Original matrix wrapper returned nonzero due to trailing CR in its exit argument; not a clean whole-suite exit.",
     "linux_over_serial": "not verified",
-    "physical_serial_download": "not verified"
+    "physical_serial_download": "verified; buffered kit, see physical.buffered_soc"
   },
   "dot4": {
     "config": "Dot4RocketVCU118Config",
@@ -492,7 +559,9 @@
     "hardware_execution": false,
     "kernel_reported_available_kib": 125148,
     "plic_contexts": 2,
-    "sched_clock_hz_reported": 100000
+    "sched_clock_hz_reported": 100000,
+    "init_process_executed": true,
+    "observed_initramfs_marker": "VCU118_INITRAMFS_READY"
   },
   "debug_buffer_experiment": {
     "config": "BufferedDebugRocketVCU118Config",
@@ -561,7 +630,7 @@
       "disposition": "SRL removed, mixed-clock OR still present; no CDC signoff"
     },
     "postroute_timing_met": true,
-    "physical_execution": false,
+    "physical_execution": true,
     "chiptop_debug_slave_lanes": {
       "mode": "debug-slave-lanes",
       "cycles": 7688092,
@@ -687,6 +756,20 @@
       "sd_commands": 0,
       "handoff": true,
       "two_pass_1mib_timer": true
+    },
+    "routed_gray_characterization": {
+      "groups": 10,
+      "bits": 40,
+      "max_min_paths": 80,
+      "min_datapath_ns": 0.1,
+      "max_datapath_ns": 0.504,
+      "minimum_reference_bus_skew_slack_ns": 5.424,
+      "input_sha256": {
+        "bits.tsv": "e0ccdfbfe55047f3197cf415e4344f1ac002a79c8d0959877cc5094a865f9a1b",
+        "data-delays.tsv": "524d005e0452f641716ae64236c511e14adbd5202cab87dae64736144cc56f7d",
+        "bus-skew.rpt": "2f55bab68508d083b686742d3bb198e8a02cead19da758be6e7d6be022558384"
+      },
+      "scope": "Temporary 5 ns bus-skew characterization on an already routed design, not an implemented constraint, CDC waiver, guaranteed MTBF or hardware calibration. Signed vendor skew is not a physical one-way flight time."
     }
   },
   "halt_source_experiment": {
@@ -705,7 +788,7 @@
       "result": "0xc0ff8be1",
       "recovered_sberror": 3
     },
-    "integrated_netlist_verified": false,
+    "integrated_netlist_verified": true,
     "routed_timing_met": null,
     "physical_execution": false,
     "chiptop_debug_slave_lanes": {
@@ -727,7 +810,8 @@
       "posthalt_external_reads": 0,
       "external_writes": 0,
       "spi_commands": 0
-    }
+    },
+    "integrated_netlist_stage": "post-synthesis: remote FF -> meta -> clean; local two FF; both OR inputs destination FFs; tile receiver 3 FDRE and 0 SRLs"
   },
   "reset_wrangler_clock_only_kit": {
     "level": "generated ResetWrangler RTL with actual debounce register and per-domain reset catchers, not a MIG/PLL or physical reset test",
@@ -835,5 +919,25 @@
       "f4f07fe298be9a86ecfea90e51481023a6f95c1f2e1793951b65c319bdab3553"
     ],
     "scope": "One max and one min path per ignored endpoint. Not every launch/capture pair, skew, routed slack or a CDC waiver."
+  },
+  "sparse_address_diagnostic": {
+    "scratch_addresses": [
+      "0x81000000",
+      "0xa1000000",
+      "0xc1000000",
+      "0xe1000000"
+    ],
+    "bytes_each": 4096,
+    "passes": 2,
+    "flush_mmio": "0x02010200",
+    "chiptop_kit": "split-halt",
+    "positive_cycles": 6127616,
+    "external_dirty_puts": 512,
+    "ordered_external_refills": 512,
+    "negative_controls": {
+      "external_ram_alias_bit29": "guest data FAIL",
+      "external_ram_alias_bit30": "guest data FAIL"
+    },
+    "physical_kit": "buffered only; see separately verified board capture"
   }
 }

@@ -59,3 +59,19 @@
 配置 FPGA 用 **J106** 的 USB-JTAG；它不是软核调试 TAP（后者在 FMC_J2）。USB-UART 用 **J4**：CP2105 **Standard** 是软核控制台；Enhanced 接板管，不发送测试命令。板载管理 microSD 不接 XCVU9P。使用 SD 启动时，J52 PMOD 侧需单独的 3.3 V SPI SDHC 模块；按板上标号核对 J52.1 = CS_n、J52.3 = MOSI、J52.5 = MISO、J52.7 = SCLK，另接电源和公共地。板卡参考：AMD *VCU118 Evaluation Board User Guide* (UG1224)，USB、SD 与 PMOD 章节。
 
 先用 `scripts/probe_board.tcl` 枚举，用 `scripts/identify-board.tcl` 只读核对线缆和器件。Windows 预检：`./scripts/test-connected-board.ps1 -Bridge <USB串口芯片序列号>`，默认不编程。确定目标与引脚、人工审查完整布线时序/CDC/DRC 后，显式传入 `-Program -Mode bare` 或 `linux`、`-Run <实现目录>`、`-ReviewedBitSha256 <已审核bit哈希>`、`-Bridge`、`-Cable`、`-Slr0Dna`。脚本先开正确的串口，再核对片上身份，易失编程，核对三片 SLR 配置状态，最后核验诊断输出或随机 shell 挑战。不写 Flash 或 SD；选用适合当前模式且已准备的启动介质。所有物理标识、日志和镜像均保留在本机。
+
+## 首次 Rocket 实板读写 · 15:39–15:40（上海时间）
+
+这是上述**调试缓冲版**（bit SHA-256 `6ba0338375d89049f57e57ba2e38f96d7e8a2fc96a61c26948d980d0479203d6`），不是独立探针，也不是仍在实现的停核拆分版。板级引脚、DDR 器件配置、路由时序、同步路径和 DRC 细目已复核，本轮限定在 J106 配置和 J4 串口；不使用外部软 TAP 或 SD。7 条严重 CDC 和 2 条 TIMING-47 仍保留，不将实验批准解释为整个设计签核。
+
+| 单次实板操作 | 实际结果 | 范围 |
+|---|---|---|
+| 易失配置 → 通过 UART 装入 422 B 裸机程序 | 3 个 SLR 均 DONE=1、CRC_ERROR=0；收到 READY、HANDOFF，随后 1 MiB 双轮写读校验通过，mtime 前进 | 使用真实 Rocket 及板载内存；不据此推算内存速率 |
+| 同一配置的 JTAG 只读 MIG 快照 | `CAL PASS`，MicroBlaze PASS，DQS gate tracking RUNNING；1 rank、64 数据位，报告时钟 800 MHz。27 个 Rank 0 校准阶段中 12 PASS、15 SKIP，与第二份寄存器属性逐项一致 | 一次校准快照，不是温度/电压范围验证，没有启动压力流量、眼图或宣称跳过项通过 |
+| 再次易失配置 → 564 B 高地址载荷 | `0x81000000`、`0xa1000000`、`0xc1000000`、`0xe1000000` 各 4 KiB。两轮地址相关图样，256 条缓存线每轮逐条发 L2 Flush64 后回读，通过 | 只覆盖 16 KiB 独立位置和两个高地址位，不是扫完 2 GiB |
+
+第一次裸机串口本身打印成功，但 Windows 采集器在关闭写入器前计算摘要失败，所以不计入自动通过。修复后从配置重新开始，生成并独立复核本轮证据。物理采集的载荷、比特流及串口 SHA-256 见 `validation.json`；不公开原始设备标识。
+
+同一个高地址载荷在停核拆分版 ChipTop 中通过：6,127,616 拍，看见目标线 512 个写回及各自后续的 512 个外存读取；将外存地址位 29 或 30 分别清零，两次均收到预期的 `VCU118_ADDR_FAIL data`。另在该版整机综合网表中验证了两路停核请求在目的域寄存后才合并，tile 接收链仍为 3 个 FDRE、0 个 SRL。128 MiB 诊断 Linux 的 RTL UART 已观察到执行 `/init`、`VCU118_INITRAMFS_READY` 和 riscv64 的 `uname`，不将这三行计作 shell 挑战通过。
+
+调试缓冲版的**路由后** DDR AXI FIFO 另查了 10 组四位 Gray 指针：40 对直连寄存器、80 条 max/min 数据路径，数据延迟 0.100–0.504 ns。临时 5 ns 参考值下，各组最差 bus-skew 裕量的最小值为 +5.424 ns。工具的实际 skew 是带符号的相对量，不是信号的飞行时间。这次测量没有改变实现约束，也不消除原有的跨域警告。

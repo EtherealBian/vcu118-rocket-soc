@@ -9,7 +9,7 @@ struct RecoveryFrame {
   else if(mode=="uart5-badmagic") reason="MAGIC";
   else if(mode=="uart5-badlength") reason="LENGTH";
   else if(mode=="uart5-truncated") reason="TIMEOUT";
-  else need(mode=="uart5-bare"||mode=="uart5-linux", "unknown UART5 case");
+  else need(mode=="uart5-bare"||mode=="uart5-linux"||mode=="uart5-address"||mode=="uart5-address-mirror29"||mode=="uart5-address-mirror30", "unknown UART5 case");
   need(argc==5,"uart5 mode requires prepared frame path after cycle limit");
   std::ifstream f(argv[4],std::ios::binary); need(bool(f),"frame not found");
   data.assign(std::istreambuf_iterator<char>(f),{});

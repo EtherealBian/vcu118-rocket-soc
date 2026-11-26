@@ -222,3 +222,27 @@ DDR 路径分三层检查：
 1. 对生成的板级数字适配器：WSL 中 `VCU_SIM_KIT=$PWD/cache/<候选> bash scripts/test-board-mig-adapter.sh logs/<新目录>`。通过标志是 12 个场景及两个故障对照都得到预期结果，脚本正常退出并生成 `test.ok`。
 2. 对完整路由 DCP：`vivado -mode batch -source scripts/inspect-mig-crossings.tcl -tclargs <post_route.dcp> <新目录>`，再运行 `python scripts/inventory-mig-crossings.py <新目录>/endpoints.tsv <同次实现>/obj/report/clock-interaction.rpt`。逐方向核对 max/min 集合、总数、端点类型；不能把未设约束的路径改写为时序通过。
 3. 对真实物理 DDR：使用易失配置和 UART 载荷，保留本轮握手、内存比较和计时器证据；有物理校准或内存测量后才报告板测结果。
+
+### 实板：用同一个配置文件分别验 CPU、内存和 Linux
+
+先核对候选自己的布线/时序、CDC、DRC、封装和串口寄存器，勿将下面命令用于其他板型。`-Program` 每次都重新进行**易失配置**，替换上轮设计和运行中的程序，不写 Flash/SD。`address` 不能在活着的 OS 上直接运行。将三个本机身份值放入环境变量 `VCU_CABLE_SERIAL`、`VCU_UART_SERIAL`、`VCU_SLR0_DNA`，不放入 git。
+
+```bash
+# WSL，在仓库根目录。四个窗口位于独立裸机链接区以外。
+bash scripts/build-address-diagnostic.sh artifacts/address-next
+# 可选：事先按上文构建并选择 VCU_SIM_KIT、VCU_SIM_OBJ；SD 镜像只是测试台占位。
+bash scripts/test-address-rtl.sh logs/address-rtl-next artifacts/bare-compact.img artifacts/address-next/address.frame
+```
+
+```powershell
+# PowerShell 7；$run 为人工审核过的完整实现，$sha 为所审 bit 的 SHA-256。
+$args0=@{Program=$true; Run=$run; ReviewedBitSha256=$sha}
+./scripts/test-connected-board.ps1 @args0 -Mode bare -UartPayload artifacts/bare/bringup.bin
+./scripts/test-connected-board.ps1 @args0 -Mode address -UartPayload artifacts/address-next/address.bin
+./scripts/test-connected-board.ps1 @args0 -Mode linux -UartPayload artifacts/fw_payload.bin -TimeoutSeconds 1500
+# 每次用该次采集目录与该次载荷，分别复核 bit、帧、三 SLR、原始 UART 和 shell 随机回复。
+python scripts/verify-soc-capture.py $run <本轮采集目录> <本轮载荷>
+```
+
+- 校准：在同一配置保持不变时，运行 `vivado -mode batch -source scripts/read-board-mig.tcl -tclargs <cable> xcvu9p_0 <dna> present <新目录>`，随后 `python scripts/review-live-mig.py <新目录>`。同时核对实机状态报告和每阶段属性；不复位 MIG、不开流量发生器、不启动眼图扫描。`absent` 用于**已知没有 MIG 的设计**，不能据此声称物理校准失败。
+- 布线复核：`vivado -mode batch -source scripts/measure-mig-gray.tcl -tclargs <post_route.dcp> <新目录>` 后运行 `python scripts/review-mig-gray.py <新目录>`。只对打开的内存设计临时施加 5 ns 的 bus-skew 参考值，既不写 DCP，也不回灌实现约束或改变 bit。

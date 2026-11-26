@@ -1,9 +1,10 @@
-[CmdletBinding()] param([ValidateSet('bare','linux')][string]$Mode='bare',[string]$Run,[ValidatePattern('^[0-9a-fA-F]{64}$')][string]$ReviewedBitSha256,[switch]$Program,[ValidateRange(30,7200)][int]$TimeoutSeconds=240,[string]$UartPayload,[string]$Vivado='D:\Xilinx\Vivado\2024.2\bin\vivado.bat',[string]$BoardDefinition,[string]$Cable=$env:VCU_CABLE_SERIAL,[string]$Bridge=$env:VCU_UART_SERIAL,[string]$Slr0Dna=$env:VCU_SLR0_DNA)
+[CmdletBinding()] param([ValidateSet('bare','address','linux')][string]$Mode='bare',[string]$Run,[ValidatePattern('^[0-9a-fA-F]{64}$')][string]$ReviewedBitSha256,[switch]$Program,[ValidateRange(30,7200)][int]$TimeoutSeconds=240,[string]$UartPayload,[string]$Vivado='D:\Xilinx\Vivado\2024.2\bin\vivado.bat',[string]$BoardDefinition,[string]$Cable=$env:VCU_CABLE_SERIAL,[string]$Bridge=$env:VCU_UART_SERIAL,[string]$Slr0Dna=$env:VCU_SLR0_DNA)
 # Default preflight never writes to the board. -Program requires prior manual review of CDC/IO/DRC and exact bit SHA.
 $ErrorActionPreference='Stop'; . (Join-Path $PSScriptRoot board-console.ps1); $root=Split-Path $PSScriptRoot -Parent
 if (!$Bridge -or ($Program -and (!$Cable -or $Slr0Dna -notmatch '^0x[0-9a-fA-F]+$'))) {throw 'Pass -Bridge for preflight; -Program also requires -Cable and -Slr0Dna from local enumeration'}
 $port=Find-VcuFpgaUart $Bridge; Write-Output "FPGA_SCI_PORT=$port bridge=$Bridge cable=$Cable"
 if (!$Program) {Write-Output 'PREFLIGHT_ONLY_NO_PROGRAM'; return}
+if ($Mode -eq 'address' -and !$UartPayload) {throw 'address mode requires a fresh framed payload; never run on top of an existing OS'}
 if (!$Run -or !$ReviewedBitSha256) {throw '-Program requires -Run and manually reviewed -ReviewedBitSha256'}
 $runDir=(Resolve-Path -LiteralPath $Run).Path; $bit=Join-Path $runDir 'obj\VCU118FPGATestHarness.bit'; if (!(Test-Path -LiteralPath $bit -PathType Leaf)) {throw 'missing routed bitstream'}
 $logDir=Join-Path $root ('logs\hw-'+$Mode+'-'+[guid]::NewGuid().ToString('N')); [void][IO.Directory]::CreateDirectory($logDir)
@@ -52,6 +53,8 @@ try {
    if($event -eq 'PASS'){$accepted=$true; break}
   }; Start-Sleep -Milliseconds 30
  }; if(!$accepted){throw "Timeout: not a board PASS. Evidence: $logDir"}
- [ordered]@{test=$Mode;bit_sha256=$ReviewedBitSha256;board_dna=$Slr0Dna;cable=$Cable;bridge=$Bridge;port=$port;challenge_sent=$sent;uart5_frame=$frameMeta;uart5_handoff=$handoff;utc=[datetime]::UtcNow.ToString('o');uart_sha256=(Get-FileHash "$logDir\uart.txt").Hash}|ConvertTo-Json|Set-Content "$logDir\pass.json"
+ # Close the live writer before reopening the transcript for its final hash (Windows file sharing).
+ $writer.Dispose(); $writer=$null
+ [ordered]@{test=$Mode;bit_sha256=$ReviewedBitSha256;board_dna=$Slr0Dna;cable=$Cable;bridge=$Bridge;port=$port;challenge_sent=$sent;challenge_nonce=$(if($sent){$nonce}else{$null});uart5_frame=$frameMeta;uart5_handoff=$handoff;utc=[datetime]::UtcNow.ToString('o');uart_sha256=(Get-FileHash "$logDir\uart.txt").Hash}|ConvertTo-Json|Set-Content "$logDir\pass.json"
  Write-Output "PHYSICAL_${Mode}_PASS $logDir"
 } finally {if($writer){$writer.Dispose()}; $sp.Dispose(); if($job){if($job.State -notin 'Completed','Failed','Stopped'){Stop-Job $job}; Remove-Job $job -Force}}

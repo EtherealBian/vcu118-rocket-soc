@@ -1,6 +1,6 @@
 # VCU118 Rocket Linux SoC
 
-在 AMD VCU118（XCVU9P）上实现一颗能启动 Linux 的 64 位 RISC-V 软核。从上游 Chipyard 生成板级 RTL；本仓库提供启动 ROM、诊断固件、Linux 镜像构建、真实 Rocket RTL 测试和实板自动验收脚本。这里发布的是**源码和构建方法**，不分发 bitstream。已做独立串口诊断的实板测试，完整 SoC 仍在验收中。
+在 AMD VCU118（XCVU9P）上实现一颗能启动 Linux 的 64 位 RISC-V 软核。从上游 Chipyard 生成板级 RTL；本仓库提供启动 ROM、诊断固件、Linux 镜像构建、真实 Rocket RTL 测试和实板自动验收脚本。这里发布的是**源码和构建方法**，不分发 bitstream。五级 Rocket 已在真实 VCU118 运行，DDR4 校准和两种裸机诊断已通过；Linux 独立验收。
 
 | 配置 | 基线 |
 |---|---|
@@ -13,11 +13,11 @@
 ## 验证进度 · 2026-11-26
 
 - **真实 Rocket RTL**：候选 ROM 通过 SPI 读取主 GPT 并装入裸机自检程序；UART 报告两轮 1 MiB 内存读写和定时器前进。GPT 头、分区表、分区越界、载荷扇区 CRC 四种异常都停在 ROM。外部 RAM 和卡为模型，不验证 DDR PHY。
-- **不用 SD 的启动路径**：另一版 600 B 恢复 ROM 已在真实 Rocket RTL 中，通过 UART 引脚接收并执行 422 B 裸机诊断；魔数、长度、CRC 错误分别被拒绝。板上的串口下载及 Linux 启动仍待验收。
+- **不用 SD 的启动路径**：另一版 600 B 恢复 ROM 已在真实 Rocket RTL 中，通过 UART 引脚接收并执行 422 B 裸机诊断；魔数、长度、CRC 错误分别被拒绝。调试缓冲版已在实板通过同一恢复路径装入并执行两种裸机程序。
 - **QEMU virt**：同一基线固件通过 10 次独立启动，每次执行 16 MiB 用户态自检并返回交互 shell 挑战。这个机器模型与 VCU118 的板级互连不同。
-- **Rocket 上的 Linux 进度（RTL）**：模拟 JTAG 预载基线固件后，第 40,000,000 周期读到 hart 已在 S 态执行 Linux 的 `memmap_init_range`，Sv39 已开启。另一个限制为 128 MiB 的诊断配置还通过 RTL 串口输出了 Linux 6.6.65、机器型号和早期控制台地址。两者都不是实板 shell 记录。
+- **Rocket 上的 Linux 进度（RTL）**：模拟 JTAG 预载基线固件后，第 40,000,000 周期读到 hart 已在 S 态执行 Linux 的 `memmap_init_range`，Sv39 已开启。另一个限制为 128 MiB 的诊断配置已执行 `/init`，通过 RTL 串口输出 `VCU118_INITRAMFS_READY` 与 Linux 6.6.65 的 `uname`。两者都不是实板 shell 记录。
 - **调试总线与时序**：已在生成的 RTL 上对调试从设备缓冲做 4,112 拍双向反压测试；整机综合网表仍发现一路跨时钟域的组合停核信号。未门控调试时钟的整机对照版首次在 100 MHz 约束下完成布线，建立/保持/脉宽裕量分别为 **+0.349 / +0.011 / +0.143 ns**，已生成 bitstream。该版仍有 7 条 Critical CDC 记录，未获准上板。
-- **实板**：已通过 JTAG 易失下载独立诊断设计。FPGA 侧串口以 115200 8N1 完成 **260/260 组随机请求与回包**，1,040 个返回字节全部匹配；三片 SLR 均 DONE=1、无配置 CRC 错误。这一设计不含 CPU 或 DDR。**尚无板上 Linux shell 验收；完整 SoC 的布线时序结果不等于实板测试。**
+- **VCU118 实板**：独立串口探针的 260/260 随机问答后，已换上完整的 100 MHz Rocket 调试缓冲版。串口上传两种裸机程序：1 MiB 两轮读写及定时器通过；在四个分隔 512 MiB 的位置，各刷出并校验 4 KiB，两轮通过。板上 DDR4 MIG 报告 **CAL PASS**。这不是全 2 GiB 扫描，Linux shell 另行验收。
 - **可选实验**：四路有符号 INT8 点积已接入可选配置的 TileLink 总线。Rocket 裸机通过 MMIO 核对 257 组结果，另验空取、重复提交两种错误。Linux 驱动已编入可选内核，尚未通过 Rocket 上的 ioctl 验收；没有实板加速比。
 
 [验证摘要与边界](docs/validation.md) · [重建与连接指南](docs/bring-up.md) · [设计需求与扩展顺序](VCU118-SOC-v0.1.md)
