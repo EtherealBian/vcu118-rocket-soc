@@ -27,6 +27,14 @@ class CaptureTest(unittest.TestCase):
         for bad in (sample.replace(marker,'LINUX_OSCHECK_FAILED'),sample.replace(marker,''),sample.replace('128 fp','127 fp'),sample.replace(marker,'# echo '+marker),sample.replace(marker,'')+marker+'\n'):
             with self.assertRaises(ValueError):c.check_uart(bad.encode(),'linux-oscheck',nonce)
 
+    def test_host_timing_is_optional_not_wire_speed(self):
+        r=dict(rom_handoff=500000,shell_prompt=510000,accept=510045)
+        self.assertEqual(c.timing(r,5341704,True)['host_elapsed_ms'],r)
+        self.assertEqual(c.timing(None,5341704,True),{})
+        for bad in (dict(r,rom_handoff=1200),dict(r,shell_prompt=510099),dict(r,accept=True),dict(r,unknown=3),dict(r,shell_prompt=None)):
+            with self.assertRaises(ValueError):c.timing(bad,5341704,True)
+        with self.assertRaises(ValueError):c.timing(r,5341704,False)
+
     def test_only_current_bare_epoch(self):
         text=b'UART5_READY v1\r\nUART5_HANDOFF\r\nVCU118_DIAG_START v1\r\nVCU118_DIAG_PASS memory_bytes=1048576 passes=2 timer=advanced\r\n'
         c.check_uart(text,'bare',None)

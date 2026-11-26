@@ -48,7 +48,7 @@ struct SerialSender {
 #include "chiptop_debug_slave.hpp"
 #include "chiptop_recovery.hpp"
 int main(int argc,char**argv){try{
- if(argc<3){std::cerr<<"usage: VChipTop media.img debug-slave-lanes|sba-mailbox|sd-prefix|sd-bare|sd-linux|gpt-bare|gpt-badcrc|gpt-linux|debug-bare|debug-linux|debug-dot4|debug-dotbench|gpt-dot4|debug-linux-console|debug-linux-dot4|gpt-linux-dot4|uart5-bare|uart5-dot4|uart5-dotbench|uart5-address[-mirror29|-mirror30]|uart5-linux|uart5-<fault>|debug-profile-linux [max-cycles] [frame | preload.bin dtb-address]\n";return 2;}
+ if(argc<3){std::cerr<<"usage: VChipTop media.img debug-slave-lanes|sba-mailbox|sd-prefix|sd-bare|sd-linux|gpt-bare|gpt-badcrc|gpt-linux|debug-bare|debug-linux|debug-dot4|debug-dotbench|gpt-dot4|debug-linux-console|debug-linux-dot4|gpt-linux-dot4|uart5-bare|uart5-dot4|uart5-dotbench|uart5-pack-bare|uart5-pack-badcrc|uart5-address[-mirror29|-mirror30]|uart5-linux|uart5-<fault>|debug-profile-linux [max-cycles] [frame | preload.bin dtb-address]\n";return 2;}
  Verilated::commandArgs(argc,argv);VChipTop t;TlMem ram;Sd sd(argv[1]);Uart uart;SerialSender serial;std::string mode=argv[2];RecoveryFrame recovery(mode,argc,argv);
  AddressAudit addressAudit;bool address=mode=="uart5-address"||mode=="uart5-address-mirror29"||mode=="uart5-address-mirror30";
  bool mirror=address&&mode!="uart5-address";if(address){ram.audit=&addressAudit;if(mirror)ram.mem.addressMask^=1u<<(mode=="uart5-address-mirror29"?29:30);}
@@ -84,6 +84,13 @@ int main(int argc,char**argv){try{
    need(uart.text.find("UART5_STOP")==std::string::npos,"good serial frame was rejected");
    if(mode=="uart5-bare")pass=diag&&uart.text.find("VCU118_DIAG_PASS memory_bytes=1048576 passes=2 timer=advanced\r\n")!=std::string::npos;
    if(mode=="uart5-dot4")pass=uart.text=="UART5_READY v1\r\nUART5_HANDOFF\r\nDOT4_MMIO_START\r\nDOT4_MMIO_PASS vectors=257 protocol_errors_checked=2\r\n";
+   if(mode=="uart5-pack-bare"||mode=="uart5-pack-badcrc"){
+    const std::string epoch="UART5_READY v1\r\nUART5_HANDOFF\r\n";
+    const std::string ok="UART5_PACK1_OK bytes=422 crc32=e6f03e5e\r\nVCU118_DIAG_START v1\r\nVCU118_DIAG_PASS memory_bytes=1048576 passes=2 timer=advanced\r\n";
+    if(mode=="uart5-pack-bare"){need(uart.text.find("UART5_PACK1_STOP")==std::string::npos,"packed stage rejected good fixture");pass=uart.text==epoch+ok;}
+    else {need(uart.text.find("VCU118_DIAG_START")==std::string::npos && uart.text.find("UART5_PACK1_OK")==std::string::npos,"bad inner CRC executed");pass=uart.text==epoch+"UART5_PACK1_STOP\r\n";
+     if(pass){for(unsigned j=0;j<200000;j++)tick();need(uart.text==epoch+"UART5_PACK1_STOP\r\n"&&sd.cmds.empty(),"bad packed image did not stay silent");}}
+   }
    if(mode=="uart5-dotbench"){
     need(uart.text.find("DOTBENCH_FAIL")==std::string::npos,"dot comparison failed");
     const std::string begin="UART5_READY v1\r\nUART5_HANDOFF\r\nDOTBENCH_START v1 vectors=257\r\n";

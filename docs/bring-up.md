@@ -280,3 +280,19 @@ python3 scripts/test-oscheck-qemu.py artifacts/fw_payload.bin logs/oscheck-contr
 ```
 
 在 Windows 中给 `scripts/run-board-suite.ps1` 指定 `-Program -Run $run -ReviewedBitSha256 $sha -Out <新目录> -Payloads $表 -Modes $顺序`。表的键与模式名称对应，值为本机构建的 `.bin`；器件身份来自本地环境变量或显式参数。每项均重新易失配置、收包并独立复查后才写 `<mode>.json`。`-ReadMigAfterBare` 在 bare 成功后立即只读校准状态；仅在已审核的同一板级运行使用。含 2,032 MiB 写读扫描的组不得与另一个串口用户或已有 Linux 会话并行。`linux-oscheck` 和 `linux-dot4` 均拒绝仅有普通 Linux shell 的启动。
+
+### 缩短 J4 上传（可选；不改 ROM 或原始镜像）
+
+在 WSL 安装/提供 `liblz4.so.1` 后，运行 `bash scripts/build-packed-boot.sh artifacts/fw_payload.bin artifacts/packed-next`。宿主用 LZ4 HC 压成一个块，并用库逐字节恢复核对。生成的是**自解压的受信任程序**，不是通用刷机协议。它由原 ROM 从 `0x80000000` 启动，将自己搬到 `0x84000000`，用 `0x87fff000` 的栈，解压回原地址，检查原始 CRC，执行 `fence.i`，再以原 hart/DTB 进入原固件；要求对应 DDR 窗口空闲。只在新易失配置上使用，不要在活 Linux 已占用的物理内存上运行。CRC32 不能认证发送者。
+
+```bash
+python3 scripts/test-packed-native.py --fixture artifacts/packed-next/block.lz4 artifacts/fw_payload.bin
+VCU_FIRMWARE=artifacts/packed-next/stage.bin VCU_QEMU_LOG=packed-next.uart python3 scripts/qemu-smoke.py
+# 在已匹配的 UART5 ChipTop 模型验证小程序和内层 CRC 故障；坏帧只用于仿真
+bash scripts/build-packed-boot.sh artifacts/bare/bringup.bin artifacts/packed-bare-next
+bash scripts/test-packed-rtl.sh logs/packed-rtl-next artifacts/packed-bare-next artifacts/bare/bringup.bin artifacts/bare-compact.img
+```
+
+实板分别用同一已审 bit、同一 `-Mode linux` 和同一固件，先发送原始文件，再发送 `stage.bin`。发送方须独占 J4 串口；对两次新采集运行 `python scripts/verify-packed-boot.py <run> <packed-capture> artifacts/packed-next artifacts/fw_payload.bin --raw-capture <raw-capture>`。两个捕获都要有本次采集器的单调计时字段。时间从开始发送到本次 shell 回答，不含 JTAG；不要把文件压缩率说成实测加速。
+
+在未重新配置、已完成随机挑战的 Linux 上还可运行 `./scripts/test-linux-serial.ps1 -Run $run -Capture $capture -Payload $payload -Out logs/tty-next`（预先设置 `VCU_UART_SERIAL`）。它在 shell 的 read 循环中发送 32 行各 256 个随机十六进制字符，逐行检查 tty 回显、guest 计算的 SHA-256 和 ACK，并要求真实 SiFive PLIC 串口中断行计数前进，不写 guest 文件。`scripts/test-linux-serial-qemu.py` 是命令协议的对照，不能替代板上 PLIC 验证。

@@ -31,7 +31,7 @@ $sp=[IO.Ports.SerialPort]::new($port,115200,[IO.Ports.Parity]::None,8,[IO.Ports.
 try {
  $sp.Open(); $writer=[IO.StreamWriter]::new("$logDir\uart.txt",$false,[Text.UTF8Encoding]::new($false)); $writer.AutoFlush=$true
  $job=Start-Job -ArgumentList $Vivado,$tool,$bit,$Cable,$Slr0Dna,$logDir -ScriptBlock {param($viv,$t,$b,$c,$dna,$d); Set-Location -LiteralPath $d; & $viv -mode batch -nojournal -log "$d\vivado.log" -source $t -tclargs $b $c xcvu9p_0 $dna "$d\arm" "$d\ack" "$d\programmed" *> "$d\vivado-console.txt"; if($LASTEXITCODE -ne 0){throw "programmer exit $LASTEXITCODE"} }
- $until=[DateTime]::UtcNow.AddSeconds($TimeoutSeconds)
+ $wire=[Diagnostics.Stopwatch]::new(); $romMs=$null; $promptMs=$null; $until=[DateTime]::UtcNow.AddSeconds($TimeoutSeconds)
  while ([DateTime]::UtcNow -lt $until) {
   if ($job.State -in 'Failed','Stopped') {throw "JTAG programming failed; $logDir"}
   if (!$armed -and (Test-Path "$logDir\arm")) {$sp.DiscardInBuffer(); $armed=$true; [IO.File]::WriteAllText("$logDir\ack",'collector ready')}
@@ -40,21 +40,21 @@ try {
   if ((Test-Path "$logDir\programmed") -and $job.State -eq 'Completed') {
    if($null -ne $frame){
     if($text -match '(?m)^UART5_STOP [^\r\n]+'){throw "UART loader rejected payload; $logDir"}
-    if(!$txStarted -and $text -match '(?m)^UART5_READY v1\r?\n'){$txStarted=$true; $text=''}
+    if(!$txStarted -and $text -match '(?m)^UART5_READY v1\r?\n'){$wire.Start(); $txStarted=$true; $text=''}
     if($txStarted -and $offset -lt $frame.Length){$n=[Math]::Min(2048,$frame.Length-$offset); $sp.Write($frame,$offset,$n); $offset+=$n}
     if(!$handoff -and $offset -eq $frame.Length){
      $guest=Get-VcuPostHandoffText $text
-     if($null -ne $guest){$handoff=$true; $text=$guest}
+     if($null -ne $guest){$romMs=$wire.ElapsedMilliseconds; $handoff=$true; $text=$guest}
     }
     if(!$handoff){Start-Sleep -Milliseconds 10; continue}
    }
    $event=Get-VcuConsoleEvent $text $Mode $nonce $sent; if($event -eq 'FAIL'){throw "Guest failure; $logDir"}
-   if($event -eq 'CHALLENGE'){$sp.Write('echo BOARD_$((40+2))_'+$nonce+"`n"); $text=''; $sent=$true}
-   if($event -eq 'PASS'){$accepted=$true; break}
+   if($event -eq 'CHALLENGE'){$promptMs=$wire.ElapsedMilliseconds; $sp.Write('echo BOARD_$((40+2))_'+$nonce+"`n"); $text=''; $sent=$true}
+   if($event -eq 'PASS'){$wire.Stop(); $accepted=$true; break}
   }; Start-Sleep -Milliseconds 30
  }; if(!$accepted){throw "Timeout: not a board PASS. Evidence: $logDir"}
  # Close the live writer before reopening the transcript for its final hash (Windows file sharing).
  $writer.Dispose(); $writer=$null
- [ordered]@{test=$Mode;bit_sha256=$ReviewedBitSha256;board_dna=$Slr0Dna;cable=$Cable;bridge=$Bridge;port=$port;challenge_sent=$sent;challenge_nonce=$(if($sent){$nonce}else{$null});uart5_frame=$frameMeta;uart5_handoff=$handoff;utc=[datetime]::UtcNow.ToString('o');uart_sha256=(Get-FileHash "$logDir\uart.txt").Hash}|ConvertTo-Json|Set-Content "$logDir\pass.json"
+ [ordered]@{test=$Mode;bit_sha256=$ReviewedBitSha256;board_dna=$Slr0Dna;cable=$Cable;bridge=$Bridge;port=$port;challenge_sent=$sent;challenge_nonce=$(if($sent){$nonce}else{$null});uart5_frame=$frameMeta;uart5_handoff=$handoff;host_elapsed_ms=$(if($handoff){[ordered]@{rom_handoff=$romMs;shell_prompt=$promptMs;accept=$wire.ElapsedMilliseconds}}else{$null});utc=[datetime]::UtcNow.ToString('o');uart_sha256=(Get-FileHash "$logDir\uart.txt").Hash}|ConvertTo-Json|Set-Content "$logDir\pass.json"
  Write-Output "PHYSICAL_${Mode}_PASS $logDir"
 } finally {if($writer){$writer.Dispose()}; $sp.Dispose(); if($job){if($job.State -notin 'Completed','Failed','Stopped'){Stop-Job $job}; Remove-Job $job -Force}}

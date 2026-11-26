@@ -644,6 +644,86 @@
               "cpi": 1.66666
             }
           ]
+        },
+        "sweep": {
+          "mode": "sweep",
+          "utc": "2026-11-26T08:11:29.8872613Z",
+          "bit_sha256": "d77b13dbf75b4773e33ba48f7b177f320572cb62ffe8a9cd930ab196edd6f520",
+          "uart": "115200 8N1",
+          "format": "VCU118U5",
+          "payload_bytes": 838,
+          "payload_sha256": "562741b806acaebc44c15d5f80601ef04afb7a380f73ef5d86f14b8ff4db4497",
+          "frame_sha256": "9e89806b9b659ff2fdc3c53e58cab442c20aebe744b535a59d5e9064574e543e",
+          "uart_sha256": "1a6c89990fdf50054087bd0031de3726666bd228730c60398d8afcb72eb41b08",
+          "slr_done": [
+            1,
+            1,
+            1
+          ],
+          "slr_crc_error": [
+            0,
+            0,
+            0
+          ],
+          "volatile_configuration": true,
+          "shell_challenge_verified": false,
+          "memory_sweep": {
+            "unique_bytes": 2130706432,
+            "word_bytes": 8,
+            "patterns": [
+              "address-derived",
+              "bitwise complement"
+            ],
+            "excluded_ranges_inclusive": [
+              "0x80000000..0x807fffff",
+              "0x8f800000..0x8fffffff"
+            ],
+            "phases": [
+              {
+                "pattern": 0,
+                "operation": "write",
+                "mtime_ticks": 4619390
+              },
+              {
+                "pattern": 0,
+                "operation": "read",
+                "mtime_ticks": 4584263
+              },
+              {
+                "pattern": 1,
+                "operation": "write",
+                "mtime_ticks": 4619461
+              },
+              {
+                "pattern": 1,
+                "operation": "read",
+                "mtime_ticks": 4584270
+              }
+            ]
+          }
+        },
+        "linux-oscheck": {
+          "mode": "linux-oscheck",
+          "utc": "2026-11-26T08:20:24.9542984Z",
+          "bit_sha256": "d77b13dbf75b4773e33ba48f7b177f320572cb62ffe8a9cd930ab196edd6f520",
+          "uart": "115200 8N1",
+          "format": "VCU118U5",
+          "payload_bytes": 5358088,
+          "payload_sha256": "ef6ddfcc69cabcaca6ea9310795063f199da72c21d7f4df9322835621eb988c5",
+          "frame_sha256": "7929ad93158172dac67a6740d7a131cbb2a9c098834bd0d2436b6666c0295901",
+          "uart_sha256": "c3e1cd522c277abac3b35229f297bcfcffaf8f512ea48ad81f116f3b7d3d04e9",
+          "slr_done": [
+            1,
+            1,
+            1
+          ],
+          "slr_crc_error": [
+            0,
+            0,
+            0
+          ],
+          "volatile_configuration": true,
+          "shell_challenge_verified": true
         }
       },
       "ddr4_live_calibration": {
@@ -707,6 +787,83 @@
       "SD_commands": 0,
       "vectors": 257,
       "protocol_errors_tested": 2
+    },
+    "buffered_uart_benchmark_rtl": {
+      "mode": "uart5-dotbench",
+      "scope": "Rocket ChipTop with modeled external RAM/card",
+      "cycles": 19693568,
+      "sd_commands": 0,
+      "tl_reads": 109,
+      "tl_writes": 0,
+      "dot_benchmark": {
+        "vectors_per_window": 257,
+        "checksum_u32": 3767693399,
+        "windows": [
+          {
+            "kernel": "scalar",
+            "round": 0,
+            "retired": 9009,
+            "cycles": 12679,
+            "mtime": 13
+          },
+          {
+            "kernel": "mmio",
+            "round": 0,
+            "retired": 6712,
+            "cycles": 21894,
+            "mtime": 22
+          },
+          {
+            "kernel": "mmio",
+            "round": 1,
+            "retired": 6712,
+            "cycles": 21892,
+            "mtime": 22
+          },
+          {
+            "kernel": "scalar",
+            "round": 1,
+            "retired": 9009,
+            "cycles": 12629,
+            "mtime": 13
+          },
+          {
+            "kernel": "scalar",
+            "round": 2,
+            "retired": 9009,
+            "cycles": 12627,
+            "mtime": 12
+          },
+          {
+            "kernel": "mmio",
+            "round": 2,
+            "retired": 6712,
+            "cycles": 21894,
+            "mtime": 22
+          },
+          {
+            "kernel": "mmio",
+            "round": 3,
+            "retired": 6712,
+            "cycles": 21892,
+            "mtime": 22
+          },
+          {
+            "kernel": "scalar",
+            "round": 3,
+            "retired": 9009,
+            "cycles": 12629,
+            "mtime": 13
+          }
+        ],
+        "median_cycles": {
+          "scalar": 12629.0,
+          "mmio": 21893.0
+        },
+        "mmio_to_scalar_elapsed_ratio": 1.73355
+      },
+      "payload_sha256": "19193fc1c77468078dacacfac28688dd53e3b7f0c4f9eeb1e818d600f8249ff2",
+      "interpretation": "v1 per-vector MMIO, including command/status/fences, took longer than this scalar implementation in this model. No physical speedup claim."
     }
   },
   "linux_chiptop_debug": {
@@ -1410,6 +1567,50 @@
       },
       "uart_sha256": "7c72df49c1c6d26710bddbbdfe81a5f73cdf10f72f4f1b7cc1f292db8c39c8db",
       "machine": "QEMU virt, single hart, read-only ext4 fixture"
-    }
+    },
+    "split_halt_vcu118": "See physical.split_halt_soc.tests.linux-oscheck for the independent physical run; performed before the fresh serial shell challenge."
+  },
+  "optional_packed_boot": {
+    "scope": "Unchanged UART5 ROM and inner firmware. Fixed DDR relocation; CRC32 is an error check, not authentication. See physical results separately.",
+    "base": {
+      "raw_bytes": 5341704,
+      "raw_sha256": "7a8f9932796747be2cd54390af7adf88ba5b156e54069884946185fef47b41c9",
+      "raw_crc32": "8ef3edd6",
+      "block_bytes": 2017559,
+      "block_sha256": "de1877d760fdf334cfbaa8caa89cd7bea8384576abbabab93c5fade047b1bc3f",
+      "lz4": "1.9.2",
+      "compression_level": 9,
+      "stage_sha256": "6e473783628df2b5e9d2642f101a893a3bddf8cf86344fd65de76daf517e0929",
+      "stage_bytes": 2018528,
+      "stage_copy_address": "0x84000000",
+      "output_address": "0x80000000",
+      "stage_stack": "0x87fff000",
+      "wire_bytes_saved": 3323176
+    },
+    "oscheck": {
+      "raw_bytes": 5358088,
+      "raw_sha256": "ef6ddfcc69cabcaca6ea9310795063f199da72c21d7f4df9322835621eb988c5",
+      "raw_crc32": "94e20a5c",
+      "block_bytes": 2023985,
+      "block_sha256": "0c011db8aad74a9d1a3b49b83758c9f39159f72bd17b36b3b5247f7fc55d0a97",
+      "lz4": "1.9.2",
+      "compression_level": 9,
+      "stage_sha256": "c668d520ed6c5775f8b274357b16ab8ef5de589302f2fdb9987170cfa0c9b38d",
+      "stage_bytes": 2024952,
+      "stage_copy_address": "0x84000000",
+      "output_address": "0x80000000",
+      "stage_stack": "0x87fff000",
+      "wire_bytes_saved": 3333136
+    },
+    "native_decoder": {
+      "native_good": 6,
+      "native_rejected": 12,
+      "canaries": "unchanged",
+      "crc": "matched zlib on all positives"
+    },
+    "qemu_virt": [
+      "baseline 16 MiB and shell",
+      "OS variant 16 MiB, two-process workload and shell"
+    ]
   }
 }

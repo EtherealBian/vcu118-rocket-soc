@@ -71,6 +71,18 @@ def check_uart(raw, mode, nonce):
         raise ValueError('unknown diagnostic')
 
 
+def timing(row, size, shell):
+    # Optional for older collectors. These timestamps are observed by the host,
+    # starting just before queuing the first byte; not a baud measurement.
+    if row is None:return {}
+    if not isinstance(row,dict) or set(row)!={'rom_handoff','shell_prompt','accept'}:raise ValueError('invalid monotonic measurement')
+    r,p,a=(row[k] for k in ('rom_handoff','shell_prompt','accept'))
+    if type(r)!=int or type(a)!=int or not 0<=r<=a or (shell and (type(p)!=int or not r<=p<=a)) or (not shell and p is not None):raise ValueError('impossible host timestamps')
+    # Allow 1% baud tolerance and millisecond quantization on either observation.
+    if r+3<0.99*(size+16)*10000/115200:raise ValueError('handoff before minimum wire interval')
+    return {'host_elapsed_ms':row}
+
+
 def public_record(run, capture, payload):
     info = metadata(capture/'pass.json'); impl = metadata(capture/'implementation.json'); bit = sha((run/'obj/VCU118FPGATestHarness.bit').read_bytes())
     if bit != impl['bit_sha256'] or bit != info['bit_sha256'] or not all(impl[k] is True for k in ('board_io_inventory_known', 'board_internal_coverage_met', 'route_and_constrained_timing_met')):
@@ -90,6 +102,7 @@ def public_record(run, capture, payload):
     if digest != info['uart_sha256'].lower() or info['challenge_sent'] is not (mode in ('linux','linux-dot4','linux-oscheck')):
         raise ValueError('bad transcript identity or challenge state')
     extra = check_uart(raw, mode, info['challenge_nonce']) or {}
+    extra.update(timing(info.get('host_elapsed_ms'),len(data),info['challenge_sent']))
     return dict(mode=mode, utc=info['utc'], bit_sha256=bit, uart='115200 8N1', **expected,
                 uart_sha256=digest, slr_done=[1,1,1], slr_crc_error=[0,0,0], volatile_configuration=True,
                 shell_challenge_verified=(mode in ('linux','linux-dot4','linux-oscheck')), **extra)
