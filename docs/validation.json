@@ -240,6 +240,160 @@
             "passes": 1,
             "guest_elapsed_integer_seconds": 2
           }
+        },
+        "counters": {
+          "mode": "counters",
+          "utc": "2026-11-26T07:52:55.6702987Z",
+          "bit_sha256": "6ba0338375d89049f57e57ba2e38f96d7e8a2fc96a61c26948d980d0479203d6",
+          "uart": "115200 8N1",
+          "format": "VCU118U5",
+          "payload_bytes": 1073,
+          "payload_sha256": "d24de717d9341fa09ab3ec74035c764a1d79441e7c6bd6de3131af1c5ba25989",
+          "frame_sha256": "ba68ae780e56ed0182986436483d84aba677e5ad6be0755606c4a8d02a834fe5",
+          "uart_sha256": "bd179610e63ba2b70a628267ad920be216dc8ce45c1b22befcb39528b94fa220",
+          "slr_done": [
+            1,
+            1,
+            1
+          ],
+          "slr_crc_error": [
+            0,
+            0,
+            0
+          ],
+          "volatile_configuration": true,
+          "shell_challenge_verified": false,
+          "counter_windows": [
+            {
+              "kernel": "chain-add",
+              "round": 0,
+              "retired": 393217,
+              "cycles": 393225,
+              "mtime_ticks": 393,
+              "cpi": 1.00002
+            },
+            {
+              "kernel": "load-use",
+              "round": 0,
+              "retired": 524289,
+              "cycles": 655378,
+              "mtime_ticks": 655,
+              "cpi": 1.25003
+            },
+            {
+              "kernel": "branch-alt",
+              "round": 0,
+              "retired": 589825,
+              "cycles": 983037,
+              "mtime_ticks": 983,
+              "cpi": 1.66666
+            },
+            {
+              "kernel": "chain-add",
+              "round": 1,
+              "retired": 393217,
+              "cycles": 393225,
+              "mtime_ticks": 394,
+              "cpi": 1.00002
+            },
+            {
+              "kernel": "load-use",
+              "round": 1,
+              "retired": 524289,
+              "cycles": 655369,
+              "mtime_ticks": 655,
+              "cpi": 1.25001
+            },
+            {
+              "kernel": "branch-alt",
+              "round": 1,
+              "retired": 589825,
+              "cycles": 983037,
+              "mtime_ticks": 983,
+              "cpi": 1.66666
+            },
+            {
+              "kernel": "chain-add",
+              "round": 2,
+              "retired": 393217,
+              "cycles": 393225,
+              "mtime_ticks": 393,
+              "cpi": 1.00002
+            },
+            {
+              "kernel": "load-use",
+              "round": 2,
+              "retired": 524289,
+              "cycles": 655369,
+              "mtime_ticks": 655,
+              "cpi": 1.25001
+            },
+            {
+              "kernel": "branch-alt",
+              "round": 2,
+              "retired": 589825,
+              "cycles": 983037,
+              "mtime_ticks": 983,
+              "cpi": 1.66666
+            }
+          ]
+        },
+        "sweep": {
+          "mode": "sweep",
+          "utc": "2026-11-26T07:57:33.5942513Z",
+          "bit_sha256": "6ba0338375d89049f57e57ba2e38f96d7e8a2fc96a61c26948d980d0479203d6",
+          "uart": "115200 8N1",
+          "format": "VCU118U5",
+          "payload_bytes": 838,
+          "payload_sha256": "562741b806acaebc44c15d5f80601ef04afb7a380f73ef5d86f14b8ff4db4497",
+          "frame_sha256": "9e89806b9b659ff2fdc3c53e58cab442c20aebe744b535a59d5e9064574e543e",
+          "uart_sha256": "9d4c25c12a554c3830041ef0f5d91a35ca5925132c90c9bb3cbcab14c9c1b282",
+          "slr_done": [
+            1,
+            1,
+            1
+          ],
+          "slr_crc_error": [
+            0,
+            0,
+            0
+          ],
+          "volatile_configuration": true,
+          "shell_challenge_verified": false,
+          "memory_sweep": {
+            "unique_bytes": 2130706432,
+            "word_bytes": 8,
+            "patterns": [
+              "address-derived",
+              "bitwise complement"
+            ],
+            "excluded_ranges_inclusive": [
+              "0x80000000..0x807fffff",
+              "0x8f800000..0x8fffffff"
+            ],
+            "phases": [
+              {
+                "pattern": 0,
+                "operation": "write",
+                "mtime_ticks": 4622378
+              },
+              {
+                "pattern": 0,
+                "operation": "read",
+                "mtime_ticks": 4584284
+              },
+              {
+                "pattern": 1,
+                "operation": "write",
+                "mtime_ticks": 4622451
+              },
+              {
+                "pattern": 1,
+                "operation": "read",
+                "mtime_ticks": 4584294
+              }
+            ]
+          }
         }
       },
       "ddr4_live_calibration": {

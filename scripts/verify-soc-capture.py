@@ -6,6 +6,8 @@ import json
 import re
 from pathlib import Path
 from uart_frame import encode
+from counter_report import review as review_counters
+from sweep_report import review as review_sweep
 
 
 def sha(data):
@@ -31,7 +33,7 @@ def check_uart(raw, mode, nonce):
     if not text.startswith(ready) or text.count(ready) != 1 or text.count(jump) != 1 or not text[len(ready):].startswith(jump):
         raise ValueError('unrecognized or repeated UART boot epoch')
     guest = text[len(ready) + len(jump):]
-    if re.search(r'UART5_STOP|Kernel panic|(?:VCU118_(?:ADDR|DIAG)_FAIL)|SOC_SELFTEST_FAILED', text):
+    if re.search(r'UART5_STOP|Kernel panic|(?:VCU118_(?:ADDR|DIAG)_FAIL)|SOC_SELFTEST_FAILED|VCU118_COUNTER_FAIL|VCU118_SWEEP_FAIL|DOT4_FAIL|LINUX_DOT4_FAILED', text):
         raise ValueError('failure in console')
     markers = {
         'bare': ('VCU118_DIAG_START v1', 'VCU118_DIAG_PASS memory_bytes=1048576 passes=2 timer=advanced'),
@@ -40,11 +42,23 @@ def check_uart(raw, mode, nonce):
     if mode in markers:
         if nonce is not None or guest.splitlines() != list(markers[mode]):
             raise ValueError('invalid bare-metal transcript')
-    elif mode == 'linux':
+    elif mode == 'sweep':
+        if nonce is not None:raise ValueError('unexpected shell challenge')
+        return {'memory_sweep':review_sweep(guest.splitlines())}
+    elif mode == 'counters':
+        if nonce is not None:raise ValueError('unexpected shell challenge')
+        return {'counter_windows':review_counters(guest.splitlines())}
+    elif mode == 'dot4':
+        if nonce is not None or guest.splitlines() != ['DOT4_MMIO_START', 'DOT4_MMIO_PASS vectors=257 protocol_errors_checked=2']:
+            raise ValueError('missing or unexpected bare accelerator output')
+    elif mode in ('linux','linux-dot4'):
         if not isinstance(nonce, str) or not re.fullmatch('[a-f0-9]{14}', nonce):
             raise ValueError('no unique live challenge')
         pattern = (r'^VCU118_INITRAMFS_READY\n.*?^SOC_CHECK_PASS bytes=16777216 passes=[1-9]\d* elapsed_s=\d+\n'
                    r'.*?^# .*?^(?:# )?BOARD_42_' + nonce + r'\n')
+        if mode == 'linux-dot4':
+            pattern=pattern.replace(r'.*?^# ',r'.*?^LINUX_DOT4_PASS vectors=257 reserved_rejected=1\n.*?^# ')
+            if 'LINUX_DOT4_NO_PLATFORM_DEVICE' in guest:raise ValueError('accelerator absent')
         if not re.search(pattern, guest, re.M | re.S):
             raise ValueError('missing userspace test or independent shell response')
     else:
@@ -67,12 +81,12 @@ def public_record(run, capture, payload):
         raise ValueError('framed file or handoff mismatch')
     check_program((capture/'vivado-console.txt').read_text(encoding='utf-8-sig').splitlines())
     raw = (capture/'uart.txt').read_bytes(); mode = info['test']; digest = sha(raw)
-    if digest != info['uart_sha256'].lower() or info['challenge_sent'] is not (mode == 'linux'):
+    if digest != info['uart_sha256'].lower() or info['challenge_sent'] is not (mode in ('linux','linux-dot4')):
         raise ValueError('bad transcript identity or challenge state')
-    check_uart(raw, mode, info['challenge_nonce'])
+    extra = check_uart(raw, mode, info['challenge_nonce']) or {}
     return dict(mode=mode, utc=info['utc'], bit_sha256=bit, uart='115200 8N1', **expected,
                 uart_sha256=digest, slr_done=[1,1,1], slr_crc_error=[0,0,0], volatile_configuration=True,
-                shell_challenge_verified=(mode == 'linux'))
+                shell_challenge_verified=(mode in ('linux','linux-dot4')), **extra)
 
 
 if __name__ == '__main__':

@@ -1,7 +1,14 @@
 $ErrorActionPreference='Stop'; . (Join-Path (Split-Path $PSScriptRoot -Parent) scripts/board-console.ps1)
 $n='7fabc'; $start="VCU118_INITRAMFS_READY`r`nSOC_CHECK_PASS bytes=16777216 passes=1 elapsed_s=7`r`n`r`n# "; $echo='echo BOARD_$((40+2))_7fabc'; $bare="VCU118_DIAG_START v1`r`nVCU118_DIAG_PASS memory_bytes=1048576 passes=2 timer=advanced`r`n"
 $addr="VCU118_ADDR_START v1`r`nVCU118_ADDR_PASS windows=4 bytes_each=4096 passes=2 flush_lines=512`r`n"
+$dot="DOT4_MMIO_START`r`nDOT4_MMIO_PASS vectors=257 protocol_errors_checked=2`r`n"; $dev='LINUX_DOT4_PASS vectors=257 reserved_rejected=1';$linuxDot=$start.Replace('# ',"$dev`r`n# ")
+$counter="VCU118_COUNTER_START v1 n=131072`r`nVCU118_COUNTER_PASS kernels=3 rounds=3`r`n"
+$sweep="VCU118_SWEEP_START v1 block_mib=8 blocks=254`r`nVCU118_SWEEP_PASS bytes=2130706432 passes=2`r`n"
 $cases=@(
+ @('counters',$counter,$false,'PASS'),@('counters',$counter.Replace('131072','130000'),$false,'WAIT'),@('counters',($counter+'VCU118_COUNTER_FAIL check'),$false,'FAIL'),
+ @('sweep',$sweep,$false,'PASS'),@('sweep',$sweep.Replace('2130706432','2147483648'),$false,'WAIT'),@('sweep',($sweep+'VCU118_SWEEP_FAIL data'),$false,'FAIL'),
+ @('dot4',$dot,$false,'PASS'),@('dot4',$dot.Replace('257','256'),$false,'WAIT'),@('dot4',$dot.Replace('DOT4_MMIO_START','noise'),$false,'WAIT'),
+ @('linux-dot4',$start,$false,'WAIT'),@('linux-dot4',$linuxDot,$false,'CHALLENGE'),@('linux-dot4',$linuxDot.Replace($dev,'LINUX_DOT4_NO_PLATFORM_DEVICE'),$false,'FAIL'),
  @('address',$addr,$false,'PASS'),@('address',$addr.Replace('512','256'),$false,'WAIT'),@('address',$addr.Replace('v1','v2'),$false,'WAIT'),
  @('address',($addr+'VCU118_ADDR_FAIL data'),$false,'FAIL'),@('address',$bare,$false,'WAIT'),@('bare',$addr,$false,'WAIT'),
  @('bare',$bare,$false,'PASS'),@('bare',($bare.Split("`n")[1]+"`n"),$false,'WAIT'),@('bare',('ROM4_STOP bad'+$bare),$false,'FAIL'),

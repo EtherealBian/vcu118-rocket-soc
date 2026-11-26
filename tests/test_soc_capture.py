@@ -25,3 +25,13 @@ class CaptureTest(unittest.TestCase):
         c.check_uart(text,'bare',None)
         for bad in (text+text,text.replace(b'HANDOFF',b'OTHER'),text.replace(b'passes=2',b'passes=1')):
             with self.assertRaises(ValueError): c.check_uart(bad,'bare',None)
+
+    def test_accelerator_required(self):
+        n='ac132562bc132a'; prefix='UART5_READY v1\nUART5_HANDOFF\n'
+        bare='DOT4_MMIO_START\nDOT4_MMIO_PASS vectors=257 protocol_errors_checked=2\n'
+        d='LINUX_DOT4_PASS vectors=257 reserved_rejected=1'; init='VCU118_INITRAMFS_READY\nSOC_CHECK_PASS bytes=16777216 passes=1 elapsed_s=3\n'
+        text=prefix+init+d+f'\n# echo BOARD_$((40+2))_{n}\nBOARD_42_{n}\n'
+        c.check_uart((prefix+bare).encode(),'dot4',None);c.check_uart(text.encode(),'linux-dot4',n)
+        for old,new in [(d,'LINUX_DOT4_NO_PLATFORM_DEVICE'),(d,'echo '+d),(d,d+'\nLINUX_DOT4_FAILED'),('vectors=257','vectors=256')]:
+            with self.assertRaises(ValueError):c.check_uart(text.replace(old,new).encode(),'linux-dot4',n)
+        with self.assertRaises(ValueError):c.check_uart((prefix+bare.split('\n',1)[1]).encode(),'dot4',None)

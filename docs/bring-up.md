@@ -254,3 +254,14 @@ python scripts/verify-soc-capture.py $run <本轮采集目录> <本轮载荷>
 ```
 
 脚本先核验该次启动证据与 FPGA 侧串口，再发新的 shell 运算挑战，读取 hart、MMU、内存、uptime 和中断计数，请 guest 运行至少 15 秒用户态自检。两次 uptime 与主机单调计时相互核对。它不重新下载、不写存储介质；返回的摘要不含线缆标识或挑战串。
+
+### 重测 CPI 和 2,032 MiB 内存覆盖
+
+在 WSL 分别运行 `bash scripts/build-counter-diagnostic.sh artifacts/cpu-new` 与 `bash scripts/build-sweep-diagnostic.sh artifacts/sweep-new`（各输出目录必须不存在）。使用上文按实际器件身份和已审核 bit 建立的 `@args0`，依次执行：
+
+```powershell
+./scripts/test-connected-board.ps1 @args0 -Mode counters -UartPayload artifacts/cpu-new/counters.bin -TimeoutSeconds 180
+./scripts/test-connected-board.ps1 @args0 -Mode sweep -UartPayload artifacts/sweep-new/sweep.bin -TimeoutSeconds 1500
+```
+
+每次必须从新一轮配置开始，**不能在已有 Linux 系统下运行内存覆盖程序**。分别把该轮采集目录和对应 `.bin` 交给 `scripts/verify-soc-capture.py`。串口出现 PASS 只是第一道判断；离线复核还检查所有计数窗口，以及每个图样、操作、块数和时间戳。扫描会覆盖被测 RAM，若要回到 shell，请重新上传 Linux 载荷。
