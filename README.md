@@ -1,6 +1,6 @@
 # VCU118 Rocket Linux SoC
 
-在 AMD VCU118（XCVU9P）上实现一颗能启动 Linux 的 64 位 RISC-V 软核。从上游 Chipyard 生成板级 RTL；本仓库提供启动 ROM、诊断固件、Linux 镜像构建、真实 Rocket RTL 测试和实板自动验收脚本。这里发布的是**源码和构建方法**，不是已通过上板验收的 bitstream。
+在 AMD VCU118（XCVU9P）上实现一颗能启动 Linux 的 64 位 RISC-V 软核。从上游 Chipyard 生成板级 RTL；本仓库提供启动 ROM、诊断固件、Linux 镜像构建、真实 Rocket RTL 测试和实板自动验收脚本。这里发布的是**源码和构建方法**，不分发 bitstream。已做独立串口诊断的实板测试，完整 SoC 仍在验收中。
 
 | 配置 | 基线 |
 |---|---|
@@ -16,7 +16,7 @@
 - **不用 SD 的启动路径**：另一版 600 B 恢复 ROM 已在真实 Rocket RTL 中，通过 UART 引脚接收并执行 422 B 裸机诊断；魔数、长度、CRC 错误分别被拒绝。板上的串口下载及 Linux 启动仍待验收。
 - **QEMU virt**：同一基线固件通过 10 次独立启动，每次执行 16 MiB 用户态自检并返回交互 shell 挑战。这个机器模型与 VCU118 的板级互连不同。
 - **Rocket 上的 Linux 进度（RTL）**：模拟 JTAG 预载基线固件后，第 40,000,000 周期读到 hart 已在 S 态执行 Linux 的 `memmap_init_range`，Sv39 已开启。另一个限制为 128 MiB 的诊断配置还通过 RTL 串口输出了 Linux 6.6.65、机器型号和早期控制台地址。两者都不是实板 shell 记录。
-- **实板**：已用 JTAG 读回 XCVU9P 配置状态，已打开 FPGA 侧 USB-UART。串口可打开不等于收到了本工程的启动日志。**尚无板上 Linux shell 验收；未宣称 100 MHz 时序收敛。**
+- **实板**：已通过 JTAG 易失下载独立诊断设计。FPGA 侧串口以 115200 8N1 完成 **260/260 组随机请求与回包**，1,040 个返回字节全部匹配；三片 SLR 均 DONE=1、无配置 CRC 错误。这一设计不含 CPU 或 DDR。**尚无板上 Linux shell 验收；未宣称 100 MHz 时序收敛。**
 - **可选实验**：四路有符号 INT8 点积已接入可选配置的 TileLink 总线。Rocket 裸机通过 MMIO 核对 257 组结果，另验空取、重复提交两种错误。Linux 驱动已编入可选内核，尚未通过 Rocket 上的 ioctl 验收；没有实板加速比。
 
 [验证摘要与边界](docs/validation.md) · [重建与连接指南](docs/bring-up.md) · [设计需求与扩展顺序](VCU118-SOC-v0.1.md)
@@ -32,6 +32,7 @@ bash scripts/checkout.sh
 
 | 路径 | 用途 |
 |---|---|
+| `rtl/boardprobe/` | 可独立重建的 VCU118 配置与双向串口实板诊断，不需要 SD 卡 |
 | `software/boot-gpt/`、`software/bare/` | 面向 SDHC 的启动 ROM、DDR 和 mtime 裸机诊断 |
 | `scripts/` | 锁定并构建依赖、生成 RTL/镜像、检查布线报告、按器件身份自动验收 |
 | `tests/` | Rocket ChipTop UART/SPI/TL/JTAG 测试台、GPT 布局和错误注入测试 |

@@ -137,3 +137,22 @@ bash scripts/build-rtl-sim.sh && bash scripts/test-debug-sba.sh logs/sba-clock-t
 ```
 
 该分支归档还在布线后物理优化前保存一个可恢复的检查点，最终另存各时钟域最差端点。如果最终实现没有同时通过建立、保持、脉宽及 CDC/IO/DRC 人工复核，不把仿真通过当作上板许可。
+
+### 先验 JTAG 和 FPGA 侧 UART（不需要 PMOD 或 SD）
+
+独立探针只连板上 250 MHz 差分时钟和 CP2105 的 FPGA 侧 RX/TX；MMCM 生成 100 MHz，UART 接受 115200 8N1。固件、Rocket 和 DDR 控制器都不在这个 bit 里。下载会替换当前易失配置，但不改写配置 Flash 或卡。关闭占用 FPGA 串口的终端。
+
+```powershell
+# PowerShell 7；使用尚不存在的输出目录。
+./scripts/test-board-probe-sim.ps1 -Run artifacts/probe-sim-next
+./scripts/build-board-probe.ps1 -Run artifacts/probe-route-next
+python scripts/review-board-probe.py artifacts/probe-route-next
+# 人工检查 impl/ 下的 timing、check、cdc、exceptions、clocks、io、drc、methodology 报告。
+# 填入自己审过的 bit 哈希和本地枚举的三个身份值，不要把它们提交到仓库。
+./scripts/test-board-probe.ps1 -Run artifacts/probe-route-next -ReviewedBitSha256 '<sha256>' `
+  -Bridge '<bridge>' -Cable '<cable>' -Slr0Dna '<0x...>' -Count 260
+# 使用刚输出的本地采集目录；复查真实回读及每个请求和响应，不依赖终端回显。
+python scripts/verify-probe-capture.py artifacts/probe-route-next logs/probe-hw-<本轮编号>
+```
+
+约束只把 UART 异步边界和 MMCM LOCKED 第一级的 D 当作异步；LOCKED 不是时钟发射端，例外报告里该条的已计时端点数为零，不当作额外覆盖。构建脚本检查它是第一级 D 的唯一驱动，以及两条同步链的两级之间都仍有经过 STA 的路径。响应格式是 `56 31 <序号> <ROL8(请求,3) XOR A7>`，主机收完四字节才发下一条。公开验证 JSON 同时记录采集 CSV 和 bit 的 SHA-256，以及构建时原始源文件与 Git 规范化 LF 源文件的摘要；本机串口号、线缆标识、DNA 和原始日志不公开。

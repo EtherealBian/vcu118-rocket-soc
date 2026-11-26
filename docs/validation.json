@@ -91,20 +91,73 @@
   },
   "physical": {
     "device": "xcvu9p",
-    "jtag_config_readback": true,
-    "slr_done": [
-      1,
-      1,
-      1
-    ],
-    "slr_crc_error": [
-      0,
-      0,
-      0
-    ],
-    "uart_opened": true,
-    "rx_bytes_in_6s": 0,
-    "programmed_by_this_run": false,
+    "initial_read_only": {
+      "device": "xcvu9p",
+      "jtag_config_readback": true,
+      "slr_done": [
+        1,
+        1,
+        1
+      ],
+      "slr_crc_error": [
+        0,
+        0,
+        0
+      ],
+      "uart_opened": true,
+      "rx_bytes_in_6s": 0,
+      "programmed_by_this_run": false,
+      "linux_shell_observed": false
+    },
+    "independent_probe": {
+      "design": "vcu118_probe",
+      "utc": "2026-11-26T06:22:28.2852362Z",
+      "link": "115200 8N1",
+      "rounds": 260,
+      "reply_bytes": 1040,
+      "transcript_sha256": "c026dbb72851406ed5b2462eb4863fa9ab71368524d549c853fb5dff3794d665",
+      "bit_sha256": "2cbd46ef3ad9f1ec5251cf6e8fb94d9c9e788defc59f2d9f4efadc572fee6c8e",
+      "configuration": "volatile JTAG; all three SLRs DONE=1 and CRC_ERROR=0",
+      "route": {
+        "routable": 137,
+        "fully_routed": 137,
+        "routing_errors": 0
+      },
+      "timing": {
+        "setup": {
+          "slack_ns": 8.198,
+          "total_negative_ns": 0.0,
+          "failed": 0,
+          "count": 227
+        },
+        "hold": {
+          "slack_ns": 0.038,
+          "total_negative_ns": 0.0,
+          "failed": 0,
+          "count": 227
+        },
+        "pulse_width": {
+          "slack_ns": 0.6,
+          "total_negative_ns": 0.0,
+          "failed": 0,
+          "count": 97
+        }
+      },
+      "build_source_sha256": {
+        "rtl/boardprobe/probe_protocol.sv": "8dfaaa2ba589415d77874c7e605c05894210c542b6465dece9269779c728ba50",
+        "rtl/boardprobe/vcu118_probe.sv": "0767ef8b975c8cebed1a3e4ff2ef4408a8283688504ff6b31a9fbcc543e155bc",
+        "rtl/boardprobe/probe.xdc": "a8eccafbde1fac993ebf99b386b8877399dd5d982582155475c9c1134b9f72d6",
+        "scripts/build-board-probe.tcl": "680fc9f37b07868e8adb1d8bff239b9207e01bebd64747b23a8f4a5b2e63fad5"
+      },
+      "source_lf_sha256": {
+        "rtl/boardprobe/probe_protocol.sv": "8f083e6ef0367e6995b02bd3a9f4c775ecb8506ff02d35645da3b80b76adbedb",
+        "rtl/boardprobe/vcu118_probe.sv": "ded5e57e64535caa3d2c58e8b7c9b236cec71d27a511cfd8234bd9d6b8cebc20",
+        "rtl/boardprobe/probe.xdc": "e0a7aa6d28a8dbc85e44828f4e30d41ea7970bf4fb50061d0fbf9f0f129ac7a1",
+        "scripts/build-board-probe.tcl": "1bbad0e7b88683f9dcbe741ea5674d44bfd553a3151b17dd4c2221e9c69f1543"
+      },
+      "test_scope": "independent electrical UART/configuration fixture; no Rocket, DDR, SD or Linux"
+    },
+    "soc_bit_programmed": false,
     "linux_shell_observed": false
   },
   "uart5": {
