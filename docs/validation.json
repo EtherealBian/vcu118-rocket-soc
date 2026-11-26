@@ -127,5 +127,18 @@
     "linux_ioctl_on_rocket": "not verified",
     "integrated_fpga_timing": "not verified",
     "physical_execution": "not verified"
+  },
+  "linux_chiptop_debug": {
+    "mode": "debug-profile-linux",
+    "load": "preload simulated TL RAM; set PC/arguments via simulated JTAG; no SD or serial payload transfer",
+    "firmware_sha256": "7a8f9932796747be2cd54390af7adf88ba5b156e54069884946185fef47b41c9",
+    "vmlinux_sha256": "68c8c87b8196a2218c745dd28e7606fb161dabaa7606e96fcd11fe7caa971fd4",
+    "cycle": 40000000,
+    "dpc": "0xffffffff8018fe8e",
+    "privilege": "S",
+    "satp": "0x8000000000080522",
+    "symbol": "memmap_init_range+0xfe",
+    "scratch_restored_and_hart_resumed": true,
+    "interactive_shell": "not verified"
   }
 }

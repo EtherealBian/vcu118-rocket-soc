@@ -104,3 +104,18 @@ VCU_SIM_OBJ=$HOME/.cache/vcu118-build/verilated-dot4-linux-next \
 ```
 
 打包时逐字节检验 firtool 导出的乘加 RTL（仅允许固定版本生成器的单行注释及文件末尾换行差异），然后从这个包重建模拟器。每例分开记录实际 UART、模型日志和输入哈希；只有进程正常退出且匹配本模式 PASS 才写 `.ok`。Linux 验收另外需要真实设备 ioctl、16 MiB 自检、交互 shell 回答；QEMU virt 打印 `LINUX_DOT4_NO_PLATFORM_DEVICE` 不算通过。
+
+## 观察 Linux 交接后的执行位置
+
+在实际 ChipTop 模型上，`debug-profile-linux` 将完整固件放到模拟外部 RAM，再经 JTAG/DMI 设置 PC 和交接参数。在指定周期停 hart，用调试程序缓冲区读 CSR/GPR，恢复临时借用的 x5，继续执行。它不改变板上配置，也不以 PC 落在内核内当作整机验收。
+
+```bash
+# 使用前文生成的 UART5 kit 及其仿真器；按实际解压/编译目录设置这两项。
+export VCU_SIM_KIT=$PWD/cache/board5-c VCU_SIM_OBJ=$HOME/.cache/vcu118-build/verilated-uart5-a
+bash scripts/test-rtl-boot.sh debug-profile-linux artifacts/linux-compact.img 3000000000 artifacts/fw_payload.bin >logs/linux-profile.txt 2>&1
+python3 scripts/symbolize-linux-profile.py logs/linux-profile.txt "$HOME/.cache/vcu118-build/image" artifacts/fw_payload.bin
+# 独立诊断配置：同一 Linux Image；对板级 DT 仅增加 /chosen/bootargs，启用早期控制台并限制 Linux 使用 128 MiB。
+bash scripts/build-linux-diagnostic.sh "$HOME/.cache/vcu118-build/diag128-next" artifacts/diag128-next artifacts/Image
+```
+
+128 MiB 配置将诊断 DTB 嵌入独立 OpenSBI，覆盖 ROM 提供的 DTB；完整硬件地址图仍有 2 GiB。本轮两个新目录重建的载荷 SHA-256 一致：`af9c7b2ae6539e825fe329ca3b739d2f255eb0a46215914dab68aa7d7418b283`。它用于观察早期串口并缩短页描述符初始化；其结果不能代替默认 2 GiB 固件、整段 DDR 自检或实板运行。为防止用错内核，符号化工具核对日志中的固件哈希，从两个 ELF 重新导出二进制，并核对嵌入载荷的位置和内容；不会把无法归属的 PC 自动解释成内核函数。
