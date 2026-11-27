@@ -45,3 +45,11 @@ class SplitIrqTests(unittest.TestCase):
             kit=Path(tmp);(kit/'rtl').mkdir(); f=kit/'rtl'/'ChipTop.sv';f.write_bytes(b'other config')
             with self.assertRaisesRegex(ValueError,'unreviewed graph'):merge['install'](kit)
             self.assertEqual(list((kit/'rtl').iterdir()),[f]);self.assertFalse((kit/'sources.f').exists())
+
+    def test_mega_rejects_medium_tile_or_receiver_graph(self):
+        mega, medium = merge['MEGA_PINS'], merge['MEDIUM_PINS']
+        check = merge['require_graph']; check(mega, mega.get)
+        for name in ('TLDebugModuleInner', 'BoomTile', 'BoomCore', 'CSRFile', 'SynchronizerShiftReg_w1_d3'):
+            mixed = dict(mega); mixed[name] = medium.get(name)
+            with self.subTest(name=name), self.assertRaisesRegex(ValueError, name):
+                check(mega, mixed.get)

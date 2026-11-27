@@ -110,3 +110,9 @@ python3 scripts/test-coremark-qemu.py <产物>/fw_payload.bin <产物>/coremark-
 两套种子的最终 CRC 分别为 `0xd340` 和 `0xbc68`；18 次主机墙钟范围 52.612–55.659 秒，与客机计时最大绝对差 0.094 秒。通用软件最快中位数为 **228.241023**。此前 Rocket 上使用 Zba/Zbb 的[最快实板中位数 254.231902](coremark-1000-compilers-board.json)仍未被超过；它是另一份程序，不能作为三路/四路 BOOM 的同 ELF 对照。单核 1,000 的目标尚未达到。
 
 复现时，在已审核 Rocket 上用上述通用固件完成 `linux-oscheck` 启动，将本次启动目录及串口桥交给 `test-board-coremark-matrix.ps1 -Experiment portable`；保留原始 UART 与主机计时，再用 `review-coremark-matrix.py <实现目录> <本次启动记录> <stage.bin> <Linux 产物> <矩阵记录> --experiment portable` 离线重验。
+
+### 单核四路 BOOM：上板前的调试中断验证
+
+四路 BOOM 与双路的 TileLink 标签、tile 和 CSR 不同，不能直接沿用双路的调试验证。沿 JTAG 停机请求和本地复位停机请求重新检查了两条来源，直到四路核心的 CSR；锁定对应的完整模块哈希。在独立的 **100 MHz 设计配置**功能模型里，两条请求先各自寄存，再合并，原有的 tile 端接收同步链保留。原版和修订版的真实 `TLDebugModule` 各跑 9 种时钟半周期/相位组合，每种 16 次 DMI 事务。**110,205 次观察**均符合预期的两个目标时钟边沿延迟，其中 536 次能区分新旧输出。独立复核从原版重新派生相同修订版，然后重放两份可执行模型，逐字节核对输出和完整轨迹。[输入身份与复核结果](perf-mega-halt.json)。
+
+复现：用 `derive-mega-halt-model.py <四路原始功能包> <新功能包>`，对两个包分别设置 `VCU_SIM_KIT` 运行 `bash scripts/test-debug-halt-sources.sh <各自全新输出>`，再执行 `python3 scripts/review-mega-halt.py <原包> <新包> <原输出> <新输出>`。这是调试模块的功能等价实验，不能证明 FPGA 亚稳态、复位/DDR 跨域收敛或四路整机时序，也不是 Linux 实板成绩。

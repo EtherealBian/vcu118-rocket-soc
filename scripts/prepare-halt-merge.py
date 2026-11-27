@@ -50,6 +50,24 @@ MEDIUM_PINS = dict(PINS, **{
     'BoomCore': 'e6b77020ab4c2c1bebc0f57cf505c95e71b0b1585c7556a6b0038ebc3a428bb3',
 })
 
+# Four-wide stock BOOM: the interrupt source/receiver clocks and both halt
+# producers were traced again through the tile to the actual CSR consumer.
+# Source tags and tile widths differ; never mix these pins with Medium.
+MEGA_PINS = dict(MEDIUM_PINS, **{
+    'DigitalTop': '439887fdbc9cd01fec1f124fbb65b72eef45f0fcf80d40a66521b1405c90712e',
+    'TLDebugModule': 'b1d4e00d3762225acf0462728caef91f0bebff61e74a8e3774301a27e88f2aab',
+    'TLDebugModuleInner': '3a5642828e8c0c1aedf3c1ad91fb9adb76026f5883c8102f118b8c4c33ec6c31',
+    'TLDebugModuleInnerAsync': '4516102a0d54af3f425e8810b3e18ec043266b14caa6983c0d6110b2a10594d4',
+    'TLInterconnectCoupler_cbus_to_debug': 'db924760669a9345397f21a385661bae55b614b4f2b7e381b9cc6f4f55a00868',
+    'TilePRCIDomain': 'a89eb06b5aab4aa637b0f40a5ff66bc2abdac4c032a1f79f2601996294437c68',
+    'BoomTile': 'dcfa49abad47453bdab712285dce49cd93c7799a273a6cca5621f2c9ed629162',
+    'BoomCore': '815c0140d41682fafa4df0e9cfa6ae7d3138bdb63c6f7d29440b497409218b24',
+    'IntSyncAsyncCrossingSink_n1x1': 'ca7da8efb5ddf457b5e30fbdbe8613426e5d2076f3d2be06e62ee246e037a15a',
+    'SynchronizerShiftReg_w1_d3': '30c9b4ad2ec9d6445f40ea33637c8639c90b5fbf4020ac25cb035390a840e4bb',
+    'IntXbar_i4_o1': '50aaaf2a274fa9b0a6c34f87e60790dedb957b7b528cbd4406a321d694dc1c51',
+    'CSRFile': 'b6602aadbc985f25e80d6383652ba4af61ddc855af6392026141cab1964a1b66',
+})
+
 def require_graph(pins, digest):
     for name, expected in pins.items():
         if digest(name) != expected: raise ValueError('unreviewed graph: '+name)
@@ -58,7 +76,8 @@ def install(kit):
     def digest(name):
         f = kit/'rtl'/(name+'.sv')
         return hashlib.sha256(f.read_bytes()).hexdigest() if f.is_file() else None
-    pins = MEDIUM_PINS if (kit/'rtl'/'BoomTile.sv').exists() else PINS
+    tile = digest('BoomTile')
+    pins = (MEGA_PINS if tile == MEGA_PINS['BoomTile'] else MEDIUM_PINS) if tile else PINS
     require_graph(pins, digest)
     leaf = kit/'rtl'/'NonSyncResetSynchronizerPrimitiveShiftReg_d3.sv'
     if leaf.read_bytes().count(b'(* ASYNC_REG = "TRUE", SHREG_EXTRACT = "NO" *)') != 3:
