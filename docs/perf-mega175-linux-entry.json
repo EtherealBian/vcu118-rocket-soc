@@ -1,0 +1,55 @@
+{
+  "scope": "Two functional BOOM models. Unpacked OpenSBI+Linux, first 8 bytes received via ROM pins, remaining bytes preloaded in behavioral TL RAM. Ends after an M-to-S transition and a short retirement window. No full-stage upload/decompression, userspace, FPGA or board score.",
+  "inputs": {
+    "fw_payload.bin": "f0db553be5448c4a8754c995cf25413b0e6f48c73cde061657c1bf1dfff46bce",
+    "Image": "faa2d5d8284e479b8c11a6267f7fa0d054a1c8ebae6fabcfeba82fd6196f8237",
+    "coremark-g15-gc-lto-ooo-strict.elf": "61f7c4579b762f86d7d7dc93d4c385d08e50248f3dd6a8a9105fd5e88b58886a",
+    "prefix.frame": "f175d2b5cca0f8dbcceec3aa7e42b728fd166adb13a370581225f246222b328d",
+    "crc.frame": "e1be42b1762b5fc37f8ae25b4af00399187f3369e8920338fb4a0090b35a13b8",
+    "mega_linux_entry.cpp": "a0d70b3d13c279a9a616dc2f3cfc9920d2def4abf8a3844383ea3f99fdd6dd73",
+    "rocket_chiptop.cpp": "9fd708b984cd078932d1727a881bced76a745a5819f0073a7020b1b9d0ac0ea6"
+  },
+  "models": {
+    "stock": {
+      "CANDIDATE.sha256": "890bca3009ed260c81112d72ebcf6c985453568329aead9e9515dcc109d0e417",
+      "VChipTop__ALL.a": "69cd3fc0369d056f38b5cd67e2123f3e33dc8d3d344fc27a4e394efac2bd0b2b",
+      "model": "dfb0c0dfb907499ebd4550c280ac7f1337a9cd3625d1328ec961bca8cff18d98",
+      "VChipTop___024root.h": "754db1bd183abd0311e5afcf57d2895a3f7b521a9979fa18af174511364c9f47"
+    },
+    "lvt": {
+      "CANDIDATE.sha256": "386d2848c9b143c1c4887b179c365c2257fce6eb33ae3e8f46ca71809dc3841b",
+      "VChipTop__ALL.a": "c7ebe57d2220c1ec020cf6cf898e810a6da80339d64090f8179ddf0f9190c408",
+      "model": "3d671faaa0fa4ba0ce97191676709c61a63c786ab2316fa3c0ba2ce5bc32f834",
+      "VChipTop___024root.h": "486470894a28892bf2000e8a91d9a722eb6bfe1579ad9c146283169aea179a5c"
+    }
+  },
+  "evidence": {
+    "boot.events": "ea7b1cf852b14605d5f6fc0e45942a93e2dd2d76a5e1f493d78bd1095fc96ed6",
+    "boot.uart": "81bb74ae01faeb8f1279aa67a8407073252eaac495002dc16a6ebde7591b224c",
+    "crc.events": "f10e60c6028e07ee37c2fb69986da96d6615179780d729a758caf4528935f410",
+    "crc.uart": "03c77fdbb9a03bf9b97c49b3143cf982711c7325a5b133cdd8d12fbd5c5e7faa"
+  },
+  "embedded_benchmark": {
+    "gzip_offset": 1780552,
+    "gzip_bytes": 415629,
+    "newc_bytes": 734720,
+    "entries": 38,
+    "member": "bin/coremark-g15-gc-lto-ooo-strict",
+    "elf_bytes": 67008,
+    "elf_sha256": "61f7c4579b762f86d7d7dc93d4c385d08e50248f3dd6a8a9105fd5e88b58886a"
+  },
+  "witness": {
+    "negative_crc_stop_tick": 883890,
+    "valid_rom_handoff_tick": 838329,
+    "mret_tick": 40822114,
+    "entry_address": "0x80200000",
+    "entry_tl_get_tick": 30779723,
+    "entry_tl_get_bytes": 64,
+    "observation_end_tick": 40822448,
+    "supervisor_arch_commits": 258,
+    "backing_tl_reads": 1833,
+    "backing_tl_writes": 99,
+    "entry_frame_bytes": 24,
+    "backing_preloaded_bytes": 5604352
+  }
+}

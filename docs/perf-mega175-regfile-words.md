@@ -25,3 +25,5 @@ python3 scripts/prove-mega-regfile-words.py "$STOCK_KIT" "$LVT_KIT" "$FRESH_PROO
 ```
 
 脚本核对两套完整输入清单，降级真实存储模块并检查位宽/深度/端口形状，然后才求解。任何空前提、求解超时、漏项、意外反例或未检出的负控都会使运行失败。只有在布线端点显示寄存器堆是关键瓶颈时，才值得为这个候选单独做物理实现。
+
+后续还让原版和 LVT 使用同一份 OpenSBI/Linux 固件，在两个整核模型上观察[从 M 模式交接到内核、再提交首批 S 模式指令](perf-mega175-linux-entry.md)。这项启动测试与上述全字性质分别验证。
