@@ -13,7 +13,7 @@ s=importlib.util.spec_from_file_location('matrix',ROOT/'scripts/review-coremark-
 class MatrixReview(unittest.TestCase):
     def setUp(self):
         td=tempfile.TemporaryDirectory();self.addCleanup(td.cleanup);self.d=Path(td.name);self.tag='abcd1234abcd1234';(self.d/'session.txt').write_text(self.tag)
-        h=lambda b:hashlib.sha256(b).hexdigest();f=fixtures.BenchmarkTests();self.boot=dict(utc='fixture',mode='linux-oscheck',bit_sha256=m.BIT,volatile_configuration=True,shell_challenge_verified=True,payload_sha256=h(b'fw'),uart_sha256=h(b'boot'))
+        h=lambda b:hashlib.sha256(b).hexdigest();f=fixtures.BenchmarkTests();self.boot=dict(utc='fixture',mode='linux-oscheck',bit_sha256=m.BIT,volatile_configuration=True,shell_challenge_verified=True,payload_sha256=m.TARGET_PAYLOAD,uart_sha256=h(b'boot'))
         p=mock.patch.object(m,'BASE_ELF',h(b'baseline'));p.start();self.addCleanup(p.stop)
         self.write_matrix(m.ORDER)
 
@@ -57,6 +57,8 @@ class MatrixReview(unittest.TestCase):
             'ead154cbb9f74e30f552dac2f5c6e38890a9a705d9010af7343388daff9d8022  /sys/firmware/devicetree/base/cpus/cpu@0/compatible',
             '547b7dbafa7395a48f9514232ae6e1abfbaff85eafc08413b8276839ff11e28a  /sys/firmware/devicetree/base/soc/pbus_clock/clock-frequency',
             f'CM_MACHINE_END_42_{n}']
+        if p==m.TARGET_PROFILE:
+            lines.append('# '+m.cm.command(n,12000,p))
         raw=raw.replace(at,('\r\n'.join(lines)+'\r\n').encode()+at); file.write_bytes(raw)
         rec=d/'result.json';obj=json.loads(rec.read_bytes());obj['uart_sha256']=digest(raw);rec.write_text(json.dumps(obj))
 
@@ -121,12 +123,41 @@ class MatrixReview(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'ELF identity'):
             m.review(self.boot,self.d,self.d,'target',tag)
 
+    def test_target_rejects_incomplete_argv_even_with_valid_output_fields(self):
+        profile=m.TARGET_PROFILE; ids={profile:hashlib.sha256(profile.encode()).hexdigest()}
+        tag='fedc012345abcd'; self.write_matrix((profile,)*3,True)
+        for i in range(1,4):self.add_live_machine(i,profile,tag,ids)
+        d=self.d/f'02-{profile}'; original=(d/'uart.txt').read_bytes()
+        nonce=(d/'nonce.txt').read_text(); echo=m.cm.command(nonce,12000,profile).encode()
+        variants=[echo.replace(a,b,1) for a,b in [(b'7 1 2000',b'7 1 1998'),(b'7 1 2000',b'7 1 1999'),
+                  (b'7 1 2000',b'7 2 2000'),(b'0x66 12000 7',b'0x66 12000 3'),(b'12000',b'24000'),
+                  (b'0x3415 0x3415',b'0x0 0x0'),(b'7 1 2000',b'7 1 20\r00')]]+[b'',echo+b'; true',echo+b'\r\n# '+echo]
+        with mock.patch.object(m,'TARGET_SHA',ids[profile]):
+            for altered in variants:
+                with self.subTest(altered=altered):
+                    raw=original.replace(echo,altered);(d/'uart.txt').write_bytes(raw)
+                    # A caller updating the receipt hash alone must not bless wrong args.
+                    rec=d/'result.json';saved=json.loads(rec.read_bytes());saved['uart_sha256']=hashlib.sha256(raw).hexdigest();rec.write_text(json.dumps(saved))
+                    with self.assertRaisesRegex(ValueError,'target invocation'):m.review(self.boot,self.d,self.d,'target',tag)
+            (d/'uart.txt').write_bytes(original)
+            for timing in (None,{'performance':20100},{'other':20100,'performance':20100,'validation':20100},
+                           {'performance':True,'validation':20100},{'performance':0,'validation':20100}):
+                (d/'host-ms.json').write_text(json.dumps(timing))
+                with self.subTest(timing=timing), self.assertRaisesRegex(ValueError,'host time'):
+                    m.review(self.boot,self.d,self.d,'target',tag)
+            with self.assertRaisesRegex(ValueError,'locked packed Linux'):
+                m.review(dict(self.boot,payload_sha256='a'*64),self.d,self.d,'target',tag)
+        published=json.loads((ROOT/'docs/linux-align-rocket-boot.json').read_bytes())
+        self.assertEqual(m.TARGET_PAYLOAD,published['packed_stage']['stage_sha256'])
+        self.assertEqual(m.TARGET_PAYLOAD,published['payload_sha256'])
+
     def test_long_target_three_pairs_and_guards(self):
         profile=m.TARGET_PROFILE; ids={profile:hashlib.sha256(profile.encode()).hexdigest()}
         tag='fedc012345abcd'; order=(profile,)*3; self.write_matrix(order,True)
         def rewrite(i, *, n=24000, old_crc=False):
             d=self.d/f'{i:02}-{profile}'; f=d/'uart.txt'; raw=f.read_bytes()
             raw=raw.replace(b': 12000',b': 24000').replace(b'600.000000',b'1200.000000')
+            raw=raw.replace(b'0x66 12000 7 1 2000',b'0x66 24000 7 1 2000')
             a,b=(b'0xd340',b'0xbc68') if old_crc else (b'0x4983',b'0xeb93')
             raw=raw.replace(b'0xd340',a).replace(b'0xbc68',b).replace(b'0x4983',a).replace(b'0xeb93',b)
             f.write_bytes(raw); record=d/'result.json'; v=json.loads(record.read_bytes())
