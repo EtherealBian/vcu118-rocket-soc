@@ -28,3 +28,18 @@ python3 scripts/test-strict-target-tail.py run "$STOCK_KIT" "$STOCK_OBJ" "$VERIL
 python3 scripts/test-strict-target-tail.py review "$GUEST" "$ORACLE" "$RUN" > "$RUN/review.json"
 diff -u docs/perf-strict-target-tail.json "$RUN/review.json"
 ```
+
+## 在恢复版物理输入上复用同一窗口
+
+上表仍是**原版**结果。恢复版可以复用同一客体快照、独立 QEMU 指令序列和出口状态检查，但必须重链接恢复版自己的 `ChipTop` 模型。以下命令读取已归档的原版末八轮运行目录 `STOCK_TAIL`，并使用[恢复版四轮实验](perf-mega175-recovery-fullcore.json)的 `RECOVERY_BUILD`（包含 `obj`、构建与审查记录）；不重跑 QEMU 或重新翻译整核。
+
+```sh
+# TAIL_RUN 必须是 MODEL_KIT 的一个尚不存在的同级目录；其父目录应为私有目录。
+for mode in run review; do
+  nice -n 15 python3 -B scripts/test-mega-recovery-tail.py "$mode" \
+    "$STOCK_BOARD" "$RECOVERY_BOARD" "$MODEL_KIT" "$RECOVERY_BUILD" "$VERILATOR_PREFIX" \
+    "$ELF" "$GUEST" "$ORACLE" "$STOCK_TAIL" "$TAIL_RUN" || exit 1
+done
+```
+
+`run` 记录链接对象、两个物理输入及观测器身份，顺序执行两个种子；每个种子都要通过逐指令 PC、逐轮边界和出口状态检查。`review` 从原始观测独立重算，并核对私有 `result.json`。脚本启动或只通过其中一个种子都不构成双种子通过；即使两者均通过，也不产生 VCU118 板测分数。
