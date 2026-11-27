@@ -1,0 +1,109 @@
+{
+  "scope": "Two one-leaf experimental board source inputs, separate from stock. Two-state combinational checks, no coupled CPU simulation, no implementation, no physical timing or board result. Inherited model receipts describe the stock input only.",
+  "stock_board_input_seal": "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+  "candidates": {
+    "grouped_grants": {
+      "board_input_seal": "05ead33d72035c156a20285d86ea8038c3a552cd4cdae5283b9f2953233d3b2e",
+      "changed": {
+        "rtl/IssueUnitCollapsing_2.sv": "2425c31b7aba1849dadc51e404e1fa8379e713392c65f75ca4192957f4268e5a"
+      }
+    },
+    "both": {
+      "board_input_seal": "6947b38b16cf00cc8a6a1509861399e4301e84b0c23fec724666772a2977b88b",
+      "changed": {
+        "rtl/IssueUnitCollapsing_2.sv": "10bd28881f51e8790de54a318621c955ee8a570c39c04dc19a706ce681eaea12"
+      }
+    }
+  },
+  "ordered_hdl_files": 549,
+  "sealed_members": 589,
+  "stock_sv_sha256": "af0a6ce24faafd5867336e055cd6511cfb083d1deda7002e17e1ee5da2ec631f",
+  "unchanged_ordered_sources_sha256": "6aa36414a276880c092dd8a9eb63aed3a5c98433318bb0c44e3e41a32281b0a7",
+  "solver": "Yosys 0.9 (git sha1 1979e0b)",
+  "mux_proof": {
+    "scope": "Exact stock two-state combinational port grants and issue payload muxes only. No issue policy, queue depth, or pipeline register changed. Not 4-state equivalence, physical QoR, Linux or a board result.",
+    "board_input_seal": "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+    "stock_sv_sha256": "af0a6ce24faafd5867336e055cd6511cfb083d1deda7002e17e1ee5da2ec631f",
+    "variant_sv_sha256": "409716877d8164dc13438f392e38faf753b8b7bb18cac89f8a84640f22099404",
+    "solver": "Yosys 0.9 (git sha1 1979e0b)",
+    "fields_per_port": [
+      69,
+      30,
+      30,
+      30
+    ],
+    "bits_per_port": [
+      394,
+      136,
+      136,
+      136
+    ],
+    "nonzero_idle_fields": 12,
+    "proofs": {
+      "onehot-port-0": {
+        "cone_sha256": "d533a2b59a32c89d36b5001143aee63366b3c679a036cd3f214fe9d52f12fe29",
+        "result": "proved"
+      },
+      "onehot-port-1": {
+        "cone_sha256": "5ec79598b125a56ab9dedfd43b7874133766c3587e02b577243380176e2fd7b8",
+        "result": "proved"
+      },
+      "onehot-port-2": {
+        "cone_sha256": "a505855a1013b51080f34375fa839e028cfa10ad1725924815a36f4c6119365a",
+        "result": "proved"
+      },
+      "onehot-port-3": {
+        "cone_sha256": "03561b73e199c6c5e216c284782f69f360a70fe72a95f9f688b7453d3116f796",
+        "result": "proved"
+      },
+      "payload-idle-0": {
+        "cone_sha256": "f7171859144b60866542285e202f203e2ef0650da183760feedf65b5849bfbf1",
+        "result": "proved"
+      },
+      "payload-idle-1": {
+        "cone_sha256": "d347180595dc286d133b614abca0b24a2c3649cf04cdb0f464ef9198e7aabe98",
+        "result": "proved"
+      },
+      "grant-negative": {
+        "cone_sha256": "d10a220425211283327ecda2c960e4e0a601b33476f440e0b79225c0f36239ae",
+        "result": "counterexample"
+      },
+      "payload-negative": {
+        "cone_sha256": "6fb77c3f85161b935c27f90e67a030781458c13307fc5f23fe67ac6774e9442a",
+        "result": "counterexample"
+      }
+    }
+  },
+  "grant_proof": {
+    "scope": "Two-state combinational proof of all 160 stock-vs-grouped grant bits for arbitrary real cone inputs. Standalone candidate; no change to the running implementation, no timing or score.",
+    "board_input_seal": "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+    "stock_sv_sha256": "af0a6ce24faafd5867336e055cd6511cfb083d1deda7002e17e1ee5da2ec631f",
+    "grant_only_sv_sha256": "2425c31b7aba1849dadc51e404e1fa8379e713392c65f75ca4192957f4268e5a",
+    "grant_and_mux_sv_sha256": "10bd28881f51e8790de54a318621c955ee8a570c39c04dc19a706ce681eaea12",
+    "priority_group_slots": 8,
+    "ports": 4,
+    "slots": 40,
+    "port_equivalence_under_previously_proved_ports": {
+      "group8-port0": {
+        "cone_sha256": "86924a62f35c21e0b3dcb28daf4cb3cba00d7e0682f08baaef1120c548999587",
+        "result": "proved"
+      },
+      "group8-port1": {
+        "cone_sha256": "7a0e72d37ec0d60bd6ec382eedaedf363ab13ce6d3ec22a621f500bb5360573d",
+        "result": "proved"
+      },
+      "group8-port2": {
+        "cone_sha256": "305c1c2b930f7ec5792d9ecee823b616ec983b8f3e56e6c6200a3300ce4b99d9",
+        "result": "proved"
+      },
+      "group8-port3": {
+        "cone_sha256": "3f6d5b0b1a21a2b9468da51a8d7d8a5bb7edecd4bdf596bb5cfc40d99d73fddd",
+        "result": "proved"
+      },
+      "omit_slot0-port0": {
+        "cone_sha256": "f623712e1493e454720a4791ed120fd40a46dd6f847d56c724f70c525fac7e1a",
+        "result": "counterexample"
+      }
+    }
+  }
+}

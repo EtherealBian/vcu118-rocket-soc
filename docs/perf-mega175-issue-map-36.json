@@ -1,0 +1,114 @@
+{
+  "scope": "Yosys/ABC unplaced combinational cuts. 40 slots, 4 ports, all 40 grant acknowledgments + 4 valid bits. 9 selected payload bits/port (36 total). Independent slot inputs, not full slot storage, compaction or downstream consumers. Primitive levels are not delay, occupied CLBs, full-core QoR or a board measurement.",
+  "payload_bits": 36,
+  "board_input_seal": "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+  "solver": "Yosys 0.9 (git sha1 1979e0b)",
+  "yosys_sha256": "f58d1dfcbc9b48a81357283e93b53e4c78415f6d28f227f0db34a79f316e6a64",
+  "abc_sha256": "6b6d93004494101bed191ddf29c411df55c50f990d7db56796767a3efbb03b09",
+  "profiles": {
+    "stock": {
+      "unit_sha256": "af0a6ce24faafd5867336e055cd6511cfb083d1deda7002e17e1ee5da2ec631f",
+      "cut_sha256": "1c08407cf7631578cdd604fbae6734486112ca6347933d658cda239b53d8ad3e",
+      "cells": {
+        "LUT2": 1014,
+        "LUT3": 172,
+        "LUT4": 206,
+        "LUT5": 128,
+        "LUT6": 1340,
+        "MUXF7": 316,
+        "MUXF8": 105
+      },
+      "total": 3281,
+      "max_primitive_levels": {
+        "ack": 28,
+        "valid": 27,
+        "io_iss_uops_0_uopc": 17,
+        "io_iss_uops_0_dst_rtype": 17,
+        "io_iss_uops_1_uopc": 22,
+        "io_iss_uops_1_dst_rtype": 25,
+        "io_iss_uops_2_uopc": 25,
+        "io_iss_uops_2_dst_rtype": 29,
+        "io_iss_uops_3_uopc": 31,
+        "io_iss_uops_3_dst_rtype": 37
+      }
+    },
+    "onehot_payload": {
+      "unit_sha256": "409716877d8164dc13438f392e38faf753b8b7bb18cac89f8a84640f22099404",
+      "cut_sha256": "4604f8de8e99b089952fb3c665e65931bfc5383b2001cec07cf73923ea478c64",
+      "cells": {
+        "LUT2": 1021,
+        "LUT3": 179,
+        "LUT4": 208,
+        "LUT5": 126,
+        "LUT6": 1367,
+        "MUXF7": 331,
+        "MUXF8": 111
+      },
+      "total": 3343,
+      "max_primitive_levels": {
+        "ack": 28,
+        "valid": 27,
+        "io_iss_uops_0_uopc": 16,
+        "io_iss_uops_0_dst_rtype": 15,
+        "io_iss_uops_1_uopc": 22,
+        "io_iss_uops_1_dst_rtype": 22,
+        "io_iss_uops_2_uopc": 25,
+        "io_iss_uops_2_dst_rtype": 26,
+        "io_iss_uops_3_uopc": 31,
+        "io_iss_uops_3_dst_rtype": 31
+      }
+    },
+    "grouped_grants": {
+      "unit_sha256": "2425c31b7aba1849dadc51e404e1fa8379e713392c65f75ca4192957f4268e5a",
+      "cut_sha256": "410cdb0ee6f379f2dafd7d59da0c31ac001ca3383d9182ea4021bd652cb9bac1",
+      "cells": {
+        "LUT2": 723,
+        "LUT3": 175,
+        "LUT4": 204,
+        "LUT5": 163,
+        "LUT6": 1570,
+        "MUXF7": 405,
+        "MUXF8": 140
+      },
+      "total": 3380,
+      "max_primitive_levels": {
+        "ack": 27,
+        "valid": 26,
+        "io_iss_uops_0_uopc": 15,
+        "io_iss_uops_0_dst_rtype": 23,
+        "io_iss_uops_1_uopc": 19,
+        "io_iss_uops_1_dst_rtype": 21,
+        "io_iss_uops_2_uopc": 24,
+        "io_iss_uops_2_dst_rtype": 28,
+        "io_iss_uops_3_uopc": 30,
+        "io_iss_uops_3_dst_rtype": 32
+      }
+    },
+    "both": {
+      "unit_sha256": "10bd28881f51e8790de54a318621c955ee8a570c39c04dc19a706ce681eaea12",
+      "cut_sha256": "02aa527dfd4b3cf100fd78db48a1171e5dc33cffd9737f91628e494b1b6a5de2",
+      "cells": {
+        "LUT2": 702,
+        "LUT3": 171,
+        "LUT4": 234,
+        "LUT5": 109,
+        "LUT6": 1485,
+        "MUXF7": 364,
+        "MUXF8": 124
+      },
+      "total": 3189,
+      "max_primitive_levels": {
+        "ack": 27,
+        "valid": 26,
+        "io_iss_uops_0_uopc": 16,
+        "io_iss_uops_0_dst_rtype": 15,
+        "io_iss_uops_1_uopc": 19,
+        "io_iss_uops_1_dst_rtype": 19,
+        "io_iss_uops_2_uopc": 24,
+        "io_iss_uops_2_dst_rtype": 23,
+        "io_iss_uops_3_uopc": 30,
+        "io_iss_uops_3_dst_rtype": 30
+      }
+    }
+  }
+}
