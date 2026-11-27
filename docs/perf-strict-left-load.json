@@ -1,0 +1,431 @@
+{
+  "scope": "Four-round user-mode RTL snapshots; normal LSU-to-cache lane handshakes confirmed at S1; only normal S2 shown, not internal MSHR replays. C: cache result; F: store queue. Not board timing or throughput.",
+  "elf_sha256": "61f7c4579b762f86d7d7dc93d4c385d08e50248f3dd6a8a9105fd5e88b58886a",
+  "probe_model_sha256": "78dd67e5319396ea9753491b6ad2ba5fa07eacbbebb54f2a29774784d9d8de1e",
+  "results": {
+    "performance": {
+      "left_sha256": "18447435d48e2a7aecd0b42d8c26edac9c24128d214f4b3e9bf768e55a51a97f",
+      "cohorts": {
+        "all": {
+          "above_bound_wait_cycles": {
+            "sum": 764
+          },
+          "loads": {
+            "C": 830
+          },
+          "return_observation": {
+            "same_lane_normal_s2_hit": 830
+          },
+          "normal_port_outcomes": {
+            "hit": 830
+          },
+          "normal_accepts": {
+            "1": 830
+          },
+          "dispatch_to_agu": {
+            "n": 830,
+            "min": 3,
+            "p50": 7,
+            "p95": 16,
+            "max": 51
+          },
+          "agu_minus_branch_dispatch": {
+            "n": 830,
+            "min": -1,
+            "p50": 2,
+            "p95": 12,
+            "max": 47
+          },
+          "agu_to_result": {
+            "n": 830,
+            "min": 2,
+            "p50": 2,
+            "p95": 2,
+            "max": 2
+          },
+          "result_minus_branch_dispatch": {
+            "n": 830,
+            "min": 1,
+            "p50": 4,
+            "p95": 14,
+            "max": 49
+          },
+          "parent_dispatch_to_agu": {
+            "n": 798,
+            "min": 3,
+            "p50": 3,
+            "p95": 11,
+            "max": 48
+          },
+          "parent_agu_minus_branch_dispatch": {
+            "n": 798,
+            "min": -2,
+            "p50": -2,
+            "p95": 6,
+            "max": 43
+          },
+          "parent_agu_to_result": {
+            "n": 798,
+            "min": 2,
+            "p50": 2,
+            "p95": 2,
+            "max": 5
+          },
+          "parent_result_to_left_agu": {
+            "n": 798,
+            "min": 2,
+            "p50": 2,
+            "p95": 2,
+            "max": 3
+          },
+          "parent_sources": {
+            "C": 791,
+            "F": 7
+          },
+          "parent_normal_port_outcomes": {
+            "hit": 791,
+            "no_s2": 9
+          }
+        },
+        "tail_fallthrough": {
+          "above_bound_wait_cycles": {
+            "sum": 589
+          },
+          "loads": {
+            "C": 55
+          },
+          "return_observation": {
+            "same_lane_normal_s2_hit": 55
+          },
+          "normal_port_outcomes": {
+            "hit": 55
+          },
+          "normal_accepts": {
+            "1": 55
+          },
+          "dispatch_to_agu": {
+            "n": 55,
+            "min": 10,
+            "p50": 17,
+            "p95": 42,
+            "max": 51
+          },
+          "agu_minus_branch_dispatch": {
+            "n": 55,
+            "min": 7,
+            "p50": 12,
+            "p95": 38,
+            "max": 47
+          },
+          "agu_to_result": {
+            "n": 55,
+            "min": 2,
+            "p50": 2,
+            "p95": 2,
+            "max": 2
+          },
+          "result_minus_branch_dispatch": {
+            "n": 55,
+            "min": 9,
+            "p50": 14,
+            "p95": 40,
+            "max": 49
+          },
+          "parent_dispatch_to_agu": {
+            "n": 55,
+            "min": 5,
+            "p50": 13,
+            "p95": 39,
+            "max": 48
+          },
+          "parent_agu_minus_branch_dispatch": {
+            "n": 55,
+            "min": 0,
+            "p50": 8,
+            "p95": 34,
+            "max": 43
+          },
+          "parent_agu_to_result": {
+            "n": 55,
+            "min": 2,
+            "p50": 2,
+            "p95": 2,
+            "max": 5
+          },
+          "parent_result_to_left_agu": {
+            "n": 55,
+            "min": 2,
+            "p50": 2,
+            "p95": 3,
+            "max": 3
+          },
+          "parent_sources": {
+            "C": 52,
+            "F": 3
+          },
+          "parent_normal_port_outcomes": {
+            "hit": 52,
+            "no_s2": 4
+          }
+        },
+        "tail_jump": {
+          "above_bound_wait_cycles": {
+            "sum": 175
+          },
+          "loads": {
+            "C": 7
+          },
+          "return_observation": {
+            "same_lane_normal_s2_hit": 7
+          },
+          "normal_port_outcomes": {
+            "hit": 7
+          },
+          "normal_accepts": {
+            "1": 7
+          },
+          "dispatch_to_agu": {
+            "n": 7,
+            "min": 26,
+            "p50": 35,
+            "p95": 44,
+            "max": 44
+          },
+          "agu_minus_branch_dispatch": {
+            "n": 7,
+            "min": 23,
+            "p50": 31,
+            "p95": 40,
+            "max": 40
+          },
+          "agu_to_result": {
+            "n": 7,
+            "min": 2,
+            "p50": 2,
+            "p95": 2,
+            "max": 2
+          },
+          "result_minus_branch_dispatch": {
+            "n": 7,
+            "min": 25,
+            "p50": 33,
+            "p95": 42,
+            "max": 42
+          }
+        }
+      }
+    },
+    "validation": {
+      "left_sha256": "9f18718be4fa75d71602864a59c2d446926e5b7da30da125112e8e14c67d2f88",
+      "cohorts": {
+        "all": {
+          "above_bound_wait_cycles": {
+            "sum": 611
+          },
+          "loads": {
+            "C": 837
+          },
+          "return_observation": {
+            "same_lane_normal_s2_hit": 837
+          },
+          "normal_port_outcomes": {
+            "hit": 837
+          },
+          "normal_accepts": {
+            "1": 837
+          },
+          "dispatch_to_agu": {
+            "n": 837,
+            "min": 3,
+            "p50": 7,
+            "p95": 11,
+            "max": 52
+          },
+          "agu_minus_branch_dispatch": {
+            "n": 837,
+            "min": -1,
+            "p50": 2,
+            "p95": 7,
+            "max": 48
+          },
+          "agu_to_result": {
+            "n": 837,
+            "min": 2,
+            "p50": 2,
+            "p95": 2,
+            "max": 2
+          },
+          "result_minus_branch_dispatch": {
+            "n": 837,
+            "min": 1,
+            "p50": 4,
+            "p95": 9,
+            "max": 50
+          },
+          "parent_dispatch_to_agu": {
+            "n": 805,
+            "min": 3,
+            "p50": 3,
+            "p95": 7,
+            "max": 48
+          },
+          "parent_agu_minus_branch_dispatch": {
+            "n": 805,
+            "min": -4,
+            "p50": -2,
+            "p95": 2,
+            "max": 43
+          },
+          "parent_agu_to_result": {
+            "n": 805,
+            "min": 2,
+            "p50": 2,
+            "p95": 2,
+            "max": 5
+          },
+          "parent_result_to_left_agu": {
+            "n": 805,
+            "min": 2,
+            "p50": 2,
+            "p95": 2,
+            "max": 3
+          },
+          "parent_sources": {
+            "C": 798,
+            "F": 7
+          },
+          "parent_normal_port_outcomes": {
+            "hit": 798,
+            "no_s2": 10
+          }
+        },
+        "tail_fallthrough": {
+          "above_bound_wait_cycles": {
+            "sum": 433
+          },
+          "loads": {
+            "C": 40
+          },
+          "return_observation": {
+            "same_lane_normal_s2_hit": 40
+          },
+          "normal_port_outcomes": {
+            "hit": 40
+          },
+          "normal_accepts": {
+            "1": 40
+          },
+          "dispatch_to_agu": {
+            "n": 40,
+            "min": 10,
+            "p50": 16,
+            "p95": 42,
+            "max": 52
+          },
+          "agu_minus_branch_dispatch": {
+            "n": 40,
+            "min": 7,
+            "p50": 12,
+            "p95": 38,
+            "max": 48
+          },
+          "agu_to_result": {
+            "n": 40,
+            "min": 2,
+            "p50": 2,
+            "p95": 2,
+            "max": 2
+          },
+          "result_minus_branch_dispatch": {
+            "n": 40,
+            "min": 9,
+            "p50": 14,
+            "p95": 40,
+            "max": 50
+          },
+          "parent_dispatch_to_agu": {
+            "n": 40,
+            "min": 6,
+            "p50": 12,
+            "p95": 39,
+            "max": 48
+          },
+          "parent_agu_minus_branch_dispatch": {
+            "n": 40,
+            "min": 1,
+            "p50": 8,
+            "p95": 34,
+            "max": 43
+          },
+          "parent_agu_to_result": {
+            "n": 40,
+            "min": 2,
+            "p50": 2,
+            "p95": 2,
+            "max": 5
+          },
+          "parent_result_to_left_agu": {
+            "n": 40,
+            "min": 2,
+            "p50": 2,
+            "p95": 3,
+            "max": 3
+          },
+          "parent_sources": {
+            "C": 36,
+            "F": 4
+          },
+          "parent_normal_port_outcomes": {
+            "hit": 36,
+            "no_s2": 6
+          }
+        },
+        "tail_jump": {
+          "above_bound_wait_cycles": {
+            "sum": 178
+          },
+          "loads": {
+            "C": 10
+          },
+          "return_observation": {
+            "same_lane_normal_s2_hit": 10
+          },
+          "normal_port_outcomes": {
+            "hit": 10
+          },
+          "normal_accepts": {
+            "1": 10
+          },
+          "dispatch_to_agu": {
+            "n": 10,
+            "min": 11,
+            "p50": 21,
+            "p95": 43,
+            "max": 43
+          },
+          "agu_minus_branch_dispatch": {
+            "n": 10,
+            "min": 7,
+            "p50": 17,
+            "p95": 39,
+            "max": 39
+          },
+          "agu_to_result": {
+            "n": 10,
+            "min": 2,
+            "p50": 2,
+            "p95": 2,
+            "max": 2
+          },
+          "result_minus_branch_dispatch": {
+            "n": 10,
+            "min": 9,
+            "p50": 19,
+            "p95": 41,
+            "max": 41
+          }
+        }
+      }
+    }
+  }
+}

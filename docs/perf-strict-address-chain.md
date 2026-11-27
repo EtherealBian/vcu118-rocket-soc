@@ -21,3 +21,5 @@ python3 scripts/test-strict-load-use.py "$STOCK_KIT" "$STOCK_OBJ" "$GUEST" "$PRI
 python3 scripts/review-strict-address-chain.py "$PRIVATE/addr" "$ELF" > "$PRIVATE/address-review.json"
 cmp "$PRIVATE/address-review.json" docs/perf-strict-address-chain.json
 ```
+
+[后续验证：沿正常缓存握手区分 `x6` 发地址前后的等待](perf-strict-left-load.md)。
