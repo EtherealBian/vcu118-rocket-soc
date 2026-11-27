@@ -1,0 +1,64 @@
+{
+  "scope": "QEMU Linux-user, four iterations per seed, exact fixed ELF, one context, 2000 bytes. Guest user instructions only; neither CPU cycles nor board throughput.",
+  "elf_sha256": "61f7c4579b762f86d7d7dc93d4c385d08e50248f3dd6a8a9105fd5e88b58886a",
+  "qemu_executable_sha256": "6c62c938d2c38e97a4853d94a65791723e9c282fb3bc8634951ae81f8d6d12f0",
+  "iterations_per_seed": 4,
+  "results": {
+    "performance": {
+      "dynamic_instructions": 1347261,
+      "by_round": [
+        336815,
+        336902,
+        336808,
+        336736
+      ],
+      "compressed": 603143,
+      "by_function": {
+        "calc_func": 705230,
+        "core_bench_list": 375733,
+        "core_state_transition": 265024,
+        "main": 1274
+      },
+      "by_kind": {
+        "bitwise": 86716,
+        "conditional_branch": 212745,
+        "jump_call_return": 25989,
+        "load": 232874,
+        "multiply": 37584,
+        "other_integer": 387334,
+        "shift": 302416,
+        "store": 61603
+      },
+      "ordered_pc_sha256": "416ac8d959c93fdc7b2c57778b2bfe53488c3b105901127d226f5a3c0fc564c4",
+      "crcfinal": "0x9f95"
+    },
+    "validation": {
+      "dynamic_instructions": 1348735,
+      "by_round": [
+        337115,
+        337270,
+        337193,
+        337157
+      ],
+      "compressed": 606193,
+      "by_function": {
+        "calc_func": 703546,
+        "core_bench_list": 380067,
+        "core_state_transition": 263848,
+        "main": 1274
+      },
+      "by_kind": {
+        "bitwise": 86604,
+        "conditional_branch": 213495,
+        "jump_call_return": 25758,
+        "load": 235048,
+        "multiply": 37584,
+        "other_integer": 386661,
+        "shift": 302332,
+        "store": 61253
+      },
+      "ordered_pc_sha256": "e7a7695d0811ac0b87d007dfecfb7c339135028b8568f08944bbd602b5d4b6e6",
+      "crcfinal": "0x19d9"
+    }
+  }
+}
