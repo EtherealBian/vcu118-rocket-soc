@@ -1,0 +1,17 @@
+{
+  "profile": "g15-gc-lto-ooo-strict",
+  "iterations": 24000,
+  "elf_sha256": "61f7c4579b762f86d7d7dc93d4c385d08e50248f3dd6a8a9105fd5e88b58886a",
+  "firmware_sha256": "f0db553be5448c4a8754c995cf25413b0e6f48c73cde061657c1bf1dfff46bce",
+  "crc_only": true,
+  "final_crcs": {
+    "performance": "0x4983",
+    "validation": "0xeb93"
+  },
+  "uart_sha256": "3901418a2b1a34a995e2adff1f35ed1a282382bba81a3155eef6a635a32ff0c0",
+  "guest_isa": "rv64imafdc_zicntr_zicsr_zifencei_zihpm",
+  "qemu_cpu": "rv64gcsu-v1.10.0",
+  "isa_control": "ISA_CONTROL_PASS addi=7 sh1add=illegal andn=illegal",
+  "isa_control_binary_sha256": "be6987cdcb4013d771b0ca7dafa7157c904a66e8026f4e1622484381c9aefb2a",
+  "scope": "QEMU virt command and CRC validation only; not an FPGA benchmark"
+}

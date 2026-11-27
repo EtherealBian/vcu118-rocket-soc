@@ -1,0 +1,22 @@
+{
+  "scope": "Native x86 POSIX CRC oracle only, not a benchmark result or hardware evidence.",
+  "archive_sha256": "243e31f8041e9757aea2475f165b3e4605bc84d621416bae2079ec18bd9331a6",
+  "upstream": "9d07b05523c16754a214a40224018a4ee908e091",
+  "compiler": "GCC 9.4.0",
+  "compared_optimization_flags": [
+    "-O0",
+    "-O2"
+  ],
+  "contexts": 1,
+  "total_buffer_bytes": 2000,
+  "final_crc_by_iterations": {
+    "12000": {
+      "performance": "0xd340",
+      "validation": "0xbc68"
+    },
+    "24000": {
+      "performance": "0x4983",
+      "validation": "0xeb93"
+    }
+  }
+}

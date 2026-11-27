@@ -57,7 +57,15 @@ witness=load('linux_machine_witness')
 
 def read(p): return p.read_text(encoding='utf-8-sig')
 
-def review(boot, release, out, experiment='original', boot_nonce=None):
+LENGTH_CRCS={12000:{'performance':'0xd340','validation':'0xbc68'},
+             24000:{'performance':'0x4983','validation':'0xeb93'}}
+
+def check_length(experiment,iterations):
+    if type(iterations)!=int or iterations not in LENGTH_CRCS or (experiment!='target' and iterations!=12000):
+        raise ValueError('unreviewed matrix length or length outside target experiment')
+
+def review(boot, release, out, experiment='original', boot_nonce=None, iterations=12000):
+    check_length(experiment,iterations)
     cases={'original':(ORDER,'baseline',BASE_ELF), 'compilers':(COMPILER_ORDER,'o3-zb',ZB_ELF), 'portable':(PORTABLE_ORDER,'baseline',BASE_ELF), 'tune':(TUNE_ORDER,'g15-gc-lto',PORTABLE_ELFS['g15-gc-lto'])}
     cases['align']=(ALIGN_ORDER,ALIGN[0],ALIGN_ELFS[ALIGN[0]])
     cases['target']=((TARGET_PROFILE,)*3,TARGET_PROFILE,TARGET_SHA)
@@ -76,7 +84,7 @@ def review(boot, release, out, experiment='original', boot_nonce=None):
     nonces=set(); digests=set(); crcs={}; runs={p:[] for p in ids}; boot_keys=['utc','mode','bit_sha256','payload_sha256','uart_sha256']
     for i,p in enumerate(order,1):
         d=out/f'{i:02}-{p}'; n=read(d/'nonce.txt').strip(); raw=(d/'uart.txt').read_bytes(); timing=json.loads(read(d/'host-ms.json'))
-        checked=cm.inspect(raw,n,ids[p],12000,timing,profile=p)
+        checked=cm.inspect(raw,n,ids[p],iterations,timing,profile=p)
         key=checked['uart_sha256']; lines=raw.decode('ascii').replace('\r','').splitlines();marker=f'CM_SESSION_{tag}_42_{n}'
         loc=[j for j,v in enumerate(lines) if v in (marker,'# '+marker)]
         def pos(v):return next(j for j,l in enumerate(lines) if l in (v,'# '+v))
@@ -89,10 +97,10 @@ def review(boot, release, out, experiment='original', boot_nonce=None):
             if not loc[0]<isi<pos(ids[p]+'  '+cm.binary(p)) or len(ext)!=1 or not {'zba','zbb'}<=set(ext[0]):raise ValueError('Linux ISA not verified for Zba/Zbb')
         nonces.add(n);digests.add(key)
         saved=json.loads(read(d/'result.json'))
-        if saved['iterations_requested']!=12000 or saved['boot']!={k:boot[k] for k in boot_keys} or any(saved[k]!=v for k,v in checked.items()):raise ValueError('stored record differs from verified bytes')
+        if saved['iterations_requested']!=iterations or saved['boot']!={k:boot[k] for k in boot_keys} or any(saved[k]!=v for k,v in checked.items()):raise ValueError('stored record differs from verified bytes')
         finals={k:v['final_crc'] for k,v in checked['runs'].items()}
         if crcs and crcs!=finals:raise ValueError('final CRC changed at fixed iteration count')
-        if experiment in ('compilers','portable','tune','align','target') and finals!={'performance':'0xd340','validation':'0xbc68'}:raise ValueError('pinned 12000-iteration final CRC mismatch')
+        if experiment in ('compilers','portable','tune','align','target') and finals!=LENGTH_CRCS[iterations]:raise ValueError(f'pinned {iterations}-iteration final CRC mismatch')
         crcs=finals
         runs[p].append(dict(sequence=i,uart_sha256=key,runs=checked['runs']))
     def score(row,kind):return Decimal(row['runs'][kind]['iterations_per_s'])
@@ -100,14 +108,15 @@ def review(boot, release, out, experiment='original', boot_nonce=None):
     for p,rows in runs.items():
         perf=[score(r,'performance') for r in rows]; m=median(perf)
         stats[p]=dict(compiler=cm.expected_compiler(p),flags=cm.PROFILES[p][1],elf_sha256=ids[p],performance_median=str(m),validation_median=str(median(score(r,'validation') for r in rows)),performance_min=str(min(perf)),performance_max=str(max(perf)),coremark_per_mhz=str(m/mhz),gain_vs_control_pct=str(round((m/base-1)*100,3)),all_three_at_least_1000=min(perf)>=1000,measurements=rows)
-    return dict(scope='Independent physical board measurement, one hart and one context, same boot; not certified.',target_single_context_iterations_per_s=1000,clock_mhz=mhz,total_buffer_bytes=2000,iterations_each_seed_set=12000,boot={k:boot[k] for k in boot_keys},order=order,control_profile=control,profiles=stats)
+    return dict(scope='Independent physical board measurement, one hart and one context, same boot; not certified.',target_single_context_iterations_per_s=1000,clock_mhz=mhz,total_buffer_bytes=2000,iterations_each_seed_set=iterations,boot={k:boot[k] for k in boot_keys},order=order,control_profile=control,profiles=stats)
 
 if __name__=='__main__':
     a=argparse.ArgumentParser(description=__doc__)
     for n in ('run','capture','payload','release','out'):a.add_argument(n,type=Path)
     a.add_argument('--experiment',choices=('original','compilers','portable','tune','align','target'),default='original')
+    a.add_argument('--iterations',choices=tuple(LENGTH_CRCS),type=int,default=12000,help='fixed count for every seed in the matrix; long runs only for target')
     a.add_argument('--preflight',action='store_true',help='target only: verify programmed boot and selected ELF without reviewing timings')
-    x=a.parse_args();boot=load('verify-soc-capture').public_record(x.run,x.capture,x.payload)
+    x=a.parse_args();check_length(x.experiment,x.iterations);boot=load('verify-soc-capture').public_record(x.run,x.capture,x.payload)
     hw.verify(boot,x.run/'obj/report',json.loads(read(x.capture/'implementation.json')))
     if x.preflight:
         if (x.experiment!='target' or boot['mode']!='linux-oscheck' or not boot['volatile_configuration'] or
@@ -116,4 +125,4 @@ if __name__=='__main__':
             raise ValueError('target preflight requires reviewed boot and locked portable ELF')
         witness.expected(hw.lookup(boot['bit_sha256'])['runtime_contract'])
         print('REGISTERED_TARGET_AND_ELF_PRECHECKED_NOT_A_SCORE');raise SystemExit(0)
-    print(json.dumps(review(boot,x.release,x.out,x.experiment,json.loads(read(x.capture/'pass.json')).get('challenge_nonce')),indent=2))
+    print(json.dumps(review(boot,x.release,x.out,x.experiment,json.loads(read(x.capture/'pass.json')).get('challenge_nonce'),x.iterations),indent=2))

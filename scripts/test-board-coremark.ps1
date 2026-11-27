@@ -3,10 +3,11 @@
  [Parameter(Mandatory)][string]$Elf,[Parameter(Mandatory)][string]$Out,[string]$Bridge=$env:VCU_UART_SERIAL,
  [ValidateSet('baseline','o3','g15-gc-lto','g15-gc-lto-ooo','g15-gc-lto-ooo-strict','g15-gc-lto-relaxed','o3-zb','o3-zb-lto','o3-zb-lto-unroll','g15-zb','g15-zb-lto','g15-zb-lto-unroll')][string]$Profile='baseline',
  [ValidatePattern('^[a-f0-9]{16}$')][string]$SessionTag,[switch]$StartSession,[switch]$CheckTuneBoard,[switch]$RequireReviewedMachine,
- [ValidateRange(1000,20000)][int]$Iterations=6000)
+ [ValidateRange(1000,24000)][int]$Iterations=6000)
 # Runs the already-installed, profile-specific benchmark on an independently verified live shell.
 # Read-only; no configuration, guest downloads, mounts, network or persistent files.
 $ErrorActionPreference='Stop'; . (Join-Path $PSScriptRoot board-console.ps1)
+if($Iterations -gt 20000 -and ($Iterations -ne 24000 -or !$RequireReviewedMachine -or $Profile -ne 'g15-gc-lto-ooo-strict')){throw 'long fixed length requires the reviewed target matrix'}
 if(!$Bridge -or (Test-Path -LiteralPath $Out)){throw 'need exact FPGA-side bridge and new output directory'}
 if($RequireReviewedMachine -and (!$CheckTuneBoard -or !$SessionTag)){throw 'live bit/ROM check needs a bound session'}
 if($StartSession -and !$SessionTag){throw 'missing matrix session tag'}

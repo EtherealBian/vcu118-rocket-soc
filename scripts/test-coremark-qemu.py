@@ -2,10 +2,12 @@
 """Boot the optional lab image on QEMU virt, check its ELF hash and both benchmark seed sets.
 Do not use QEMU throughput as a VCU118 performance number.
 """
-import argparse,hashlib,importlib.util,json,os,re,secrets,selectors,subprocess,tempfile,time
+import argparse,runpy,hashlib,importlib.util,json,os,re,secrets,selectors,subprocess,tempfile,time
 from pathlib import Path
 spec=importlib.util.spec_from_file_location('cmcheck',Path(__file__).with_name('review-coremark.py'));cm=importlib.util.module_from_spec(spec);spec.loader.exec_module(cm)
-p=argparse.ArgumentParser(description=__doc__);p.add_argument('firmware',type=Path);p.add_argument('elf',type=Path);p.add_argument('out',type=Path);p.add_argument('--profile',choices=tuple(cm.PROFILES),default='baseline');a=p.parse_args();a.out.mkdir(); nonce=secrets.token_hex(7)
+p=argparse.ArgumentParser(description=__doc__);p.add_argument('firmware',type=Path);p.add_argument('elf',type=Path);p.add_argument('out',type=Path);p.add_argument('--profile',choices=tuple(cm.PROFILES),default='baseline');p.add_argument('--target-crc-only',action='store_true',help='recheck the 24000-iteration CRC, without producing any score');a=p.parse_args();
+if a.target_crc_only and a.profile!='g15-gc-lto-ooo-strict':p.error('CRC-only fixture requires the locked strict target profile')
+a.out.mkdir(); nonce=secrets.token_hex(7)
 q=Path(os.getenv('VCU_TOOLS',Path.home()/'.local/share/vcu118-tools'))/'qemu';env=dict(os.environ);env['LD_LIBRARY_PATH']=f'{q}/usr/lib/x86_64-linux-gnu:{q}/lib/x86_64-linux-gnu:'+env.get('LD_LIBRARY_PATH','')
 args=[q/'usr/bin/qemu-system-riscv64','-machine','virt','-m','256M','-smp','1','-nographic','-monitor','none','-bios',a.firmware.resolve()]
 portable=a.profile in ('g15-gc-lto', 'g15-gc-lto-ooo', 'g15-gc-lto-ooo-strict', 'g15-gc-lto-relaxed')
@@ -41,11 +43,14 @@ with subprocess.Popen(args,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=s
             send('cat /proc/cpuinfo; echo ISA_END_$((40+2))_'+nonce);wait(rb'^ISA_END_42_'+nonce.encode()+rb'\r?\n')
             isa=re.findall(rb'^isa\s*:\s*(rv64\w+)\r?$',raw,re.M)
             if len(isa)!=1 or re.search(rb'_(?:zba|zbb)(?:_|$)',isa[0]): raise ValueError('expected one hart without Zba/Zbb')
-        send('echo CM_LIVE_$((6*7))_'+nonce);wait(rb'^(?:# )?CM_LIVE_42_'+nonce.encode()+rb'\r?\n');send(cm.command(nonce,0,a.profile));wait(rb'^CM_DONE_42_'+nonce.encode()+rb'\r?\n')
-        result=cm.inspect(bytes(raw),nonce,hashlib.sha256(a.elf.read_bytes()).hexdigest(),0,profile=a.profile)
+        send('echo CM_LIVE_$((6*7))_'+nonce);wait(rb'^(?:# )?CM_LIVE_42_'+nonce.encode()+rb'\r?\n');send(cm.command(nonce,24000 if a.target_crc_only else 0,a.profile));wait(rb'^CM_DONE_42_'+nonce.encode()+rb'\r?\n')
+        if a.target_crc_only:
+            oracle=runpy.run_path(str(Path(__file__).with_name('derive-target-length-crcs.py')))
+            result=oracle['check_guest'](bytes(raw),nonce,a.elf,a.firmware)
+        else:result=cm.inspect(bytes(raw),nonce,hashlib.sha256(a.elf.read_bytes()).hexdigest(),0,profile=a.profile)
     finally:
         proc.terminate()
         try:proc.wait(timeout=4)
         except subprocess.TimeoutExpired:proc.kill();proc.wait()
 if portable: result.update(guest_isa=isa[0].decode(),qemu_cpu=cpu,isa_control=control.decode().strip(),isa_control_binary_sha256=control_id)
-(a.out/'nonce.txt').write_text(nonce);result.update(scope='QEMU virt command and CRC validation only; not an FPGA benchmark',firmware_sha256=hashlib.sha256(a.firmware.read_bytes()).hexdigest());(a.out/'result.json').write_text(json.dumps(result,indent=2)+'\n');print('QEMU_COREMARK_CHECK_AND_VALIDATION_PASS')
+(a.out/'nonce.txt').write_text(nonce);result.update(scope='QEMU virt command and CRC validation only; not an FPGA benchmark',firmware_sha256=hashlib.sha256(a.firmware.read_bytes()).hexdigest());(a.out/'result.json').write_text(json.dumps(result,indent=2)+'\n');print('QEMU_TARGET_CRC_ONLY_NO_SCORE' if a.target_crc_only else 'QEMU_COREMARK_CHECK_AND_VALIDATION_PASS')

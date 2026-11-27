@@ -121,6 +121,39 @@ class MatrixReview(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'ELF identity'):
             m.review(self.boot,self.d,self.d,'target',tag)
 
+    def test_long_target_three_pairs_and_guards(self):
+        profile=m.TARGET_PROFILE; ids={profile:hashlib.sha256(profile.encode()).hexdigest()}
+        tag='fedc012345abcd'; order=(profile,)*3; self.write_matrix(order,True)
+        def rewrite(i, *, n=24000, old_crc=False):
+            d=self.d/f'{i:02}-{profile}'; f=d/'uart.txt'; raw=f.read_bytes()
+            raw=raw.replace(b': 12000',b': 24000').replace(b'600.000000',b'1200.000000')
+            a,b=(b'0xd340',b'0xbc68') if old_crc else (b'0x4983',b'0xeb93')
+            raw=raw.replace(b'0xd340',a).replace(b'0xbc68',b).replace(b'0x4983',a).replace(b'0xeb93',b)
+            f.write_bytes(raw); record=d/'result.json'; v=json.loads(record.read_bytes())
+            v.update(m.cm.inspect(raw,(d/'nonce.txt').read_text(),ids[profile],24000,json.loads((d/'host-ms.json').read_bytes()),profile));v['iterations_requested']=n;record.write_text(json.dumps(v))
+        def review():return m.review(self.boot,self.d,self.d,'target',tag,24000)
+        for i in range(1,4):self.add_live_machine(i,profile,tag,ids)
+        with mock.patch.object(m,'TARGET_SHA',ids[profile]):
+            rewrite(1);rewrite(2)
+            with self.assertRaises(ValueError):review()  # No mixed lengths.
+            rewrite(3);result=review();self.assertEqual(result['iterations_each_seed_set'],24000)
+            self.assertTrue(result['profiles'][profile]['all_three_at_least_1000'])
+            rewrite(1,old_crc=True)
+            with self.assertRaisesRegex(ValueError,'pinned 24000'):review()
+            rewrite(1,n=12000)
+            with self.assertRaisesRegex(ValueError,'stored record'):review()
+            rewrite(1); f=self.d/('03-'+profile)/'uart.txt';raw=f.read_bytes()
+            f.write_bytes(raw.replace(b'sifive,rocket0',b'ucb-bar,boom0'))
+            with self.assertRaisesRegex(ValueError,'Rocket CPU'):review()
+            f.write_bytes(raw);t=self.d/('02-'+profile)/'host-ms.json';t.write_text('{"performance": 20100, "validation": 30000}')
+            with self.assertRaisesRegex(ValueError,'host time'):review()
+        for mode in ('original','compilers','portable','tune','align'):
+            with self.assertRaisesRegex(ValueError,'length'):m.review(self.boot,self.d,self.d,mode,tag,24000)
+        for n in (True,24000.0,24001,0):
+            with self.assertRaisesRegex(ValueError,'length'):m.check_length('target',n)
+        oracle=json.loads((ROOT/'docs/coremark-target-length-crcs.json').read_bytes())['final_crc_by_iterations']
+        self.assertEqual({str(n):v for n,v in m.LENGTH_CRCS.items()},oracle)
+
     def test_rom_contract_is_not_bit_registration_and_both_directions_reject_substitution(self):
         w=m.witness; tag='1'*14; nonce='2'*14
         def fixture(contract):
