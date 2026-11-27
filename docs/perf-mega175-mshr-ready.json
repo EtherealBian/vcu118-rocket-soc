@@ -1,0 +1,188 @@
+{
+  "scope": "Recovery MSHRFile two-lane ready outputs, eight child state/secondary-ready equations. Two-state, same-cycle, unrestricted inputs. XCUP mapped primitive depths only; not routed timing or a board score.",
+  "physical_sha256": "ce0ef1171c7b0077282602c5c97230d03850b71c350c6c9ddcdf0b7ebcb5a456",
+  "parents_sha256": {
+    "BoomMSHRFile": "96ccaabbe67fe9daac896c44d4939cd3c55039982a82a932eccdaa87635a6963",
+    "BoomMSHR": "c55a123b15ceca01fd5512ad6a4af66a0421bd90beddb479f4021a76d1eb0732",
+    "BranchKillableQueue": "33993debb1b2d0064ac999be9500d75ef054db07f1f6b178a77c1a049296752a",
+    "BoomNonBlockingDCache": "fdd20681408038f71c070fc1e8776a43f4ba38af7d5814af6b8e5c61162031d2"
+  },
+  "inputs_bits": 490,
+  "sha256": {
+    "stock": {
+      "parent": "96ccaabbe67fe9daac896c44d4939cd3c55039982a82a932eccdaa87635a6963",
+      "child": "c55a123b15ceca01fd5512ad6a4af66a0421bd90beddb479f4021a76d1eb0732",
+      "cut": "3edaa7f6a4988506426809ba269adb75a0630842065a0f82b7966bc63eb6cd73"
+    },
+    "lane_local": {
+      "parent": "52caaa34b1322c5c5daa5e13ee4470a731f0b23dbfe1738b0af0bd35eceb6807",
+      "child": "c55a123b15ceca01fd5512ad6a4af66a0421bd90beddb479f4021a76d1eb0732",
+      "cut": "7e1d52e4e0f5175ee0e28f37cb76d87b62cfab246ef48752d3e137760c260cb9"
+    },
+    "class_local": {
+      "parent": "c45149a5c6b807527bd6ab56280b984af1f3c0d56ff6936836dbdc0b061f6318",
+      "child": "700928dccf70f1880ba69631af5acd576bcd0504d3df4b92ca0a55346a2e2afd",
+      "cut": "fcff729400aed62a47d5d5693368a75ab4b911ddd18cd47bffb322173e19bccb"
+    },
+    "gate_idle_primary": {
+      "parent": "f87b5cf06cd370c12ac5729a5af9b06088d7335e226706748d663724133a4000",
+      "child": "700928dccf70f1880ba69631af5acd576bcd0504d3df4b92ca0a55346a2e2afd",
+      "cut": "800b688d8f81e3e0b7e5e787ea73efa785a8eaf46a6280ce56f88cd196c02f5e"
+    },
+    "drop_lane1_cmd6": {
+      "parent": "11ffa3f5c646810e24dfeed13cb0e4cd88520d4710edc5de065786569a5d4b90",
+      "child": "700928dccf70f1880ba69631af5acd576bcd0504d3df4b92ca0a55346a2e2afd",
+      "cut": "b5519d69f1363134efc5791eea51fc1d1300dcee1ce898c15f032f1d34cab22d"
+    },
+    "wrong_bank7_space": {
+      "parent": "2a205efc7c62b61361a8db6fe4081cec0b6d32c21d2609366bc3f19fd08a7d10",
+      "child": "700928dccf70f1880ba69631af5acd576bcd0504d3df4b92ca0a55346a2e2afd",
+      "cut": "c2abfa0ee9180093b5f56605cc01333ac719931583ca8bb55f472235324715d8"
+    }
+  },
+  "proofs": {
+    "lane_local": "equivalent",
+    "class_local": "equivalent",
+    "gate_idle_primary": {
+      "gold_o": "01",
+      "gate_o": "00"
+    },
+    "drop_lane1_cmd6": {
+      "gold_o": "00",
+      "gate_o": "10"
+    },
+    "wrong_bank7_space": {
+      "gold_o": "00",
+      "gate_o": "10"
+    }
+  },
+  "mapping": {
+    "stock": {
+      "cells": {
+        "LUT2": 228,
+        "LUT3": 18,
+        "LUT4": 36,
+        "LUT5": 41,
+        "LUT6": 379,
+        "MUXF7": 74,
+        "MUXF8": 24
+      },
+      "stages_to_ready_0_1": {
+        "all": [
+          11,
+          12
+        ],
+        "lane1_valid": [
+          7,
+          8
+        ],
+        "lane0_valid": [
+          3,
+          4
+        ],
+        "request_command": [
+          7,
+          8
+        ],
+        "request_address": [
+          11,
+          12
+        ],
+        "mshr_state": [
+          7,
+          8
+        ],
+        "queue_space": [
+          7,
+          8
+        ]
+      }
+    },
+    "lane_local": {
+      "cells": {
+        "LUT2": 137,
+        "LUT3": 6,
+        "LUT4": 62,
+        "LUT5": 36,
+        "LUT6": 415,
+        "MUXF7": 106,
+        "MUXF8": 39
+      },
+      "stages_to_ready_0_1": {
+        "all": [
+          12,
+          11
+        ],
+        "lane1_valid": [
+          10,
+          9
+        ],
+        "lane0_valid": [
+          4,
+          null
+        ],
+        "request_command": [
+          10,
+          9
+        ],
+        "request_address": [
+          12,
+          11
+        ],
+        "mshr_state": [
+          11,
+          10
+        ],
+        "queue_space": [
+          11,
+          10
+        ]
+      }
+    },
+    "class_local": {
+      "cells": {
+        "LUT2": 97,
+        "LUT3": 18,
+        "LUT4": 37,
+        "LUT5": 40,
+        "LUT6": 475,
+        "MUXF7": 127,
+        "MUXF8": 44
+      },
+      "stages_to_ready_0_1": {
+        "all": [
+          12,
+          9
+        ],
+        "lane1_valid": [
+          1,
+          2
+        ],
+        "lane0_valid": [
+          5,
+          null
+        ],
+        "request_command": [
+          7,
+          5
+        ],
+        "request_address": [
+          12,
+          9
+        ],
+        "mshr_state": [
+          11,
+          8
+        ],
+        "queue_space": [
+          11,
+          8
+        ]
+      }
+    }
+  },
+  "tools": {
+    "yosys": "f58d1dfcbc9b48a81357283e93b53e4c78415f6d28f227f0db34a79f316e6a64",
+    "abc": "6b6d93004494101bed191ddf29c411df55c50f990d7db56796767a3efbb03b09"
+  }
+}

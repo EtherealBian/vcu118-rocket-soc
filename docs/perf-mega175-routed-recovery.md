@@ -76,3 +76,5 @@
 CPU ↔ MIG 的 40 个 Gray 指针位能否定向标记、哪些 CDC 告警仍在，见[局部同步链属性实验](perf-mega175-gray-attributes.md)。
 
 UART、SD-SPI 和软核 TAP 的十个单向引脚为何引发 `RPBF-3`，以及方向修正的局部综合与反例，见[板级引脚对照](perf-mega175-board-pads.md)。
+
+把队列状态、八个 MSHR、D-cache 响应与 LSU miss 重新连接后的[同拍优化对照](perf-mega175-mshr-ready.md)；只比较未布局结构，不替代本版物理签核。

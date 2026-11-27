@@ -1,0 +1,233 @@
+{
+  "scope": "Same-cycle, two-state MSHR/queue-state -> two D-cache response valids and LSU speculative miss. S2 hits and remaining cut inputs free. XCUP primitive graph, not routed timing or board scores.",
+  "physical_sha256": "ce0ef1171c7b0077282602c5c97230d03850b71c350c6c9ddcdf0b7ebcb5a456",
+  "parents_sha256": {
+    "BoomNonBlockingDCache": "fdd20681408038f71c070fc1e8776a43f4ba38af7d5814af6b8e5c61162031d2",
+    "LSU": "5749f211d5093a7ef4ac6bba75706d2a4ab3a016b2fb814da34fd7bed44d80d7",
+    "BoomTile": "dcfa49abad47453bdab712285dce49cd93c7799a273a6cca5621f2c9ed629162",
+    "BoomMSHRFile": "96ccaabbe67fe9daac896c44d4939cd3c55039982a82a932eccdaa87635a6963",
+    "BoomMSHR": "c55a123b15ceca01fd5512ad6a4af66a0421bd90beddb479f4021a76d1eb0732",
+    "BranchKillableQueue": "33993debb1b2d0064ac999be9500d75ef054db07f1f6b178a77c1a049296752a"
+  },
+  "inputs_bits": 1891,
+  "outputs_lsb_first": [
+    "io_lsu_resp_0_valid",
+    "io_lsu_resp_1_valid",
+    "io_core_ld_miss"
+  ],
+  "cuts_sha256": {
+    "stock": "d26e3fc2871367bd0b1f2142f474aefde0a8e4752a8064fc0854d772b9f1bc08",
+    "class_local": "432b2367e35fd99995ac60950855fce42439dd86a1121a5230d77e8756ceb035",
+    "split_rsp": "9e73bcf53d07dbbdeccd800ceb78ccad0f399dffc61ae2721ad47348a6a856a6",
+    "class_and_rsp": "518003ca452bb383df93056a382da4ed3db9d4e5ccb11ecffe8de33b70ecce86",
+    "bank7_space": "1b6bd35b4c50c3d2f1b37311ff0604fe60f008be0108a36eecec8a25d7487f62",
+    "bank7_permitted": "ef9568ad6e614669f916de9727417156269ab08476145ab0c60d4d284adcefcd",
+    "wrong_lane": "e5f605e9f54bc50326996200cd63f981695465e246621458b25b374ec88da3b5"
+  },
+  "proofs": {
+    "class_local": {
+      "status": "equivalent"
+    },
+    "split_rsp": {
+      "status": "equivalent"
+    },
+    "class_and_rsp": {
+      "status": "equivalent"
+    },
+    "bank7_space": {
+      "status": "equivalent"
+    },
+    "bank7_permitted": {
+      "status": "counterexample",
+      "output_bits_msb_first": {
+        "gold_o": "111",
+        "gate_o": "101"
+      }
+    },
+    "wrong_lane": {
+      "status": "counterexample",
+      "output_bits_msb_first": {
+        "gold_o": "101",
+        "gate_o": "100"
+      }
+    }
+  },
+  "mapping": {
+    "stock": {
+      "cells": {
+        "LUT2": 174,
+        "LUT3": 141,
+        "LUT4": 130,
+        "LUT5": 147,
+        "LUT6": 1827,
+        "MUXF7": 536,
+        "MUXF8": 164
+      },
+      "primitive_depth": {
+        "all": [
+          17,
+          17,
+          29
+        ],
+        "branch_mask": [
+          15,
+          15,
+          27
+        ],
+        "lane1_address": [
+          17,
+          17,
+          29
+        ],
+        "mshr_state": [
+          15,
+          15,
+          27
+        ],
+        "rpq_ptr_full": [
+          11,
+          11,
+          23
+        ],
+        "lsu_table": [
+          null,
+          null,
+          14
+        ]
+      }
+    },
+    "class_local": {
+      "cells": {
+        "LUT2": 257,
+        "LUT3": 141,
+        "LUT4": 141,
+        "LUT5": 111,
+        "LUT6": 1547,
+        "MUXF7": 387,
+        "MUXF8": 97
+      },
+      "primitive_depth": {
+        "all": [
+          16,
+          17,
+          28
+        ],
+        "branch_mask": [
+          11,
+          12,
+          23
+        ],
+        "lane1_address": [
+          null,
+          15,
+          26
+        ],
+        "mshr_state": [
+          12,
+          13,
+          24
+        ],
+        "rpq_ptr_full": [
+          11,
+          13,
+          24
+        ],
+        "lsu_table": [
+          null,
+          null,
+          16
+        ]
+      }
+    },
+    "split_rsp": {
+      "cells": {
+        "LUT2": 393,
+        "LUT3": 103,
+        "LUT4": 166,
+        "LUT5": 176,
+        "LUT6": 1575,
+        "MUXF7": 332,
+        "MUXF8": 78
+      },
+      "primitive_depth": {
+        "all": [
+          15,
+          17,
+          26
+        ],
+        "branch_mask": [
+          15,
+          17,
+          26
+        ],
+        "lane1_address": [
+          14,
+          16,
+          25
+        ],
+        "mshr_state": [
+          12,
+          15,
+          24
+        ],
+        "rpq_ptr_full": [
+          10,
+          12,
+          21
+        ],
+        "lsu_table": [
+          null,
+          null,
+          13
+        ]
+      }
+    },
+    "class_and_rsp": {
+      "cells": {
+        "LUT2": 271,
+        "LUT3": 138,
+        "LUT4": 180,
+        "LUT5": 132,
+        "LUT6": 1788,
+        "MUXF7": 497,
+        "MUXF8": 160
+      },
+      "primitive_depth": {
+        "all": [
+          17,
+          17,
+          28
+        ],
+        "branch_mask": [
+          11,
+          11,
+          22
+        ],
+        "lane1_address": [
+          null,
+          13,
+          24
+        ],
+        "mshr_state": [
+          15,
+          15,
+          26
+        ],
+        "rpq_ptr_full": [
+          15,
+          15,
+          26
+        ],
+        "lsu_table": [
+          null,
+          null,
+          12
+        ]
+      }
+    }
+  },
+  "tools_sha256": {
+    "yosys": "f58d1dfcbc9b48a81357283e93b53e4c78415f6d28f227f0db34a79f316e6a64",
+    "abc": "6b6d93004494101bed191ddf29c411df55c50f990d7db56796767a3efbb03b09"
+  }
+}
