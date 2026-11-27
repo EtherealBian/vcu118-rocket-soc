@@ -56,8 +56,20 @@ def head_probe(source):
     return src
 
 
-def run(kit,obj,guest,baseline,out,include,address_chain=False, left_load=False, rob_heads=False):
-    if rob_heads and (address_chain or left_load): raise ValueError('standalone head probe required')
+REVERSAL_PCS = (0x13b62, 0x13b64, 0x13b6a)
+
+
+def reversal_probe(source):
+    src = BP['instrument'](source)
+    for old,new in [('#define V(n)', '#include "strict_reversal.hpp"\n#define V(n)'),
+                    ('Redirects bp(argv[5]);', 'Reversal bp(argv[5]);')]:
+        if src.count(old)!=1: raise ValueError('changed reversal probe hook')
+        src=src.replace(old,new)
+    return src
+
+
+def run(kit,obj,guest,baseline,out,include,address_chain=False, left_load=False, rob_heads=False, reversal=False):
+    if sum(map(bool,(address_chain or left_load,rob_heads,reversal)))>1: raise ValueError('incompatible probes')
     lock=json.loads((ROOT/'docs/perf-strict-user-lvt.json').read_bytes())
     oracle=json.loads((ROOT/'docs/perf-strict-redirects.json').read_bytes())
     runpy.run_path(str(HERE/'check-model-kit.py'))['check'](obj,kit)
@@ -74,16 +86,18 @@ def run(kit,obj,guest,baseline,out,include,address_chain=False, left_load=False,
             p=(kit if k=='CANDIDATE.sha256' else obj)/k
         if digest(p)!=h: raise ValueError('changed sealed input: '+k)
         inputs[k]=p
-    for name in ['strict_redirects.hpp', 'strict_rob_heads.hpp' if rob_heads else 'strict_load_use.hpp'] + (['strict_address_chain.hpp'] if address_chain else []) + (['strict_left_load.hpp'] if left_load else []):
+    header='strict_reversal.hpp' if reversal else ('strict_rob_heads.hpp' if rob_heads else 'strict_load_use.hpp')
+    for name in ['strict_redirects.hpp',header] + (['strict_address_chain.hpp'] if address_chain else []) + (['strict_left_load.hpp'] if left_load else []):
         p=out/name; p.write_bytes((ROOT/'tests'/name).read_text().encode()); inputs[name]=p
     cpp=out/'probe.cpp'; exe=out/'model'
     source=inputs['mega_user_replay.cpp'].read_text()
-    src=head_probe(source) if rob_heads else instrument(source,address_chain,left_load)
+    src=reversal_probe(source) if reversal else (head_probe(source) if rob_heads else instrument(source,address_chain,left_load))
     cpp.write_bytes(src.encode()); inputs[cpp.name]=cpp
     for seed in BP['LIB']['SEEDS']:
         raw=checked_capture(baseline,seed,oracle)
         if rob_heads: continue  # sample all head rows, not a PC or ticket selection
-        p=out/(seed+'.select'); p.write_bytes(selection(raw, PCS + ((0x13ea2,) if address_chain else ()) + ((0x13e9e,) if left_load else ())).encode()); inputs[p.name]=p
+        pcs=REVERSAL_PCS if reversal else PCS + ((0x13ea2,) if address_chain else ()) + ((0x13e9e,) if left_load else ())
+        p=out/(seed+'.select'); p.write_bytes(selection(raw,pcs).encode()); inputs[p.name]=p
     hashes={k:digest(p) for k,p in inputs.items()}
     BP['LIB']['link'](cpp,exe,obj,include)
     inputs['model']=exe; hashes['model']=digest(exe)
@@ -102,4 +116,5 @@ if __name__=='__main__':
     ap.add_argument('--address-chain',action='store_true',help='also capture the x10 pointer-to-halfword address chain')
     ap.add_argument('--left-load',action='store_true',help='also trace x6 and its fall-through pointer through the cache port')
     ap.add_argument('--rob-heads',action='store_true',help='record actual ROB head gates on all zero-retirement hot edges')
-    a=ap.parse_args(); run(*(getattr(a,k).resolve() for k in ('kit','obj','guest','baseline','out','include')), address_chain=a.address_chain or a.left_load,left_load=a.left_load,rob_heads=a.rob_heads)
+    ap.add_argument('--reversal',action='store_true',help='observe the linked-list load recurrence, branch and first ROB busy clear')
+    a=ap.parse_args(); run(*(getattr(a,k).resolve() for k in ('kit','obj','guest','baseline','out','include')), address_chain=a.address_chain or a.left_load,left_load=a.left_load,rob_heads=a.rob_heads,reversal=a.reversal)
