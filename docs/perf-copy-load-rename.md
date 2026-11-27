@@ -46,3 +46,25 @@ inputs=("$STOCK_MODEL_KIT" "$STOCK_OBJ" "$GUEST_PAIR" "$PREVIOUS_REDIRECT_CAPTUR
 python3 scripts/test-strict-copy-decode.py "${inputs[@]}" "$VERILATOR_INCLUDE"
 python3 scripts/review-strict-copy-decode.py "${inputs[@]}" "$STRICT_ELF" --expect docs/perf-strict-copy-decode.json
 ```
+
+## 缩短判定条件，是否值得替换当前候选？
+
+**暂不替换。** 如果只观察旁路是否命中和加载选中的源寄存器，短版看起来少用近一半原语；把译码器仍须为其他逻辑提供的字段一起保留，结论反转。两组用同一版 Yosys/ABC、同一 `xcup` 映射流程，各自比较相同输入和输出。表中数量是组合原语个数，深度是三个有效源输出中最长的原语链；二者都不是布局后延迟或整核资源。
+
+| 保留的输出 | 版本 | LUT | 宽 MUX | 有效源最长原语链 |
+|---|---|---:|---:|---:|
+| 三个命中位及三个 6 位源索引 | 完整条件 | 864 | 213 | 13 |
+| 同上 | 短条件 | 436 | 109 | 12 |
+| 上述输出 + 每路 15 个译码字段（共 272 位） | 完整条件 | 1,036 | 184 | 11 |
+| 同上 | 短条件 | 1,125 | 227 | 11 |
+
+短版只改三处命中判定，保留异常、SFB、寄存器和相邻有效指令检查。四个真实译码器的输入和四路握手分别放开，不用 CoreMark 轨迹限制输入：两版 **21 位**命中与有效源输出的二值组合等价证明通过，三对相邻路各有命中和不命中的可达解。三个有意破坏的版本均得到预期方向的反例；短版在原来的真实重命名流水线上也通过同一套 **22 个定向用例**。四份映射后网表各自对映射前 RTL 再做等价检查，通过。详见[每路深度、原语分类、测试与模块指纹](perf-copy-load-guard.json)。
+
+保留全部字段时短版多用 89 个 LUT、43 个宽 MUX，最长有效源链没有缩短，第 3 路还由 10 层变为 11 层。因此**整核双种子 A/B 仍使用已封存的完整条件候选**，不因孤立电路变小而换版。这组对照保留的是译码输出，不包含真实映射表、其他负载的扇出和物理连线；不能据此认定两种写法的上板频率或 CoreMark 分数。
+
+```sh
+python3 scripts/prove-copy-load-guard.py "$STOCK_MODEL_KIT" "$FULL_GUARD_MODEL_KIT" "$FRESH_GUARD_CHECK" "$(command -v yosys)"
+# 需要归档版本的 Yosys 和 berkeley-abc，以及 Icarus Verilog/vvp。
+# 私有结果保存在新目录内；只有汇总应与公开记录一致。
+diff -u docs/perf-copy-load-guard.json "$FRESH_GUARD_CHECK/result.json"
+```

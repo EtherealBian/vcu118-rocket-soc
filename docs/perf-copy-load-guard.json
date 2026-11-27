@@ -1,0 +1,162 @@
+{
+  "scope": "Two-state combinational decoder-to-rename equivalence; unplaced xcup mapping of match bits and effective indices, with and without 15 visible decoded fields per lane. Not full rename timing, Fmax, speedup or a board result.",
+  "full_leaf_sha256": "9901e30107b56a394ae3edb4ef7c2c397efdca3f6309e8482a5898b8ca8428a2",
+  "short_leaf_sha256": "164b5932fbec0206f916d87bba4a621d6ccfe0ba3c18db07b7217825c4aff3da",
+  "decode_unit_sha256": "9e9f4b840c3df86376389f9f214a47a87d309fc1273f0e20d339712d2b3b76f4",
+  "boom_core_sha256": "815c0140d41682fafa4df0e9cfa6ae7d3138bdb63c6f7d29440b497409218b24",
+  "solver": "Yosys 0.9 (git sha1 1979e0b)",
+  "yosys_sha256": "f58d1dfcbc9b48a81357283e93b53e4c78415f6d28f227f0db34a79f316e6a64",
+  "abc_sha256": "6b6d93004494101bed191ddf29c411df55c50f990d7db56796767a3efbb03b09",
+  "equivalent_bits": 21,
+  "nonvacuity_witnesses": 6,
+  "negative_controls": {
+    "allow_copy_sfb": {
+      "lane": 1,
+      "full_hit": 0,
+      "broken_hit": 1
+    },
+    "ignore_load_exception": {
+      "lane": 2,
+      "full_hit": 0,
+      "broken_hit": 1
+    },
+    "disable_lane_3": {
+      "lane": 3,
+      "full_hit": 1,
+      "broken_hit": 0
+    }
+  },
+  "paired_rename": {
+    "cases": 22,
+    "simulator": "Icarus Verilog version 10.3 (stable) ()",
+    "bench_sha256": "4b8b93c03b5e7e8b321adf888f7c0bfcc1a60fff3deb186bec4cdd092ea2df25",
+    "wiring_sha256": "453752de4fd5e84ce30148bf373e8278a5f16099c0eab29cab19a60d40d9bf7d"
+  },
+  "mapped": {
+    "full": {
+      "fixture_sha256": "da2bf6e5c991fa25c5ab572811edf239f402082c558138df2b7a556789dd7907",
+      "mapped_vs_rtl": "proved",
+      "cells": {
+        "LUT2": 146,
+        "LUT3": 48,
+        "LUT4": 95,
+        "LUT5": 66,
+        "LUT6": 509,
+        "MUXF7": 160,
+        "MUXF8": 53
+      },
+      "total": 1077,
+      "max_primitive_levels": {
+        "cut_hit_1": 11,
+        "cut_eff_1": 11,
+        "cut_hit_2": 13,
+        "cut_eff_2": 13,
+        "cut_hit_3": 12,
+        "cut_eff_3": 13
+      }
+    },
+    "short": {
+      "fixture_sha256": "dad644cfcb8615e548a1a8c045e59bb7ffa980bc60d0799ff763780aba3f590a",
+      "mapped_vs_rtl": "proved",
+      "cells": {
+        "LUT2": 78,
+        "LUT3": 32,
+        "LUT4": 47,
+        "LUT5": 32,
+        "LUT6": 247,
+        "MUXF7": 84,
+        "MUXF8": 25
+      },
+      "total": 545,
+      "max_primitive_levels": {
+        "cut_hit_1": 9,
+        "cut_eff_1": 10,
+        "cut_hit_2": 11,
+        "cut_eff_2": 11,
+        "cut_hit_3": 11,
+        "cut_eff_3": 12
+      }
+    }
+  },
+  "mapped_with_shared_fields": {
+    "full": {
+      "fixture_sha256": "46d5b0033ceb80ef66bf5754cefc7f5f721ac2012f8c233afa9480470cd85d14",
+      "mapped_vs_rtl": "proved",
+      "cells": {
+        "LUT2": 215,
+        "LUT3": 87,
+        "LUT4": 129,
+        "LUT5": 106,
+        "LUT6": 499,
+        "MUXF7": 139,
+        "MUXF8": 45
+      },
+      "total": 1220,
+      "max_primitive_levels": {
+        "cut_hit_1": 11,
+        "cut_eff_1": 11,
+        "cut_hit_2": 11,
+        "cut_eff_2": 11,
+        "cut_hit_3": 10,
+        "cut_eff_3": 10
+      },
+      "tap_levels_max_across_lanes": {
+        "inst": 0,
+        "exception": 10,
+        "is_sfb": 0,
+        "fp_val": 7,
+        "ldst_val": 8,
+        "dst_rtype": 8,
+        "lrs1_rtype": 8,
+        "lrs2_rtype": 8,
+        "ldst": 0,
+        "lrs1": 0,
+        "lrs2": 0,
+        "uses_ldq": 5,
+        "uses_stq": 5,
+        "is_amo": 4,
+        "mem_cmd": 5
+      }
+    },
+    "short": {
+      "fixture_sha256": "9cf0cd28d6b52c86eae1e391f01a6e68219a2324f6bb5e57861fda902bd09a0f",
+      "mapped_vs_rtl": "proved",
+      "cells": {
+        "LUT2": 223,
+        "LUT3": 82,
+        "LUT4": 141,
+        "LUT5": 112,
+        "LUT6": 567,
+        "MUXF7": 167,
+        "MUXF8": 60
+      },
+      "total": 1352,
+      "max_primitive_levels": {
+        "cut_hit_1": 11,
+        "cut_eff_1": 11,
+        "cut_hit_2": 11,
+        "cut_eff_2": 11,
+        "cut_hit_3": 11,
+        "cut_eff_3": 11
+      },
+      "tap_levels_max_across_lanes": {
+        "inst": 0,
+        "exception": 10,
+        "is_sfb": 0,
+        "fp_val": 7,
+        "ldst_val": 8,
+        "dst_rtype": 8,
+        "lrs1_rtype": 8,
+        "lrs2_rtype": 8,
+        "ldst": 0,
+        "lrs1": 0,
+        "lrs2": 0,
+        "uses_ldq": 5,
+        "uses_stq": 5,
+        "is_amo": 4,
+        "mem_cmd": 5
+      }
+    }
+  },
+  "shared_field_bits": 272
+}
