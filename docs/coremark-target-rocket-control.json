@@ -1,0 +1,120 @@
+{
+  "scope": "Independent physical board measurement, one hart and one context, same boot; not certified.",
+  "target_single_context_iterations_per_s": 1000,
+  "clock_mhz": 100,
+  "total_buffer_bytes": 2000,
+  "iterations_each_seed_set": 12000,
+  "boot": {
+    "utc": "2026-11-27T05:52:15.3190143Z",
+    "mode": "linux-oscheck",
+    "bit_sha256": "d77b13dbf75b4773e33ba48f7b177f320572cb62ffe8a9cd930ab196edd6f520",
+    "payload_sha256": "b952fffeca0afa1cde8578f9a39677ebb36bdbccce35ba61dcaa6b5d0b16aeac",
+    "uart_sha256": "95cac765334a89f626e8824865b4a72be38a2238c11816ddbfaf566e94fd4b3f"
+  },
+  "order": [
+    "g15-gc-lto-ooo-strict",
+    "g15-gc-lto-ooo-strict",
+    "g15-gc-lto-ooo-strict"
+  ],
+  "control_profile": "g15-gc-lto-ooo-strict",
+  "profiles": {
+    "g15-gc-lto-ooo-strict": {
+      "compiler": "GCC15.1.0",
+      "flags": "-O3 -flto -mtune=generic-ooo -mstrict-align -static -s -march=rv64gc -mabi=lp64d -Wl,--build-id=none -lrt",
+      "elf_sha256": "61f7c4579b762f86d7d7dc93d4c385d08e50248f3dd6a8a9105fd5e88b58886a",
+      "performance_median": "229.590373",
+      "validation_median": "228.475686",
+      "performance_min": "229.550846",
+      "performance_max": "229.590373",
+      "coremark_per_mhz": "2.29590373",
+      "gain_vs_control_pct": "0.000",
+      "all_three_at_least_1000": false,
+      "measurements": [
+        {
+          "sequence": 1,
+          "uart_sha256": "34d876a83c8f409a705fb7b5f0748a0e660d834294bf16b2336464f88eae685a",
+          "runs": {
+            "performance": {
+              "iterations": 12000,
+              "elapsed_s": "52.267000",
+              "iterations_per_s": "229.590373",
+              "seedcrc": "0xe9f5",
+              "list_crc": "0xe714",
+              "matrix_crc": "0x1fd7",
+              "state_crc": "0x8e3a",
+              "final_crc": "0xd340",
+              "host_observed_ms": 52335
+            },
+            "validation": {
+              "iterations": 12000,
+              "elapsed_s": "52.523000",
+              "iterations_per_s": "228.471336",
+              "seedcrc": "0x18f2",
+              "list_crc": "0xe3c1",
+              "matrix_crc": "0x0747",
+              "state_crc": "0x8d84",
+              "final_crc": "0xbc68",
+              "host_observed_ms": 52547
+            }
+          }
+        },
+        {
+          "sequence": 2,
+          "uart_sha256": "75ddc651634f6b82b87d8fab46d53b961eccc19ccce022007988d9b55d318c6d",
+          "runs": {
+            "performance": {
+              "iterations": 12000,
+              "elapsed_s": "52.276000",
+              "iterations_per_s": "229.550846",
+              "seedcrc": "0xe9f5",
+              "list_crc": "0xe714",
+              "matrix_crc": "0x1fd7",
+              "state_crc": "0x8e3a",
+              "final_crc": "0xd340",
+              "host_observed_ms": 52363
+            },
+            "validation": {
+              "iterations": 12000,
+              "elapsed_s": "52.520000",
+              "iterations_per_s": "228.484387",
+              "seedcrc": "0x18f2",
+              "list_crc": "0xe3c1",
+              "matrix_crc": "0x0747",
+              "state_crc": "0x8d84",
+              "final_crc": "0xbc68",
+              "host_observed_ms": 52540
+            }
+          }
+        },
+        {
+          "sequence": 3,
+          "uart_sha256": "1f938af6fd6fe6de311aaf5fbdcfc90a819a6de9b1ed253e0951ff74037914d1",
+          "runs": {
+            "performance": {
+              "iterations": 12000,
+              "elapsed_s": "52.267000",
+              "iterations_per_s": "229.590373",
+              "seedcrc": "0xe9f5",
+              "list_crc": "0xe714",
+              "matrix_crc": "0x1fd7",
+              "state_crc": "0x8e3a",
+              "final_crc": "0xd340",
+              "host_observed_ms": 52346
+            },
+            "validation": {
+              "iterations": 12000,
+              "elapsed_s": "52.522000",
+              "iterations_per_s": "228.475686",
+              "seedcrc": "0x18f2",
+              "list_crc": "0xe3c1",
+              "matrix_crc": "0x0747",
+              "state_crc": "0x8d84",
+              "final_crc": "0xbc68",
+              "host_observed_ms": 52528
+            }
+          }
+        }
+      ]
+    }
+  }
+}

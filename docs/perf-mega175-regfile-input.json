@@ -1,0 +1,27 @@
+{
+  "scope": "Separate experimental four-wide source package. Differential checks include the flat memory port adapters. No coupled CPU simulation, Vivado implementation or physical score.",
+  "stock_board_seal": "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+  "candidate_board_input_seal": "386d2848c9b143c1c4887b179c365c2257fce6eb33ae3e8f46ca71809dc3841b",
+  "original_ordered_hdl_files": 549,
+  "candidate_ordered_hdl_files": 550,
+  "changed_or_added": {
+    "rtl/regfile_128x64.sv": "a7fdabaa492847a74665789569d19ca9c254f8f49b07e1a3648a626a2b06ab33",
+    "rtl/regfile_128x65.sv": "c8861cd75f53f94700992f707d080f66760da18ffb143325079c6c197aaa3100",
+    "rtl/vcu_lvt_regfile.v": "07952f29085cdd6d392f9db04dec114632a4f3d8d0e3b23f5faaad7487f5906e",
+    "sources.f": "3e1efc5c7c4a39a50d5b527f08144ae64255e5b7291f3df40baf2c6e3d01209a"
+  },
+  "tests": [
+    {
+      "width": 64,
+      "observed_clock_edges": 10240,
+      "read_lane_checks": 270360,
+      "swapped_read_addresses_rejected": true
+    },
+    {
+      "width": 65,
+      "observed_clock_edges": 4096,
+      "read_lane_checks": 61452,
+      "swapped_read_addresses_rejected": true
+    }
+  ]
+}

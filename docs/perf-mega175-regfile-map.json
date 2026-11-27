@@ -1,0 +1,65 @@
+{
+  "scope": "Isolated Yosys/ABC xcup technology mapping. Primitive counts, not occupied LUT sites, vendor timing, full-core synthesis or a benchmark.",
+  "board_input_seal": "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+  "candidate_sha256": "07952f29085cdd6d392f9db04dec114632a4f3d8d0e3b23f5faaad7487f5906e",
+  "yosys": "Yosys 0.9 (git sha1 1979e0b)",
+  "yosys_binary_sha256": "f58d1dfcbc9b48a81357283e93b53e4c78415f6d28f227f0db34a79f316e6a64",
+  "abc": "UC Berkeley, ABC 1.01",
+  "abc_binary_sha256": "6b6d93004494101bed191ddf29c411df55c50f990d7db56796767a3efbb03b09",
+  "profiles": [
+    {
+      "bits": 64,
+      "readers": 12,
+      "writers": 6,
+      "stock_sha256": "f6eb510b5d9518aea9fc6e5d74ffc1c2ddaaac2406718b2649e364dd4e2ccf45",
+      "stock": {
+        "FDRE": 8192,
+        "LUT2": 10051,
+        "LUT3": 2215,
+        "LUT4": 685,
+        "LUT5": 1082,
+        "LUT6": 63307,
+        "MUXF7": 15244,
+        "MUXF8": 471
+      },
+      "lvt": {
+        "FDRE": 384,
+        "LUT2": 974,
+        "LUT3": 228,
+        "LUT4": 46,
+        "LUT5": 565,
+        "LUT6": 6643,
+        "MUXF7": 2751,
+        "MUXF8": 848,
+        "RAM128X1D": 4608
+      }
+    },
+    {
+      "bits": 65,
+      "readers": 6,
+      "writers": 4,
+      "stock_sha256": "b03b5cdc1a77f009605cbe68225317163926d9e5a9980391ea17b96733053628",
+      "stock": {
+        "FDRE": 8320,
+        "LUT2": 1318,
+        "LUT3": 1097,
+        "LUT4": 397,
+        "LUT5": 491,
+        "LUT6": 39628,
+        "MUXF7": 15580,
+        "MUXF8": 98
+      },
+      "lvt": {
+        "FDRE": 256,
+        "LUT2": 664,
+        "LUT3": 133,
+        "LUT4": 3,
+        "LUT5": 131,
+        "LUT6": 2396,
+        "MUXF7": 1115,
+        "MUXF8": 393,
+        "RAM128X1D": 1560
+      }
+    }
+  ]
+}

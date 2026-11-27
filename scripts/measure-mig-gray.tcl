@@ -1,11 +1,13 @@
 # Characterize all ten 4-bit AXI asynchronous FIFO pointer transfers in a *copy in
 # memory* of a routed design. No checkpoint, netlist, hardware or bitstream writes.
-if {$argc != 2} {error {usage: routed.dcp fresh-output-directory}}
-lassign $argv dcp out
+if {$argc ni {2 3}} {error {usage: routed.dcp fresh-output-directory ?100|175?}}
+lassign $argv dcp out mhz
+if {$argc == 2} {set mhz 100}
+if {$mhz ni {100 175}} {error {unsupported system clock contract}}
 if {![file isfile $dcp] || [file exists $out]} {error {missing checkpoint or stale output directory}}
 file mkdir $out; set_param general.maxThreads 2; open_checkpoint $dcp
 set sys clk_out1_harnessSysPLL; set ui mmcm_clkout0
-foreach clk [list $sys $ui] p {10.0 5.0} {
+foreach clk [list $sys $ui] p [list [expr {1000.0/$mhz}] 5.0] {
  set c [get_clocks $clk]; if {[llength $c]!=1 || abs([get_property PERIOD $c]-$p)>0.001} {error "wrong clock $clk"}
 }
 proc one_fd {name} {

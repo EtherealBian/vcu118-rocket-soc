@@ -1,0 +1,31 @@
+{
+  "scope": "Isolated four-state behavioral differential test of an alternative LVT register file, with default random-init macros off. No synthesis, routing, performance or full-core qualification.",
+  "board_input_seal": "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+  "candidate_sha256": "07952f29085cdd6d392f9db04dec114632a4f3d8d0e3b23f5faaad7487f5906e",
+  "testbench_sha256": "225722d915daa5ee93b10fff21f711a2562171e8d0502264cda76845ae564171",
+  "simulator": "Icarus Verilog version 10.3 (stable) ()",
+  "profiles": [
+    {
+      "data_bits": 64,
+      "depth": 128,
+      "read_ports": 12,
+      "write_ports": 6,
+      "reference_sha256": "f6eb510b5d9518aea9fc6e5d74ffc1c2ddaaac2406718b2649e364dd4e2ccf45",
+      "enclosing_module_sha256": "ec0eedb3ac0462b16ca8bc99e195b30836b794835443bbc14897d468b858371a",
+      "edges": 10240,
+      "read_lane_checks": 270360,
+      "wrong_writer_priority_rejected": true
+    },
+    {
+      "data_bits": 65,
+      "depth": 128,
+      "read_ports": 6,
+      "write_ports": 4,
+      "reference_sha256": "b03b5cdc1a77f009605cbe68225317163926d9e5a9980391ea17b96733053628",
+      "enclosing_module_sha256": "68407a0fe70d21faccaf14ffc1780d6dfc3918f6eb6c62f4d73f75bb4b0ae214",
+      "edges": 4096,
+      "read_lane_checks": 61452,
+      "wrong_writer_priority_rejected": true
+    }
+  ]
+}

@@ -267,3 +267,24 @@ ChipTop 引脚仿真不包含 VCU118 的外层串口接线。用 Vivado 2024.2 x
 [12 组实测](coremark-align-rocket-board.json) · [四项配对比较](coremark-align-rocket-contrasts.json) · [四份 ELF 与有效编译选项](linux-align-code.json) · [易失配置和 Linux 启动](linux-align-rocket-boot.json)。复现：镜像使用 `VCU_COREMARK_AB=align`；绑定本次 Linux shell 后采集 `-Experiment align`，以 `review-coremark-matrix.py --experiment align` 重读原始数据，再用 `coremark-align-contrasts.py <实板 JSON> <代码 JSON>`。
 
 单独的 `-Experiment target` 模式只运行显式严格对齐的通用 ELF，连续三对性能与验证种子。计时前先核已纳入硬件注册表的 bitstream、同次布线时钟/时序与 ELF，再核在线 hart、CPU 和设备树；结束后依次复核原始 UART。任何一次性能不足 1,000 或任何一次验证失败都不能达标。静态 BOOM ROM 记录不授予上板权限。
+
+单独按最终验收流程，在上面的同次 Rocket 启动中又做了三对新的、不同于交错矩阵的运行：性能 **229.590 / 229.551 / 229.590**，验证 228.471 / 228.484 / 228.476 次/秒。六次均通过校验，性能三次均未到 1,000。[逐次验收对照](coremark-target-rocket-control.json)。这说明采集程序能报告“校验通过但成绩不足”，不是 BOOM 板测。
+
+### 替换四路寄存器堆：先测多写口的代价
+
+原版整数物理寄存器堆有 12 个异步读口、6 个同步写口；浮点为 6 读、4 写，均为 128 项。备选设计（LVT）为每个写口分配独立存储，用每地址的标签记录最后一个写者。多个写口同拍写同一地址时仍以高编号写口为准；不加读延迟，也不改原有旁路。本轮正在实现的原版没有被替换。
+
+设计依据是 LaForest 与 Steffan 的 [Efficient Multi-Ported Memories for FPGAs（FPGA 2010）](https://doi.org/10.1145/1723112.1723122)：用标签选择保存最新值的写入银行。本工程针对 BOOM 的异步读接口手写分布式 RAM，没有沿用论文的 BRAM 实现或频率数据。
+
+| 隔离的原始 RAM / LVT | LUT1～6 原语（不含 RAM） | FDRE | RAM128X1D |
+|---|---:|---:|---:|
+| 整数 128×64，原始 → LVT | 77,340 → 8,456 | 8,192 → 384 | 0 → 4,608 |
+| 浮点 128×65，原始 → LVT | 42,931 → 3,327 | 8,320 → 256 | 0 → 1,560 |
+
+这些是 **Yosys 0.9 / ABC 的 `xcup` 独立映射**。LUTRAM 本身也消耗 FPGA 资源；不能把表里的 LUT 差额当成节省的 CLB，更不能据此计算时钟或 CoreMark。备选设计用复制的读存储换掉触发器和多路选择逻辑，还可能增加地址扇出和对可作存储的 LUT 的需求。下一步看 Vivado 在目标器件上的层级、SLR 分布和实路径，而不是靠原语数量选胜者。
+
+Icarus 四态测试在全部地址覆盖同址写使能组合，另测独立写和异步读。两种配置分别核对 270,360 和 61,452 次读口值，交换写优先级的负控均失败。进一步生成独立的 550 文件 HDL 输入清单（原版 549 个文件），对**实际封装的扁平接口**重复对照；故意交换两个读地址也被捕获。只新增自写 RTL、调整清单、替换两个 RAM 叶模块；不改变时钟、约束、CPU 父模块或 ROM。尚未对新候选声称整核等价、物理实现或成绩。
+
+[四态功能对照](perf-mega175-regfile-lvt.json) · [隔离映射的全部原语](perf-mega175-regfile-map.json) · [独立候选的封存和读口负控](perf-mega175-regfile-input.json)。复现：分别运行 `scripts/check-mega-regfile.py`、`scripts/map-mega-regfile.py` 和 `scripts/derive-mega-regfile.py`，各传入原版四路板级输入和不同的新目录。生成的第三方源码和工具日志不发布。
+
+对原版最终布线可运行 `scripts/inspect-mega-postroute.py <实现目录> <封存包> <实现日志> <新目录> <Vivado启动器>`。它先核原布局布线输入和同次端点，再单独开只读诊断：异常约束的覆盖/忽略对象、waiver 和被豁免的结果、SLR/层级资源、拥塞、高扇出与最多 40 条 CPU setup/hold 路径各自的物理特征。第二次打开同一 DCP，单独量十组 DDR Gray 指针的 40 个直连位及临时 5 ns 偏斜，**不改原约束**。在原版 `post_route.dcp` 出来之前，这一节只是可执行的复核方法，没有新的签核结果。
