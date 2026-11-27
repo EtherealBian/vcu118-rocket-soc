@@ -21,6 +21,20 @@ class BenchmarkTests(unittest.TestCase):
         return ('\r\n'.join(lines+[f'CM_DONE_42_{self.nonce}'])+'\r\n').encode()
     def test_check_both_runs(self):
         s=cm.inspect(self.fixture(),self.nonce,self.elf,6000,dict(performance=20105,validation=20123));self.assertEqual(s['runs']['performance']['iterations_per_s'],'300.000000')
+    def test_host_and_guest_each_need_ten_seconds(self):
+        # Synthetic boundary case: unchanged CRCs, consistent guest ticks, rate and summary.
+        raw=(self.fixture().replace(b'20000',b'10000').replace(b'20.000000',b'10.000000')
+             .replace(b'300.000000',b'600.000000'))
+        both=dict(performance=10000,validation=10000)
+        result=cm.inspect(raw,self.nonce,self.elf,6000,both)
+        self.assertEqual([r['host_observed_ms'] for r in result['runs'].values()],[10000,10000])
+        for kind in ('performance','validation'):
+            with self.subTest(kind=kind), self.assertRaisesRegex(ValueError,'host time'):
+                cm.inspect(raw,self.nonce,self.elf,6000,{**both,kind:9999})
+        short=(raw.replace(b': 10000',b': 9999').replace(b'10.000000',b'9.999000')
+               .replace(b'600.000000',b'600.060006'))
+        with self.assertRaisesRegex(ValueError,'duration'):
+            cm.inspect(short,self.nonce,self.elf,6000,both)
     def test_profiles_bind_flags_and_executable(self):
         for profile,(path,flags) in cm.PROFILES.items():
             data=self.fixture().replace(b'/bin/coremark',path.encode()).replace(cm.FLAGS.encode(),flags.encode()).replace(b'GCC13.3.0',cm.expected_compiler(profile).encode())

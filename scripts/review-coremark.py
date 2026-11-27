@@ -82,7 +82,12 @@ def inspect(data, nonce, elf_sha, iterations, host_ms=None, profile='baseline'):
         result[name]=dict(iterations=n,elapsed_s=str(secs),iterations_per_s=str(rate),seedcrc=seed,list_crc=lst,matrix_crc=mat,state_crc=state,final_crc=final)
         if host_ms is not None:
             ms=host_ms[name]
-            if not iterations or type(ms)!=int or abs(ms-ticks)>max(2000,ticks//20):raise ValueError('host time does not agree with fixed-iteration guest interval')
+            # Agreement with the guest timer does not establish the independent
+            # ten-second minimum when both durations are close to that boundary.
+            if type(ms)!=int or ms<10000:
+                raise ValueError('host time must independently cover at least 10000 ms per seed')
+            if not iterations or abs(ms-ticks)>max(2000,ticks//20):
+                raise ValueError('host time does not agree with fixed-iteration guest interval')
             result[name]['host_observed_ms']=ms
     if pos('CM_DONE_42_'+nonce)<=prev:raise ValueError('missing final handoff')
     return dict(profile=profile,upstream=REV,elf_sha256=elf_sha,compiler=compiler,flags=flags,context_count=1,total_buffer_bytes=2000,allocation='heap',runs=result,uart_sha256=hashlib.sha256(data).hexdigest())
