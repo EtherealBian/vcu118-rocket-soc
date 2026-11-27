@@ -1,0 +1,36 @@
+{
+  "scope": "Stock functional model, M-mode diagnostic. Linux ELF clock calls inspected only; neither Linux timekeeping nor board clock or score measured.",
+  "model_kit_seal": "890bca3009ed260c81112d72ebcf6c985453568329aead9e9515dcc109d0e417",
+  "model_archive_sha256": "69cd3fc0369d056f38b5cd67e2123f3e33dc8d3d344fc27a4e394efac2bd0b2b",
+  "rom_and_dtb_sha256": "7a561da71813d499a4d396b18702c79184fed4bc08694c7b099bc8af070b000c",
+  "linux_elf_sha256": "61f7c4579b762f86d7d7dc93d4c385d08e50248f3dd6a8a9105fd5e88b58886a",
+  "diagnostic_sha256": {
+    "entry.bin": "a99df007a3dbb6d3e772dc408a8afd912e5603da46df31e60fb66f3b271fa42c",
+    "prefix.frame": "1807ec7bca749955ef5284483959673855688287546a1cabe26f713b3dfa9a20",
+    "model": "de40749c5d49fdc545c6fb6b5f9aed2d6f6a58d572a8f287053b5217ba45eb66"
+  },
+  "uart_sha256": "8800da3c89b75dafb1f3686eba780f6d14e9ea8ab076d889b8b39a876e68ac0e",
+  "locked_elf_timer": {
+    "start_call_pc": "0x106ac",
+    "stop_call_pc": "0x10f3a",
+    "ecall_pc": "0x147b4",
+    "clock_id": 0,
+    "syscall": 113
+  },
+  "model_witness": {
+    "edge_intervals": 1120,
+    "first_tick_edge": 1102,
+    "last_tick_edge": 1121102,
+    "uncore_edges_per_tick": 1000,
+    "guest_mtime_ticks": 256,
+    "guest_mcycle_bounds": [
+      255879,
+      256097
+    ],
+    "irq_compare_value": 969,
+    "threshold_edge": 969102,
+    "mcause_update_edge": 969111,
+    "compare_disarmed_edge": 969239,
+    "mret_edge": 969285
+  }
+}
