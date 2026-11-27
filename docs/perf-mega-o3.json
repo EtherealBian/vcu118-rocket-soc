@@ -1,0 +1,181 @@
+{
+  "scope": "Whole-core comparison of two generated ChipTop models, same preloaded executable and behavioral RAM. Different cache/predictor/issue organizations; not a board measurement or a CoreMark score.",
+  "reference": {
+    "scope": "Functional ChipTop RTL, behavioral memory, debug-preloaded, bare-metal; not a board or Linux CoreMark score.",
+    "inputs": {
+      "sim": "8623be299c4cf50c4c6370a391ab84867c82acace12782c40525f4cbf2c98b6e",
+      "CANDIDATE.sha256": "9bd04af0410dbad475d7898c438094785fb232c3178fc225a0e38bcaa476d8a1",
+      "window.bin": "ed67f11e0e92adc0d03ae020401cfd1101c802dc75613a9e644093fc1b4125b9",
+      "window.elf": "ed00d06bae6bfd11c484d19882cc06f038b6fa22840d0c40bcddd1d6becb90e5",
+      "sdboot.elf": "dc616579418d120f53fde6ae60e918166d13df4570bd14bb7efb56f4c7131d2b",
+      "rocket_chiptop.cpp": "9fd708b984cd078932d1727a881bced76a745a5819f0073a7020b1b9d0ac0ea6"
+    },
+    "console_sha256": "3132e33cf1dcf4cf85707a21cb59ee64c502da742f11762b5f94ce7276a4a59b",
+    "performance_seed": {
+      "samples": [
+        {
+          "sample": 0,
+          "cycles": 729160,
+          "retired": 1376429
+        },
+        {
+          "sample": 1,
+          "cycles": 715904,
+          "retired": 1376429
+        },
+        {
+          "sample": 2,
+          "cycles": 714904,
+          "retired": 1376429
+        }
+      ],
+      "median_cycles_per_iteration": 178976.0,
+      "median_retired_per_iteration": 344107.25,
+      "median_ipc": 1.922645
+    },
+    "validation_seed": {
+      "samples": [
+        {
+          "sample": 0,
+          "cycles": 723752,
+          "retired": 1378998
+        },
+        {
+          "sample": 1,
+          "cycles": 719003,
+          "retired": 1378998
+        },
+        {
+          "sample": 2,
+          "cycles": 719657,
+          "retired": 1378998
+        }
+      ],
+      "median_cycles_per_iteration": 179914.25,
+      "median_retired_per_iteration": 344749.5,
+      "median_ipc": 1.916188
+    },
+    "model_cycles": 10641408,
+    "backing_reads": 176,
+    "backing_writes": 0
+  },
+  "candidate": {
+    "scope": "Functional ChipTop RTL, behavioral memory, debug-preloaded, bare-metal; not a board or Linux CoreMark score.",
+    "inputs": {
+      "sim": "89649eef2cc91516c0a74ea172d06d13d1f198730f4343089dcaad17e1795e96",
+      "CANDIDATE.sha256": "38567bc0a3e7fbf5e87869db6b1408d478781f80203c3d4226fe3612194768b3",
+      "window.bin": "ed67f11e0e92adc0d03ae020401cfd1101c802dc75613a9e644093fc1b4125b9",
+      "window.elf": "ed00d06bae6bfd11c484d19882cc06f038b6fa22840d0c40bcddd1d6becb90e5",
+      "sdboot.elf": "dc616579418d120f53fde6ae60e918166d13df4570bd14bb7efb56f4c7131d2b",
+      "rocket_chiptop.cpp": "9fd708b984cd078932d1727a881bced76a745a5819f0073a7020b1b9d0ac0ea6"
+    },
+    "console_sha256": "8cbb59eec0cd482322cce585f8652639814ce2f87f31670a85c8e37974447b28",
+    "performance_seed": {
+      "samples": [
+        {
+          "sample": 0,
+          "cycles": 668456,
+          "retired": 1376429
+        },
+        {
+          "sample": 1,
+          "cycles": 657107,
+          "retired": 1376429
+        },
+        {
+          "sample": 2,
+          "cycles": 656885,
+          "retired": 1376429
+        }
+      ],
+      "median_cycles_per_iteration": 164276.75,
+      "median_retired_per_iteration": 344107.25,
+      "median_ipc": 2.09468
+    },
+    "validation_seed": {
+      "samples": [
+        {
+          "sample": 0,
+          "cycles": 663699,
+          "retired": 1378998
+        },
+        {
+          "sample": 1,
+          "cycles": 660745,
+          "retired": 1378998
+        },
+        {
+          "sample": 2,
+          "cycles": 661510,
+          "retired": 1378998
+        }
+      ],
+      "median_cycles_per_iteration": 165377.5,
+      "median_retired_per_iteration": 344749.5,
+      "median_ipc": 2.084622
+    },
+    "model_cycles": 10283008,
+    "backing_reads": 179,
+    "backing_writes": 0
+  },
+  "comparison": {
+    "performance_seed": {
+      "reference_cycles_per_iteration": 178976.0,
+      "candidate_cycles_per_iteration": 164276.75,
+      "retired_per_iteration": 344107.25,
+      "reference_ipc": 1.922645,
+      "candidate_ipc": 2.09468,
+      "reference_to_candidate_cycle_ratio": 1.089479
+    },
+    "validation_seed": {
+      "reference_cycles_per_iteration": 179914.25,
+      "candidate_cycles_per_iteration": 165377.5,
+      "retired_per_iteration": 344749.5,
+      "reference_ipc": 1.916188,
+      "candidate_ipc": 2.084622,
+      "reference_to_candidate_cycle_ratio": 1.0879
+    }
+  },
+  "cycle_budget_screen": {
+    "assumed_mhz": 175,
+    "diagnostic_target_iterations_per_s": 1000,
+    "cycles_per_iteration_budget": 175000.0,
+    "groups": {
+      "performance_seed": {
+        "reference_cycles_per_iteration": [
+          182290.0,
+          178976.0,
+          178726.0
+        ],
+        "candidate_cycles_per_iteration": [
+          167114.0,
+          164276.75,
+          164221.25
+        ],
+        "cycle_savings_median_percent": 8.213,
+        "break_even_candidate_to_reference_clock_ratio": 0.91787,
+        "candidate_median_cycles_minus_budget": -10723.25,
+        "matched_windows_with_lower_cycles": 3,
+        "windows_within_fixed_budget": 3
+      },
+      "validation_seed": {
+        "reference_cycles_per_iteration": [
+          180938.0,
+          179750.75,
+          179914.25
+        ],
+        "candidate_cycles_per_iteration": [
+          165924.75,
+          165186.25,
+          165377.5
+        ],
+        "cycle_savings_median_percent": 8.0798,
+        "break_even_candidate_to_reference_clock_ratio": 0.919202,
+        "candidate_median_cycles_minus_budget": -9622.5,
+        "matched_windows_with_lower_cycles": 3,
+        "windows_within_fixed_budget": 3
+      }
+    },
+    "limits": "Four bare-metal iterations per sample; first and later windows shown separately. Clock ratio assumes these measured cycles repeat; an FPGA clock and a Linux score both require separate measurement."
+  }
+}

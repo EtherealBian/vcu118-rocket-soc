@@ -1,0 +1,22 @@
+{
+  "scope": "Post-opt unplaced estimates only. Not post-route timing, board clock or Fmax.",
+  "requested_clock_mhz": 175,
+  "setup_endpoints_sampled": 40,
+  "unique_launch_pins": 1,
+  "endpoints_from_worst_launch": 40,
+  "worst_setup": {
+    "start": "chiptop0/system/tile_prci_domain/element_reset_domain_boom_tile/dcache/s2_tag_match_way_0_reg[0]/C",
+    "end": "chiptop0/system/tile_prci_domain/element_reset_domain_boom_tile/core/int_issue_unit/io_dis_uops_0_ready_REG_reg/D",
+    "slack_ns": -4.414,
+    "requirement_ns": 5.714,
+    "logic_levels": 38,
+    "data_ns": 9.918,
+    "logic_ns": 1.636,
+    "estimated_route_ns": 8.282,
+    "traverses_dcache_mshr_response_queue": true
+  },
+  "inputs_sha256": {
+    "clk_out1_harnessSysPLL-max.rpt": "54256ff1bbba0223e298d64160b41bd1c9e23887fc70bd817f2ed108a0c27b70",
+    "endpoints.tsv": "c565e2614344d217d795ec341f37d2d8348855b755c5d1cb40c35e037b63f88f"
+  }
+}

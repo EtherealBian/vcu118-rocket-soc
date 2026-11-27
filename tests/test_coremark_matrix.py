@@ -38,6 +38,17 @@ class MatrixReview(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'pinned .*CRC'):m.review(self.boot,self.d,self.d,'compilers')
         with self.assertRaisesRegex(ValueError,'ELF identity'):m.review(self.boot,self.d,self.d,'compilers')
 
+    def test_portable_matrix_latin_order_final_crcs_and_all_elf_ids(self):
+        ids={p:hashlib.sha256(p.encode()).hexdigest() for p in m.PORTABLE}
+        self.write_matrix(m.PORTABLE_ORDER,True)
+        with self.assertRaisesRegex(ValueError,'locked portable'):m.review(self.boot,self.d,self.d,'portable')
+        with mock.patch.object(m,'PORTABLE_ELFS',ids):
+            r=m.review(self.boot,self.d,self.d,'portable')
+            self.assertEqual([x['sequence'] for x in r['profiles']['g15-gc-lto']['measurements']],[3,5,7])
+            self.assertEqual(r['control_profile'],'baseline')
+            self.write_matrix(m.PORTABLE_ORDER,False)
+            with self.assertRaisesRegex(ValueError,'pinned .*CRC'):m.review(self.boot,self.d,self.d,'portable')
+
     def test_balanced_and_not_target(self):
         r=m.review(self.boot,self.d,self.d);self.assertFalse(r['profiles']['o3']['all_three_at_least_1000']);self.assertEqual(len(r['profiles']['o3-zb']['measurements']),3)
     def test_reject_missing_session_and_wrong_bit(self):

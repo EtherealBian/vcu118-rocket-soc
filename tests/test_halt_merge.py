@@ -33,6 +33,13 @@ class SplitIrqTests(unittest.TestCase):
             for d in (a,b):(d/'events.bin').write_bytes(bytes(36))
             with self.assertRaises(ValueError):compare(a,b)
 
+    def test_medium_rejects_mixed_graph_and_missing_boom_hart(self):
+        medium=merge['MEDIUM_PINS']; check=merge['require_graph']; check(medium, medium.get)
+        for name in ('TLDebugModuleInner', 'DigitalTop', 'TilePRCIDomain', 'BoomTile', 'BoomCore'):
+            mixed=dict(medium); mixed[name]=merge['PINS'].get(name)
+            with self.subTest(name=name), self.assertRaisesRegex(ValueError,name):
+                check(medium, mixed.get)
+
     def test_refuses_unpinned_synthesis_graph_before_modification(self):
         with tempfile.TemporaryDirectory() as tmp:
             kit=Path(tmp);(kit/'rtl').mkdir(); f=kit/'rtl'/'ChipTop.sv';f.write_bytes(b'other config')

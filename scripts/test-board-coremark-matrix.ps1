@@ -1,6 +1,6 @@
 [CmdletBinding()] param(
  [Parameter(Mandatory)][string]$Run,[Parameter(Mandatory)][string]$Capture,[Parameter(Mandatory)][string]$Payload,
- [Parameter(Mandatory)][string]$Release,[Parameter(Mandatory)][string]$Out,[Parameter(Mandatory)][string]$Bridge,[ValidateSet('original','compilers')][string]$Experiment='original')
+ [Parameter(Mandatory)][string]$Release,[Parameter(Mandatory)][string]$Out,[Parameter(Mandatory)][string]$Bridge,[ValidateSet('original','compilers','portable')][string]$Experiment='original')
 # A full Latin square with one steady board clock and one boot. The session marker
 # is an ash variable, deliberately not a file that might survive guest restart.
 $ErrorActionPreference='Stop';if(Test-Path -LiteralPath $Out){throw 'fresh output directory required'}
@@ -11,6 +11,10 @@ $order='baseline','o3','o3-zb','o3','o3-zb','baseline','o3-zb','baseline','o3'
 if($Experiment -eq 'compilers'){
  $trio='o3-zb','g15-zb-lto','o3-zb-lto-unroll';$order=@(for($r=0;$r -lt 3;$r++){for($c=0;$c -lt 3;$c++){$trio[($r+$c)%3]}})
  foreach($p in $trio){$files[$p]="coremark-$p.elf"}
+}
+if($Experiment -eq 'portable'){
+ $trio='baseline','o3','g15-gc-lto';$files['g15-gc-lto']='coremark-g15-gc-lto.elf'
+ $order=@(for($r=0;$r -lt 3;$r++){for($c=0;$c -lt 3;$c++){$trio[($r+$c)%3]}})
 }
 for($i=0;$i -lt $order.Count;$i++){
  $p=$order[$i];$dest=Join-Path $dir ('{0:d2}-{1}' -f ($i+1),$p)

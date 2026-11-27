@@ -1,0 +1,17 @@
+{
+  "date_local": "2026-11-26T18:39:51+08:00",
+  "scope": "Pre-programming host diagnostics only; no new physical benchmark.",
+  "target": "previously qualified 100 MHz Rocket",
+  "stage_sha256": "79ee96cec46510151d684329354d8c562e5283833eafbf99e0d3beb6cedcba5a",
+  "firmware_sha256": "6e6262b7241ae3f67e608af8b8c6e09ffa2c245bd60a02ef26488ce337ab7318",
+  "uart_bridge_present": true,
+  "programmer_armed": false,
+  "programmed": false,
+  "separate_vivado_target_counts": [
+    0,
+    0,
+    0,
+    0
+  ],
+  "reason": "No matching cable during programming preflight; separate read-only enumerator found zero targets on all four samples."
+}

@@ -1,0 +1,86 @@
+{
+  "scope": "Original two-wide Medium only. Routed; withheld from board. Not the revised split-halt build.",
+  "bit_sha256": "156fa7e878ee11eb1cd961e581cf66bc5925d2ee908bbf880c5bf896a38aace3",
+  "route": {
+    "routable": 224292,
+    "fully_routed": 224292,
+    "routing_errors": 0
+  },
+  "timing": {
+    "setup": {
+      "slack_ns": 0.43,
+      "total_negative_ns": 0.0,
+      "failed": 0,
+      "count": 239219
+    },
+    "hold": {
+      "slack_ns": 0.012,
+      "total_negative_ns": 0.0,
+      "failed": 0,
+      "count": 238517
+    },
+    "pulse_width": {
+      "slack_ns": 0.143,
+      "total_negative_ns": 0.0,
+      "failed": 0,
+      "count": 102702
+    }
+  },
+  "resources": {
+    "CLB LUTs": 149525.0,
+    "CLB Registers": 91143.0,
+    "Block RAM Tile": 174.5,
+    "DSPs": 64.0,
+    "URAM": 0.0
+  },
+  "check_timing": {
+    "no_clock": 0,
+    "constant_clock": 0,
+    "pulse_width_clock": 0,
+    "unconstrained_internal_endpoints": 0,
+    "no_input_delay": 5,
+    "no_output_delay": 6,
+    "multiple_clock": 0,
+    "generated_clocks": 0,
+    "loops": 0,
+    "partial_input_delay": 0,
+    "partial_output_delay": 0,
+    "latch_loops": 0
+  },
+  "reports_sha256": {
+    "route-status.rpt": "ad090ea845141a55016e1087aad0328212f2b581a2d47df298f592ead6ab9435",
+    "full-timing.rpt": "103a133b1e338734cbd4d4fae87cf56708fd39b83c83666dd0eefa46c0c2ca60",
+    "check-timing.rpt": "1b42f45d3fff2e16e18463dbcdb3953a93208adaca66bdee905f43b5e7747bbf",
+    "routed-utilization.rpt": "8d53a467a528bc45d2038078faf0b88cc52fedd261e3c7997d6b63f9b7219fbd",
+    "cdc.rpt": "a0f0203238f6c44a01ba6ba629eaf36745cbb02d9d626b39a0ff842dfbc82115",
+    "clock-interaction.rpt": "ce6a6e677385cd410622c6266fd12216d2dea708ffdd23d66442337ac5f31bb2",
+    "pulse-width.rpt": "d25eee44bd08e658bbc31fd526b93bbe3ba70f1d5715e264d5de98545a057ca6",
+    "methodology.rpt": "57292f3caf570b4d567eb168bea45cd695af2923dde02d1c2caa36d35073f112",
+    "routed-clocks.rpt": "b5291a88cbbdfc2dc7b934ec97def9ec17ca683061e96f96e5a8cbbe3721486d",
+    "routed-drc.rpt": "650bc7df4fcbe21b6683586408da5949ae5c3d6fbbb17e75a3b7be4003f52e55"
+  },
+  "clock_mhz_requested": 100,
+  "pad_inventory": {
+    "total": 133,
+    "ddr": 115
+  },
+  "cdc": {
+    "rows": 579,
+    "counts": {
+      "CDC-10 Critical": 5,
+      "CDC-15 Warning": 335,
+      "CDC-2 Warning": 52,
+      "CDC-3 Info": 179,
+      "CDC-7 Critical": 2,
+      "CDC-8 Warning": 3,
+      "CDC-9 Info": 3
+    },
+    "critical_families": {
+      "DMI async queue validity reset": 2,
+      "debug halt reaches tile receiver via combinational logic": 1,
+      "unclassified": 1,
+      "DDR AXI async queue validity reset": 2,
+      "MIG/POR to reset-wrangler asynchronous preset": 1
+    }
+  }
+}
