@@ -1,0 +1,22 @@
+{
+  "simulator": "Icarus Verilog version 10.3 (stable) ()",
+  "directed_cases": 22,
+  "scope": "Directed paired rename-stage RTL only. No full-core equivalence, timing, speedup or board score.",
+  "module_sha256": {
+    "RenameStage": "c7b12c6a22633b8860309dde54f5b0b5efb937228dfdc15471890a667961349a",
+    "RenameMapTable": "94d7412c2e2256ede6f57fabf4af4cdf75d2e750315a52a4a53764f344d1f17a",
+    "RenameFreeList": "563bb504d96d3ba132443292a8baa1914ef67ece56a610a892f40b2e241320e4",
+    "RenameBusyTable": "80b77e6e5ee1167580bcfc9d97ad3c862e8a4bba9cd807f81cfab478eeb70ba6",
+    "DecodeUnit": "9e9f4b840c3df86376389f9f214a47a87d309fc1273f0e20d339712d2b3b76f4",
+    "RVCExpander": "243e0260b839c395c2f718d6da3226355b4e66634fc9e48e6f02e7a65af0cb4b"
+  },
+  "candidate_sha256": "9901e30107b56a394ae3edb4ef7c2c397efdca3f6309e8482a5898b8ca8428a2",
+  "bench_sha256": "4b8b93c03b5e7e8b321adf888f7c0bfcc1a60fff3deb186bec4cdd092ea2df25",
+  "wiring_sha256": "453752de4fd5e84ce30148bf373e8278a5f16099c0eab29cab19a60d40d9bf7d",
+  "results": {
+    "candidate": "passed",
+    "omit_lane1": "SOURCE_ORACLE_MISMATCH case=0 lane=1",
+    "ignore_copy_sfb": "UNEXPECTED_SOURCE_CHANGE case=16 lane=1",
+    "original_map_read": "SOURCE_ORACLE_MISMATCH case=0 lane=1"
+  }
+}

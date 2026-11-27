@@ -1,0 +1,10 @@
+{
+  "scope": "Functional source inputs only; not a compiled model, physical input, or board result.",
+  "original_seal": "890bca3009ed260c81112d72ebcf6c985453568329aead9e9515dcc109d0e417",
+  "candidate_seal": "34c3704d43c6e01a98dc4cad87dbc1489b24095c5dbf23542c62b96fe47455b9",
+  "ordered_hdl": 549,
+  "sealed_members": 554,
+  "changed": {
+    "rtl/RenameStage.sv": "9901e30107b56a394ae3edb4ef7c2c397efdca3f6309e8482a5898b8ca8428a2"
+  }
+}
