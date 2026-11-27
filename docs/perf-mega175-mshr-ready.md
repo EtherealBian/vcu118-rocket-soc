@@ -53,3 +53,22 @@ for CASE in stock class_local split_rsp; do
     -tclargs "$PREPARED" "$OUT_BASE/$CASE" "$CASE" || exit 1
 done
 ```
+
+## 同一个寄存边界进 Vivado 之后
+
+三案都在 VCU118 器件、5.714 ns 约束下分别完成综合和 `opt_design`，保存了可继续布局的 DCP。[去敏记录](perf-mega175-mshr-preplace.json)按案核对了三个独立捕获端、四组到 LSU miss 的启动端、每条报告的查询与实际引脚。下表是 **Vivado 按估算时序选中的路径**的逻辑级数，并非所有路径的最大结构深度；CLB LUT 为布局前资源估计。
+
+| 方案 | 响应 0 / 响应 1 / LSU miss 的级数 | 分支掩码 / 通道 1 地址 / MSHR 状态 / RPQ 至 miss 的级数 | CLB LUT / 寄存器 |
+|---|---:|---:|---:|
+| 不改写 | 14 / 15 / 19 | 17 / 19 / 19 / 14 | 1384 / 1838 |
+| 只改 MSHR 命令分类 | 11 / 12 / 16 | 14 / 16 / 16 / 14 | 1462 / 1838 |
+| 只拆两路 D-cache 响应 | 13 / 13 / 20 | 17 / 20 / 20 / 15 | 1460 / 1840 |
+
+以基准为对照，改命令分类后，三个输出的所选路径各少 3 级；寄存器数不变，局部 CLB LUT 由 1,384 增至 1,462（多 78 个）。拆响应后的 miss 路径反而从 19 级变为 20 级。只看两个候选，Vivado 选出的 miss 路径是命令分类 16 级、拆响应 20 级；上面的 Yosys 最长结构路径却分别是 28 和 26 级。两者的映射和选路准则不同。优先对命令分类和基准做同约束布线，再测拆响应；不能把级数差当作时序收益。三个优化后检查点均未用于正在综合的整机。一次独立的基准布局在触发主机内存保护线时提前停止，未得到任何布线余量；因此不发布估算延时或跑分。
+
+复核命令（Windows、Vivado 2024.2；占位符均用绝对路径）：每案从单独的 `RUNS/CASE-driver` 工作目录启动，`RUNS/CASE` 尚不存在。这里的 `CONNECTED` 是已通过独立等价检查的实验输出。
+
+```text
+vivado -mode batch -log vivado.log -nojournal -source SCRIPT_DIR/implement-mega-mshr-ooc.tcl -tclargs PREPARED RUNS/CASE CASE opt-only
+python -B SCRIPT_DIR/review-mega-mshr-ooc.py CONNECTED PREPARED RUNS stock class_local split_rsp --opt-only
+```

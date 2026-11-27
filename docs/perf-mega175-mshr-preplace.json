@@ -1,0 +1,185 @@
+{
+  "scope": "Pre-placement only. Inspected logic levels on estimated worst paths; no routed measurements. Registered MSHR/response/LSU cut, not whole-SoC timing, a CPU pipeline change or a board score.",
+  "period_ns": "5.714",
+  "inputs": {
+    "stock.v": "dd7d6033900f3912a3814694babd8002ad5bdeb78cc17837ce336cd9f59c861b",
+    "class_local.v": "eb7c24d9a761e1ea45f13646d65bf892266e8cf188503aaaeffeadc87765b803",
+    "split_rsp.v": "917f4d31682ce919dd35941e483eea4784bbe8da947289d3cad2c25d42843fad",
+    "boundary.v": "bae2af2f79a9bc66abda3ef38ad02dfd01bd213050650f2698cbe1d206c6e3d6",
+    "clock.xdc": "8391c5a9db3e2b23d6e1c43675117bce8f6100dda568ce226e09f62c84225391"
+  },
+  "driver_sha256": "27c40da5d7d07cd34b4f168ad9bf4e1b5c77679995465317ccdffc3f69999878",
+  "cases": {
+    "stock": {
+      "design_state": "Optimized",
+      "register_setup_endpoints": 3,
+      "luts": 1384,
+      "registers": 1838,
+      "paths": {
+        "all-0": {
+          "start": "q_dc_s2_req_1_addr_reg[9]/C",
+          "end": "result_reg[0]/D",
+          "levels": 14
+        },
+        "all-1": {
+          "start": "q_dc_s2_req_1_addr_reg[9]/C",
+          "end": "result_reg[1]/D",
+          "levels": 15
+        },
+        "all-2": {
+          "start": "q_dc_s2_req_1_addr_reg[9]/C",
+          "end": "result_reg[2]/D",
+          "levels": 19
+        },
+        "branch-2": {
+          "start": "q_dc_io_lsu_brupdate_b1_mispredict_mask_reg[13]/C",
+          "end": "result_reg[2]/D",
+          "levels": 17
+        },
+        "address1-2": {
+          "start": "q_dc_s2_req_1_addr_reg[9]/C",
+          "end": "result_reg[2]/D",
+          "levels": 19
+        },
+        "state-2": {
+          "start": "q_m7_state_reg[2]/C",
+          "end": "result_reg[2]/D",
+          "levels": 19
+        },
+        "rpq-2": {
+          "start": "q_q7_deq_ptr_value_reg[0]/C",
+          "end": "result_reg[2]/D",
+          "levels": 14
+        }
+      },
+      "log_sha256": "7fda120922dbf8c7cb3b838637f8d94f622413151a054763eb67e79d174ff6fe",
+      "checkpoint_sha256": "081dd60dde4228c4df5ae5ca9b5ab3a8b0339a3630b5fda331170476b62cba13",
+      "report_sha256": {
+        "timing.rpt": "fbfc4963ad988e0dd2dd3dd58e6e47b2f0d183ffecffe498c8cd883320553763",
+        "util.rpt": "40b25b7849456df0f82451a0e17f2e05c557b24797505122b489785aafa5ab9b",
+        "paths.tsv": "794e473dbf9a01c2baa17de9b593fbbb876a9c3021fb92c8a4cd4f2c6449f15d",
+        "path-all-0.rpt": "90a16ee253b0afe375c457f9cae70fa9d39596429a239a80231267f9a632cc9c",
+        "path-all-1.rpt": "4a5cc80f623d91b53a82cfeaf0b8c8b5146aff8f2293810cd3f2b0c70cd2eee4",
+        "path-all-2.rpt": "ec835c55e49cb2b2632368d8051fca96f2b496de80f4e16f71dce3d1be0accbc",
+        "path-branch-2.rpt": "0d3fce4ed0a76dfb60e2c5fbd4d366642fe1d271f0c06c8dc533ab7dcf1490cf",
+        "path-address1-2.rpt": "133011c00c6891b9efadf5f96a710aac699ef873efed62ac5d1c37d45d535a1c",
+        "path-state-2.rpt": "d3019d045bca66a944de9c9459b0217546d1383f77e4c566316d804bbfe20691",
+        "path-rpq-2.rpt": "16c5e1bf9e3e195f3ceefc52451839463d4f657cbf7473761644d38d73b5f36b"
+      }
+    },
+    "class_local": {
+      "design_state": "Optimized",
+      "register_setup_endpoints": 3,
+      "luts": 1462,
+      "registers": 1838,
+      "paths": {
+        "all-0": {
+          "start": "q_dc_s2_tag_match_way_1_reg[3]/C",
+          "end": "result_reg[0]/D",
+          "levels": 11
+        },
+        "all-1": {
+          "start": "q_dc_s2_tag_match_way_1_reg[3]/C",
+          "end": "result_reg[1]/D",
+          "levels": 12
+        },
+        "all-2": {
+          "start": "q_dc_s2_tag_match_way_1_reg[3]/C",
+          "end": "result_reg[2]/D",
+          "levels": 16
+        },
+        "branch-2": {
+          "start": "q_dc_io_lsu_brupdate_b1_mispredict_mask_reg[13]/C",
+          "end": "result_reg[2]/D",
+          "levels": 14
+        },
+        "address1-2": {
+          "start": "q_dc_s2_req_1_addr_reg[11]/C",
+          "end": "result_reg[2]/D",
+          "levels": 16
+        },
+        "state-2": {
+          "start": "q_m1_state_reg[2]/C",
+          "end": "result_reg[2]/D",
+          "levels": 16
+        },
+        "rpq-2": {
+          "start": "q_q6_deq_ptr_value_reg[2]/C",
+          "end": "result_reg[2]/D",
+          "levels": 14
+        }
+      },
+      "log_sha256": "ee01ea9c064aab4e65ba32637bbe00797373e634b563208887888eb7d2e3fd0e",
+      "checkpoint_sha256": "b5f0c1ccb9b4cd1e935ed8ec0a0aabeddb089e54b9a11597515f272d9a08f00e",
+      "report_sha256": {
+        "timing.rpt": "1776c40ed5e8d68cc81a7bdc11700fe62ca64be26d98a42545a49dbe6552ce53",
+        "util.rpt": "135bbea9e9399b99a3b7dace0e69dfd9bc3ed698ec3a872771e6963a62301afa",
+        "paths.tsv": "b9162ae913ae8568b656f789a57b659e8954bcadab421245a6b2c71dd28165c4",
+        "path-all-0.rpt": "d2b7ea3aa128c5348b81f513ad01cd2086007c27c6589952949ef6b7984a346e",
+        "path-all-1.rpt": "1d54a41a149cc0f8fc44088c0d13f036d8ce1848accb27001196344edbe6701d",
+        "path-all-2.rpt": "6bb5dac0e51f5f2de8034d69ab8fc5264200e407d04cc55401016b48ea5607e0",
+        "path-branch-2.rpt": "5dc6a39c9dc85252abec0affe856695da326c5d07f677fbb69fb26dea2334168",
+        "path-address1-2.rpt": "c30c8d1a8bbbf76139f3ce7175969bc8d10373951a3f219c24def3cad73e3d0e",
+        "path-state-2.rpt": "f7feafd0d68c30a9aa003dea85c0e2cca3c7c3680241297513cb2676ad415541",
+        "path-rpq-2.rpt": "54e2afb2ea658a480701485160022cdedabf6a18e7567cc634928b6359834bbc"
+      }
+    },
+    "split_rsp": {
+      "design_state": "Optimized",
+      "register_setup_endpoints": 3,
+      "luts": 1460,
+      "registers": 1840,
+      "paths": {
+        "all-0": {
+          "start": "q_dc_s2_req_1_addr_reg[9]/C",
+          "end": "result_reg[0]/D",
+          "levels": 13
+        },
+        "all-1": {
+          "start": "q_dc_s2_req_1_addr_reg[9]/C",
+          "end": "result_reg[1]/D",
+          "levels": 13
+        },
+        "all-2": {
+          "start": "q_dc_s2_req_1_addr_reg[9]/C",
+          "end": "result_reg[2]/D",
+          "levels": 20
+        },
+        "branch-2": {
+          "start": "q_dc_io_lsu_brupdate_b1_mispredict_mask_reg[14]/C",
+          "end": "result_reg[2]/D",
+          "levels": 17
+        },
+        "address1-2": {
+          "start": "q_dc_s2_req_1_addr_reg[9]/C",
+          "end": "result_reg[2]/D",
+          "levels": 20
+        },
+        "state-2": {
+          "start": "q_m5_state_reg[2]/C",
+          "end": "result_reg[2]/D",
+          "levels": 20
+        },
+        "rpq-2": {
+          "start": "q_q7_deq_ptr_value_reg[0]/C",
+          "end": "result_reg[2]/D",
+          "levels": 15
+        }
+      },
+      "log_sha256": "55445a18c011b81df94e056b5b50f4e43d951da4e6c1b8ecc9396d22c2031aba",
+      "checkpoint_sha256": "2bc9b1b25585f16a696e10af11738ca9d021965eb7d2f3abd5bec1b2615d521a",
+      "report_sha256": {
+        "timing.rpt": "b5632773b387690965acc19d0e598d930839bb593ba9a1fd5d780922ab86311f",
+        "util.rpt": "5fe48b1ee61cf38d36124b66e63ed9d98688b83f53adcbd287927dcb8d03baff",
+        "paths.tsv": "385783471dd1a5a105c0af01526cfbfb60c157c054e88e3b6a33f3211faf74a9",
+        "path-all-0.rpt": "4b8e02d7db9f61cfbc331f1ead1e4488fab7700321349676026b32b0f2d10709",
+        "path-all-1.rpt": "00375ed74c10c45c05a2686262d8d02beb343573ae934945b4f8bd872cdc8c4b",
+        "path-all-2.rpt": "7bae7cdebb19d2d2e02651dedd5a7a741fce57b5b93d1468a785e3114f0729ac",
+        "path-branch-2.rpt": "1635f55b743cdcbcf4267e053415d467f71bb2ef7fcdc0c37f191c83d4109be7",
+        "path-address1-2.rpt": "d9aff3397ed92119a7b0d20547715ec3e537d7f820989b1cef90b17948d44284",
+        "path-state-2.rpt": "5f4f6727f41083912edd0add4042eade03d4e09855fd8d8a5d1901d18f0edae2",
+        "path-rpq-2.rpt": "a14ad86db645227529f6b021b464c729fb89b41968bdba050d3ac43b1fbf7c33"
+      }
+    }
+  }
+}
