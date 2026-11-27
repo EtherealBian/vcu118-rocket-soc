@@ -1,0 +1,173 @@
+{
+  "scope": "Vivado 2024.2 registered four-column bank only, xcvu9p-flga2104-2L-e; single implementation per variant. Not full-SoC STA or board performance.",
+  "period_ns": 5.714,
+  "boundary_sha256": {
+    "boundary.v": "341ffeef7304416e6e163bbc5b4d1cf03e1e9bf7ebcf81f176251a3fa3c2c2f9",
+    "loop.xdc": "2ce6e590fd43bf60a45d85cb844464dd35e3ad3ea2efd42dc83ca207647af15d"
+  },
+  "cases": {
+    "stock": {
+      "rtl_sha256": {
+        "LoopBranchPredictorBank": "c00622a25f75de06f297eac49daf832871cc0726a22c7411610bd98d6f96eb41",
+        "LoopBranchPredictorColumn": "d0ac014f0e323eae279ac8260ac6ae4c2b8d3c52628d1addea887c69991c8900"
+      },
+      "fully_routed": 4886,
+      "routing_errors": 0,
+      "wns_ns": 1.885,
+      "whs_ns": 0.045,
+      "wpws_ns": 2.325,
+      "utilization": {
+        "CLB LUTs": 2753,
+        "CLB Registers": 4182,
+        "Block RAM Tile": 0,
+        "DSPs": 0
+      },
+      "worst_setup": {
+        "start": "dut/s2_idx_reg[3]/C",
+        "end": "dut/columns_2/f3_entry_s_cnt_reg[8]/D",
+        "slack_ns": 1.885,
+        "data_ns": 3.81,
+        "logic_levels": 5
+      },
+      "taken": [
+        {
+          "start": "dut/s1_update_idx_reg[2]/C",
+          "end": "b_io_resp_f3_0_taken_reg/D",
+          "slack_ns": 2.722,
+          "data_ns": 2.972,
+          "logic_levels": 7
+        },
+        {
+          "start": "dut/s1_update_idx_reg[11]/C",
+          "end": "b_io_resp_f3_1_taken_reg/D",
+          "slack_ns": 2.785,
+          "data_ns": 2.909,
+          "logic_levels": 7
+        },
+        {
+          "start": "dut/s1_update_idx_reg[2]/C",
+          "end": "b_io_resp_f3_2_taken_reg/D",
+          "slack_ns": 2.378,
+          "data_ns": 3.317,
+          "logic_levels": 7
+        },
+        {
+          "start": "dut/s1_update_idx_reg[2]/C",
+          "end": "b_io_resp_f3_3_taken_reg/D",
+          "slack_ns": 2.702,
+          "data_ns": 2.993,
+          "logic_levels": 7
+        }
+      ],
+      "early_enable": [],
+      "report_sha256": {
+        "route.rpt": "a95d387ef7fd8669cac71c3ba37f39e1e14713587788f95ade26819cc6d3f679",
+        "timing.rpt": "c09a937f2618b7b776488b25b9c2b642978f62c88e733c4f93ec494fa4053deb",
+        "util.rpt": "1c446b7658ff030c36627ec3648ed5c8c4fcaaea519f7a5d0e5c612aabbfbdb4",
+        "paths.tsv": "5ca6ef6845b3f267ee8e114d62c0448358a2435dbbc9e87b2d2f61732489ad46",
+        "registers-max.rpt": "ec343b39168e6db60ce0d2331a497dfff3fcdc1bc70747be51b4b52b643e058c",
+        "registers-min.rpt": "5e44fdab0823a681b810ac96466c79c6dd20583aa510670aa6449cbf2f42d875",
+        "taken-0.rpt": "7abc1271fa5afcc4d50766d7a285ec863e429ef9a96060bfd351f066c9a6e26d",
+        "taken-1.rpt": "2033d231e2c9feb9a064bbed1b403c50b76f822eb106f113b1fb723d444a798d",
+        "taken-2.rpt": "ed2080de1fe89cdb17cfec8fd366c1688dc9ea1ed498d813d6cf958cac468aa6",
+        "taken-3.rpt": "dffe4f99b7d8f7fe6b6103fd99e4bff2eb9e6d49fb0c79907139688abf3efb3a"
+      }
+    },
+    "candidate": {
+      "rtl_sha256": {
+        "LoopBranchPredictorBank": "7da16fdcc7a0ef6c282e6b61ba2b90a62f3ba6b0551d6746ffc1daaa6bcc31db",
+        "LoopBranchPredictorColumn": "5dd17bd06c4a1f26c9a82c8eeceab0e6168d9fbb46df978c2f774dae3aee1555"
+      },
+      "fully_routed": 5269,
+      "routing_errors": 0,
+      "wns_ns": 1.931,
+      "whs_ns": 0.043,
+      "wpws_ns": 2.325,
+      "utilization": {
+        "CLB LUTs": 3078,
+        "CLB Registers": 4191,
+        "Block RAM Tile": 0,
+        "DSPs": 0
+      },
+      "worst_setup": {
+        "start": "dut/s1_update_idx_reg[3]/C",
+        "end": "dut/columns_0/entries_8_p_cnt_reg[4]/CE",
+        "slack_ns": 1.931,
+        "data_ns": 3.679,
+        "logic_levels": 6
+      },
+      "taken": [
+        {
+          "start": "dut/vcu_f3_repair_bypass_reg[0]/C",
+          "end": "b_io_resp_f3_0_taken_reg/D",
+          "slack_ns": 3.627,
+          "data_ns": 2.07,
+          "logic_levels": 4
+        },
+        {
+          "start": "dut/vcu_f3_repair_bypass_reg[1]/C",
+          "end": "b_io_resp_f3_1_taken_reg/D",
+          "slack_ns": 3.773,
+          "data_ns": 1.924,
+          "logic_levels": 4
+        },
+        {
+          "start": "dut/vcu_f3_repair_bypass_reg[2]/C",
+          "end": "b_io_resp_f3_2_taken_reg/D",
+          "slack_ns": 3.759,
+          "data_ns": 1.937,
+          "logic_levels": 4
+        },
+        {
+          "start": "dut/vcu_f3_repair_bypass_reg[3]/C",
+          "end": "b_io_resp_f3_3_taken_reg/D",
+          "slack_ns": 3.483,
+          "data_ns": 2.213,
+          "logic_levels": 4
+        }
+      ],
+      "early_enable": [
+        {
+          "start": "b_io_update_bits_br_mask_reg[0]/C",
+          "end": "dut/vcu_f3_repair_bypass_reg[0]/D",
+          "slack_ns": 5.409,
+          "data_ns": 0.286,
+          "logic_levels": 0
+        },
+        {
+          "start": "b_io_update_bits_br_mask_reg[1]/C",
+          "end": "dut/vcu_f3_repair_bypass_reg[1]/D",
+          "slack_ns": 5.359,
+          "data_ns": 0.336,
+          "logic_levels": 0
+        },
+        {
+          "start": "b_io_update_bits_br_mask_reg[2]/C",
+          "end": "dut/vcu_f3_repair_bypass_reg[2]/D",
+          "slack_ns": 5.413,
+          "data_ns": 0.281,
+          "logic_levels": 0
+        },
+        {
+          "start": "b_io_update_bits_br_mask_reg[3]/C",
+          "end": "dut/vcu_f3_repair_bypass_reg[3]/D",
+          "slack_ns": 5.337,
+          "data_ns": 0.358,
+          "logic_levels": 0
+        }
+      ],
+      "report_sha256": {
+        "route.rpt": "39b293680310ea492f3b0843003e1a90cebc480a4387beed8c2bb98f36014abb",
+        "timing.rpt": "cbbdce909dfc5ac7642ac98eb6b2df71c30f0435029b8158589b132f4b475e61",
+        "util.rpt": "c4d93b8638d5184d32f5da02dafe4a3cdaa861b40d7147f94e654f70fe562d93",
+        "paths.tsv": "c4d733f0bed51852d6648db3ef12f7e3ad49f8a1c48438ee55b7197fa86a413a",
+        "registers-max.rpt": "5656dcb3d07e5c6f0aa9318b6b0e135fa5a703967bc42a3773d70f59acca7ea6",
+        "registers-min.rpt": "7a1d52699dc5227708f627f011ef0eed648ed1e4575dffc36c815f649a422aeb",
+        "taken-0.rpt": "398308390fb85b55ba8406fe9b42683e4dc4471baf8e40a4fe6efca9fcc8de3a",
+        "taken-1.rpt": "2a4d3e1641073dbd346830bc2ea09e7bbde13558de5619891de11245e68b0f44",
+        "taken-2.rpt": "25169f2be26d8a142a22f5d50289352f81f0377aa8012b38fe8ae4759c4aa9a5",
+        "taken-3.rpt": "1f2c8eb01d3b6e739754f2a34f922faef4afbc858a5b1fbb181f30225c972713"
+      }
+    }
+  }
+}

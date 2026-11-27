@@ -1,0 +1,50 @@
+{
+  "scope": "One full four-column bank. Two-state inductive state relation checked from every related state for every input; all-zero storage satisfies the relation. Four-state finite post-reset lockstep uses the original packed RTL. No routed candidate, frequency or board score.",
+  "kit_sha256": "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+  "source_sha256": {
+    "LoopBranchPredictorBank": "c00622a25f75de06f297eac49daf832871cc0726a22c7411610bd98d6f96eb41",
+    "LoopBranchPredictorColumn": "d0ac014f0e323eae279ac8260ac6ae4c2b8d3c52628d1addea887c69991c8900"
+  },
+  "candidate_sha256": {
+    "LoopBranchPredictorBank": "7da16fdcc7a0ef6c282e6b61ba2b90a62f3ba6b0551d6746ffc1daaa6bcc31db",
+    "LoopBranchPredictorColumn": "5dd17bd06c4a1f26c9a82c8eeceab0e6168d9fbb46df978c2f774dae3aee1555"
+  },
+  "formal": {
+    "candidate": {
+      "common_registers": 407,
+      "common_state_bits": 3239,
+      "replaced_reference_index_bits": 144,
+      "retimed_enable_bits": 4,
+      "output_bits": 648,
+      "decision": "equivalent_step"
+    },
+    "ignore_bit35": {
+      "common_registers": 407,
+      "common_state_bits": 3239,
+      "replaced_reference_index_bits": 144,
+      "retimed_enable_bits": 4,
+      "output_bits": 648,
+      "decision": "counterexample"
+    }
+  },
+  "lockstep": {
+    "candidate": {
+      "address_match_repair_cycles": 792,
+      "f3_fire_low_with_enabled_bypass": 472,
+      "overlapping_repair_and_mispredict_updates": 634,
+      "flipped_prediction_lane_samples": 92
+    },
+    "ignore_bit35": "output_mismatch"
+  },
+  "clock_edges": 2304,
+  "first_compared_edge": 26,
+  "tool_sha256": {
+    "yosys": "f58d1dfcbc9b48a81357283e93b53e4c78415f6d28f227f0db34a79f316e6a64",
+    "iverilog": "3b6bfe950e42356b73f5a1847457e63822449a90333a8629ce5c7dbd049fc36d",
+    "vvp": "8892455ad451df6460bf010de007857c0fbe9df7ee0c6aa6c999413edd4ae34d",
+    "ivl": "121b37c485a814d8f34a1880bf41f87c88a2de1f01376cddd65d860da324f562",
+    "ivlpp": "09678ef7728f589313769a21bb29ab03d7c67602abbd0883b1fc24e28de503b4",
+    "vvp.tgt": "b079293158bd1dec6d399d13b69edb3b87f10bc5f33b31ee2cb84e271b5f863b"
+  },
+  "bench_sha256": "edaae6ef87b5d9a050737edaf18427aa328dced7e48414ea81c6566f8daccd83"
+}

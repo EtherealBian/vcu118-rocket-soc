@@ -1,0 +1,172 @@
+{
+  "scope": "Same strict ELF and two four-round user snapshots, stock vs. copy/load ChipTop RTL only. No FPGA timing or board score.",
+  "elf_sha256": "61f7c4579b762f86d7d7dc93d4c385d08e50248f3dd6a8a9105fd5e88b58886a",
+  "shared_inputs": {
+    "mega_user_replay.cpp": "54e44e5c93f2e0722d6680ad77592aab54fcf6b4b6a5ccb97dbebeb1dd5c5d2c",
+    "rocket_chiptop.cpp": "9fd708b984cd078932d1727a881bced76a745a5819f0073a7020b1b9d0ac0ea6",
+    "chiptop_address.hpp": "1a79c1e91ac8f1b34e4922f5b9069115a19b7f1e53d36274a332bf17a50c2315",
+    "chiptop_debug.hpp": "aaa4817843798f11cf68f41dcffc0c2dfde059cc7f79b7273ecf020f7e0be78f",
+    "chiptop_debug_slave.hpp": "070f4c91a7ef46f329b12584093c2d65a0e0082bfce605c734c4a84b4b0da18b",
+    "chiptop_recovery.hpp": "f44541458bb364bf1e0d5039562406530a5280fc6801ff7a79c08724a21e1cd9",
+    "chiptop_sba.hpp": "ab2f34bd3025d4d0c012a7f48f3177e1a0b396207a3b10e183a0cb2717050417",
+    "chiptop_sd.hpp": "a5f5d11134f1b40dadc7b58cd749d47e09dafd1fdda6f9ac25b1f6e7329f57d4",
+    "verilated.o": "2c3ba69e92629c65c1022ac91fc9065b6ba0c3dfacc78097a5620101cd687902",
+    "verilated_threads.o": "a7f51711612d60da9b567a6d6bd6f167e42c26c620e38252683ec1c9a98fbeb7",
+    "performance/mem.bin": "5e7ba05ec05651cd7c26b96bec34a2024c7c2510c8f9518df68fdecd75597db0",
+    "performance/prefix.frame": "f9acf3a4ac69c7a6e28bd48ac2576332558f3c40271bf1e9f89a16dbe8533e1a",
+    "validation/mem.bin": "3ae621dddb2e9e736f6bce75e7941e7a16f16debb437bccfc0d1350a86d83147",
+    "validation/prefix.frame": "f9acf3a4ac69c7a6e28bd48ac2576332558f3c40271bf1e9f89a16dbe8533e1a"
+  },
+  "designs": {
+    "stock": {
+      "CANDIDATE.sha256": "890bca3009ed260c81112d72ebcf6c985453568329aead9e9515dcc109d0e417",
+      "VChipTop__ALL.a": "69cd3fc0369d056f38b5cd67e2123f3e33dc8d3d344fc27a4e394efac2bd0b2b",
+      "VChipTop___024root.h": "754db1bd183abd0311e5afcf57d2895a3f7b521a9979fa18af174511364c9f47",
+      "model": "1a96491b34f8aeb70d085b7998252a4fef6a24ed58ca8e641bfe3c63b09e1db7"
+    },
+    "candidate": {
+      "CANDIDATE.sha256": "34c3704d43c6e01a98dc4cad87dbc1489b24095c5dbf23542c62b96fe47455b9",
+      "VChipTop__ALL.a": "a80bc69936e67f4f88367001f102fa3babe2ac3e3027e54873fa49edbd0ccc18",
+      "VChipTop___024root.h": "7e7d8b744b3edddfdc3a9fb98963bc3950f107914a3438a05ddee10fbe084ef1",
+      "model": "50006bfe86fce45fb67f069623d64c241f9f721c785e7d1e117e7d651730546c"
+    }
+  },
+  "results": {
+    "performance": {
+      "stock_cycles": [
+        171404,
+        161746,
+        160691,
+        159606
+      ],
+      "candidate_cycles": [
+        166120,
+        156834,
+        155638,
+        154219
+      ],
+      "candidate_minus_stock_cycles": [
+        -5284,
+        -4912,
+        -5053,
+        -5387
+      ],
+      "total_delta_cycles": -20636,
+      "candidate_window": {
+        "ordered_pc_sha256": "416ac8d959c93fdc7b2c57778b2bfe53488c3b105901127d226f5a3c0fc564c4",
+        "user_window_instructions": 1347261,
+        "user_window_cycles": 632811,
+        "by_round_cycles": [
+          166120,
+          156834,
+          155638,
+          154219
+        ],
+        "by_round_instructions": [
+          336815,
+          336902,
+          336808,
+          336736
+        ],
+        "fence_ticks": [
+          701581,
+          867701,
+          1024535,
+          1180173,
+          1334392
+        ],
+        "mret_tick": 701352,
+        "user_ecall_trap_tick": 1334403,
+        "privilege_interval_cycles": 633051,
+        "prefix_arch_valid_pc": [
+          "0x800000ec"
+        ],
+        "suffix_arch_valid_pc": [
+          "0x10f3a",
+          "0x147ac",
+          "0x147b0"
+        ],
+        "privilege_interval_cycles_by_retired_width_0_to_4": [
+          99105,
+          184514,
+          92735,
+          49507,
+          207190
+        ]
+      },
+      "candidate_evidence_sha256": {
+        "events": "f66c48e4bf623b7ab41c499cf7981d8df8d57e35df677bb4f4b73da95ce5344d",
+        "uart": "66144f24d734d9eb39e2fd75f5c3aabfb92007c4425be6fb10ef558bdf5fc30c",
+        "pc": "416ac8d959c93fdc7b2c57778b2bfe53488c3b105901127d226f5a3c0fc564c4"
+      }
+    },
+    "validation": {
+      "stock_cycles": [
+        173150,
+        162949,
+        161180,
+        160257
+      ],
+      "candidate_cycles": [
+        168271,
+        157820,
+        156942,
+        155907
+      ],
+      "candidate_minus_stock_cycles": [
+        -4879,
+        -5129,
+        -4238,
+        -4350
+      ],
+      "total_delta_cycles": -18596,
+      "candidate_window": {
+        "ordered_pc_sha256": "e7a7695d0811ac0b87d007dfecfb7c339135028b8568f08944bbd602b5d4b6e6",
+        "user_window_instructions": 1348735,
+        "user_window_cycles": 638940,
+        "by_round_cycles": [
+          168271,
+          157820,
+          156942,
+          155907
+        ],
+        "by_round_instructions": [
+          337115,
+          337270,
+          337193,
+          337157
+        ],
+        "fence_ticks": [
+          701581,
+          869852,
+          1027672,
+          1184614,
+          1340521
+        ],
+        "mret_tick": 701352,
+        "user_ecall_trap_tick": 1340532,
+        "privilege_interval_cycles": 639180,
+        "prefix_arch_valid_pc": [
+          "0x800000ec"
+        ],
+        "suffix_arch_valid_pc": [
+          "0x10f3a",
+          "0x147ac",
+          "0x147b0"
+        ],
+        "privilege_interval_cycles_by_retired_width_0_to_4": [
+          95314,
+          196209,
+          92307,
+          53484,
+          201866
+        ]
+      },
+      "candidate_evidence_sha256": {
+        "events": "49b7d43720decb12ba765690c3ab9b83f4037ef2f3f03a62402b3d21d19c0003",
+        "uart": "66144f24d734d9eb39e2fd75f5c3aabfb92007c4425be6fb10ef558bdf5fc30c",
+        "pc": "e7a7695d0811ac0b87d007dfecfb7c339135028b8568f08944bbd602b5d4b6e6"
+      }
+    }
+  }
+}

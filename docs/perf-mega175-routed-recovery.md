@@ -24,6 +24,12 @@
 
 前两条只差 **7 ps**，且两者数据延时均逾 80% 来自布线。下一轮分别对照 **F3 预测方向到取指地址**、**load-miss 到发射槽就绪**：先检查能否提前算出候选值或在消费端局部选择，做保持时序行为的等价对照，再比较相同约束下的整机时序。仅重写发射仲裁器不足以覆盖前端问题。这是下一轮实验，不是已取得的改善。
 
+### 后端：从 load-miss 到槽 8 不只是一次就绪判断
+
+在上述 −9.237 ns 的同一条路径中，`lsu/io_core_ld_miss3` 后的 miss 网络跨 SLR 1 → 2，扇出 122，本段 1.640 ns。随后经过槽 9 的 `io_will_be_valid`，再到 `issue_slots_8_in_uop_valid`（扇出 151，本段 0.634 ns）。对照同版 `IssueSlot_32` 和 `IssueUnitCollapsing_1`：当源槽获准发射，但依赖推测唤醒且此次 load miss 时，槽可能需要保留；槽 8 搬入有效位的一个数据来源正是槽 9。再往后的两条单负载网络分别跨 SLR 2 → 1、1 → 2，用了 1.132 和 1.012 ns，最后抵达 `slots_8/p2_reg/D`。这是报告中的物理网络名与 RTL 的对照，不把中间组合逻辑的归属名解读成队列实际移动了多次。
+
+因此后端实验应比较两个量：miss 到搬入有效位的选择深度，以及搬入有效位到 `p2` 的布线。直接把 miss 寄存会改变推测唤醒失败时的行为；即便前端修好，这一条仍可能限制整机。
+
 ## 六条 CDC Critical 的去向
 
 - `CDC-7` 两条：MIG `mmcm_clkout0` 的复位、`sys_clock` 的上电复位，分别到 CPU 域同一 `deglitched_deglitch/reg_0_reg/PRE`。后一条上有 `False Path`，仍须核实复位的断言和释放。
@@ -38,3 +44,15 @@
 | `cpu-max.tsv` | `df1c4915dbf7d2aa48b17bd232709d84b17582b38ff5b3d96b92c3a4d1b7f399` |
 | `cdc.rpt` | `b7b4ff7357a3f7f21b5c79a1cc8ed90f21e925c374712f6ade8d7aa767b5c3a6` |
 | `routed-drc.rpt` | `5432682eef3f66fed23d763137203c535f049aab1c32fe9976914ffe18ca23b9` |
+
+### 补记：同一检查点的离线审查已运行完毕
+
+11 月 28 日 04:07，独立诊断正常退出，复核后原 DCP 的 SHA-256 未变。`report_methodology` 有 1,307 条 Warning、1 条 Advisory（包含 1,000 条 `TIMING-16`）。两条 `TIMING-47` 分别指向 CPU 时钟与 `mmcm_clkout0` 两个方向：Vivado 将它们判作同步时钟，但同版第 41 号约束把它们分在异步组。时钟交互报告列出的两个方向分别有 188 和 119 个总端点，均显示 `Ignored / Asynchronous Groups`。这不等同于跨域正确：需核对实际相位/复位关系、异步队列及指针约束的命中，再决定是否缩窄例外。未删除约束，也未自动豁免。
+
+可追溯到本版 `shell.sdc` 第 7 行的三组声明：MIG UI、CPU PLL 输出、JTCK。`report_clocks` 显示 CPU（5.714 ns）和 MIG UI（5.000 ns）各由独立 MMCM 输出，但都列同一 4.000 ns 的 `sys_clock` 为 master。共同 master 是 Vivado 告警的具体背景，不代表独立复位之后两者一定有可依赖的固定相位。
+
+逐位核对同一 CDC 报告中的 AXI `AW/W/B/AR/R` 五个通道，每个通道的读、写 Gray 指针各四位；40 个源位均对应另一域正确方向和相同位号的第一级同步器。两个方向各 20 位；全部为 `CDC-2 Warning`、深度 3、缺少工具认可的 `ASYNC_REG` 属性，受异步组例外覆盖。它们是 40 条 Warning，不是那 6 条 Critical 的重复计数；结构识别不能证明布局、偏斜、复位或 MTBF 合格。
+
+本次 `report_bus_skew` 的 4 个报告项都属于调试集线器的读写 FIFO，最差余量 +19.496 ns；这不能替代对 MIG/CPU 桥 Gray 指针的审查。`report_exceptions -ignored` 另列 5 条无实际路径的例外。完成报告采集不代表签核通过。
+
+前端慢路径的首个实体 RTL 候选及整组等价验证见[循环预测修复旁路](perf-mega175-loop-repair.md)。
