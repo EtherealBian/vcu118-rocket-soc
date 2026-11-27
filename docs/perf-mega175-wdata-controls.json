@@ -1,0 +1,106 @@
+{
+  "scope": "Two historical 100 MHz routed controls; each SDF wire reports the larger rising/falling MAX in ps. No arc sums, four-wide slack, or board score.",
+  "four_wide_input_seal": "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+  "four_wide_pin_table_sha256": "fe2d2ef233e373df16bc57d24c14caf0ace6a891ade0234127e1193b95c46fb9",
+  "shared_W_source_sha256": {
+    "XilinxVCU118MIG": "0c22842380e8e952fa9dedd97629dc6c6d3ea3a436236146d79e88ad08c92df2",
+    "TLToAXI4": "d9fc66d1eda1de867523e9eff617fd4a13bc746aaac7ac042b7e771d12f94e33",
+    "Queue1_AXI4BundleW": "e025c7767adc27853957c9f0cefaf2b14ca462cb44f61295bff73eb1117b076c",
+    "AXI4AsyncCrossingSource": "be82306ce224b2c03834545a3b17e8c0fd575dc79c1a7f2c50c82a74e3fb86ee",
+    "AsyncQueueSource_AXI4BundleW": "3873bd18717a6d60bd45c6651fdda0bcb48d0124eab5d637471abe0e17b2f181"
+  },
+  "controls": {
+    "rocket": {
+      "bit_sha256": "d77b13dbf75b4773e33ba48f7b177f320572cb62ffe8a9cd930ab196edd6f520",
+      "sdf_sha256": "3ac55cbbab5bea3b9281d590b6ee3b5a056853c57a3a3d5d408c0347a7b844f2",
+      "data_bits": 64,
+      "queue_slots": 8,
+      "mapped_data_D_pins": 512,
+      "data_muxes": 64,
+      "output_sinks_per_mux": 8,
+      "all_output_wire_max_ps_range": [
+        "49.0",
+        "1512.5"
+      ],
+      "input_wire_max_ps_ranges": {
+        "stored": [
+          "45.0",
+          "271.0"
+        ],
+        "full_select": [
+          "67.7",
+          "532.5"
+        ],
+        "bypass": [
+          "97.2",
+          "699.9"
+        ]
+      },
+      "bit5": {
+        "input_wire_max_ps": {
+          "stored": "178.0",
+          "full_select": "244.1",
+          "bypass": "221.2"
+        },
+        "eight_output_wire_max_ps_range": [
+          "308.8",
+          "497.0"
+        ],
+        "tight_output_wire_max_ps_by_slot": {
+          "1": "417.4",
+          "3": "308.8",
+          "6": "497.0",
+          "7": "321.4"
+        }
+      },
+      "bits_with_bypass_wire_longer_than_all_eight_output_wires": 4,
+      "other_bits_with_larger_worst_output_wire": 57
+    },
+    "two_wide_boom_withheld_from_board": {
+      "bit_sha256": "156fa7e878ee11eb1cd961e581cf66bc5925d2ee908bbf880c5bf896a38aace3",
+      "sdf_sha256": "91ccd7c0c9fc567e1b9edda55f10242fe97c9faab9566904815fae9f698b8dc4",
+      "data_bits": 64,
+      "queue_slots": 8,
+      "mapped_data_D_pins": 512,
+      "data_muxes": 64,
+      "output_sinks_per_mux": 8,
+      "all_output_wire_max_ps_range": [
+        "328.7",
+        "1618.1"
+      ],
+      "input_wire_max_ps_ranges": {
+        "stored": [
+          "48.0",
+          "510.0"
+        ],
+        "full_select": [
+          "134.6",
+          "825.2"
+        ],
+        "bypass": [
+          "1101.4",
+          "2726.4"
+        ]
+      },
+      "bit5": {
+        "input_wire_max_ps": {
+          "stored": "154.0",
+          "full_select": "482.8",
+          "bypass": "1339.9"
+        },
+        "eight_output_wire_max_ps_range": [
+          "495.5",
+          "870.4"
+        ],
+        "tight_output_wire_max_ps_by_slot": {
+          "1": "668.5",
+          "3": "564.5",
+          "6": "591.5",
+          "7": "495.5"
+        }
+      },
+      "bits_with_bypass_wire_longer_than_all_eight_output_wires": 63,
+      "other_bits_with_larger_worst_output_wire": 23
+    }
+  }
+}

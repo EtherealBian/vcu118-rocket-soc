@@ -17,3 +17,4 @@
 [四个方向的完整汇总及私有原件指纹](perf-mega175-initial-congestion.json)。日志指纹从首字节算至第一次 `Phase 5.1 Global Iteration 0` 行（含换行），引脚表指纹按原始字节。没有改变约束、下载 FPGA 或据此发布分数。
 
 针对这 8 个 L2 MSHR 标签引脚，另见[目录返回标签的三种等价改写与取舍](perf-mega175-directory-tag.md)。
+四个 MIG W 数据引脚则在[两份历史整机网表中逐线核对](perf-mega175-wdata-controls.md)，区分源端旁路和八槽扇出。
