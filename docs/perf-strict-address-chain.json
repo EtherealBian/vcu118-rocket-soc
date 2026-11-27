@@ -1,0 +1,285 @@
+{
+  "scope": "User-mode four-round RTL snapshots. C: D-cache response (not necessarily a hit); F: STQ forwarded. AGU observed at core-to-LSU request. Not FPGA performance or a timing improvement.",
+  "elf_sha256": "61f7c4579b762f86d7d7dc93d4c385d08e50248f3dd6a8a9105fd5e88b58886a",
+  "probe_model_sha256": "6d8bb267e795745297e38fa01974863b18c6c865e53473b25e1e859cbbd889d4",
+  "results": {
+    "performance": {
+      "last_operand_after_branch_dispatch": {
+        "x28": {
+          "cycles": {
+            "n": 676,
+            "min": 5,
+            "p50": 5,
+            "p95": 7,
+            "max": 8
+          },
+          "over_x28_latest_max": 0
+        },
+        "x6": {
+          "cycles": {
+            "n": 154,
+            "min": 5,
+            "p50": 7,
+            "p95": 39,
+            "max": 49
+          },
+          "over_x28_latest_max": 62
+        }
+      },
+      "tail_by_incoming_pc": {
+        "0x13e9e,0x13ea2": 55,
+        "0x13f50,0x13ea2": 7
+      },
+      "cohorts": {
+        "all": {
+          "ptr_dispatch_to_agu": {
+            "n": 830,
+            "min": 3,
+            "p50": 3,
+            "p95": 5,
+            "max": 7
+          },
+          "ptr_agu_to_result": {
+            "n": 830,
+            "min": 2,
+            "p50": 2,
+            "p95": 2,
+            "max": 2
+          },
+          "ptr_result_to_key_agu": {
+            "n": 830,
+            "min": 2,
+            "p50": 3,
+            "p95": 3,
+            "max": 6
+          },
+          "key_agu_to_result": {
+            "n": 830,
+            "min": 2,
+            "p50": 2,
+            "p95": 2,
+            "max": 2
+          },
+          "key_result_minus_branch_dispatch": {
+            "n": 830,
+            "min": 4,
+            "p50": 5,
+            "p95": 7,
+            "max": 11
+          },
+          "ptr_agu_to_key_result": {
+            "n": 830,
+            "min": 6,
+            "p50": 7,
+            "p95": 7,
+            "max": 10
+          },
+          "response_sources": {
+            "CC": 830
+          },
+          "request_lanes": {
+            "00": 21,
+            "01": 303,
+            "10": 443,
+            "11": 63
+          }
+        },
+        "x28_last_B2": {
+          "ptr_dispatch_to_agu": {
+            "n": 280,
+            "min": 3,
+            "p50": 3,
+            "p95": 5,
+            "max": 6
+          },
+          "ptr_agu_to_result": {
+            "n": 280,
+            "min": 2,
+            "p50": 2,
+            "p95": 2,
+            "max": 2
+          },
+          "ptr_result_to_key_agu": {
+            "n": 280,
+            "min": 2,
+            "p50": 3,
+            "p95": 3,
+            "max": 4
+          },
+          "key_agu_to_result": {
+            "n": 280,
+            "min": 2,
+            "p50": 2,
+            "p95": 2,
+            "max": 2
+          },
+          "key_result_minus_branch_dispatch": {
+            "n": 280,
+            "min": 5,
+            "p50": 5,
+            "p95": 7,
+            "max": 8
+          },
+          "ptr_agu_to_key_result": {
+            "n": 280,
+            "min": 6,
+            "p50": 7,
+            "p95": 7,
+            "max": 8
+          },
+          "response_sources": {
+            "CC": 280
+          },
+          "request_lanes": {
+            "00": 2,
+            "01": 80,
+            "10": 184,
+            "11": 14
+          }
+        }
+      },
+      "address_trace_sha256": "fa98b39cd54ceef5aa6d71f3f87c79c01f3829041f6c772cd40bc94e77caa0c5",
+      "prior_operand_sha256": "14b823d8e3faa2aa4ae52da499a8d954a8f340417cfff683def9abe264b63f6e"
+    },
+    "validation": {
+      "last_operand_after_branch_dispatch": {
+        "x28": {
+          "cycles": {
+            "n": 716,
+            "min": 3,
+            "p50": 5,
+            "p95": 7,
+            "max": 8
+          },
+          "over_x28_latest_max": 0
+        },
+        "x6": {
+          "cycles": {
+            "n": 121,
+            "min": 5,
+            "p50": 8,
+            "p95": 40,
+            "max": 50
+          },
+          "over_x28_latest_max": 50
+        }
+      },
+      "tail_by_incoming_pc": {
+        "0x13e9e,0x13ea2": 40,
+        "0x13f50,0x13ea2": 10
+      },
+      "cohorts": {
+        "all": {
+          "ptr_dispatch_to_agu": {
+            "n": 837,
+            "min": 3,
+            "p50": 3,
+            "p95": 5,
+            "max": 8
+          },
+          "ptr_agu_to_result": {
+            "n": 837,
+            "min": 2,
+            "p50": 2,
+            "p95": 2,
+            "max": 2
+          },
+          "ptr_result_to_key_agu": {
+            "n": 837,
+            "min": 2,
+            "p50": 3,
+            "p95": 3,
+            "max": 7
+          },
+          "key_agu_to_result": {
+            "n": 837,
+            "min": 2,
+            "p50": 2,
+            "p95": 2,
+            "max": 2
+          },
+          "key_result_minus_branch_dispatch": {
+            "n": 837,
+            "min": -2,
+            "p50": 5,
+            "p95": 7,
+            "max": 8
+          },
+          "ptr_agu_to_key_result": {
+            "n": 837,
+            "min": 6,
+            "p50": 7,
+            "p95": 7,
+            "max": 11
+          },
+          "response_sources": {
+            "CC": 834,
+            "FC": 3
+          },
+          "request_lanes": {
+            "00": 25,
+            "01": 278,
+            "10": 480,
+            "11": 54
+          }
+        },
+        "x28_last_B2": {
+          "ptr_dispatch_to_agu": {
+            "n": 268,
+            "min": 3,
+            "p50": 3,
+            "p95": 5,
+            "max": 6
+          },
+          "ptr_agu_to_result": {
+            "n": 268,
+            "min": 2,
+            "p50": 2,
+            "p95": 2,
+            "max": 2
+          },
+          "ptr_result_to_key_agu": {
+            "n": 268,
+            "min": 2,
+            "p50": 3,
+            "p95": 3,
+            "max": 3
+          },
+          "key_agu_to_result": {
+            "n": 268,
+            "min": 2,
+            "p50": 2,
+            "p95": 2,
+            "max": 2
+          },
+          "key_result_minus_branch_dispatch": {
+            "n": 268,
+            "min": 4,
+            "p50": 5,
+            "p95": 7,
+            "max": 8
+          },
+          "ptr_agu_to_key_result": {
+            "n": 268,
+            "min": 6,
+            "p50": 7,
+            "p95": 7,
+            "max": 7
+          },
+          "response_sources": {
+            "CC": 266,
+            "FC": 2
+          },
+          "request_lanes": {
+            "00": 3,
+            "01": 73,
+            "10": 181,
+            "11": 11
+          }
+        }
+      },
+      "address_trace_sha256": "66842a73434173b0d4c23e79001e172677d4f4cd3b325939e915592bc51594ea",
+      "prior_operand_sha256": "b5f4e7203efa1b630ff1643ba6b31a5d30290ea7c88bd2185e37381b9598c915"
+    }
+  }
+}
