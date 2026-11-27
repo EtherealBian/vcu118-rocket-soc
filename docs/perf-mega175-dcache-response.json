@@ -1,0 +1,272 @@
+{
+  "scope": "Same-cycle two-state D-cache/LSU cut. Two valid outputs plus actual LSU speculative miss with five ordered queue tables. XCUP primitive mapping, not delay or board performance.",
+  "kit_sha256": "ce0ef1171c7b0077282602c5c97230d03850b71c350c6c9ddcdf0b7ebcb5a456",
+  "parents_sha256": {
+    "BoomNonBlockingDCache": "fdd20681408038f71c070fc1e8776a43f4ba38af7d5814af6b8e5c61162031d2",
+    "LSU": "5749f211d5093a7ef4ac6bba75706d2a4ab3a016b2fb814da34fd7bed44d80d7",
+    "BoomTile": "dcfa49abad47453bdab712285dce49cd93c7799a273a6cca5621f2c9ed629162"
+  },
+  "candidates_sha256": {
+    "source_first": "1b852076568efc8ab8702a7b2b133840a84b8697ea9093caf8801661980f82d1",
+    "source_and_s2": "3515824bcacb1cf6c2d4c1cc67d24cdfb5ad05e349b05a00677f23fd02027f11"
+  },
+  "cuts_sha256": {
+    "stock": "ae11910a9f1693cb02a18284bcdc169dfe7934a30f4347a4d93a843cc1731d96",
+    "source_first": "c0ad5db7d54e61cf04309df909b1b9f5169ab2556db97e67936cefa682180e55",
+    "source_and_s2": "2e9cfa68a57f4c37a9a7babb945329f9e1acf559210d6e47dcb056c92a81f6b8",
+    "wrong_local_ldq_tag": "6e9748b6945b60c3ddef649c33445c363acf44beb86c62417d2ee6c2ccf543e9",
+    "wrong_lane_mask": "34ecef26d83a00451867a595de02d1b7d0c77d4827f28766f40af6ad6b5b5312",
+    "suppress_replay_on_killed_cache0": "47a70fab8898e3dceb36e19495af41b7db0fd04f735e73c43ee30337cd84bd2c",
+    "drop_store17": "c1e79d6348aa4c0aafa3270eb4bf204920292242b91e768c8043585078337da0"
+  },
+  "inputs_bits": 1239,
+  "ordered_tables": {
+    "_GEN_71": [
+      32,
+      5
+    ],
+    "_GEN_251": [
+      32,
+      5
+    ],
+    "_GEN_309": [
+      32,
+      2
+    ],
+    "_GEN_166": [
+      32,
+      1
+    ],
+    "_GEN_180": [
+      32,
+      20
+    ]
+  },
+  "response_signals_verified_across_tile": 12,
+  "outputs_in_order": [
+    "io_lsu_resp_0_valid",
+    "io_lsu_resp_1_valid",
+    "io_core_ld_miss"
+  ],
+  "tools": {
+    "yosys": "Yosys 0.9 (git sha1 1979e0b)",
+    "abc": "UC Berkeley, ABC 1.01",
+    "yosys_sha256": "f58d1dfcbc9b48a81357283e93b53e4c78415f6d28f227f0db34a79f316e6a64",
+    "abc_sha256": "6b6d93004494101bed191ddf29c411df55c50f990d7db56796767a3efbb03b09"
+  },
+  "sat": {
+    "source_first": {
+      "status": "equivalent"
+    },
+    "source_and_s2": {
+      "status": "equivalent"
+    },
+    "wrong_local_ldq_tag": {
+      "status": "counterexample",
+      "output_bits_msb_first": {
+        "gold_o": "111",
+        "gate_o": "011"
+      }
+    },
+    "wrong_local_ldq_tag_valid_only": {
+      "status": "equivalent"
+    },
+    "wrong_lane_mask": {
+      "status": "counterexample",
+      "output_bits_msb_first": {
+        "gold_o": "010",
+        "gate_o": "000"
+      }
+    },
+    "suppress_replay_on_killed_cache0": {
+      "status": "counterexample",
+      "output_bits_msb_first": {
+        "gold_o": "110",
+        "gate_o": "100"
+      }
+    },
+    "drop_store17": {
+      "status": "counterexample",
+      "output_bits_msb_first": {
+        "gold_o": "110",
+        "gate_o": "100"
+      }
+    }
+  },
+  "mapping": {
+    "stock": {
+      "cells": {
+        "LUT2": 69,
+        "LUT3": 70,
+        "LUT4": 36,
+        "LUT5": 61,
+        "LUT6": 1020,
+        "MUXF7": 188,
+        "MUXF8": 24
+      },
+      "primitive_depth": {
+        "all": [
+          6,
+          10,
+          19
+        ],
+        "branch_mask": [
+          6,
+          10,
+          19
+        ],
+        "mshr_ready_0": [
+          6,
+          9,
+          18
+        ],
+        "s2_hit_0": [
+          6,
+          9,
+          18
+        ],
+        "op_0": [
+          6,
+          9,
+          18
+        ],
+        "mshr_ready_1": [
+          null,
+          10,
+          19
+        ],
+        "s2_hit_1": [
+          null,
+          8,
+          17
+        ],
+        "op_1": [
+          null,
+          10,
+          19
+        ],
+        "queue_data": [
+          null,
+          null,
+          15
+        ]
+      }
+    },
+    "source_first": {
+      "cells": {
+        "LUT2": 57,
+        "LUT3": 37,
+        "LUT4": 42,
+        "LUT5": 47,
+        "LUT6": 1086,
+        "MUXF7": 245,
+        "MUXF8": 27
+      },
+      "primitive_depth": {
+        "all": [
+          8,
+          8,
+          21
+        ],
+        "branch_mask": [
+          8,
+          8,
+          21
+        ],
+        "mshr_ready_0": [
+          4,
+          4,
+          17
+        ],
+        "s2_hit_0": [
+          3,
+          3,
+          15
+        ],
+        "op_0": [
+          5,
+          5,
+          18
+        ],
+        "mshr_ready_1": [
+          null,
+          4,
+          17
+        ],
+        "s2_hit_1": [
+          null,
+          5,
+          18
+        ],
+        "op_1": [
+          null,
+          5,
+          18
+        ],
+        "queue_data": [
+          null,
+          null,
+          14
+        ]
+      }
+    },
+    "source_and_s2": {
+      "cells": {
+        "LUT2": 81,
+        "LUT3": 41,
+        "LUT4": 41,
+        "LUT5": 26,
+        "LUT6": 1332,
+        "MUXF7": 353,
+        "MUXF8": 107
+      },
+      "primitive_depth": {
+        "all": [
+          5,
+          9,
+          23
+        ],
+        "branch_mask": [
+          5,
+          9,
+          23
+        ],
+        "mshr_ready_0": [
+          3,
+          5,
+          19
+        ],
+        "s2_hit_0": [
+          3,
+          5,
+          19
+        ],
+        "op_0": [
+          3,
+          5,
+          19
+        ],
+        "mshr_ready_1": [
+          null,
+          6,
+          20
+        ],
+        "s2_hit_1": [
+          null,
+          6,
+          20
+        ],
+        "op_1": [
+          null,
+          6,
+          20
+        ],
+        "queue_data": [
+          null,
+          null,
+          17
+        ]
+      }
+    }
+  }
+}

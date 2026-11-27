@@ -46,3 +46,5 @@ python3 scripts/test-mega-lsu-miss-fork.py "$PHYSICAL" "$YOSYS" "$CONE_OUT"
 ```
 
 本实验不验证 DDR、时钟约束、板上引导或 Linux CoreMark 每秒迭代数。是否可以上板，仍取决于恢复版自己的时序、CDC、DRC 与约束审查。
+
+后续从两路 D-cache 响应一直比较到 LSU 的 miss 输出，见[为什么缩短响应 valid 仍未合入](perf-mega175-dcache-response.md)。
