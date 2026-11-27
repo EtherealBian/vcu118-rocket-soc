@@ -1,0 +1,83 @@
+{
+  "scope": "Route design returned; before post-route physical optimization. Router timing estimates only, not final design STA, CDC, DRC, bitstream or hardware performance.",
+  "kit_manifest_sha256": "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+  "native_log_prefix_bytes": 4970635,
+  "native_log_prefix_sha256": "90bad5db07f1a52c4abad47c123d0cdff286b974d529223e45e99462273c37e4",
+  "post_place_dcp": {
+    "bytes": 464636777,
+    "sha256": "e5be273c5dae935df5b0e114a94b7c55ee1825bd7dedad2f2ec63ae4fdf3858e"
+  },
+  "routed_before_physopt_dcp": {
+    "bytes": 537529878,
+    "sha256": "d0ead1ae8498f90d6ec268dc12c7f26d745448bcf2c20b4ce681a4dd356ef581"
+  },
+  "phase8_routable_nets_only": {
+    "Failed Nets": 0,
+    "Unrouted Nets": 0,
+    "Partially Routed Nets": 0,
+    "Node Overlaps": 0
+  },
+  "phase15_router_estimate_ns": {
+    "wns": "-9.283",
+    "tns": "-753824.949",
+    "whs": "0.010",
+    "ths": "0.000"
+  },
+  "phase16_in_router_physopt_estimate_ns": {
+    "wns": "-9.237",
+    "tns": "-747889.862",
+    "whs": "0.010",
+    "ths": "0.000"
+  },
+  "phase16_2_cpu_processed_nets_with_no_group_wns_improvement": [
+    "int_issue_unit/slots_8/p2",
+    "brinfos_0_valid",
+    "int_issue_unit/slots_12/slot_uop_prs2_reg[4]_20"
+  ],
+  "xdc": {
+    "XDC": {
+      "place_sha256": "ea0ee6a675e81c6e96e020a1647aa51fd8950d00db9a22c7c1ff49c97caa14fe",
+      "route_sha256": "ea0ee6a675e81c6e96e020a1647aa51fd8950d00db9a22c7c1ff49c97caa14fe",
+      "byte_identical": true,
+      "nonblank_noncomment_lines": [
+        552,
+        552
+      ]
+    },
+    "XDC_BOARD": {
+      "place_sha256": "0b299bfd44835c7f9c2f7b4b06e9141329357bacf75a9dd71f0474812f0434af",
+      "route_sha256": "0b299bfd44835c7f9c2f7b4b06e9141329357bacf75a9dd71f0474812f0434af",
+      "byte_identical": true,
+      "nonblank_noncomment_lines": [
+        16,
+        16
+      ]
+    },
+    "XDC_EARLY": {
+      "place_sha256": "7fe4282a4769aa3941140474af13d3bf4386f2290eb7b2a58536a74b972ed841",
+      "route_sha256": "7fe4282a4769aa3941140474af13d3bf4386f2290eb7b2a58536a74b972ed841",
+      "byte_identical": true,
+      "nonblank_noncomment_lines": [
+        1729,
+        1729
+      ]
+    },
+    "XDC_LATE": {
+      "place_sha256": "41ee65742afb96d7fd2ca996837951d8dabf250316bc214efba4b8af0be22ee8",
+      "route_sha256": "41ee65742afb96d7fd2ca996837951d8dabf250316bc214efba4b8af0be22ee8",
+      "byte_identical": true,
+      "nonblank_noncomment_lines": [
+        66,
+        66
+      ]
+    }
+  },
+  "embedded_routed_qor": {
+    "design_state": "Routed",
+    "retains_all_five_placed_stage_rows": true,
+    "appended_stage": "route_design -directive Explore",
+    "reported_minutes": 218,
+    "rda_json_sha256": "409dedda7f48fd70eaa3d26d53866aaccd9c579ed4598e1d196f7b26baabd823",
+    "four_values_match_last_router_physopt_summary": true
+  }
+}
