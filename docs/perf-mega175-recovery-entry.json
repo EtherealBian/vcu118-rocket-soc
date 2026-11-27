@@ -1,0 +1,32 @@
+{
+  "scope": "Cold-reset recovery ChipTop RTL; preloaded behavioral external TL RAM except the UART entry bytes. Through MRET and a bounded S-mode retirement window only. Not a userspace, STA or board result.",
+  "physical_kit_sha256": "ce0ef1171c7b0077282602c5c97230d03850b71c350c6c9ddcdf0b7ebcb5a456",
+  "model_sha256": "1aab61cc7d048510f7b191ce51ba6b41797d7a7774898453731d131a20ce7066",
+  "bound_sha256": "b60a1985c290acc3e213de0393e34b2230071af1a2f86de5b03d0438f2f5aa98",
+  "observer_sha256": "4d886a3b36c0e207a710a4192660df8f592f24ec8b566fc4b7254bab0331d2e8",
+  "firmware_sha256": "f0db553be5448c4a8754c995cf25413b0e6f48c73cde061657c1bf1dfff46bce",
+  "kernel_sha256": "faa2d5d8284e479b8c11a6267f7fa0d054a1c8ebae6fabcfeba82fd6196f8237",
+  "bounded_events_including_marker_sha256": "55fdf523fe1c7b0db37ff44cb7cc8a8c17757044aee792d5db743ba9ce8b7f50",
+  "witness": {
+    "negative_crc_stop_tick": 883890,
+    "valid_rom_handoff_tick": 838329,
+    "mret_tick": 40822114,
+    "entry_address": "0x80200000",
+    "entry_tl_get_tick": 30779723,
+    "entry_tl_get_bytes": 64,
+    "observation_end_tick": 40822448,
+    "supervisor_arch_commits": 258,
+    "backing_tl_reads": 1833,
+    "backing_tl_writes": 99,
+    "entry_frame_bytes": 24,
+    "backing_preloaded_bytes": 5604352
+  },
+  "evidence_sha256": {
+    "boot.uart": "81bb74ae01faeb8f1279aa67a8407073252eaac495002dc16a6ebde7591b224c",
+    "boot.events": "ea7b1cf852b14605d5f6fc0e45942a93e2dd2d76a5e1f493d78bd1095fc96ed6",
+    "crc.uart": "03c77fdbb9a03bf9b97c49b3143cf982711c7325a5b133cdd8d12fbd5c5e7faa",
+    "crc.events": "f10e60c6028e07ee37c2fb69986da96d6615179780d729a758caf4528935f410"
+  },
+  "uart_prefix_bytes": 2352,
+  "events_prefix_bytes": 641
+}

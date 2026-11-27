@@ -17,4 +17,16 @@ python3 -B scripts/test-mega-recovery-linux.py rom "$PHYSICAL" "$KIT" "$PREVIOUS
 python3 -B scripts/test-mega-recovery-linux.py review "$PHYSICAL" "$KIT" "$PREVIOUS" "$RELEASE" "$VERILATOR" "$OUT"
 ```
 
-UART 和模型事件原件保留在私有目录。`rom` 只检查第一回完整记录和第二回的固定 ROM 前缀；后续启动、内核身份和短跑 CRC 在完整 `review` 之前均不记为通过。两者均不能证明 175 MHz 时序、六次实板验收或 1,000 次/秒。
+UART 和模型事件原件保留在私有目录。`rom` 只检查第一回完整记录和第二回的固定 ROM 前缀；入核需要下面的独立检查；Linux 用户态与短跑 CRC 则要等完整 `review`。这些检查均不能证明 175 MHz 时序、六次实板验收或 1,000 次/秒。
+
+## 恢复版实际进入了 Linux 内核吗？
+
+进入了内核入口，还未凭这个窗口证明用户态运行。正确帧从冷复位开始：第 **30,779,723** 拍出现对内核入口的 64 字节总线读；直到第 **40,822,114** 拍才观测到 OpenSBI 执行 `mret`，从 M 模式切到 S 模式，`mepc=0x80200000`。第 **40,822,448** 拍，累计观测到 **258 条 S 模式架构提交**。这三个事件不能互相替代，预取尤其不能当作已开始执行内核。
+
+对照的是恢复版正在运行的 `ChipTop` 模型，而非另一个已经启动的原版模型。按观察器标记截取 2,352 字节 UART 和标记前 641 字节事件；两段内容、独立错帧的两个完整记录，以及从这些记录重新解析的计数，均与原版入核实验相同。[结果和输入指纹](perf-mega175-recovery-entry.json)中没有私有串口原文。本次 RTL 复核还检查了活动进程的可执行文件、启动参数、工作目录、两个输出文件描述符和物理输入封印；不使用进程号的离线复算得到了相同的 JSON。删除 `mret`、更改提交数、截短 UART 或截断边界标记均被拒绝。只读截取没有停止或重启模型。
+
+```sh
+python3 -B scripts/review-mega-recovery-entry.py "$PHYSICAL" "$KIT" "$PREVIOUS" "$RELEASE" "$VERILATOR" "$OUT" > entry.json
+diff -u docs/perf-mega175-recovery-entry.json entry.json
+# 在模型仍运行时，额外传 --pid <模型进程号> 可核对实际进程与输出文件。
+```
