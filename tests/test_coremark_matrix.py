@@ -49,8 +49,56 @@ class MatrixReview(unittest.TestCase):
             self.write_matrix(m.PORTABLE_ORDER,False)
             with self.assertRaisesRegex(ValueError,'pinned .*CRC'):m.review(self.boot,self.d,self.d,'portable')
 
+    def test_tune_matrix_requires_actual_boot_cpu_and_dt_in_each_capture(self):
+        digest=lambda data:hashlib.sha256(data).hexdigest()
+        ids={p:digest(p.encode()) for p in m.TUNE}
+        self.write_matrix(m.TUNE_ORDER,True); boot_nonce='fedc012345abcd'
+        def augment(i,p):
+            d=self.d/f'{i:02}-{p}';n=(d/'nonce.txt').read_text();file=d/'uart.txt';raw=file.read_bytes();at=ids[p].encode()+b'  /bin/'
+            lines=[f'CM_BOOT_{boot_nonce}_42_{n}','0','processor : 0','hart : 0','uarch : sifive,rocket0',
+                'b6f54d6d00b160ef946114b90c9f61182f61e2fbc9eef90d11932a2c00633a0a  /sys/firmware/devicetree/base/cpus/timebase-frequency',
+                'ead154cbb9f74e30f552dac2f5c6e38890a9a705d9010af7343388daff9d8022  /sys/firmware/devicetree/base/cpus/cpu@0/compatible',
+                '547b7dbafa7395a48f9514232ae6e1abfbaff85eafc08413b8276839ff11e28a  /sys/firmware/devicetree/base/soc/pbus_clock/clock-frequency',
+                f'CM_MACHINE_END_42_{n}']
+            raw=raw.replace(at,('\r\n'.join(lines)+'\r\n').encode()+at); file.write_bytes(raw)
+            rec=d/'result.json';obj=json.loads(rec.read_bytes());obj['uart_sha256']=digest(raw);rec.write_text(json.dumps(obj))
+        with mock.patch.object(m,'PORTABLE_ELFS',ids),mock.patch.object(m,'TUNED_ELF',ids[m.TUNE[2]]):
+            for i,p in enumerate(m.TUNE_ORDER,1):augment(i,p)
+            r=m.review(self.boot,self.d,self.d,'tune',boot_nonce)
+            self.assertEqual(r['control_profile'],'g15-gc-lto')
+            self.assertEqual([x['sequence'] for x in r['profiles'][m.TUNE[2]]['measurements']],[3,5,7])
+            with self.assertRaisesRegex(ValueError,'machine marker'):m.review(self.boot,self.d,self.d,'tune','b'*14)
+            f=self.d/'03-g15-gc-lto-ooo/uart.txt';orig=f.read_bytes()
+            for (old,new,err) in [(b'uarch : sifive,rocket0',b'uarch : ucb-bar,boom0','Rocket CPU'),
+                                  (b'0\r\nprocessor',b'0-3\r\nprocessor','Rocket CPU'),
+                                  (b'b6f54',b'00f54','live device tree'),
+                                  (b'generic-ooo',b'generic-inorder','invalid build')]:
+                with self.subTest(old=old),self.assertRaisesRegex(ValueError,err):
+                    f.write_bytes(orig.replace(old,new));m.review(self.boot,self.d,self.d,'tune',boot_nonce)
+            f.write_bytes(orig)
+            with mock.patch.object(m,'TUNED_ELF','0'*64),self.assertRaisesRegex(ValueError,'locked tuning ELFs'):
+                m.review(self.boot,self.d,self.d,'tune',boot_nonce)
+
     def test_balanced_and_not_target(self):
         r=m.review(self.boot,self.d,self.d);self.assertFalse(r['profiles']['o3']['all_three_at_least_1000']);self.assertEqual(len(r['profiles']['o3-zb']['measurements']),3)
+    def test_target_uses_all_three_not_the_median_and_still_checks_validation(self):
+        from decimal import Decimal
+        def rate(seq, ticks):
+            d=self.d/f'{seq:02}-o3'; file=d/'uart.txt'; n=(d/'nonce.txt').read_text()
+            raw=file.read_bytes(); marker=f'CM_validation_42_{n}'.encode(); before,after=raw.split(marker)
+            t=Decimal(ticks)/1000; speed=format(Decimal(12000)/t,'.6f').encode()
+            before=before.replace(b'20000',str(ticks).encode()).replace(b'20.000000',format(t,'.6f').encode()).replace(b'600.000000',speed)
+            raw=marker.join((before,after)); file.write_bytes(raw); timing={'performance':ticks+100,'validation':20100}
+            (d/'host-ms.json').write_text(json.dumps(timing));saved=d/'result.json';rec=json.loads(saved.read_bytes())
+            rec.update(m.cm.inspect(raw,n,hashlib.sha256(b'o3').hexdigest(),12000,timing,'o3'));saved.write_text(json.dumps(rec))
+        for seq,ticks in [(2,11000),(4,11500),(9,12001)]:rate(seq,ticks)
+        stats=m.review(self.boot,self.d,self.d)['profiles']['o3']
+        self.assertGreater(Decimal(stats['performance_median']),1000);self.assertFalse(stats['all_three_at_least_1000'])
+        self.write_matrix(m.ORDER)
+        for seq,ticks in [(2,11000),(4,11500),(9,12000)]:rate(seq,ticks)
+        self.assertTrue(m.review(self.boot,self.d,self.d)['profiles']['o3']['all_three_at_least_1000'])
+        f=self.d/'09-o3/uart.txt';f.write_bytes(f.read_bytes().replace(b'0xe3c1',b'0xe3c0'))
+        with self.assertRaisesRegex(ValueError,'wrong CRC'):m.review(self.boot,self.d,self.d)
     def test_reject_missing_session_and_wrong_bit(self):
         with self.assertRaises(ValueError):m.review(dict(self.boot,bit_sha256='1'*64),self.d,self.d)
         p=self.d/'03-o3-zb/uart.txt';p.write_bytes(p.read_bytes().replace(b'CM_SESSION_',b'OTHER_'))

@@ -8,7 +8,7 @@ spec=importlib.util.spec_from_file_location('cmcheck',Path(__file__).with_name('
 p=argparse.ArgumentParser(description=__doc__);p.add_argument('firmware',type=Path);p.add_argument('elf',type=Path);p.add_argument('out',type=Path);p.add_argument('--profile',choices=tuple(cm.PROFILES),default='baseline');a=p.parse_args();a.out.mkdir(); nonce=secrets.token_hex(7)
 q=Path(os.getenv('VCU_TOOLS',Path.home()/'.local/share/vcu118-tools'))/'qemu';env=dict(os.environ);env['LD_LIBRARY_PATH']=f'{q}/usr/lib/x86_64-linux-gnu:{q}/lib/x86_64-linux-gnu:'+env.get('LD_LIBRARY_PATH','')
 args=[q/'usr/bin/qemu-system-riscv64','-machine','virt','-m','256M','-smp','1','-nographic','-monitor','none','-bios',a.firmware.resolve()]
-portable=a.profile=='g15-gc-lto'
+portable=a.profile in ('g15-gc-lto', 'g15-gc-lto-ooo')
 if portable:
     # The pinned QEMU 4.2.1 has named RV64GC models but no zba/zbb property.
     # Do not infer illegal instructions from a model name or /proc/cpuinfo alone.

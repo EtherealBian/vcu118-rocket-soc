@@ -1,6 +1,6 @@
 [CmdletBinding()] param(
  [Parameter(Mandatory)][string]$Run,[Parameter(Mandatory)][string]$Capture,[Parameter(Mandatory)][string]$Payload,
- [Parameter(Mandatory)][string]$Release,[Parameter(Mandatory)][string]$Out,[Parameter(Mandatory)][string]$Bridge,[ValidateSet('original','compilers','portable')][string]$Experiment='original')
+ [Parameter(Mandatory)][string]$Release,[Parameter(Mandatory)][string]$Out,[Parameter(Mandatory)][string]$Bridge,[ValidateSet('original','compilers','portable','tune')][string]$Experiment='original')
 # A full Latin square with one steady board clock and one boot. The session marker
 # is an ash variable, deliberately not a file that might survive guest restart.
 $ErrorActionPreference='Stop';if(Test-Path -LiteralPath $Out){throw 'fresh output directory required'}
@@ -16,8 +16,13 @@ if($Experiment -eq 'portable'){
  $trio='baseline','o3','g15-gc-lto';$files['g15-gc-lto']='coremark-g15-gc-lto.elf'
  $order=@(for($r=0;$r -lt 3;$r++){for($c=0;$c -lt 3;$c++){$trio[($r+$c)%3]}})
 }
+if($Experiment -eq 'tune'){
+ $trio='baseline','g15-gc-lto','g15-gc-lto-ooo'
+ foreach($p in $trio[1..2]){$files[$p]="coremark-$p.elf"}
+ $order=@(for($r=0;$r -lt 3;$r++){for($c=0;$c -lt 3;$c++){$trio[($r+$c)%3]}})
+}
 for($i=0;$i -lt $order.Count;$i++){
  $p=$order[$i];$dest=Join-Path $dir ('{0:d2}-{1}' -f ($i+1),$p)
- & "$PSScriptRoot/test-board-coremark.ps1" -Run $Run -Capture $Capture -Payload $Payload -Elf (Join-Path $Release $files[$p]) -Out $dest -Bridge $Bridge -Iterations 12000 -Profile $p -SessionTag $tag -StartSession:($i -eq 0)
+ & "$PSScriptRoot/test-board-coremark.ps1" -Run $Run -Capture $Capture -Payload $Payload -Elf (Join-Path $Release $files[$p]) -Out $dest -Bridge $Bridge -Iterations 12000 -Profile $p -SessionTag $tag -StartSession:($i -eq 0) -CheckTuneBoard:($Experiment -eq 'tune')
 }
 $summary=& python "$PSScriptRoot/review-coremark-matrix.py" $Run $Capture $Payload $Release $dir --experiment $Experiment;if($LASTEXITCODE){throw 'matrix failed review'};$summary|Set-Content (Join-Path $dir result.json);$summary

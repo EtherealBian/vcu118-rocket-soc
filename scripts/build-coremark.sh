@@ -2,7 +2,7 @@
 # Build the unmodified upstream POSIX port. Do not run or publish host timing as a board result.
 set -euo pipefail
 root=$(cd "$(dirname "$0")/.." && pwd); out=${1:?fresh output directory}; profile=${2:-baseline}; opt=-O2; arch=rv64gc; sdk=bootlin; ver=13.3.0
-case "$profile" in baseline) ;; g15-gc-lto) opt="-O3 -flto"; sdk=bootlin-cpu-2025.08-1; ver=15.1.0;; o3) opt=-O3;; o3-zb) opt=-O3; arch=rv64gc_zba_zbb;;
+case "$profile" in baseline) ;; g15-gc-lto|g15-gc-lto-ooo) opt="-O3 -flto"; if [[ $profile == *-ooo ]]; then opt+=" -mtune=generic-ooo"; fi; sdk=bootlin-cpu-2025.08-1; ver=15.1.0;; o3) opt=-O3;; o3-zb) opt=-O3; arch=rv64gc_zba_zbb;;
  o3-zb-lto|o3-zb-lto-unroll|g15-zb|g15-zb-lto|g15-zb-lto-unroll)
    arch=rv64gc_zba_zbb; opt=-O3
    if [[ $profile == g15-* ]]; then sdk=bootlin-cpu-2025.08-1;ver=15.1.0;fi

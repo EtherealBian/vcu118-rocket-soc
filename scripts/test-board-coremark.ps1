@@ -1,8 +1,8 @@
 [CmdletBinding()] param(
  [Parameter(Mandatory)][string]$Run,[Parameter(Mandatory)][string]$Capture,[Parameter(Mandatory)][string]$Payload,
  [Parameter(Mandatory)][string]$Elf,[Parameter(Mandatory)][string]$Out,[string]$Bridge=$env:VCU_UART_SERIAL,
- [ValidateSet('baseline','o3','g15-gc-lto','o3-zb','o3-zb-lto','o3-zb-lto-unroll','g15-zb','g15-zb-lto','g15-zb-lto-unroll')][string]$Profile='baseline',
- [ValidatePattern('^[a-f0-9]{16}$')][string]$SessionTag,[switch]$StartSession,
+ [ValidateSet('baseline','o3','g15-gc-lto','g15-gc-lto-ooo','o3-zb','o3-zb-lto','o3-zb-lto-unroll','g15-zb','g15-zb-lto','g15-zb-lto-unroll')][string]$Profile='baseline',
+ [ValidatePattern('^[a-f0-9]{16}$')][string]$SessionTag,[switch]$StartSession,[switch]$CheckTuneBoard,
  [ValidateRange(1000,20000)][int]$Iterations=6000)
 # Runs the already-installed, profile-specific benchmark on an independently verified live shell.
 # Read-only; no configuration, guest downloads, mounts, network or persistent files.
@@ -28,6 +28,11 @@ try {
  $s.Write("sha256sum $guest`n");AwaitLine "$elfSha  $guest";[void]$all.Clear()
  $s.Write(('echo CM_LIVE_$((6*7))_'+$nonce+"`n"));AwaitLine "CM_LIVE_42_$nonce"
  if($SessionTag){$s.Write(('echo CM_SESSION_${CMAB}_$((6*7))_'+$nonce+"`n"));AwaitLine "CM_SESSION_${SessionTag}_42_$nonce"}
+ if($CheckTuneBoard){
+  if(!$SessionTag -or $prior.challenge_nonce -cnotmatch '^[0-9a-f]{14}$'){throw 'tune collector requires a bound boot and matrix session'}
+  $s.Write(('echo CM_BOOT_${VCU_BOOT_TAG}_$((6*7))_'+$nonce+'; cat /sys/devices/system/cpu/online; cat /proc/cpuinfo; sha256sum /sys/firmware/devicetree/base/cpus/timebase-frequency /sys/firmware/devicetree/base/cpus/cpu@0/compatible /sys/firmware/devicetree/base/soc/pbus_clock/clock-frequency; echo CM_MACHINE_END_$((6*7))_'+$nonce+"`n"));AwaitLine "CM_MACHINE_END_42_$nonce"
+  if($all.ToString() -cnotmatch ("(?m)^(?:# )?CM_BOOT_"+$prior.challenge_nonce+"_42_${nonce}\r?$")){throw 'benchmark shell differs from programmed boot'}
+ }
  if($Profile -like '*-zb*'){
   $s.Write(('cat /proc/cpuinfo; echo CM_ISA_END_$((6*7))_'+$nonce+"`n"));AwaitLine "CM_ISA_END_42_$nonce"
   $isa=[regex]::Matches($all.ToString(),'(?m)^isa\s*:\s*(rv64[a-z0-9_]+)\r?$');if($isa.Count -ne 1){throw 'expected one Linux hart ISA field'}

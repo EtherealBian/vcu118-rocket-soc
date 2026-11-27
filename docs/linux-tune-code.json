@@ -1,0 +1,29 @@
+{
+  "scope": "Static comparison of the two pinned Linux executables. The single explicit tuning switch also changes the implicit alignment policy. Section sizes and fingerprints do not measure throughput.",
+  "compiler": "GCC 15.1.0",
+  "reference": {
+    "profile": "g15-gc-lto",
+    "elf_sha256": "0ab2e1c3baf03a98c23383268e1f792c9d955e6fe54b15c0e536ac21f22a4232",
+    "text_bytes": 56832,
+    "text_sha256": "f728983a8656aae7af5673fd1bf29f8b39f99c099f1559ace7642853730eadda",
+    "elf_arch": "rv64i2p1_m2p0_a2p1_f2p2_d2p2_c2p0_zicsr2p0_zifencei2p0_zmmul1p0_zaamo1p0_zalrsc1p0_zca1p0_zcd1p0",
+    "effective_march": "rv64imafdc_zicsr_zifencei_zmmul_zaamo_zalrsc_zca_zcd",
+    "abi": "lp64d",
+    "explicit_mtune": null,
+    "effective_strict_align": true,
+    "elf_declares_unaligned_access": false
+  },
+  "candidate": {
+    "profile": "g15-gc-lto-ooo",
+    "elf_sha256": "54144e7c53a35078afe3f075469e68e87ea9b5de6837530f4be76c67725ecce9",
+    "text_bytes": 56888,
+    "text_sha256": "2897ab1ad2745b6522674e470f53b5037f64db23e392b17f04fd6853a709828d",
+    "elf_arch": "rv64i2p1_m2p0_a2p1_f2p2_d2p2_c2p0_zicsr2p0_zifencei2p0_zmmul1p0_zaamo1p0_zalrsc1p0_zca1p0_zcd1p0",
+    "effective_march": "rv64imafdc_zicsr_zifencei_zmmul_zaamo_zalrsc_zca_zcd",
+    "abi": "lp64d",
+    "explicit_mtune": "generic-ooo",
+    "effective_strict_align": false,
+    "elf_declares_unaligned_access": true
+  },
+  "text_size_delta_bytes": 56
+}

@@ -16,6 +16,7 @@ FLAGS = '-O2 -static -s -march=rv64gc -mabi=lp64d -Wl,--build-id=none -lrt'
 PROFILES = {
     'baseline': ('/bin/coremark', FLAGS),
     'g15-gc-lto': ('/bin/coremark-g15-gc-lto', FLAGS.replace('-O2 ', '-O3 -flto ')),
+    'g15-gc-lto-ooo': ('/bin/coremark-g15-gc-lto-ooo', FLAGS.replace('-O2 ', '-O3 -flto -mtune=generic-ooo ')),
     'o3': ('/bin/coremark-o3', FLAGS.replace('-O2 ', '-O3 ')),
     'o3-zb': ('/bin/coremark-o3-zb', FLAGS.replace('-O2 ', '-O3 ').replace('rv64gc ', 'rv64gc_zba_zbb ')),
 }

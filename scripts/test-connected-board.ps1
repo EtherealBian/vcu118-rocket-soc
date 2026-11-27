@@ -1,4 +1,4 @@
-[CmdletBinding()] param([ValidateSet('bare','address','linux','dot4','dotbench','linux-dot4','linux-oscheck','counters','sweep','cpu-window')][string]$Mode='bare',[string]$Run,[ValidatePattern('^[0-9a-fA-F]{64}$')][string]$ReviewedBitSha256,[switch]$Program,[ValidateRange(30,7200)][int]$TimeoutSeconds=240,[string]$UartPayload,[string]$Vivado='D:\Xilinx\Vivado\2024.2\bin\vivado.bat',[string]$BoardDefinition,[string]$Cable=$env:VCU_CABLE_SERIAL,[string]$Bridge=$env:VCU_UART_SERIAL,[string]$Slr0Dna=$env:VCU_SLR0_DNA)
+[CmdletBinding()] param([ValidateSet('bare','address','linux','dot4','dotbench','linux-dot4','linux-oscheck','counters','sweep','cpu-window')][string]$Mode='bare',[string]$Run,[ValidatePattern('^[0-9a-fA-F]{64}$')][string]$ReviewedBitSha256,[switch]$Program,[switch]$BindShell,[ValidateRange(30,7200)][int]$TimeoutSeconds=240,[string]$UartPayload,[string]$Vivado='D:\Xilinx\Vivado\2024.2\bin\vivado.bat',[string]$BoardDefinition,[string]$Cable=$env:VCU_CABLE_SERIAL,[string]$Bridge=$env:VCU_UART_SERIAL,[string]$Slr0Dna=$env:VCU_SLR0_DNA)
 # Default preflight never writes to the board. -Program requires prior manual review of CDC/IO/DRC and exact bit SHA.
 $ErrorActionPreference='Stop'; . (Join-Path $PSScriptRoot board-console.ps1); $root=Split-Path $PSScriptRoot -Parent
 if (!$Bridge -or ($Program -and (!$Cable -or $Slr0Dna -notmatch '^0x[0-9a-fA-F]+$'))) {throw 'Pass -Bridge for preflight; -Program also requires -Cable and -Slr0Dna from local enumeration'}
@@ -49,7 +49,7 @@ try {
     if(!$handoff){Start-Sleep -Milliseconds 10; continue}
    }
    $event=Get-VcuConsoleEvent $text $Mode $nonce $sent; if($event -eq 'FAIL'){throw "Guest failure; $logDir"}
-   if($event -eq 'CHALLENGE'){$promptMs=$wire.ElapsedMilliseconds; $sp.Write('echo BOARD_$((40+2))_'+$nonce+"`n"); $text=''; $sent=$true}
+   if($event -eq 'CHALLENGE'){$promptMs=$wire.ElapsedMilliseconds; if($BindShell){$sp.Write(('VCU_BOOT_TAG='+$nonce+'; echo BOARD_$((40+2))_${VCU_BOOT_TAG}'+"`n"))}else{$sp.Write('echo BOARD_$((40+2))_'+$nonce+"`n")}; $text=''; $sent=$true}
    if($event -eq 'PASS'){$wire.Stop(); $accepted=$true; break}
   }; Start-Sleep -Milliseconds 30
  }; if(!$accepted){throw "Timeout: not a board PASS. Evidence: $logDir"}

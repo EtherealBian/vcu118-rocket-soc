@@ -8,13 +8,14 @@ dot4=${VCU_DOT4_ENABLE:-0}; case "$dot4" in 0) ;; 1) test -n "${VCU_BUILD:-}" &&
 oscheck=${VCU_OSCHECK_ENABLE:-0}; case "$oscheck" in 0) ;; 1) [[ -n ${VCU_IMAGE_OBJ:-} && -n ${VCU_RELEASE_OUT:-} && "$obj" != "$native/image" && "$release" != "$root/artifacts" ]] || { echo 'use a separate object directory and release for oscheck'; exit 2; } ;; *) exit 2;; esac
 quad=${VCU_QUAD_SMP:-0}; case "$quad" in 0) ;; 1) [[ -n ${VCU_IMAGE_OBJ:-} && -n ${VCU_RELEASE_OUT:-} && "$obj" != "$native/image" && "$release" != "$root/artifacts" ]] || exit 2;; *) exit 2;; esac
 coremark=${VCU_COREMARK_ENABLE:-0}; case "$coremark" in 0) ;; 1) [[ -n ${VCU_IMAGE_OBJ:-} && -n ${VCU_RELEASE_OUT:-} && "$obj" != "$native/image" && "$release" != "$root/artifacts" ]] || { echo 'CoreMark requires isolated build and release directories'; exit 2; } ;; *) exit 2;; esac
-profiles=${VCU_COREMARK_AB:-0}; case "$profiles:$coremark" in 0:0|0:1|1:1|portable:1) ;; *) echo 'profile matrix requires isolated CoreMark image' >&2; exit 2;; esac
+profiles=${VCU_COREMARK_AB:-0}; case "$profiles:$coremark" in 0:0|0:1|1:1|portable:1|tune:1) ;; *) echo 'profile matrix requires isolated CoreMark image' >&2; exit 2;; esac
 compiler_profiles=(); case ${VCU_COREMARK_COMPILERS:-0}:$profiles in
  0:*) ;; 1:1) compiler_profiles=(o3-zb-lto o3-zb-lto-unroll g15-zb g15-zb-lto g15-zb-lto-unroll);;
  *) echo 'compiler comparisons require the complete controlled baseline image' >&2; exit 2;; esac
 extra_profiles=(); case $profiles in
  1) extra_profiles=(o3 o3-zb "${compiler_profiles[@]}");;
  portable) extra_profiles=(o3 g15-gc-lto);;
+ tune) extra_profiles=(o3 g15-gc-lto g15-gc-lto-ooo);;
 esac
 cross=$tools/bootlin/bin/riscv64-linux-; test -x "${cross}gcc"; jobs=${JOBS:-4}
 gcc -std=c11 -D_POSIX_C_SOURCE=200809L -Wall -Wextra -Werror -O2 "$root/software/soc-check.c" -o "$obj/host-check"; "$obj/host-check" 0
@@ -70,7 +71,15 @@ if [[ $coremark == 1 ]]; then
       cp "$stage/coremark-$p" "$release/coremark-$p.elf"; cmp "$stage/coremark-$p" "$release/coremark-$p.elf"
     done
     if (( ${#compiler_profiles[@]} )); then (cd "$release" && sha256sum coremark-g15-*.elf coremark-o3-zb-lto*.elf > compiler-profiles.sha256 && sha256sum -c compiler-profiles.sha256); fi
-    (cd "$release"; files=(coremark.elf coremark-o3.elf); if [[ $profiles == portable ]]; then files+=(coremark-g15-gc-lto.elf); else files+=(coremark-o3-zb.elf); fi; sha256sum "${files[@]}" > profiles.sha256 && sha256sum -c profiles.sha256)
+    (cd "$release"
+     files=(coremark.elf coremark-o3.elf)
+     case $profiles in
+       portable) files+=(coremark-g15-gc-lto.elf);;
+       tune) files+=(coremark-g15-gc-lto.elf coremark-g15-gc-lto-ooo.elf);;
+       1) files+=(coremark-o3-zb.elf);;
+       *) exit 2;;
+     esac
+     sha256sum "${files[@]}" > profiles.sha256 && sha256sum -c profiles.sha256)
   fi
 fi
 manifest=$obj/kernel/initramfs.list

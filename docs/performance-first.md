@@ -217,3 +217,17 @@ ChipTop 引脚仿真不包含 VCU118 的外层串口接线。用 Vivado 2024.2 x
 又把这两个 175 MHz 三路模型接到同一个整核 UART 引脚测试。两版都收到了 64 字节正确帧的 `HANDOFF` 和探针回复 `K`，也都对 20 字节坏帧回报 CRC 错误。计入回复后的 20 位静默观察，两个用例在原版与前移版上分别同为 **1,491,500 拍**和 **823,131 拍**。首字节的 9 个边沿间隔均为 1,519 拍，故意按 868 拍/位接收被拒绝。[同频串口逐项对照](perf175-early-way-rom-link.json)。这是对启动通路的仿真回归，不是 Linux 跑分或实板时钟测量。
 
 复现这组对照：分别用 `scripts/test-clocked-rom-link.sh` 对原版和前移版执行 `175 single` 配置，再运行 `python3 scripts/compare-early-way-rom-link.py <原版证据目录> <原版模型包> <前移版证据目录> <前移版模型包>`。它直接复核两份原始引脚记录、输入文件和模型封存标识，不以已发布的分数或两份摘要相等作为通过条件。
+
+### 2026-11-27：只改变 GCC 的调优选项，Rocket 上快了多少？
+
+同一块 VCU118 经 JTAG 易失配置并重新启动 Linux 后，用同一 100 MHz Rocket、单 hart、单上下文、标准 2,000 字节测试。下表单位为次/秒。三份通用 RV64GC 程序按交错次序各运行三次，每次性能与验证种子各 12,000 轮。
+
+| Linux 用户态程序（无 Zba/Zbb） | 性能种子逐次 | 性能中位 | 验证中位 |
+|---|---:|---:|---:|
+| GCC 13.3，`-O2` | 216.994 / 216.975 / 216.924 | 216.975 | 215.637 |
+| GCC 15.1，`-O3 -flto` | 228.324 / 228.180 / 228.328 | 228.324 | 227.036 |
+| 同上，加 `-mtune=generic-ooo` | 229.854 / 229.841 / 229.850 | 229.850 | 228.672 |
+
+`generic-ooo` 相对同次启动的 GCC 15 默认配置，中位数变化 **+0.668%**。不要只归因于指令调度：在这版 GCC 中，该选项还把隐含的 `-mstrict-align` 从启用改为禁用；两份程序的 ISA、ABI 相同，ELF 的非对齐访问标记不同。18 次运行的 CRC 均通过，主机墙钟与客机计时一致。它没有刷新 Rocket 使用 Zba/Zbb 的 254.232 次/秒中位数，也没有给四路 BOOM 产生实板分数。
+
+[九组双种子实测（哈希、CRC、墙钟）](coremark-tune-rocket-board.json) · [本次易失配置与 Linux 启动](linux-tune-rocket-boot.json) · [两份 Linux ELF 的代码和目标选项](linux-tune-code.json)。复现：`VCU_COREMARK_AB=tune` 构建实验镜像，实板采集加 `-BindShell`，运行矩阵加 `-Experiment tune`；最后用 `review-coremark-matrix.py --experiment tune` 从原始 UART 独立复核。
