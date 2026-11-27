@@ -1,0 +1,93 @@
+`timescale 1ps/1ps
+// Exercised below the PLL and MIG UI reset outputs. The IP itself is not simulated.
+module tb;
+  reg sc=0, dc=0, cpucause=0, uicause=0, send=0, want=0, check_on=0, probe=0;
+  integer hs,hd,phase,gate, sent=0,seen=0,expected=1,valid_edges=0;
+  wire sr,ui_wr,sourceclock;
+  wire dr=uicause;             // Raw UI reset at island. Not the AXI IP aresetn.
+  wire ip_aresetn=!ui_wr;
+  wire take=want && (!gate || ip_aresetn);   // Two boundary stimuli, not an IP model.
+  wire enready, devalid, rv, wv, rsn, ssn; wire [3:0] ri,wi; wire [60:0] dataout;
+  initial begin
+    if (!$value$plusargs("HS=%d",hs)||!$value$plusargs("HD=%d",hd)||!$value$plusargs("PH=%d",phase)||!$value$plusargs("GATE=%d",gate)) $fatal(1,"clock/ready args");
+    fork forever #(hs) sc=~sc; begin #(phase); forever #(hd) dc=~dc; end join
+  end
+  ResetWrangler wr(.auto_in_1_clock(dc),.auto_in_1_reset(uicause),.auto_in_0_clock(sc),.auto_in_0_reset(cpucause),
+                  .auto_out_0_clock(sourceclock),.auto_out_0_reset(sr),.auto_out_1_reset(ui_wr));
+  function automatic [60:0] payload(input integer n);
+    reg [31:0] a,b; begin a=n*32'hfa27acf1; b=n*32'hd3ca316f; payload={a,b[28:0]}; end
+  endfunction
+  wire [60:0] datain=payload(sent+1);
+  // AW_DUT
+  always @(posedge sc) if(check_on) begin
+    if(sourceclock!==sc || (enready!==0 && enready!==1)) $fatal(1,"unknown enq or source clock");
+    if(send && enready) sent<=sent+1;
+  end
+  always @(posedge dc) if(check_on) begin
+    if(devalid!==0 && devalid!==1) $fatal(1,"unknown AWVALID");
+    if(probe && devalid) valid_edges<=valid_edges+1;
+    if(take && devalid) begin
+      if(dataout!==payload(expected)) $fatal(1,"wrong tag %0d",expected);
+      seen<=seen+1; expected<=expected+1;
+    end
+  end
+  task automatic release_check;
+    integer count;
+    begin
+      // Exact real debounce + deglitch + CPU-domain catch, counted from final deassertion.
+      begin: window
+        for(count=1;count<=17505;count=count+1) begin
+          @(posedge sc); #1;
+          if(sr===0) begin if(count!=17504) $fatal(1,"EARLY_CPU_RELEASE %0d",count); disable window; end
+          if(sr!==1) $fatal(1,"unknown CPU reset");
+        end
+        $fatal(1,"late CPU release");
+      end
+      repeat(25) @(negedge sc); repeat(10) @(negedge dc);
+      if({sr,ui_wr,enready,devalid,rv,wv}!==6'b001011 || ri!==0 || wi!==0) $fatal(1,"RECOVERY_NOT_EMPTY");
+    end
+  endtask
+  task automatic emit(input integer n);
+    integer target;
+    begin @(negedge sc); target=sent+n; send=1; wait(sent==target); @(negedge sc); send=0; end
+  endtask
+  task automatic burst(input integer n);
+    integer target;
+    begin target=seen+n; @(negedge dc); want=1; emit(n); wait(seen==target);
+      @(negedge dc); want=0; repeat(10) @(negedge dc);
+      if(expected!=sent+1 || devalid!==0) $fatal(1,"drain"); end
+  endtask
+  integer oldsent,oldseen,tail_seen;
+  initial begin
+    #37; cpucause=1; uicause=1; #20; check_on=1;
+    repeat(5) @(negedge sc); #211; cpucause=0; repeat(3) @(negedge dc); #133; uicause=0;
+    release_check; burst(25);
+    // UI-only cause: CPU-side queue also resets. Keep an offer pending for
+    // sixteen source clocks, far less than the qualified release delay.
+    @(negedge sc); #211; oldsent=sent; send=1; uicause=1; #13;
+    if({sr,dr,ip_aresetn,enready,devalid}!==5'b11000) $fatal(1,"UI_ASSERT");
+    #787; uicause=0;
+    fork
+      begin release_check; end
+      begin repeat(16) @(negedge sc); send=0; if(sent!=oldsent) $fatal(1,"write after UI reset"); end
+    join
+    burst(26);
+    // Six outstanding at PLL-lock loss, MIG raw reset held low. Observe queue
+    // AWVALID even when the IP reset is asserted. Only its real AWREADY can
+    // decide what crosses the black-box port on hardware.
+    emit(6); wait(devalid===1); repeat(4) @(negedge dc);
+    @(negedge dc); #211; oldseen=seen; cpucause=1; probe=1; want=1; #13;
+    if({sr,dr,ip_aresetn,enready,devalid}!==5'b10001) $fatal(1,"CPU_ASSERT");
+    #787; cpucause=0;
+    fork
+      begin release_check; end
+      begin repeat(12) @(negedge dc); probe=0; want=0; tail_seen=seen-oldseen;
+        if(valid_edges!=3 || tail_seen!=(gate ? 0 : 3)) $fatal(1,"AW_TAIL %0d %0d",valid_edges,tail_seen);
+      end
+    join
+    expected=sent+1; burst(30);
+    $display("WR_AW_RESULT gate=%0d source_edges_to_release=17504 ui_reset_enqueues=0 cpu_reset_awvalid_edges=%0d cpu_reset_handshakes=%0d drained=81",gate,valid_edges,tail_seen);
+    $finish;
+  end
+  initial #1500000000 $fatal(1,"watchdog");
+endmodule

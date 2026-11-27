@@ -1,0 +1,83 @@
+`timescale 1ps/1ps
+// Bind both real AXI AW queue halves (including all 61 data bits) at AW_DUT.
+module tb;
+  integer phase, hs, hd;
+  reg sc=0, dc=0, sr=0, dr=0, send=0, take=0, armed=0;
+  wire enready, devalid, rv, wv, rsn, ssn;
+  wire [3:0] ri, wi;
+  wire [60:0] dataout;
+  integer sent=0, seen=0, expected=1, es=0, ed=0;
+  integer crossing_in, crossing_out, mark, oldsent;
+  wire bothreset=sr|dr;
+  initial begin
+    if (!$value$plusargs("HS=%d",hs) || !$value$plusargs("HD=%d",hd) || !$value$plusargs("PH=%d",phase)) $fatal(1,"clock args");
+    fork forever #(hs) sc=~sc; begin #(phase); forever #(hd) dc=~dc; end join
+  end
+  function automatic [60:0] payload(input integer tagno);
+    reg [31:0] a,b;
+    begin a=tagno*32'h7361acfd; b=(tagno*32'h8b2afdc3)^32'h279a85ef; payload={a,b[28:0]}; end
+  endfunction
+  wire [60:0] datain=payload(sent+1);
+  // AW_DUT
+  always @(posedge sc or posedge bothreset) begin
+    if (bothreset) es<=0; else if(es<6) es<=es+1;
+  end
+  always @(posedge dc or posedge bothreset) begin
+    if (bothreset) ed<=0; else if(ed<6) ed<=ed+1;
+  end
+  // Read on opposite edges (before any same-time NBA): reference is a count
+  // of local edges after BOTH reset inputs are low, not a second copy of RTL.
+  always @(negedge sc or negedge dc) if(armed) begin
+    if(wv !== (es==6) || rv !== (ed==6)) begin $display("VALID_LATENCY es=%0d ed=%0d wv=%b rv=%b",es,ed,wv,rv); $finish_and_return(3); end
+    if(ssn !== !sr || rsn !== !dr) $fatal(1,"remote reset wire");
+  end
+  always @(posedge sc) if(armed) begin
+    if(enready!==0 && enready!==1) $fatal(1,"unknown ready");
+    if(enready && send) sent<=sent+1;
+  end
+  always @(posedge dc) if(armed) begin
+    if(devalid!==0 && devalid!==1) $fatal(1,"unknown valid");
+    if(devalid && take) begin
+      if(dataout!==payload(expected)) $fatal(1,"BAD_PACKET tag=%0d",expected);
+      seen<=seen+1; expected<=expected+1;
+    end
+  end
+  task automatic emit(input integer n);
+    integer target;
+    begin @(negedge sc); target=sent+n; send=1; wait(sent==target); @(negedge sc); send=0; end
+  endtask
+  task automatic drained_burst(input integer n);
+    integer target;
+    begin target=seen+n; @(negedge dc); take=1; emit(n); wait(seen==target);
+      @(negedge dc); take=0; repeat(12) @(negedge dc);
+      if(devalid!==0 || expected!=sent+1) $fatal(1,"not drained");
+    end
+  endtask
+  task automatic recovered_empty;
+    begin repeat(28) @(negedge sc); repeat(8) @(negedge dc);
+      if({enready,devalid,wv,rv}!==4'b1011 || ri!==0 || wi!==0) $fatal(1,"RECOVERY_NOT_EMPTY"); end
+  endtask
+  initial begin
+    #37; sr=1; dr=1; #17; armed=1;
+    repeat(5) @(negedge sc); #211; sr=0; repeat(3) @(negedge dc); #133; dr=0;
+    recovered_empty; drained_burst(27);
+    // A remote sink reset with an empty queue. The source deliberately keeps
+    // offering traffic during the peer's isolation latency (not a safe system policy).
+    @(negedge sc); #211; mark=sent; dr=1; send=1;
+    #13; if({wv,rv}!==0) $fatal(1,"remote sink reset failed to assert");
+    #787; dr=0; wait(enready===0); @(negedge sc); send=0; crossing_in=sent-mark;
+    recovered_empty; expected=sent+1; drained_burst(25);
+    // A remote source reset with six outstanding words, the sink starts
+    // accepting at assertion. Check the exact ordered prefix, then a clean epoch.
+    emit(6); wait(devalid===1); repeat(4) @(negedge dc);
+    @(negedge dc); #211; mark=seen; oldsent=sent; sr=1; take=1;
+    #13; if({wv,rv}!==0) $fatal(1,"remote source reset failed to assert");
+    #787; sr=0; wait(devalid===0); @(negedge dc); take=0; crossing_out=seen-mark;
+    recovered_empty; if(sent!=oldsent) $fatal(1,"unexpected new write");
+    expected=sent+1; drained_burst(29);
+    if(crossing_in<=0 || crossing_in>8 || crossing_out<=0 || crossing_out>=6) $fatal(1,"missing isolation-window coverage");
+    $display("AW_RESULT sink_reset_enqueues=%0d source_reset_dequeues=%0d drained=%0d outstanding_at_reset=6",crossing_in,crossing_out,27+25+29);
+    $finish;
+  end
+  initial #15000000 $fatal(1,"watchdog");
+endmodule

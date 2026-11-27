@@ -1,0 +1,52 @@
+{
+  "scope": "Four-state AW queue RTL only. Independent resets deliberately exercised under live traffic, not evidence of board reset reachability or analog CDC safety.",
+  "kits": [
+    "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+    "ce0ef1171c7b0077282602c5c97230d03850b71c350c6c9ddcdf0b7ebcb5a456"
+  ],
+  "units_sha256": {
+    "AsyncQueueSource_AXI4BundleAW": "6aed5dbcd59a02db067d82d77299ff386036ef6aa942aee244235bb27f605746",
+    "AsyncQueueSink_AXI4BundleAW": "dd7bdb0ea7f879167c8183a1b8258481042b10fbcdb5485e8213f0babd7b3615",
+    "AsyncValidSync": "3bed243e2afa1c3ca595b62a562f190789564f6a25a7ce4b35c7c275211bd8d7",
+    "AsyncResetSynchronizerShiftReg_w1_d3_i0_2": "1c41cb67f4c6450fcfb262a7c1279bc7d555c4254ca3dcad97f888b2409df7ea",
+    "AsyncResetSynchronizerShiftReg_w4_d3_i0": "862f5b3c19ecc8cd1eb3ccdf104b835224d702657ee4647633128e7bbffa0073",
+    "AsyncResetSynchronizerPrimitiveShiftReg_d3_i0": "05c3f0eca3dcc0696bf95af33c71bdf4d224543bf698f2bfb3a67d16ab4aa0fb",
+    "ClockCrossingReg_w61": "69391c7b556f097cfaca222d20afca71562ffb7521a558f2d420a35c087d6b61"
+  },
+  "bench_sha256": "8b534270d73477221393024153ab5f8115990dbafb6f161b8800ccae2934d9cc",
+  "half_periods_and_sink_phase_ps": {
+    "2857-2500-113": {
+      "sink_reset_enqueues_before_isolation": 3,
+      "source_reset_dequeues_before_isolation": 3
+    },
+    "2857-2500-1569": {
+      "sink_reset_enqueues_before_isolation": 3,
+      "source_reset_dequeues_before_isolation": 3
+    },
+    "2500-2857-479": {
+      "sink_reset_enqueues_before_isolation": 3,
+      "source_reset_dequeues_before_isolation": 3
+    },
+    "2101-4591-151": {
+      "sink_reset_enqueues_before_isolation": 3,
+      "source_reset_dequeues_before_isolation": 3
+    }
+  },
+  "clean_ordered_transfers_per_case": 81,
+  "outstanding_before_source_reset": 6,
+  "unilateral_reset_ps": 800,
+  "negative_controls_rejected": {
+    "omit_remote_at_source_first": [
+      "2857-2500-113",
+      "2857-2500-1569",
+      "2500-2857-479",
+      "2101-4591-151"
+    ],
+    "omit_remote_at_sink_first": [
+      "2857-2500-113",
+      "2857-2500-1569",
+      "2500-2857-479",
+      "2101-4591-151"
+    ]
+  }
+}

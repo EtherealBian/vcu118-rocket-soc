@@ -1,0 +1,120 @@
+{
+  "scope": "Generated MIG AXI front end with actual AW queue/ResetWrangler and functional vendor libraries. Calibrated, ready application-side model; no DDR PHY/model, external pins, implementation signoff or board score.",
+  "candidate_seal": "ce0ef1171c7b0077282602c5c97230d03850b71c350c6c9ddcdf0b7ebcb5a456",
+  "generated_ip_inputs": {
+    "rtl/axi/ddr4_v2_2_a_upsizer.sv": "11db01f027dde04b140ae20f7c540fee86f8c6b0ea737b98fc76078d482c484a",
+    "rtl/axi/ddr4_v2_2_axi.sv": "79bbbb81c3fd9e207d775b259529241a65996b5fb925344359b35e0522c842d6",
+    "rtl/axi/ddr4_v2_2_axi_ar_channel.sv": "9793e96af451d74d7db4c975ed8f8b7dc8828727b569049a967749b4bb7f24b7",
+    "rtl/axi/ddr4_v2_2_axi_aw_channel.sv": "8bf8c8f62b1930e4cacb1a3ae5a698cde47ebaefd42856afba5b8799f44cdbce",
+    "rtl/axi/ddr4_v2_2_axi_b_channel.sv": "1bc74e508f03dea66a83035e36a98e05b09edd4bd6087d8e79a015576d1636c8",
+    "rtl/axi/ddr4_v2_2_axi_cmd_arbiter.sv": "32734c12f81aa4eba06bcd245ed3c04a8c9f9385b7d58774ddc27e02796f5277",
+    "rtl/axi/ddr4_v2_2_axi_cmd_fsm.sv": "1560f9a54f96ed6c245d22a50ad6186716da07a6d1b5fd9a8d7a40a293c4f2c7",
+    "rtl/axi/ddr4_v2_2_axi_cmd_translator.sv": "1866de0c5225b47c73b4983328837f88b804a053e597dfe6dbfd030c73dd58f5",
+    "rtl/axi/ddr4_v2_2_axi_fifo.sv": "e26d1b0160ed900778860ab3cc9f0470f39b477e1065f9ed44d22d6bf86c0fbb",
+    "rtl/axi/ddr4_v2_2_axi_incr_cmd.sv": "f9d7eca92dad65fb2662263e759426cdccf177d8b6f2c139e8aeb1cad809092a",
+    "rtl/axi/ddr4_v2_2_axi_r_channel.sv": "6aa7cb9fb8db425beea6b31bb24f3f8a245f93e276902dc25e77b4ae14b75e98",
+    "rtl/axi/ddr4_v2_2_axi_register_slice.sv": "4f00dd492177cfa2483f8b798480228f1454d42def171482173a15b0c3e57f69",
+    "rtl/axi/ddr4_v2_2_axi_upsizer.sv": "ab4463898fa4a40ad740ebebe6d8cf215eceee4ef907a679217b5409e0448939",
+    "rtl/axi/ddr4_v2_2_axi_w_channel.sv": "76e68ffe6055276f144adfce5bca5d63db607b2d25531bd1c1c0c5603feebafa",
+    "rtl/axi/ddr4_v2_2_axi_wr_cmd_fsm.sv": "4b5657c9ecc9d8c97ec51e6f446c1d75c53522dab7d28bd1f383809aa77d5d7b",
+    "rtl/axi/ddr4_v2_2_axi_wrap_cmd.sv": "965711131b2bdd4fbfd3833894d19593b948e420e1a526d364135cc5e6a81d05",
+    "rtl/axi/ddr4_v2_2_axic_register_slice.sv": "54895a5cfcf0439a45905a74d5314d2a3ee0a2b243310aa6d48a294a7020f179",
+    "rtl/axi/ddr4_v2_2_carry_and.sv": "c10cbab1a5a30f52cd4bb1fbfaddafdbdad12d1d44f1dc1197c95c4204020e63",
+    "rtl/axi/ddr4_v2_2_carry_latch_and.sv": "9b85ee6617f896b76b3faae10c259e4db01f4394942d9bdf0a5568d0b9bff94b",
+    "rtl/axi/ddr4_v2_2_carry_latch_or.sv": "624c2e84676560236dc31a8b39649bc1026aac32e627880b6685aae3a0b1f7c9",
+    "rtl/axi/ddr4_v2_2_carry_or.sv": "5cf73af688c1a54bc10c5b6cca15cb40381760c9fafe51c2142f167a10935774",
+    "rtl/axi/ddr4_v2_2_command_fifo.sv": "1e13f57c776eb8f72b0c696f6b0df1e6984ecefd444f790993aafd7f0164dd5b",
+    "rtl/axi/ddr4_v2_2_comparator.sv": "0288d03e3819646c6298f4a3a6059be42a4a668a424d33a99481bb0a6e395545",
+    "rtl/axi/ddr4_v2_2_comparator_sel.sv": "9d2a0b281ef8c4ee9c63bf8ed1caecd499992ee0edfeb37a511aa06daf053a8e",
+    "rtl/axi/ddr4_v2_2_comparator_sel_static.sv": "c8d780f9c215174505fef89e1d49d5de8c3f249d35f622e362c877e9a64913c4",
+    "rtl/axi/ddr4_v2_2_r_upsizer.sv": "ba8c306ce8fb7fab24039de75b705e1314658a26e3d94a76c95e3ed9a2e1db16",
+    "rtl/axi/ddr4_v2_2_w_upsizer.sv": "2b7c7696cd2d61bbd3797b1d521e2d12e874d8a51f0984a64a0ebb0860f38751",
+    "rtl/ip_top/vcu118mig.sv": "ea105daaac424b41d3d08db77b780db80ca029a64458ba5011187ccb7b663fbe",
+    "rtl/ip_top/vcu118mig_ddr4.sv": "6911567d1d38847a9056c55c5f9d2ba866cee58893d1c1dc666422e5f4442391",
+    "vcu118mig.xci": "be47ca3d0594b66ea2d1a1afe97b6ba7bf29f6db512fccb1b02539e4c734bd28"
+  },
+  "checked_parent_pins": 34,
+  "compared_ip_parameters": 12,
+  "queue_and_wrangler_rtl": {
+    "AsyncQueueSource_AXI4BundleAW": "6aed5dbcd59a02db067d82d77299ff386036ef6aa942aee244235bb27f605746",
+    "AsyncQueueSink_AXI4BundleAW": "dd7bdb0ea7f879167c8183a1b8258481042b10fbcdb5485e8213f0babd7b3615",
+    "AsyncValidSync": "3bed243e2afa1c3ca595b62a562f190789564f6a25a7ce4b35c7c275211bd8d7",
+    "AsyncResetSynchronizerShiftReg_w1_d3_i0_2": "1c41cb67f4c6450fcfb262a7c1279bc7d555c4254ca3dcad97f888b2409df7ea",
+    "AsyncResetSynchronizerShiftReg_w4_d3_i0": "862f5b3c19ecc8cd1eb3ccdf104b835224d702657ee4647633128e7bbffa0073",
+    "AsyncResetSynchronizerPrimitiveShiftReg_d3_i0": "05c3f0eca3dcc0696bf95af33c71bdf4d224543bf698f2bfb3a67d16ab4aa0fb",
+    "ClockCrossingReg_w61": "69391c7b556f097cfaca222d20afca71562ffb7521a558f2d420a35c087d6b61",
+    "ResetWrangler": "4b2df154f1a255df77fb697284c8aa026f1737d3d8c627a7f664725fd6b43724",
+    "AsyncResetReg": "94dcf57984913d993121473a6758ad5c9091cdf30c7fd5365a238ca01a651b41",
+    "AsyncResetRegVec_w15_i0": "5e5410088f012ef18ba6d9fc2e052b87fbb1f79749dc2a326346f818acd5b7d7",
+    "ResetCatchAndSync_d3": "e308c33385feaaedd775a6775f04d47501f5c7820a150694e7e8a686337830ec",
+    "AsyncResetSynchronizerShiftReg_w1_d3_i0": "af379022202ba38bce2b4e6dd616d255b6aa3c9d9d41cc70a19b8f74b5b340cd"
+  },
+  "glbl_sha256": "6270251cf35e1fce3119fc79f8fb968912f7983027e43cf030409ba68f048936",
+  "fixture_sha256": "4206450a876fabfc32fe6517154853412ee4a3eb6dc95855d46385feea91667f",
+  "cases": [
+    {
+      "half_periods_and_phase_ps": [
+        2857,
+        2500,
+        113
+      ],
+      "aresetn": "0000000000",
+      "awvalid": "1110000000",
+      "awready": "1000000000",
+      "overlap_edges": 1,
+      "clean_writes_with_b_before_after": 2,
+      "mc_requests_and_data_between_clean_writes_after_reset_assertion": [
+        0,
+        0
+      ]
+    },
+    {
+      "half_periods_and_phase_ps": [
+        2857,
+        2500,
+        1569
+      ],
+      "aresetn": "0000000000",
+      "awvalid": "1110000000",
+      "awready": "1000000000",
+      "overlap_edges": 1,
+      "clean_writes_with_b_before_after": 2,
+      "mc_requests_and_data_between_clean_writes_after_reset_assertion": [
+        0,
+        0
+      ]
+    },
+    {
+      "half_periods_and_phase_ps": [
+        2500,
+        2857,
+        479
+      ],
+      "aresetn": "0000000000",
+      "awvalid": "1110000000",
+      "awready": "1000000000",
+      "overlap_edges": 1,
+      "clean_writes_with_b_before_after": 2,
+      "mc_requests_and_data_between_clean_writes_after_reset_assertion": [
+        0,
+        0
+      ]
+    },
+    {
+      "half_periods_and_phase_ps": [
+        2101,
+        4591,
+        151
+      ],
+      "aresetn": "0000000000",
+      "awvalid": "1110000000",
+      "awready": "1000000000",
+      "overlap_edges": 1,
+      "clean_writes_with_b_before_after": 2,
+      "mc_requests_and_data_between_clean_writes_after_reset_assertion": [
+        0,
+        0
+      ]
+    }
+  ]
+}

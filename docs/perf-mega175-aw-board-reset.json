@@ -1,0 +1,95 @@
+{
+  "scope": "ResetWrangler and real AW queue in RTL; synthetic reset causes below PLL/MIG outputs, two explicit MIG AWREADY stimuli. No MIG IP model, silicon, metastability, recovery/removal signoff or throughput.",
+  "stock_and_candidate_sha256": [
+    "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+    "ce0ef1171c7b0077282602c5c97230d03850b71c350c6c9ddcdf0b7ebcb5a456"
+  ],
+  "rtl_sha256": {
+    "AXI4AsyncCrossingSink": "bbb1b9bf3876298b1395774ff72ca498ba375ce5a44b528eab293e8b453c4750",
+    "AXI4AsyncCrossingSource": "be82306ce224b2c03834545a3b17e8c0fd575dc79c1a7f2c50c82a74e3fb86ee",
+    "AsyncQueueSink_AXI4BundleAW": "dd7bdb0ea7f879167c8183a1b8258481042b10fbcdb5485e8213f0babd7b3615",
+    "AsyncQueueSource_AXI4BundleAW": "6aed5dbcd59a02db067d82d77299ff386036ef6aa942aee244235bb27f605746",
+    "AsyncResetReg": "94dcf57984913d993121473a6758ad5c9091cdf30c7fd5365a238ca01a651b41",
+    "AsyncResetRegVec_w15_i0": "5e5410088f012ef18ba6d9fc2e052b87fbb1f79749dc2a326346f818acd5b7d7",
+    "AsyncResetSynchronizerPrimitiveShiftReg_d3_i0": "05c3f0eca3dcc0696bf95af33c71bdf4d224543bf698f2bfb3a67d16ab4aa0fb",
+    "AsyncResetSynchronizerShiftReg_w1_d3_i0": "af379022202ba38bce2b4e6dd616d255b6aa3c9d9d41cc70a19b8f74b5b340cd",
+    "AsyncResetSynchronizerShiftReg_w1_d3_i0_2": "1c41cb67f4c6450fcfb262a7c1279bc7d555c4254ca3dcad97f888b2409df7ea",
+    "AsyncResetSynchronizerShiftReg_w4_d3_i0": "862f5b3c19ecc8cd1eb3ccdf104b835224d702657ee4647633128e7bbffa0073",
+    "AsyncValidSync": "3bed243e2afa1c3ca595b62a562f190789564f6a25a7ce4b35c7c275211bd8d7",
+    "ClockCrossingReg_w61": "69391c7b556f097cfaca222d20afca71562ffb7521a558f2d420a35c087d6b61",
+    "ResetCatchAndSync_d3": "e308c33385feaaedd775a6775f04d47501f5c7820a150694e7e8a686337830ec",
+    "ResetWrangler": "4b2df154f1a255df77fb697284c8aa026f1737d3d8c627a7f664725fd6b43724",
+    "VCU118FPGATestHarness": "31646f1a0ff1f85d94474108f4f21895969400cb83ffab8f5a7e93351c062823",
+    "XilinxVCU118MIG": "0c22842380e8e952fa9dedd97629dc6c6d3ea3a436236146d79e88ad08c92df2",
+    "XilinxVCU118MIGIsland": "e6a34285d76e72b9989efcfceaaddb849d082c18c262aa5cdc1f1e35d9812920"
+  },
+  "checked_parent_instance_pins": 34,
+  "checked_mig_passthroughs": 2,
+  "bench_sha256": "0f8e15346183b07f1ff41024baca1ff954436a979c5504c59472f420acffd2d9",
+  "cases_by_source_half_sink_half_phase_ps_and_ready_gate": {
+    "2857-2500-113-0": {
+      "gate_ready_with_aresetn": 0,
+      "source_edges_to_release": 17504,
+      "ui_reset_enqueues": 0,
+      "cpu_reset_awvalid_edges": 3,
+      "cpu_reset_handshakes": 3,
+      "drained": 81
+    },
+    "2857-2500-113-1": {
+      "gate_ready_with_aresetn": 1,
+      "source_edges_to_release": 17504,
+      "ui_reset_enqueues": 0,
+      "cpu_reset_awvalid_edges": 3,
+      "cpu_reset_handshakes": 0,
+      "drained": 81
+    },
+    "2857-2500-1569-0": {
+      "gate_ready_with_aresetn": 0,
+      "source_edges_to_release": 17504,
+      "ui_reset_enqueues": 0,
+      "cpu_reset_awvalid_edges": 3,
+      "cpu_reset_handshakes": 3,
+      "drained": 81
+    },
+    "2857-2500-1569-1": {
+      "gate_ready_with_aresetn": 1,
+      "source_edges_to_release": 17504,
+      "ui_reset_enqueues": 0,
+      "cpu_reset_awvalid_edges": 3,
+      "cpu_reset_handshakes": 0,
+      "drained": 81
+    },
+    "2500-2857-479-0": {
+      "gate_ready_with_aresetn": 0,
+      "source_edges_to_release": 17504,
+      "ui_reset_enqueues": 0,
+      "cpu_reset_awvalid_edges": 3,
+      "cpu_reset_handshakes": 3,
+      "drained": 81
+    },
+    "2500-2857-479-1": {
+      "gate_ready_with_aresetn": 1,
+      "source_edges_to_release": 17504,
+      "ui_reset_enqueues": 0,
+      "cpu_reset_awvalid_edges": 3,
+      "cpu_reset_handshakes": 0,
+      "drained": 81
+    },
+    "2101-4591-151-0": {
+      "gate_ready_with_aresetn": 0,
+      "source_edges_to_release": 17504,
+      "ui_reset_enqueues": 0,
+      "cpu_reset_awvalid_edges": 3,
+      "cpu_reset_handshakes": 3,
+      "drained": 81
+    },
+    "2101-4591-151-1": {
+      "gate_ready_with_aresetn": 1,
+      "source_edges_to_release": 17504,
+      "ui_reset_enqueues": 0,
+      "cpu_reset_awvalid_edges": 3,
+      "cpu_reset_handshakes": 0,
+      "drained": 81
+    }
+  }
+}
