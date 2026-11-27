@@ -1,0 +1,81 @@
+{
+  "scope": "QEMU Linux-user instruction workload only. No cycles, elapsed times, FPGA clock or board throughput.",
+  "elf_sha256": "61f7c4579b762f86d7d7dc93d4c385d08e50248f3dd6a8a9105fd5e88b58886a",
+  "qemu_4_2_source_archive_sha256": "d3481d4108ce211a053ef15be69af1bdd9dde1510fda80d92be0f6c3e98768f0",
+  "qemu_plugin_header_sha256": "0a0eed076b985a20a85980d5bb179df368e836acf155c32e38535ae540039a3f",
+  "contexts": 1,
+  "total_buffer_bytes": 2000,
+  "iterations_per_seed": 24000,
+  "results": {
+    "performance": {
+      "dynamic_user_instructions": 8084760119,
+      "round_min": 336601,
+      "round_max": 337140,
+      "ordered_round_counts_sha256": "826fefa32607f8ba4be08103ba0f1853738e88c94477522bd52aa9a2c083be3e",
+      "pc_histogram_sha256": "3f46651cb06f75ab8ade6e89af9ee548ffc3ce6a2d8b7a23e503279f34b169fe",
+      "distinct_pcs": 3384,
+      "dynamic_instructions_at_pcs_absent_from_four_rounds": 3927,
+      "four_round_pc_mix_total_variation_ppm": 455.429,
+      "reversal_loop_pc_counts": {
+        "entry_jump": 4896000,
+        "copy": 141984000,
+        "load": 146880000,
+        "branch": 146880000,
+        "exit_pc": 4896000
+      },
+      "compressed": 3619522501,
+      "by_function": {
+        "calc_func": 4231931894,
+        "core_bench_list": 2255052223,
+        "core_state_transition": 1590144000,
+        "main": 7632002
+      },
+      "by_kind": {
+        "bitwise": 520402492,
+        "conditional_branch": 1276631055,
+        "jump_call_return": 156075738,
+        "load": 1397523144,
+        "multiply": 225504000,
+        "other_integer": 2324263397,
+        "shift": 1814602492,
+        "store": 369757801
+      },
+      "crcfinal": "0x4983"
+    },
+    "validation": {
+      "dynamic_user_instructions": 8094820378,
+      "round_min": 336978,
+      "round_max": 337577,
+      "ordered_round_counts_sha256": "9193c022207ad47a316bead13da6036e76c2c00e8822fffe55c9cae0fa2dd646",
+      "pc_histogram_sha256": "48c0599cdd75f6f279149018fa1e621ee0b10f77ec1502fef1a88f8388af444f",
+      "distinct_pcs": 3384,
+      "dynamic_instructions_at_pcs_absent_from_four_rounds": 3426,
+      "four_round_pc_mix_total_variation_ppm": 660.4,
+      "reversal_loop_pc_counts": {
+        "entry_jump": 4896000,
+        "copy": 141984000,
+        "load": 146880000,
+        "branch": 146880000,
+        "exit_pc": 4896000
+      },
+      "compressed": 3638890405,
+      "by_function": {
+        "calc_func": 4223345564,
+        "core_bench_list": 2280754812,
+        "core_state_transition": 1583088000,
+        "main": 7632002
+      },
+      "by_kind": {
+        "bitwise": 519730560,
+        "conditional_branch": 1281263389,
+        "jump_call_return": 154842614,
+        "load": 1410856326,
+        "multiply": 225504000,
+        "other_integer": 2320650284,
+        "shift": 1814098560,
+        "store": 367874645
+      },
+      "crcfinal": "0xeb93"
+    }
+  }
+}
