@@ -174,3 +174,11 @@ ChipTop 引脚仿真不包含 VCU118 的外层串口接线。用 Vivado 2024.2 x
 使用各自封存的 **175 MHz 请求**四路模型，在原版和两拍同步修订版的真实调试模块上分别模拟 9 组异步时钟关系，每组 16 笔事务。共 110,205 次观测，536 次可以区分修订后的两拍；从原版重新派生修订版、重读两份输入与轨迹，摘要一致。[调试接口复核](perf-mega175-halt.json)。这只验证数字功能；既不是物理 CDC 签核，也不表示整核串口、Linux 或板上性能通过。
 
 复现：`python3 scripts/derive-mega-halt-model.py <175MHz原版包> <新修订包> --control100 <100MHz四路包>`；以两个包分别设置 `VCU_SIM_KIT` 并运行 `bash scripts/test-debug-halt-sources.sh <新输出>`，最后用 `python3 scripts/review-mega-halt.py <原版包> <修订包> <原版输出> <修订输出> --control100 <100MHz四路包>` 复核。
+
+### 前移后的缓存选择，还会在同一拍给出正确的路吗？
+
+用 Verilator 直接读取两份已生成的三路 D-cache RTL，从 MSHR 实例真正的 `io_req_0_bits_way_en` 输入追溯。原版在寄存器后选择，新版在同一个上升沿前选择并寄存。两套模型的 535 个有序 HDL 输入中，531 个内容相同，另 3 个仅有源码位置注释差别，逻辑变化集中在 `BoomNonBlockingDCache.sv`。启动 ROM、设备树也相同。
+
+在共同的 S1 标签掩码和替换索引上，穷举 **256 × 8 = 2,048** 个组合：下一拍给 MSHR 的完整 8 位值全部相等；其中 1,976 个输入有多个命中位。例：掩码 `0x81` 应原样输出 `0x81`，丢掉最高位会得到 `0x01`；从 `(0x00,7)` 切换到 `(0x03,2)` 时，额外延迟一拍会错误地给出 `0x80` 而非 `0x03`。两次从封存 HDL 重新提取得到相同摘要。[实际模块哈希、输入差异和反例](perf-early-way-cone.json)。仅覆盖二态输入下这一拍的选择，不是整个缓存等价证明、复位检查或提速证明。
+
+复现：`python3 scripts/check-mshr-way-cone.py <原三路模型包> <early-way模型包> <新目录> --verilator <Verilator 5.022可执行文件>`；如使用工程内工具链，沿用整核模型构建时的 `VERILATOR_ROOT` 和 `LD_LIBRARY_PATH`。

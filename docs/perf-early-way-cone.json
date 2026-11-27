@@ -1,0 +1,46 @@
+{
+  "scope": "Generated three-wide RTL, two-state MSHR request way mask after one rising edge on shared S1 inputs. No hypothesis that the mask is one-hot. Not reset initialization, whole-cache equivalence, FPGA timing or a Linux score.",
+  "parser": "Verilator 5.022 2024-02-24 rev conda-forge build 1",
+  "module_sha256": [
+    "97f5764f97a945d4b90b7ea9a1711942a40c8a6ceff16844e3574605ff882032",
+    "37cca7447bb4614cb78a28ec2bf45a2e074dbfafa15f88b9f6606694819c7aa5"
+  ],
+  "kit_seals": [
+    "9bd04af0410dbad475d7898c438094785fb232c3178fc225a0e38bcaa476d8a1",
+    "78859cb275cc58dae07b1cad529483365c3e6c2c573534af8a26ed0b7e49f933"
+  ],
+  "hdl_comparison": {
+    "ordered_hdl_sources": 535,
+    "byte_identical": 531,
+    "location_annotations_only": [
+      "BoomDuplicatedDataArray.sv",
+      "BoomProbeUnit.sv",
+      "BoomWritebackUnit.sv"
+    ],
+    "changed_logic": [
+      "BoomNonBlockingDCache.sv"
+    ]
+  },
+  "shared_mask_bits": 8,
+  "shared_index_bits": 3,
+  "single_edge_vectors": 2048,
+  "multi_hot_vectors": 1976,
+  "high_bit_dropped_witness": {
+    "mask": 129,
+    "index": 0,
+    "reference": 129,
+    "mutant": 1
+  },
+  "extra_register_witness": {
+    "previous": [
+      0,
+      7
+    ],
+    "current": [
+      3,
+      2
+    ],
+    "reference": 3,
+    "mutant": 128
+  }
+}
