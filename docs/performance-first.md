@@ -241,3 +241,7 @@ ChipTop 引脚仿真不包含 VCU118 的外层串口接线。用 Vivado 2024.2 x
 根据旧三路路径，另做了一个**未加入正在实现工程**的四路缓存实验：在两个 MSHR 请求口分别把路选择移到已有时钟边界之前。以四路原始 D-cache 为对照，每个端口检查 2,048 组掩码和替换索引，一拍后的 8 位输出相同；故意交换两个端口，两次都被拒绝。这只验证选择逻辑，不证明整个缓存、复位、时序收益或板上性能。[四路双端口 RTL 实验](perf-mega175-dual-way.json)。是否采用要看四路实际布线的慢路径，不能据此声称达到 175 MHz。
 
 复现：对封存工程包运行 `review-mega-linux-contract.py`、`review-mega-shell-constraints.py`；用 Verilator 5.022 执行 `check-mega-way-candidate.py <四路包> <新目录> --verilator <可执行文件>`。有四路最终路径报告后，再以 `review-mega-routed-paths.py <本轮实现> <四路包> <本轮日志>` 核对 CPU 时钟下 setup/hold 各 40 个端点与各 8 条详细路径；样本仅用于定位，不替代完整签核。
+
+四路与 Rocket 的 `post_opt.dcp` 内部各有四份序列化 XDC。在保留命令顺序、选择器和实例作用域后，两者的 **2,363 条命令一致**，包括 41 条 false path、27 条 max delay、4 条 bus skew 和 34 个 waiver 声明。waiver 中 18 个属于调试核 CDC，11 个属于 MIG 校准 MicroBlaze 的 DRC，5 个属于 MIG 时钟方法学检查；不是 34 条 CPU 时序豁免。相同的选择器在不同网表可以命中不同端点。[逐文件哈希、规则和作用域](perf-mega175-checkpoint-xdc.json)。复现：`review-mega-checkpoint-xdc.py <Rocket post_opt.dcp> <四路 post_opt.dcp>`。
+
+四路在 175 MHz 约束下已完成 `place_design`。布局后全设计 WNS 估计 **−9.105 ns**，同频三路历史构建为 −5.167 ns。四路触发 `Place 46-14` 高拥塞提示；以布局器的 SLR1 区域尺寸为例，北向长线为 **64×64**（三路 32×32），南向长线却是 **1×1**（三路 32×32）。不能把区域尺寸当作资源占用率或用来指定最慢 CPU 路径。两者的调试通路也不同，这不是仅改变路数的受控实验。[可复核的三片 SLR、四个方向和三类路由区域](perf175-placement.json)。复现：给 `review-boom-placement.py` 依次传入三路、四路各自的 Vivado 日志、封存板级输入包和 `obj` 目录。未取得最终布线与 CDC/DRC 签核前，不以布局估算频率，也不下载四路设计。

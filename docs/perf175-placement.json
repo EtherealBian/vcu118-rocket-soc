@@ -1,0 +1,217 @@
+{
+  "scope": "Whole-design placer estimates only. Region size is not utilization or a count of failing paths. Does not identify a CPU path, measured Fmax or score. The two organizations and debug revisions differ.",
+  "three_wide": {
+    "board_input_seal": "6c9528b1f3c8d18584b3b095d7d20399fc7b5cb56668a9d656af31cc7df93147",
+    "post_opt_dcp_sha256": "592e127cae12ede785e506b3d96eab099ea4918f4cde3aeb88241832a7c67a20",
+    "before_bufg_wns_ns": "-6.337",
+    "before_bufg_tns_ns": "-255764.986",
+    "post_placement_wns_ns": "-5.167",
+    "post_replication_wns_ns": "-5.167",
+    "regions": {
+      "device": {
+        "North": {
+          "global": "32x32",
+          "long": "32x32",
+          "short": "8x8"
+        },
+        "South": {
+          "global": "32x32",
+          "long": "32x32",
+          "short": "16x16"
+        },
+        "East": {
+          "global": "2x2",
+          "long": "4x4",
+          "short": "8x8"
+        },
+        "West": {
+          "global": "4x4",
+          "long": "8x8",
+          "short": "16x16"
+        }
+      },
+      "SLR0": {
+        "North": {
+          "global": "1x1",
+          "long": "1x1",
+          "short": "1x1"
+        },
+        "South": {
+          "global": "1x1",
+          "long": "1x1",
+          "short": "1x1"
+        },
+        "East": {
+          "global": "1x1",
+          "long": "1x1",
+          "short": "1x1"
+        },
+        "West": {
+          "global": "1x1",
+          "long": "1x1",
+          "short": "1x1"
+        }
+      },
+      "SLR1": {
+        "North": {
+          "global": "32x32",
+          "long": "32x32",
+          "short": "8x8"
+        },
+        "South": {
+          "global": "32x32",
+          "long": "32x32",
+          "short": "16x16"
+        },
+        "East": {
+          "global": "2x2",
+          "long": "4x4",
+          "short": "8x8"
+        },
+        "West": {
+          "global": "4x4",
+          "long": "8x8",
+          "short": "16x16"
+        }
+      },
+      "SLR2": {
+        "North": {
+          "global": "1x1",
+          "long": "1x1",
+          "short": "2x2"
+        },
+        "South": {
+          "global": "1x1",
+          "long": "1x1",
+          "short": "1x1"
+        },
+        "East": {
+          "global": "1x1",
+          "long": "1x1",
+          "short": "8x8"
+        },
+        "West": {
+          "global": "1x1",
+          "long": "1x1",
+          "short": "8x8"
+        }
+      }
+    },
+    "congestion_table_sha256": "8040419b7531c872038e62b1db357f5135ca3ae45e57ff9cb018ddaa3aade3e9",
+    "placer_congestion_checksum": "1bb693363",
+    "place_46_14": false,
+    "placer_messages": {
+      "info": 105,
+      "warnings": 1,
+      "critical_warnings": 0,
+      "errors": 0
+    }
+  },
+  "four_wide": {
+    "board_input_seal": "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+    "post_opt_dcp_sha256": "98e6d4f6c545a4f0f07c0618dad28e5de23dc9330ff98bc2cc81d2038a54db5f",
+    "before_bufg_wns_ns": "-10.927",
+    "before_bufg_tns_ns": "-649537.367",
+    "post_placement_wns_ns": "-9.105",
+    "post_replication_wns_ns": "-9.105",
+    "regions": {
+      "device": {
+        "North": {
+          "global": "8x8",
+          "long": "64x64",
+          "short": "4x4"
+        },
+        "South": {
+          "global": "1x1",
+          "long": "1x1",
+          "short": "4x4"
+        },
+        "East": {
+          "global": "2x2",
+          "long": "1x1",
+          "short": "16x16"
+        },
+        "West": {
+          "global": "2x2",
+          "long": "8x8",
+          "short": "8x8"
+        }
+      },
+      "SLR0": {
+        "North": {
+          "global": "1x1",
+          "long": "1x1",
+          "short": "1x1"
+        },
+        "South": {
+          "global": "1x1",
+          "long": "1x1",
+          "short": "1x1"
+        },
+        "East": {
+          "global": "1x1",
+          "long": "1x1",
+          "short": "2x2"
+        },
+        "West": {
+          "global": "1x1",
+          "long": "1x1",
+          "short": "2x2"
+        }
+      },
+      "SLR1": {
+        "North": {
+          "global": "8x8",
+          "long": "64x64",
+          "short": "4x4"
+        },
+        "South": {
+          "global": "1x1",
+          "long": "1x1",
+          "short": "2x2"
+        },
+        "East": {
+          "global": "2x2",
+          "long": "1x1",
+          "short": "16x16"
+        },
+        "West": {
+          "global": "1x1",
+          "long": "4x4",
+          "short": "8x8"
+        }
+      },
+      "SLR2": {
+        "North": {
+          "global": "1x1",
+          "long": "1x1",
+          "short": "4x4"
+        },
+        "South": {
+          "global": "1x1",
+          "long": "1x1",
+          "short": "4x4"
+        },
+        "East": {
+          "global": "1x1",
+          "long": "1x1",
+          "short": "4x4"
+        },
+        "West": {
+          "global": "2x2",
+          "long": "8x8",
+          "short": "8x8"
+        }
+      }
+    },
+    "congestion_table_sha256": "4b00b68f4c7e28626e8c2bdba661561759bd7a5b892416575d4795e85751894f",
+    "placer_congestion_checksum": "27e06610c",
+    "place_46_14": true,
+    "placer_messages": {
+      "info": 228,
+      "warnings": 2,
+      "critical_warnings": 0,
+      "errors": 0
+    }
+  }
+}

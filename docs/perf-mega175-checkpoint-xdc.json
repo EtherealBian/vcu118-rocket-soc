@@ -1,0 +1,126 @@
+{
+  "scope": "Serialized Vivado post-opt XDC comparison (not routed STA, exception coverage, CDC/DRC signoff or programming permission). Matching commands may resolve to different cells or pins.",
+  "post_opt_dcp_sha256": [
+    "bea90f70e656a177a9744b879b9edb2a9229f7b9087a5cdf36ca58685affc5f3",
+    "98e6d4f6c545a4f0f07c0618dad28e5de23dc9330ff98bc2cc81d2038a54db5f"
+  ],
+  "ignored_differences": "Blank and full comment lines, run/kit/config and debug-session components in SRC_FILE_INFO paths, and create_waiver timestamp only.",
+  "xdc_files": {
+    "XDC": {
+      "rocket_xdc_sha256": "e50c0885b96e32dfba96fed8f96dedb9869fcfe27b46f92bf8aeb1fb7c0ac47f",
+      "mega_xdc_sha256": "ea0ee6a675e81c6e96e020a1647aa51fd8950d00db9a22c7c1ff49c97caa14fe",
+      "ordered_command_count": 552,
+      "common_normalized_commands_sha256": "d0488631eeda714cb1cae874f72f59c06cc2880239fb6684bd2394f4c52d153f"
+    },
+    "XDC_BOARD": {
+      "rocket_xdc_sha256": "d1054ba218fed6adfafaea6a78940e8ea38c69ece3e63c92150028e1e2957d11",
+      "mega_xdc_sha256": "0b299bfd44835c7f9c2f7b4b06e9141329357bacf75a9dd71f0474812f0434af",
+      "ordered_command_count": 16,
+      "common_normalized_commands_sha256": "1dee627320b4694972b2e0c2a7dc68ae5095b3457c6714dab5a20e2ec0998fcd"
+    },
+    "XDC_EARLY": {
+      "rocket_xdc_sha256": "8c018832a43d0c3d78ed01aaed1276617c12497adda9b4bfa7d811cb52f72445",
+      "mega_xdc_sha256": "7fe4282a4769aa3941140474af13d3bf4386f2290eb7b2a58536a74b972ed841",
+      "ordered_command_count": 1729,
+      "common_normalized_commands_sha256": "6acd9e677a0c0a53d9ddc7b3debfd2315ce3d155b36ce1a3e762fbf391f165e4"
+    },
+    "XDC_LATE": {
+      "rocket_xdc_sha256": "480c20434728a4b3b9849bca05c33302ec8b249033c169149a4631ba4946719f",
+      "mega_xdc_sha256": "41ee65742afb96d7fd2ca996837951d8dabf250316bc214efba4b8af0be22ee8",
+      "ordered_command_count": 66,
+      "common_normalized_commands_sha256": "a8ef92f6f55c882b640ea3d9def662a116b42ee0478f7168f7ae2b04b707392c"
+    }
+  },
+  "command_counts": {
+    "create_clock": 3,
+    "create_interface": 1,
+    "create_waiver": 34,
+    "current_instance": 16,
+    "set_bus_skew": 4,
+    "set_clock_groups": 1,
+    "set_false_path": 41,
+    "set_input_jitter": 2,
+    "set_max_delay": 27,
+    "set_property": 2234
+  },
+  "waiver_declarations": [
+    {
+      "scope": "dbg_hub/inst",
+      "type": "CDC",
+      "rule": "CDC-15",
+      "count": 11
+    },
+    {
+      "scope": "dbg_hub/inst",
+      "type": "CDC",
+      "rule": "CDC-6",
+      "count": 7
+    },
+    {
+      "scope": "mig/island/blackbox/inst",
+      "type": "METHODOLOGY",
+      "rule": "CLKC-40",
+      "count": 1
+    },
+    {
+      "scope": "mig/island/blackbox/inst",
+      "type": "METHODOLOGY",
+      "rule": "CLKC-55",
+      "count": 1
+    },
+    {
+      "scope": "mig/island/blackbox/inst",
+      "type": "METHODOLOGY",
+      "rule": "CLKC-56",
+      "count": 1
+    },
+    {
+      "scope": "mig/island/blackbox/inst",
+      "type": "METHODOLOGY",
+      "rule": "CLKC-57",
+      "count": 1
+    },
+    {
+      "scope": "mig/island/blackbox/inst",
+      "type": "METHODOLOGY",
+      "rule": "CLKC-58",
+      "count": 1
+    },
+    {
+      "scope": "mig/island/blackbox/inst/u_ddr4_mem_intfc/u_ddr_cal_riu/mcs0/inst/microblaze_I/U0",
+      "type": "DRC",
+      "rule": "DPIP-1",
+      "count": 2
+    },
+    {
+      "scope": "mig/island/blackbox/inst/u_ddr4_mem_intfc/u_ddr_cal_riu/mcs0/inst/microblaze_I/U0",
+      "type": "DRC",
+      "rule": "DPIP-2",
+      "count": 2
+    },
+    {
+      "scope": "mig/island/blackbox/inst/u_ddr4_mem_intfc/u_ddr_cal_riu/mcs0/inst/microblaze_I/U0",
+      "type": "DRC",
+      "rule": "DPOP-1",
+      "count": 1
+    },
+    {
+      "scope": "mig/island/blackbox/inst/u_ddr4_mem_intfc/u_ddr_cal_riu/mcs0/inst/microblaze_I/U0",
+      "type": "DRC",
+      "rule": "DPOP-2",
+      "count": 1
+    },
+    {
+      "scope": "mig/island/blackbox/inst/u_ddr4_mem_intfc/u_ddr_cal_riu/mcs0/inst/microblaze_I/U0",
+      "type": "DRC",
+      "rule": "DPOP-3",
+      "count": 2
+    },
+    {
+      "scope": "mig/island/blackbox/inst/u_ddr4_mem_intfc/u_ddr_cal_riu/mcs0/inst/microblaze_I/U0",
+      "type": "DRC",
+      "rule": "DPOP-4",
+      "count": 3
+    }
+  ]
+}
