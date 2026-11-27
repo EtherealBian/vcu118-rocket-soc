@@ -34,3 +34,5 @@ python3 scripts/test-strict-replay-oracle.py "$PRIVATE/stock" "$PRIVATE/guest" "
 最后一步是负对照：仅翻转异常处理器用来比较的预期堆区中的一位，不动用户初始内存或 ELF。它要求完整性能 PC 序列仍匹配，但 RTL UART 须改报 `!`，模型以非零退出；否则负对照本身失败。
 
 本次负对照实跑：性能热区 PC 摘要仍完全相同，RTL UART 最后的结果从 `K` 变为 `!`，模型按预期以状态 1 拒绝。只核对指令条数、甚至只核对完整 PC 顺序，都抓不到这次数据故障。
+
+[后续：原版与 LVT 寄存器堆在相同两段热区的逐轮对照](perf-strict-user-lvt.md)。

@@ -78,3 +78,69 @@ class SnapshotInputTests(unittest.TestCase):
 
     def test_rejects_patched_guest_text(self):
         with self.assertRaisesRegex(ValueError,'changed text'): self.make()
+
+
+class ReplayPairTests(unittest.TestCase):
+    def setUp(self):
+        from tempfile import TemporaryDirectory
+        self.t = TemporaryDirectory()
+        self.addCleanup(self.t.cleanup)
+        self.pair = runpy.run_path(str(Path(__file__).resolve().parents[1] / 'scripts/review-strict-replay-pair.py'))
+        self.base = Path(self.t.name).resolve()
+        self.guest = self.base / 'guest'
+        self.pins = {'models': {}}
+        self.oracle = {'results': {s: REF for s in self.pair['SEEDS']}}
+        self.roles = {}
+        for s in self.pair['SEEDS']:
+            p = self.guest / s / 'replay'; p.mkdir(parents=True)
+            (p / 'mem.bin').write_bytes(s.encode()); (p / 'prefix.frame').write_bytes(b'frame')
+        for role in ('stock', 'lvt'):
+            kit, obj, run = [self.base / role / n for n in ('kit', 'obj', 'run')]
+            for p in (kit, obj, run): p.mkdir(parents=True)
+            self.roles[role] = (kit, obj, run)
+            paths = []; pins = {}
+            for i,n in enumerate(self.pair['DESIGN']):
+                p = (kit if i == 0 else obj) / n; p.write_bytes((role+n).encode())
+                paths.append(p); pins[n] = hashlib.sha256(p.read_bytes()).hexdigest()
+            self.pins['models'][role] = pins
+            for n in self.pair['RUNTIME']:
+                p = obj / n; p.write_bytes(n.encode()); paths.append(p)
+            (run / 'model').write_bytes(role.encode()); paths.append(run / 'model')
+            paths.extend(self.pair['ROOT'] / 'tests' / n for n in self.pair['HARNESS'])
+            for s in self.pair['SEEDS']:
+                paths.extend(self.guest / s / 'replay' / n for n in ('mem.bin', 'prefix.frame'))
+                for n,b in [('pc',TRACE), ('uart',M['EPOCH']), ('events',EVENTS.encode())]:
+                    (run / f'{s}.{n}').write_bytes(b)
+            (run / 'inputs.sha256').write_text(''.join(hashlib.sha256(p.read_bytes()).hexdigest()+'  '+str(p)+'\n' for p in paths))
+
+    def read(self, role, label=None):
+        return self.pair['review_run'](label or role, *self.roles[role], self.guest, self.pins, self.oracle)
+
+    def test_scoped_inputs_and_separate_linked_models(self):
+        a,b = self.read('stock'), self.read('lvt')
+        r = self.pair['compare'](a,b,'elf')
+        self.assertEqual(r['matched_windows']['validation']['by_round_cycles'], [4]*4)
+        self.assertEqual(r['matched_windows']['validation']['privilege_interval_cycles_by_retired_width_0_to_4'],
+                         [4,16,0,0,0])
+        self.assertNotEqual(r['shared_inputs']['performance/mem.bin'], r['shared_inputs']['validation/mem.bin'])
+        b['hashes']['model'] = a['hashes']['model']
+        with self.assertRaisesRegex(ValueError,'separate designs'): self.pair['compare'](a,b,'elf')
+
+    def test_same_run_with_foreign_role_and_stale_executable(self):
+        with self.assertRaisesRegex(ValueError,'match its design'): self.read('lvt','stock')
+        (self.roles['lvt'][2] / 'model').write_bytes(b'stock')
+        with self.assertRaisesRegex(ValueError,'changed replay input'): self.read('lvt')
+
+    def test_swapped_seed_ram_and_duplicated_manifest_item(self):
+        p,q = (self.guest / s / 'replay' / 'mem.bin' for s in self.pair['SEEDS'])
+        old = p.read_bytes(); p.write_bytes(q.read_bytes())
+        with self.assertRaisesRegex(ValueError,'changed replay input'): self.read('lvt')
+        p.write_bytes(old)
+        f = self.roles['lvt'][2] / 'inputs.sha256'; data = f.read_text()
+        f.write_text(data+data.splitlines()[0]+'\n')
+        with self.assertRaisesRegex(ValueError,'duplicate'): self.read('lvt')
+
+    def test_one_cycle_shift_is_not_an_equal_pair(self):
+        (self.roles['lvt'][2] / 'performance.events').write_text(EVENTS.replace('102,106,','102,107,'))
+        with self.assertRaisesRegex(ValueError,'per-round cycles'):
+            self.pair['compare'](self.read('stock'), self.read('lvt'), 'elf')

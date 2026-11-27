@@ -25,7 +25,7 @@ def csv(text, base=10):
 OUTER = ([0x800000ec], [0x10f3a, 0x147ac, 0x147b0])
 
 
-def inspect(events, uart, trace, ref):
+def inspect(events, uart, trace, ref, *, include_widths=False):
     lines = events.splitlines()
     if len(lines) != 3 or uart != EPOCH:
         raise ValueError('incomplete ROM/result epoch or unexpected events')
@@ -53,19 +53,25 @@ def inspect(events, uart, trace, ref):
         rounds[-1] += 1; lists[-1] += pc == 0x13b0c
     if rounds != ref['by_round'] or lists != [2]*4:
         raise ValueError('wrong per-round instruction or list-call counts')
-    return dict(ordered_pc_sha256=sha, user_window_instructions=hot,
+    result = dict(ordered_pc_sha256=sha, user_window_instructions=hot,
                 user_window_cycles=fences[-1]-fences[0], by_round_cycles=cycles,
                 by_round_instructions=rounds, fence_ticks=fences,
                 mret_tick=start, user_ecall_trap_tick=stop, privilege_interval_cycles=dt,
                 prefix_arch_valid_pc=[hex(x) for x in pre], suffix_arch_valid_pc=[hex(x) for x in post])
+    if include_widths:
+        # This histogram covers the MRET-to-trap interval, not just the user PC fences.
+        result['privilege_interval_cycles_by_retired_width_0_to_4'] = widths
+    return result
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('run', type=Path); args = parser.parse_args()
+    parser.add_argument('run', type=Path)
+    parser.add_argument('--role', choices=('stock', 'lvt'), default='stock')
+    args = parser.parse_args()
     ref = json.loads(ORACLE.read_bytes()); results = {}
     for seed in ('performance', 'validation'):
         files = [args.run/(seed+'.'+suffix) for suffix in ('events', 'uart', 'pc')]
         results[seed] = inspect(files[0].read_text(), files[1].read_bytes(), files[2].read_bytes(), ref['results'][seed])
-    print(json.dumps(dict(scope='Stock four-wide BOOM RTL; Sv39 U-mode snapshot replay, not Linux boot or FPGA throughput.',
+    print(json.dumps(dict(scope=('Stock' if args.role=='stock' else 'LVT')+' four-wide BOOM RTL; Sv39 U-mode snapshot replay, not Linux boot or FPGA throughput.',
                           elf_sha256=ref['elf_sha256'], results=results), indent=2))
