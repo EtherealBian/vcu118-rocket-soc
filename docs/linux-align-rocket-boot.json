@@ -1,0 +1,41 @@
+{
+  "mode": "linux-oscheck",
+  "utc": "2026-11-27T05:52:15.3190143Z",
+  "bit_sha256": "d77b13dbf75b4773e33ba48f7b177f320572cb62ffe8a9cd930ab196edd6f520",
+  "uart": "115200 8N1",
+  "format": "VCU118U5",
+  "payload_bytes": 2267104,
+  "payload_sha256": "b952fffeca0afa1cde8578f9a39677ebb36bdbccce35ba61dcaa6b5d0b16aeac",
+  "frame_sha256": "e2a0c661183206d7f8230f47c58ab6163ecf5d840f270f3046d7685529cb70db",
+  "uart_sha256": "95cac765334a89f626e8824865b4a72be38a2238c11816ddbfaf566e94fd4b3f",
+  "slr_done": [
+    1,
+    1,
+    1
+  ],
+  "slr_crc_error": [
+    0,
+    0,
+    0
+  ],
+  "volatile_configuration": true,
+  "shell_challenge_verified": true,
+  "host_elapsed_ms": {
+    "rom_handoff": 208058,
+    "shell_prompt": 217450,
+    "accept": 217497
+  },
+  "packed_stage": {
+    "raw_bytes": 5604360,
+    "raw_sha256": "f0db553be5448c4a8754c995cf25413b0e6f48c73cde061657c1bf1dfff46bce",
+    "raw_crc32": "72610c0d",
+    "block_bytes": 2266141,
+    "block_sha256": "8b4b34cfa5148cb074b7fe9d984855cdfff021eb28a9980fff16d40ea34e5daa",
+    "stage_bytes": 2267104,
+    "stage_sha256": "b952fffeca0afa1cde8578f9a39677ebb36bdbccce35ba61dcaa6b5d0b16aeac",
+    "wire_bytes_saved": 3337256,
+    "stage_copy_address": "0x84000000",
+    "output_address": "0x80000000",
+    "stage_stack": "0x87fff000"
+  }
+}

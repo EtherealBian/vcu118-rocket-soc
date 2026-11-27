@@ -9,7 +9,7 @@ import re
 
 ROCKET_BIT = 'd77b13dbf75b4773e33ba48f7b177f320572cb62ffe8a9cd930ab196edd6f520'
 HARDWARE = {
-    ROCKET_BIT: dict(name='Rocket split-halt', physical_harts=1, mhz=100,
+    ROCKET_BIT: dict(name='Rocket split-halt', physical_harts=1, mhz=100, runtime_contract='rocket100',
                      reports={'routed-clocks.rpt':'2b135964b838898b80065e8243824b82ab66cf71df5d952a00d0b3a1eeeaa1b5',
                               'full-timing.rpt':'92f6928ce9a3e7b865f2df92fae10c23b68f034766d557b061f38326a2d378cb'}),
 }

@@ -8,13 +8,14 @@ dot4=${VCU_DOT4_ENABLE:-0}; case "$dot4" in 0) ;; 1) test -n "${VCU_BUILD:-}" &&
 oscheck=${VCU_OSCHECK_ENABLE:-0}; case "$oscheck" in 0) ;; 1) [[ -n ${VCU_IMAGE_OBJ:-} && -n ${VCU_RELEASE_OUT:-} && "$obj" != "$native/image" && "$release" != "$root/artifacts" ]] || { echo 'use a separate object directory and release for oscheck'; exit 2; } ;; *) exit 2;; esac
 quad=${VCU_QUAD_SMP:-0}; case "$quad" in 0) ;; 1) [[ -n ${VCU_IMAGE_OBJ:-} && -n ${VCU_RELEASE_OUT:-} && "$obj" != "$native/image" && "$release" != "$root/artifacts" ]] || exit 2;; *) exit 2;; esac
 coremark=${VCU_COREMARK_ENABLE:-0}; case "$coremark" in 0) ;; 1) [[ -n ${VCU_IMAGE_OBJ:-} && -n ${VCU_RELEASE_OUT:-} && "$obj" != "$native/image" && "$release" != "$root/artifacts" ]] || { echo 'CoreMark requires isolated build and release directories'; exit 2; } ;; *) exit 2;; esac
-profiles=${VCU_COREMARK_AB:-0}; case "$profiles:$coremark" in 0:0|0:1|1:1|portable:1|tune:1) ;; *) echo 'profile matrix requires isolated CoreMark image' >&2; exit 2;; esac
+profiles=${VCU_COREMARK_AB:-0}; case "$profiles:$coremark" in 0:0|0:1|1:1|portable:1|tune:1|align:1) ;; *) echo 'profile matrix requires isolated CoreMark image' >&2; exit 2;; esac
 compiler_profiles=(); case ${VCU_COREMARK_COMPILERS:-0}:$profiles in
  0:*) ;; 1:1) compiler_profiles=(o3-zb-lto o3-zb-lto-unroll g15-zb g15-zb-lto g15-zb-lto-unroll);;
  *) echo 'compiler comparisons require the complete controlled baseline image' >&2; exit 2;; esac
 extra_profiles=(); case $profiles in
  1) extra_profiles=(o3 o3-zb "${compiler_profiles[@]}");;
  portable) extra_profiles=(o3 g15-gc-lto);;
+ align) extra_profiles=(o3 g15-gc-lto g15-gc-lto-ooo g15-gc-lto-ooo-strict g15-gc-lto-relaxed);;
  tune) extra_profiles=(o3 g15-gc-lto g15-gc-lto-ooo);;
 esac
 cross=$tools/bootlin/bin/riscv64-linux-; test -x "${cross}gcc"; jobs=${JOBS:-4}
@@ -75,6 +76,7 @@ if [[ $coremark == 1 ]]; then
      files=(coremark.elf coremark-o3.elf)
      case $profiles in
        portable) files+=(coremark-g15-gc-lto.elf);;
+       align) files+=(coremark-g15-gc-lto.elf coremark-g15-gc-lto-ooo.elf coremark-g15-gc-lto-ooo-strict.elf coremark-g15-gc-lto-relaxed.elf);;
        tune) files+=(coremark-g15-gc-lto.elf coremark-g15-gc-lto-ooo.elf);;
        1) files+=(coremark-o3-zb.elf);;
        *) exit 2;;

@@ -1,13 +1,14 @@
 [CmdletBinding()] param(
  [Parameter(Mandatory)][string]$Run,[Parameter(Mandatory)][string]$Capture,[Parameter(Mandatory)][string]$Payload,
  [Parameter(Mandatory)][string]$Elf,[Parameter(Mandatory)][string]$Out,[string]$Bridge=$env:VCU_UART_SERIAL,
- [ValidateSet('baseline','o3','g15-gc-lto','g15-gc-lto-ooo','o3-zb','o3-zb-lto','o3-zb-lto-unroll','g15-zb','g15-zb-lto','g15-zb-lto-unroll')][string]$Profile='baseline',
- [ValidatePattern('^[a-f0-9]{16}$')][string]$SessionTag,[switch]$StartSession,[switch]$CheckTuneBoard,
+ [ValidateSet('baseline','o3','g15-gc-lto','g15-gc-lto-ooo','g15-gc-lto-ooo-strict','g15-gc-lto-relaxed','o3-zb','o3-zb-lto','o3-zb-lto-unroll','g15-zb','g15-zb-lto','g15-zb-lto-unroll')][string]$Profile='baseline',
+ [ValidatePattern('^[a-f0-9]{16}$')][string]$SessionTag,[switch]$StartSession,[switch]$CheckTuneBoard,[switch]$RequireReviewedMachine,
  [ValidateRange(1000,20000)][int]$Iterations=6000)
 # Runs the already-installed, profile-specific benchmark on an independently verified live shell.
 # Read-only; no configuration, guest downloads, mounts, network or persistent files.
 $ErrorActionPreference='Stop'; . (Join-Path $PSScriptRoot board-console.ps1)
 if(!$Bridge -or (Test-Path -LiteralPath $Out)){throw 'need exact FPGA-side bridge and new output directory'}
+if($RequireReviewedMachine -and (!$CheckTuneBoard -or !$SessionTag)){throw 'live bit/ROM check needs a bound session'}
 if($StartSession -and !$SessionTag){throw 'missing matrix session tag'}
 $prior=Get-Content -Raw -LiteralPath (Join-Path $Capture pass.json)|ConvertFrom-Json
 if($prior.test -notin @('linux','linux-dot4','linux-oscheck') -or !$prior.challenge_sent -or $prior.bridge -cne $Bridge){throw 'matching Linux shell required'}
@@ -32,6 +33,10 @@ try {
   if(!$SessionTag -or $prior.challenge_nonce -cnotmatch '^[0-9a-f]{14}$'){throw 'tune collector requires a bound boot and matrix session'}
   $s.Write(('echo CM_BOOT_${VCU_BOOT_TAG}_$((6*7))_'+$nonce+'; cat /sys/devices/system/cpu/online; cat /proc/cpuinfo; sha256sum /sys/firmware/devicetree/base/cpus/timebase-frequency /sys/firmware/devicetree/base/cpus/cpu@0/compatible /sys/firmware/devicetree/base/soc/pbus_clock/clock-frequency; echo CM_MACHINE_END_$((6*7))_'+$nonce+"`n"));AwaitLine "CM_MACHINE_END_42_$nonce"
   if($all.ToString() -cnotmatch ("(?m)^(?:# )?CM_BOOT_"+$prior.challenge_nonce+"_42_${nonce}\r?$")){throw 'benchmark shell differs from programmed boot'}
+  if($RequireReviewedMachine){
+   $all.ToString() | & python "$PSScriptRoot/linux_machine_witness.py" $prior.bit_sha256 $prior.challenge_nonce $nonce $SessionTag
+   if($LASTEXITCODE){throw 'live CPU or ROM mismatch: refusing to run timed workload'}
+  }
  }
  if($Profile -like '*-zb*'){
   $s.Write(('cat /proc/cpuinfo; echo CM_ISA_END_$((6*7))_'+$nonce+"`n"));AwaitLine "CM_ISA_END_42_$nonce"

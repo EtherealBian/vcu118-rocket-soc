@@ -49,21 +49,23 @@ class MatrixReview(unittest.TestCase):
             self.write_matrix(m.PORTABLE_ORDER,False)
             with self.assertRaisesRegex(ValueError,'pinned .*CRC'):m.review(self.boot,self.d,self.d,'portable')
 
+    def add_live_machine(self,i,p,boot_nonce,ids):
+        digest=lambda data:hashlib.sha256(data).hexdigest()
+        d=self.d/f'{i:02}-{p}';n=(d/'nonce.txt').read_text();file=d/'uart.txt';raw=file.read_bytes();at=ids[p].encode()+b'  /bin/'
+        lines=[f'CM_BOOT_{boot_nonce}_42_{n}','0','processor : 0','hart : 0','uarch : sifive,rocket0',
+            'b6f54d6d00b160ef946114b90c9f61182f61e2fbc9eef90d11932a2c00633a0a  /sys/firmware/devicetree/base/cpus/timebase-frequency',
+            'ead154cbb9f74e30f552dac2f5c6e38890a9a705d9010af7343388daff9d8022  /sys/firmware/devicetree/base/cpus/cpu@0/compatible',
+            '547b7dbafa7395a48f9514232ae6e1abfbaff85eafc08413b8276839ff11e28a  /sys/firmware/devicetree/base/soc/pbus_clock/clock-frequency',
+            f'CM_MACHINE_END_42_{n}']
+        raw=raw.replace(at,('\r\n'.join(lines)+'\r\n').encode()+at); file.write_bytes(raw)
+        rec=d/'result.json';obj=json.loads(rec.read_bytes());obj['uart_sha256']=digest(raw);rec.write_text(json.dumps(obj))
+
     def test_tune_matrix_requires_actual_boot_cpu_and_dt_in_each_capture(self):
         digest=lambda data:hashlib.sha256(data).hexdigest()
         ids={p:digest(p.encode()) for p in m.TUNE}
         self.write_matrix(m.TUNE_ORDER,True); boot_nonce='fedc012345abcd'
-        def augment(i,p):
-            d=self.d/f'{i:02}-{p}';n=(d/'nonce.txt').read_text();file=d/'uart.txt';raw=file.read_bytes();at=ids[p].encode()+b'  /bin/'
-            lines=[f'CM_BOOT_{boot_nonce}_42_{n}','0','processor : 0','hart : 0','uarch : sifive,rocket0',
-                'b6f54d6d00b160ef946114b90c9f61182f61e2fbc9eef90d11932a2c00633a0a  /sys/firmware/devicetree/base/cpus/timebase-frequency',
-                'ead154cbb9f74e30f552dac2f5c6e38890a9a705d9010af7343388daff9d8022  /sys/firmware/devicetree/base/cpus/cpu@0/compatible',
-                '547b7dbafa7395a48f9514232ae6e1abfbaff85eafc08413b8276839ff11e28a  /sys/firmware/devicetree/base/soc/pbus_clock/clock-frequency',
-                f'CM_MACHINE_END_42_{n}']
-            raw=raw.replace(at,('\r\n'.join(lines)+'\r\n').encode()+at); file.write_bytes(raw)
-            rec=d/'result.json';obj=json.loads(rec.read_bytes());obj['uart_sha256']=digest(raw);rec.write_text(json.dumps(obj))
         with mock.patch.object(m,'PORTABLE_ELFS',ids),mock.patch.object(m,'TUNED_ELF',ids[m.TUNE[2]]):
-            for i,p in enumerate(m.TUNE_ORDER,1):augment(i,p)
+            for i,p in enumerate(m.TUNE_ORDER,1):self.add_live_machine(i,p,boot_nonce,ids)
             r=m.review(self.boot,self.d,self.d,'tune',boot_nonce)
             self.assertEqual(r['control_profile'],'g15-gc-lto')
             self.assertEqual([x['sequence'] for x in r['profiles'][m.TUNE[2]]['measurements']],[3,5,7])
@@ -78,6 +80,61 @@ class MatrixReview(unittest.TestCase):
             f.write_bytes(orig)
             with mock.patch.object(m,'TUNED_ELF','0'*64),self.assertRaisesRegex(ValueError,'locked tuning ELFs'):
                 m.review(self.boot,self.d,self.d,'tune',boot_nonce)
+
+    def test_factorial_checks_all_four_elfs_three_blocks_and_live_witness(self):
+        ids={p:hashlib.sha256(p.encode()).hexdigest() for p in m.ALIGN}; tag='fedc012345abcd'
+        self.write_matrix(m.ALIGN_ORDER,True)
+        for i,p in enumerate(m.ALIGN_ORDER,1):self.add_live_machine(i,p,tag,ids)
+        with mock.patch.object(m,'ALIGN_ELFS',ids):
+            r=m.review(self.boot,self.d,self.d,'align',tag)
+            self.assertEqual(set(r['profiles']),set(m.ALIGN))
+            for j in range(3):self.assertEqual(set(r['order'][4*j:4*j+4]),set(m.ALIGN))
+            for p in m.ALIGN:
+                seq=[e['sequence'] for e in r['profiles'][p]['measurements']]
+                self.assertEqual(len({(i-1)%4 for i in seq}),3)
+                self.assertFalse(r['profiles'][p]['all_three_at_least_1000'])
+            with self.assertRaisesRegex(ValueError,'machine marker'):m.review(self.boot,self.d,self.d,'align','a'*14)
+            file=self.d/('coremark-'+m.ALIGN[3]+'.elf'); file.write_bytes(b'wrong experimental binary')
+            with self.assertRaisesRegex(ValueError,'four alignment ELFs'):m.review(self.boot,self.d,self.d,'align',tag)
+            file.write_bytes(m.ALIGN[3].encode()); row=self.d/f'12-{m.ALIGN_ORDER[-1]}'/'uart.txt'
+            row.write_bytes(row.read_bytes().replace(b'0xe3c1',b'0xe3c0'))
+            with self.assertRaisesRegex(ValueError,'wrong CRC'):m.review(self.boot,self.d,self.d,'align',tag)
+
+    def test_three_pair_target_mode_needs_registered_bit_and_same_portable_binary(self):
+        profile=m.TARGET_PROFILE; ids={profile:hashlib.sha256(profile.encode()).hexdigest()}
+        tag='fedc012345abcd'; order=(profile,)*3; self.write_matrix(order,True)
+        for i in range(1,4):self.add_live_machine(i,profile,tag,ids)
+        with mock.patch.object(m,'TARGET_SHA',ids[profile]):
+            r=m.review(self.boot,self.d,self.d,'target',tag)
+            self.assertEqual(r['order'], order)
+            self.assertEqual(set(r['profiles']), {profile})
+            self.assertFalse(r['profiles'][profile]['all_three_at_least_1000'])
+            with self.assertRaisesRegex(ValueError,'reviewed benchmark hardware'):
+                m.review(dict(self.boot,bit_sha256='0'*64),self.d,self.d,'target',tag)
+            last=self.d/('03-'+profile)/'uart.txt'; raw=last.read_bytes()
+            for old,new,err in ((b'sifive,rocket0',b'ucb-bar,boom0','Rocket CPU'),
+                                (b'b6f54d6d',b'262a28db','live device tree'),
+                                (b'0xbc68',b'0xbc67','stored record|final CRC')):
+                last.write_bytes(raw.replace(old,new))
+                with self.assertRaisesRegex(ValueError,err):m.review(self.boot,self.d,self.d,'target',tag)
+            last.write_bytes(raw)
+        with self.assertRaisesRegex(ValueError,'ELF identity'):
+            m.review(self.boot,self.d,self.d,'target',tag)
+
+    def test_rom_contract_is_not_bit_registration_and_both_directions_reject_substitution(self):
+        w=m.witness; tag='1'*14; nonce='2'*14
+        def fixture(contract):
+            cpu,hashes=w.expected(contract)
+            return ['session','CM_BOOT_'+tag+'_42_'+nonce,'0','processor : 0','hart : 0','uarch : '+cpu,
+                    *[v+'  '+w.SYSFS+k for v,k in zip(hashes,w.PROPERTIES)],'CM_MACHINE_END_42_'+nonce]
+        for contract,foreign in (('rocket100',w.MEGA_SEAL),(w.MEGA_SEAL,'rocket100')):
+            rows=fixture(contract); w.inspect(rows,0,len(rows),tag,nonce,contract)
+            with self.assertRaisesRegex(ValueError,'one online'):w.inspect(rows,0,len(rows),tag,nonce,foreign)
+            for i in (6,7,8):
+                bad=rows[:];bad[i]=fixture(foreign)[i]
+                with self.assertRaisesRegex(ValueError,'live device tree'):w.inspect(bad,0,len(bad),tag,nonce,contract)
+        with self.assertRaisesRegex(ValueError,'reviewed benchmark hardware'):m.hw.lookup(w.MEGA_SEAL)
+        self.assertEqual(m.hw.lookup(m.BIT)['runtime_contract'],'rocket100')
 
     def test_balanced_and_not_target(self):
         r=m.review(self.boot,self.d,self.d);self.assertFalse(r['profiles']['o3']['all_three_at_least_1000']);self.assertEqual(len(r['profiles']['o3-zb']['measurements']),3)

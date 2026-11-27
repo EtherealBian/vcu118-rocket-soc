@@ -1,0 +1,423 @@
+{
+  "scope": "Independent physical board measurement, one hart and one context, same boot; not certified.",
+  "target_single_context_iterations_per_s": 1000,
+  "clock_mhz": 100,
+  "total_buffer_bytes": 2000,
+  "iterations_each_seed_set": 12000,
+  "boot": {
+    "utc": "2026-11-27T05:52:15.3190143Z",
+    "mode": "linux-oscheck",
+    "bit_sha256": "d77b13dbf75b4773e33ba48f7b177f320572cb62ffe8a9cd930ab196edd6f520",
+    "payload_sha256": "b952fffeca0afa1cde8578f9a39677ebb36bdbccce35ba61dcaa6b5d0b16aeac",
+    "uart_sha256": "95cac765334a89f626e8824865b4a72be38a2238c11816ddbfaf566e94fd4b3f"
+  },
+  "order": [
+    "g15-gc-lto",
+    "g15-gc-lto-ooo-strict",
+    "g15-gc-lto-ooo",
+    "g15-gc-lto-relaxed",
+    "g15-gc-lto-ooo-strict",
+    "g15-gc-lto-ooo",
+    "g15-gc-lto-relaxed",
+    "g15-gc-lto",
+    "g15-gc-lto-ooo",
+    "g15-gc-lto-relaxed",
+    "g15-gc-lto",
+    "g15-gc-lto-ooo-strict"
+  ],
+  "control_profile": "g15-gc-lto",
+  "profiles": {
+    "g15-gc-lto": {
+      "compiler": "GCC15.1.0",
+      "flags": "-O3 -flto -static -s -march=rv64gc -mabi=lp64d -Wl,--build-id=none -lrt",
+      "elf_sha256": "0ab2e1c3baf03a98c23383268e1f792c9d955e6fe54b15c0e536ac21f22a4232",
+      "performance_median": "228.297472",
+      "validation_median": "226.984697",
+      "performance_min": "228.293128",
+      "performance_max": "228.319190",
+      "coremark_per_mhz": "2.28297472",
+      "gain_vs_control_pct": "0.000",
+      "all_three_at_least_1000": false,
+      "measurements": [
+        {
+          "sequence": 1,
+          "uart_sha256": "c15913bc0b20334aff6ba958aa18b48257559b03dab439ffe0f90f1141dabe2f",
+          "runs": {
+            "performance": {
+              "iterations": 12000,
+              "elapsed_s": "52.564000",
+              "iterations_per_s": "228.293128",
+              "seedcrc": "0xe9f5",
+              "list_crc": "0xe714",
+              "matrix_crc": "0x1fd7",
+              "state_crc": "0x8e3a",
+              "final_crc": "0xd340",
+              "host_observed_ms": 52664
+            },
+            "validation": {
+              "iterations": 12000,
+              "elapsed_s": "52.871000",
+              "iterations_per_s": "226.967525",
+              "seedcrc": "0x18f2",
+              "list_crc": "0xe3c1",
+              "matrix_crc": "0x0747",
+              "state_crc": "0x8d84",
+              "final_crc": "0xbc68",
+              "host_observed_ms": 52881
+            }
+          }
+        },
+        {
+          "sequence": 8,
+          "uart_sha256": "c7a549c6256fbe8fc400aef9035523f5862fc28189443da1683521c39417a064",
+          "runs": {
+            "performance": {
+              "iterations": 12000,
+              "elapsed_s": "52.563000",
+              "iterations_per_s": "228.297472",
+              "seedcrc": "0xe9f5",
+              "list_crc": "0xe714",
+              "matrix_crc": "0x1fd7",
+              "state_crc": "0x8e3a",
+              "final_crc": "0xd340",
+              "host_observed_ms": 52631
+            },
+            "validation": {
+              "iterations": 12000,
+              "elapsed_s": "52.867000",
+              "iterations_per_s": "226.984697",
+              "seedcrc": "0x18f2",
+              "list_crc": "0xe3c1",
+              "matrix_crc": "0x0747",
+              "state_crc": "0x8d84",
+              "final_crc": "0xbc68",
+              "host_observed_ms": 52896
+            }
+          }
+        },
+        {
+          "sequence": 11,
+          "uart_sha256": "efe5d3d7f54aa64a65cf8e65bc2216bd7c3fb554063161c8298939947b8f7130",
+          "runs": {
+            "performance": {
+              "iterations": 12000,
+              "elapsed_s": "52.558000",
+              "iterations_per_s": "228.319190",
+              "seedcrc": "0xe9f5",
+              "list_crc": "0xe714",
+              "matrix_crc": "0x1fd7",
+              "state_crc": "0x8e3a",
+              "final_crc": "0xd340",
+              "host_observed_ms": 52625
+            },
+            "validation": {
+              "iterations": 12000,
+              "elapsed_s": "52.859000",
+              "iterations_per_s": "227.019051",
+              "seedcrc": "0x18f2",
+              "list_crc": "0xe3c1",
+              "matrix_crc": "0x0747",
+              "state_crc": "0x8d84",
+              "final_crc": "0xbc68",
+              "host_observed_ms": 52885
+            }
+          }
+        }
+      ]
+    },
+    "g15-gc-lto-ooo-strict": {
+      "compiler": "GCC15.1.0",
+      "flags": "-O3 -flto -mtune=generic-ooo -mstrict-align -static -s -march=rv64gc -mabi=lp64d -Wl,--build-id=none -lrt",
+      "elf_sha256": "61f7c4579b762f86d7d7dc93d4c385d08e50248f3dd6a8a9105fd5e88b58886a",
+      "performance_median": "229.590373",
+      "validation_median": "228.445240",
+      "performance_min": "229.564020",
+      "performance_max": "229.590373",
+      "coremark_per_mhz": "2.29590373",
+      "gain_vs_control_pct": "0.566",
+      "all_three_at_least_1000": false,
+      "measurements": [
+        {
+          "sequence": 2,
+          "uart_sha256": "cb937888a57472a667bcdd5d321628bea3f2d7aedf6a70ef42099ad55fa0cf28",
+          "runs": {
+            "performance": {
+              "iterations": 12000,
+              "elapsed_s": "52.273000",
+              "iterations_per_s": "229.564020",
+              "seedcrc": "0xe9f5",
+              "list_crc": "0xe714",
+              "matrix_crc": "0x1fd7",
+              "state_crc": "0x8e3a",
+              "final_crc": "0xd340",
+              "host_observed_ms": 52351
+            },
+            "validation": {
+              "iterations": 12000,
+              "elapsed_s": "52.529000",
+              "iterations_per_s": "228.445240",
+              "seedcrc": "0x18f2",
+              "list_crc": "0xe3c1",
+              "matrix_crc": "0x0747",
+              "state_crc": "0x8d84",
+              "final_crc": "0xbc68",
+              "host_observed_ms": 52544
+            }
+          }
+        },
+        {
+          "sequence": 5,
+          "uart_sha256": "e66c0dd43ee204d33366bc2b32d785aa89c3028db80b9008a267489e3d2288a9",
+          "runs": {
+            "performance": {
+              "iterations": 12000,
+              "elapsed_s": "52.267000",
+              "iterations_per_s": "229.590373",
+              "seedcrc": "0xe9f5",
+              "list_crc": "0xe714",
+              "matrix_crc": "0x1fd7",
+              "state_crc": "0x8e3a",
+              "final_crc": "0xd340",
+              "host_observed_ms": 52341
+            },
+            "validation": {
+              "iterations": 12000,
+              "elapsed_s": "52.541000",
+              "iterations_per_s": "228.393064",
+              "seedcrc": "0x18f2",
+              "list_crc": "0xe3c1",
+              "matrix_crc": "0x0747",
+              "state_crc": "0x8d84",
+              "final_crc": "0xbc68",
+              "host_observed_ms": 52555
+            }
+          }
+        },
+        {
+          "sequence": 12,
+          "uart_sha256": "55b7437f6b96bf63858b2af95150d32227c7df5182537b8306a228c7cb43ffc9",
+          "runs": {
+            "performance": {
+              "iterations": 12000,
+              "elapsed_s": "52.267000",
+              "iterations_per_s": "229.590373",
+              "seedcrc": "0xe9f5",
+              "list_crc": "0xe714",
+              "matrix_crc": "0x1fd7",
+              "state_crc": "0x8e3a",
+              "final_crc": "0xd340",
+              "host_observed_ms": 52347
+            },
+            "validation": {
+              "iterations": 12000,
+              "elapsed_s": "52.521000",
+              "iterations_per_s": "228.480037",
+              "seedcrc": "0x18f2",
+              "list_crc": "0xe3c1",
+              "matrix_crc": "0x0747",
+              "state_crc": "0x8d84",
+              "final_crc": "0xbc68",
+              "host_observed_ms": 52522
+            }
+          }
+        }
+      ]
+    },
+    "g15-gc-lto-ooo": {
+      "compiler": "GCC15.1.0",
+      "flags": "-O3 -flto -mtune=generic-ooo -static -s -march=rv64gc -mabi=lp64d -Wl,--build-id=none -lrt",
+      "elf_sha256": "54144e7c53a35078afe3f075469e68e87ea9b5de6837530f4be76c67725ecce9",
+      "performance_median": "229.819018",
+      "validation_median": "228.741351",
+      "performance_min": "229.814616",
+      "performance_max": "229.819018",
+      "coremark_per_mhz": "2.29819018",
+      "gain_vs_control_pct": "0.666",
+      "all_three_at_least_1000": false,
+      "measurements": [
+        {
+          "sequence": 3,
+          "uart_sha256": "45675428647b415e2dbf8a6e352953768e5602a272736ffa00a6998bf04c71f9",
+          "runs": {
+            "performance": {
+              "iterations": 12000,
+              "elapsed_s": "52.215000",
+              "iterations_per_s": "229.819018",
+              "seedcrc": "0xe9f5",
+              "list_crc": "0xe714",
+              "matrix_crc": "0x1fd7",
+              "state_crc": "0x8e3a",
+              "final_crc": "0xd340",
+              "host_observed_ms": 52281
+            },
+            "validation": {
+              "iterations": 12000,
+              "elapsed_s": "52.482000",
+              "iterations_per_s": "228.649823",
+              "seedcrc": "0x18f2",
+              "list_crc": "0xe3c1",
+              "matrix_crc": "0x0747",
+              "state_crc": "0x8d84",
+              "final_crc": "0xbc68",
+              "host_observed_ms": 52501
+            }
+          }
+        },
+        {
+          "sequence": 6,
+          "uart_sha256": "73e6438bae624f62bc181e0856e2db7f43464d6d252c1b8fe524d6fa4cfec69f",
+          "runs": {
+            "performance": {
+              "iterations": 12000,
+              "elapsed_s": "52.216000",
+              "iterations_per_s": "229.814616",
+              "seedcrc": "0xe9f5",
+              "list_crc": "0xe714",
+              "matrix_crc": "0x1fd7",
+              "state_crc": "0x8e3a",
+              "final_crc": "0xd340",
+              "host_observed_ms": 52291
+            },
+            "validation": {
+              "iterations": 12000,
+              "elapsed_s": "52.460000",
+              "iterations_per_s": "228.745711",
+              "seedcrc": "0x18f2",
+              "list_crc": "0xe3c1",
+              "matrix_crc": "0x0747",
+              "state_crc": "0x8d84",
+              "final_crc": "0xbc68",
+              "host_observed_ms": 52479
+            }
+          }
+        },
+        {
+          "sequence": 9,
+          "uart_sha256": "a3e9eaced2d6c549a0856d41cef7aeee995f8efa685e959a452eb616af7f3fdd",
+          "runs": {
+            "performance": {
+              "iterations": 12000,
+              "elapsed_s": "52.215000",
+              "iterations_per_s": "229.819018",
+              "seedcrc": "0xe9f5",
+              "list_crc": "0xe714",
+              "matrix_crc": "0x1fd7",
+              "state_crc": "0x8e3a",
+              "final_crc": "0xd340",
+              "host_observed_ms": 52283
+            },
+            "validation": {
+              "iterations": 12000,
+              "elapsed_s": "52.461000",
+              "iterations_per_s": "228.741351",
+              "seedcrc": "0x18f2",
+              "list_crc": "0xe3c1",
+              "matrix_crc": "0x0747",
+              "state_crc": "0x8d84",
+              "final_crc": "0xbc68",
+              "host_observed_ms": 52474
+            }
+          }
+        }
+      ]
+    },
+    "g15-gc-lto-relaxed": {
+      "compiler": "GCC15.1.0",
+      "flags": "-O3 -flto -mno-strict-align -static -s -march=rv64gc -mabi=lp64d -Wl,--build-id=none -lrt",
+      "elf_sha256": "35419f1ea8ece2ceed2c0831d00c562752d52c1602e97d94e35667e1ac81112c",
+      "performance_median": "228.319190",
+      "validation_median": "227.010461",
+      "performance_min": "228.301815",
+      "performance_max": "228.319190",
+      "coremark_per_mhz": "2.2831919",
+      "gain_vs_control_pct": "0.010",
+      "all_three_at_least_1000": false,
+      "measurements": [
+        {
+          "sequence": 4,
+          "uart_sha256": "dc179c00f055781e94aef80c5b4d4d5f2e5375d3ea91c8a054964a102df9a08f",
+          "runs": {
+            "performance": {
+              "iterations": 12000,
+              "elapsed_s": "52.562000",
+              "iterations_per_s": "228.301815",
+              "seedcrc": "0xe9f5",
+              "list_crc": "0xe714",
+              "matrix_crc": "0x1fd7",
+              "state_crc": "0x8e3a",
+              "final_crc": "0xd340",
+              "host_observed_ms": 52670
+            },
+            "validation": {
+              "iterations": 12000,
+              "elapsed_s": "52.851000",
+              "iterations_per_s": "227.053414",
+              "seedcrc": "0x18f2",
+              "list_crc": "0xe3c1",
+              "matrix_crc": "0x0747",
+              "state_crc": "0x8d84",
+              "final_crc": "0xbc68",
+              "host_observed_ms": 52865
+            }
+          }
+        },
+        {
+          "sequence": 7,
+          "uart_sha256": "9064c4604a68ada15727c0b4fa86ec03ece5ff8e34e11d117cc9cc3c4220fa73",
+          "runs": {
+            "performance": {
+              "iterations": 12000,
+              "elapsed_s": "52.558000",
+              "iterations_per_s": "228.319190",
+              "seedcrc": "0xe9f5",
+              "list_crc": "0xe714",
+              "matrix_crc": "0x1fd7",
+              "state_crc": "0x8e3a",
+              "final_crc": "0xd340",
+              "host_observed_ms": 52659
+            },
+            "validation": {
+              "iterations": 12000,
+              "elapsed_s": "52.861000",
+              "iterations_per_s": "227.010461",
+              "seedcrc": "0x18f2",
+              "list_crc": "0xe3c1",
+              "matrix_crc": "0x0747",
+              "state_crc": "0x8d84",
+              "final_crc": "0xbc68",
+              "host_observed_ms": 52851
+            }
+          }
+        },
+        {
+          "sequence": 10,
+          "uart_sha256": "3c6666f877224728fa90378d1c2062d398338a048f4e43816bab1bb2e66e6506",
+          "runs": {
+            "performance": {
+              "iterations": 12000,
+              "elapsed_s": "52.558000",
+              "iterations_per_s": "228.319190",
+              "seedcrc": "0xe9f5",
+              "list_crc": "0xe714",
+              "matrix_crc": "0x1fd7",
+              "state_crc": "0x8e3a",
+              "final_crc": "0xd340",
+              "host_observed_ms": 52662
+            },
+            "validation": {
+              "iterations": 12000,
+              "elapsed_s": "52.861000",
+              "iterations_per_s": "227.010461",
+              "seedcrc": "0x18f2",
+              "list_crc": "0xe3c1",
+              "matrix_crc": "0x0747",
+              "state_crc": "0x8d84",
+              "final_crc": "0xbc68",
+              "host_observed_ms": 52859
+            }
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "scope": "Three interleaved blocks from one physical Rocket boot. Descriptive ratios, not confidence bounds. For each pair (candidate/reference - 1) * 100. No inference to BOOM.",
+  "contrasts": {
+    "tune_at_strict": {
+      "reference": "g15-gc-lto",
+      "candidate": "g15-gc-lto-ooo-strict",
+      "sequence_pairs": [
+        [
+          1,
+          2
+        ],
+        [
+          8,
+          5
+        ],
+        [
+          11,
+          12
+        ]
+      ],
+      "performance": {
+        "paired_change_pct": [
+          "0.556693",
+          "0.566323",
+          "0.556757"
+        ],
+        "median_paired_change_pct": "0.556757",
+        "ratio_of_medians_change_pct": "0.566323"
+      },
+      "validation": {
+        "paired_change_pct": [
+          "0.651069",
+          "0.620468",
+          "0.643552"
+        ],
+        "median_paired_change_pct": "0.643552",
+        "ratio_of_medians_change_pct": "0.643454"
+      }
+    },
+    "tune_at_relaxed": {
+      "reference": "g15-gc-lto-relaxed",
+      "candidate": "g15-gc-lto-ooo",
+      "sequence_pairs": [
+        [
+          4,
+          3
+        ],
+        [
+          7,
+          6
+        ],
+        [
+          10,
+          9
+        ]
+      ],
+      "performance": {
+        "paired_change_pct": [
+          "0.664560",
+          "0.654972",
+          "0.656900"
+        ],
+        "median_paired_change_pct": "0.656900",
+        "ratio_of_medians_change_pct": "0.656900"
+      },
+      "validation": {
+        "paired_change_pct": [
+          "0.703098",
+          "0.764392",
+          "0.762471"
+        ],
+        "median_paired_change_pct": "0.762471",
+        "ratio_of_medians_change_pct": "0.762471"
+      }
+    },
+    "relax_at_default_tune": {
+      "reference": "g15-gc-lto",
+      "candidate": "g15-gc-lto-relaxed",
+      "sequence_pairs": [
+        [
+          1,
+          4
+        ],
+        [
+          8,
+          7
+        ],
+        [
+          11,
+          10
+        ]
+      ],
+      "performance": {
+        "paired_change_pct": [
+          "0.003805",
+          "0.009513",
+          "0.000000"
+        ],
+        "median_paired_change_pct": "0.003805",
+        "ratio_of_medians_change_pct": "0.009513"
+      },
+      "validation": {
+        "paired_change_pct": [
+          "0.037842",
+          "0.011351",
+          "-0.003784"
+        ],
+        "median_paired_change_pct": "0.011351",
+        "ratio_of_medians_change_pct": "0.011351"
+      }
+    },
+    "relax_at_ooo_tune": {
+      "reference": "g15-gc-lto-ooo-strict",
+      "candidate": "g15-gc-lto-ooo",
+      "sequence_pairs": [
+        [
+          2,
+          3
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          12,
+          9
+        ]
+      ],
+      "performance": {
+        "paired_change_pct": [
+          "0.111079",
+          "0.097671",
+          "0.099588"
+        ],
+        "median_paired_change_pct": "0.099588",
+        "ratio_of_medians_change_pct": "0.099588"
+      },
+      "validation": {
+        "paired_change_pct": [
+          "0.089555",
+          "0.154404",
+          "0.114371"
+        ],
+        "median_paired_change_pct": "0.114371",
+        "ratio_of_medians_change_pct": "0.129620"
+      }
+    }
+  }
+}

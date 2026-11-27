@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Repeat offline verification of the physical boot and 9 fixed-iteration captures.
+"""Repeat offline verification of the physical boot and a fixed-iteration capture matrix.
 
 The CLI binds the capture to allowlisted bit and routed clock/timing reports.
 """
@@ -41,32 +41,26 @@ TUNE_ORDER=tuple(TUNE[(row+col)%3] for row in range(3) for col in range(3))
 TUNED_ELF='54144e7c53a35078afe3f075469e68e87ea9b5de6837530f4be76c67725ecce9'
 
 
-def verify_tune_machine(lines, session_pos, elf_pos, boot_nonce, n):
-    if not isinstance(boot_nonce,str) or not re.fullmatch('[a-f0-9]{14}',boot_nonce):
-        raise ValueError('need independently reviewed boot nonce')
-    def unique(s):
-        hits=[i for i,line in enumerate(lines) if line in (s,'# '+s)]
-        if len(hits)!=1:raise ValueError('missing or repeated boot or machine marker')
-        return hits[0]
-    a=unique(f'CM_BOOT_{boot_nonce}_42_{n}'); b=unique('CM_MACHINE_END_42_'+n)
-    if not session_pos<a<b<elf_pos:raise ValueError('misordered boot or machine witness')
-    body=lines[a+1:b]; fields={}
-    for key in ('processor','hart','uarch'):
-        fields[key]=[m[1] for line in body if (m:=re.fullmatch(key+r'\s*:\s*(\S+)',line))]
-    if body[:1]!=['0'] or fields!={'processor':['0'],'hart':['0'],'uarch':['sifive,rocket0']}:
-        raise ValueError('expected one online Rocket CPU and hart 0')
-    props={'cpus/timebase-frequency':(100000).to_bytes(4,'big'),
-           'cpus/cpu@0/compatible':b'sifive,rocket0\x00riscv\x00',
-           'soc/pbus_clock/clock-frequency':(100000000).to_bytes(4,'big')}
-    expected=[sha256(value).hexdigest()+'  /sys/firmware/devicetree/base/'+key for key,value in props.items()]
-    if [l for l in body if '/sys/firmware/devicetree/base/' in l]!=expected:
-        raise ValueError('live device tree differs from reviewed Rocket clock or CPU')
+# Four toolchain configurations, three blocks; each profile occurs once per
+# block and visits three distinct within-block positions (not a full 4x4).
+ALIGN=('g15-gc-lto','g15-gc-lto-ooo-strict','g15-gc-lto-ooo','g15-gc-lto-relaxed')
+ALIGN_ORDER=tuple(ALIGN[(i+j)%4] for i in range(3) for j in range(4))
+ALIGN_ELFS=dict(zip(ALIGN,(PORTABLE_ELFS['g15-gc-lto'],
+    '61f7c4579b762f86d7d7dc93d4c385d08e50248f3dd6a8a9105fd5e88b58886a',TUNED_ELF,
+    '35419f1ea8ece2ceed2c0831d00c562752d52c1602e97d94e35667e1ac81112c')))
+
+# Score attempt: three pairs using the same portable, explicitly aligned ELF.
+TARGET_PROFILE='g15-gc-lto-ooo-strict'
+TARGET_SHA=ALIGN_ELFS[TARGET_PROFILE]
+witness=load('linux_machine_witness')
 
 
 def read(p): return p.read_text(encoding='utf-8-sig')
 
 def review(boot, release, out, experiment='original', boot_nonce=None):
     cases={'original':(ORDER,'baseline',BASE_ELF), 'compilers':(COMPILER_ORDER,'o3-zb',ZB_ELF), 'portable':(PORTABLE_ORDER,'baseline',BASE_ELF), 'tune':(TUNE_ORDER,'g15-gc-lto',PORTABLE_ELFS['g15-gc-lto'])}
+    cases['align']=(ALIGN_ORDER,ALIGN[0],ALIGN_ELFS[ALIGN[0]])
+    cases['target']=((TARGET_PROFILE,)*3,TARGET_PROFILE,TARGET_SHA)
     if experiment not in cases:raise ValueError('unknown matrix')
     order,control,control_sha=cases[experiment]
     board=hw.lookup(boot['bit_sha256']); mhz=board['mhz']
@@ -78,6 +72,7 @@ def review(boot, release, out, experiment='original', boot_nonce=None):
     if len(set(ids.values()))!=len(ids) or ids[control]!=control_sha:raise ValueError('baseline or experiment ELF identity mismatch')
     if experiment=='portable' and ids!=PORTABLE_ELFS:raise ValueError('expected the three locked portable ELFs')
     if experiment=='tune' and (boot['bit_sha256']!=BIT or ids!={TUNE[0]:PORTABLE_ELFS[TUNE[0]],TUNE[1]:PORTABLE_ELFS[TUNE[1]],TUNE[2]:TUNED_ELF}):raise ValueError('expected reviewed Rocket and three locked tuning ELFs')
+    if experiment=='align' and (boot['bit_sha256']!=BIT or ids!=ALIGN_ELFS):raise ValueError('expected reviewed Rocket and four alignment ELFs')
     nonces=set(); digests=set(); crcs={}; runs={p:[] for p in ids}; boot_keys=['utc','mode','bit_sha256','payload_sha256','uart_sha256']
     for i,p in enumerate(order,1):
         d=out/f'{i:02}-{p}'; n=read(d/'nonce.txt').strip(); raw=(d/'uart.txt').read_bytes(); timing=json.loads(read(d/'host-ms.json'))
@@ -86,7 +81,8 @@ def review(boot, release, out, experiment='original', boot_nonce=None):
         loc=[j for j,v in enumerate(lines) if v in (marker,'# '+marker)]
         def pos(v):return next(j for j,l in enumerate(lines) if l in (v,'# '+v))
         if (len(loc)!=1 or not pos('CM_LIVE_42_'+n)<loc[0]<pos(ids[p]+'  '+cm.binary(p)) or n in nonces or key in digests):raise ValueError('session, order or capture reuse')
-        if experiment=='tune':verify_tune_machine(lines,loc[0],pos(ids[p]+'  '+cm.binary(p)),boot_nonce,n)
+        if experiment in ('tune','align','target'):
+            witness.inspect(lines,loc[0],pos(ids[p]+'  '+cm.binary(p)),boot_nonce,n,board['runtime_contract'])
         if '-zb' in p:
             isi=pos('CM_ISA_END_42_'+n)
             ext=[m[1].split('_') for l in lines[loc[0]+1:isi] if (m:=re.fullmatch(r'isa\s*:\s*(rv64[a-z0-9_]+)',l))]
@@ -96,7 +92,7 @@ def review(boot, release, out, experiment='original', boot_nonce=None):
         if saved['iterations_requested']!=12000 or saved['boot']!={k:boot[k] for k in boot_keys} or any(saved[k]!=v for k,v in checked.items()):raise ValueError('stored record differs from verified bytes')
         finals={k:v['final_crc'] for k,v in checked['runs'].items()}
         if crcs and crcs!=finals:raise ValueError('final CRC changed at fixed iteration count')
-        if experiment in ('compilers','portable','tune') and finals!={'performance':'0xd340','validation':'0xbc68'}:raise ValueError('pinned 12000-iteration final CRC mismatch')
+        if experiment in ('compilers','portable','tune','align','target') and finals!={'performance':'0xd340','validation':'0xbc68'}:raise ValueError('pinned 12000-iteration final CRC mismatch')
         crcs=finals
         runs[p].append(dict(sequence=i,uart_sha256=key,runs=checked['runs']))
     def score(row,kind):return Decimal(row['runs'][kind]['iterations_per_s'])
@@ -109,7 +105,15 @@ def review(boot, release, out, experiment='original', boot_nonce=None):
 if __name__=='__main__':
     a=argparse.ArgumentParser(description=__doc__)
     for n in ('run','capture','payload','release','out'):a.add_argument(n,type=Path)
-    a.add_argument('--experiment',choices=('original','compilers','portable','tune'),default='original')
+    a.add_argument('--experiment',choices=('original','compilers','portable','tune','align','target'),default='original')
+    a.add_argument('--preflight',action='store_true',help='target only: verify programmed boot and selected ELF without reviewing timings')
     x=a.parse_args();boot=load('verify-soc-capture').public_record(x.run,x.capture,x.payload)
     hw.verify(boot,x.run/'obj/report',json.loads(read(x.capture/'implementation.json')))
+    if x.preflight:
+        if (x.experiment!='target' or boot['mode']!='linux-oscheck' or not boot['volatile_configuration'] or
+                not boot['shell_challenge_verified'] or hw.lookup(boot['bit_sha256'])['physical_harts']!=1 or
+                sha256((x.release/('coremark-'+TARGET_PROFILE+'.elf')).read_bytes()).hexdigest()!=TARGET_SHA):
+            raise ValueError('target preflight requires reviewed boot and locked portable ELF')
+        witness.expected(hw.lookup(boot['bit_sha256'])['runtime_contract'])
+        print('REGISTERED_TARGET_AND_ELF_PRECHECKED_NOT_A_SCORE');raise SystemExit(0)
     print(json.dumps(review(boot,x.release,x.out,x.experiment,json.loads(read(x.capture/'pass.json')).get('challenge_nonce')),indent=2))

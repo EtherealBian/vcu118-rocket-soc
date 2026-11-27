@@ -245,3 +245,25 @@ ChipTop 引脚仿真不包含 VCU118 的外层串口接线。用 Vivado 2024.2 x
 四路与 Rocket 的 `post_opt.dcp` 内部各有四份序列化 XDC。在保留命令顺序、选择器和实例作用域后，两者的 **2,363 条命令一致**，包括 41 条 false path、27 条 max delay、4 条 bus skew 和 34 个 waiver 声明。waiver 中 18 个属于调试核 CDC，11 个属于 MIG 校准 MicroBlaze 的 DRC，5 个属于 MIG 时钟方法学检查；不是 34 条 CPU 时序豁免。相同的选择器在不同网表可以命中不同端点。[逐文件哈希、规则和作用域](perf-mega175-checkpoint-xdc.json)。复现：`review-mega-checkpoint-xdc.py <Rocket post_opt.dcp> <四路 post_opt.dcp>`。
 
 四路在 175 MHz 约束下已完成 `place_design`。布局后全设计 WNS 估计 **−9.105 ns**，同频三路历史构建为 −5.167 ns。四路触发 `Place 46-14` 高拥塞提示；以布局器的 SLR1 区域尺寸为例，北向长线为 **64×64**（三路 32×32），南向长线却是 **1×1**（三路 32×32）。不能把区域尺寸当作资源占用率或用来指定最慢 CPU 路径。两者的调试通路也不同，这不是仅改变路数的受控实验。[可复核的三片 SLR、四个方向和三类路由区域](perf175-placement.json)。复现：给 `review-boom-placement.py` 依次传入三路、四路各自的 Vivado 日志、封存板级输入包和 `obj` 目录。未取得最终布线与 CDC/DRC 签核前，不以布局估算频率，也不下载四路设计。
+
+### 2026-11-27：分开测 GCC 调度与对齐策略
+
+同一块 VCU118、同次 100 MHz Rocket Linux 启动，保持单 hart、单上下文、2,000 字节、GCC 15.1、RV64GC、`-O3 -flto` 不变。以下是每个 ELF 三次实测；每次分别运行性能和验证种子，各 12,000 轮，单位均为次/秒。
+
+| 配置 | 性能种子逐次 | 性能中位 | 验证中位 |
+|---|---:|---:|---:|
+| 默认调优，严格对齐 | 228.293 / 228.297 / 228.319 | 228.297 | 226.985 |
+| `generic-ooo`，严格对齐 | 229.564 / 229.590 / 229.590 | 229.590 | 228.445 |
+| `generic-ooo`，允许非对齐 | 229.819 / 229.815 / 229.819 | 229.819 | 228.741 |
+| 默认调优，允许非对齐 | 228.302 / 228.319 / 228.319 | 228.319 | 227.010 |
+
+- 严格对齐下改用 `generic-ooo`：同一测试块内性能变化的中位数 **+0.557%**。
+- 允许非对齐时改用 `generic-ooo`：同一测试块内性能变化的中位数 **+0.657%**。
+- 默认调优下允许非对齐：同一测试块内性能变化的中位数 **+0.004%**。
+- `generic-ooo` 下允许非对齐：同一测试块内性能变化的中位数 **+0.100%**。
+
+这里按三个交错测试块分别计算百分比再取中位数，并非用两个中位数直接相除。在线 hart、设备树、ELF 身份、两套种子的 CRC 和主机墙钟在原始捕获中复核，24 次均通过；三次重复不提供统计显著性结论。该实验没有刷新 Rocket 的 254.232 次/秒纪录，也不能外推四路 BOOM 性能。
+
+[12 组实测](coremark-align-rocket-board.json) · [四项配对比较](coremark-align-rocket-contrasts.json) · [四份 ELF 与有效编译选项](linux-align-code.json) · [易失配置和 Linux 启动](linux-align-rocket-boot.json)。复现：镜像使用 `VCU_COREMARK_AB=align`；绑定本次 Linux shell 后采集 `-Experiment align`，以 `review-coremark-matrix.py --experiment align` 重读原始数据，再用 `coremark-align-contrasts.py <实板 JSON> <代码 JSON>`。
+
+单独的 `-Experiment target` 模式只运行显式严格对齐的通用 ELF，连续三对性能与验证种子。计时前先核已纳入硬件注册表的 bitstream、同次布线时钟/时序与 ELF，再核在线 hart、CPU 和设备树；结束后依次复核原始 UART。任何一次性能不足 1,000 或任何一次验证失败都不能达标。静态 BOOM ROM 记录不授予上板权限。
