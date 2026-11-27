@@ -1,0 +1,165 @@
+{
+  "abc_elf_sha256": "6b6d93004494101bed191ddf29c411df55c50f990d7db56796767a3efbb03b09",
+  "decode_candidate": {
+    "changed": {
+      "rtl/BoomCore.sv": "acec5d5861605b7090c3512d9250c68284032fec3f6f877606fa3dcb810f92eb"
+    },
+    "kit_sha256": "69422cdaccbd17776782930314ef6f0bdecebc0cc9f0895a65cb666649b840a7",
+    "ordered_hdl_count": 549,
+    "ordered_hdl_sha256": "6aa36414a276880c092dd8a9eb63aed3a5c98433318bb0c44e3e41a32281b0a7",
+    "sealed_members": 589
+  },
+  "interface_lint": {
+    "child_instances": 23,
+    "child_interfaces": 19,
+    "executable_sha256": "7276ac7090bc151d8366e120f108dc1b8ef4bc76bb66af051206a90fe165a462",
+    "interfaces_sha256": "3f2d5bea5644a7e41f4fdc539bdfac7ac8646ae4e7df7c779226a255b7725dfb",
+    "modes": {
+      "RANDOMIZE_REG_INIT": {
+        "messages_sha256": "1a709614bdeace5ddf1a632b5a2c2ee083c976d0417b4cdaf139b01f8cbf455b",
+        "warnings": {
+          "WIDTHEXPAND": 9
+        }
+      },
+      "SYNTHESIS": {
+        "messages_sha256": "1a709614bdeace5ddf1a632b5a2c2ee083c976d0417b4cdaf139b01f8cbf455b",
+        "warnings": {
+          "WIDTHEXPAND": 9
+        }
+      }
+    },
+    "scope": "Complete stock/decode BoomCore syntax and port binding against empty direct child interfaces only.",
+    "verilator_version": "Verilator 5.022 2024-02-24 rev conda-forge build 1"
+  },
+  "mapping": {
+    "banked": {
+      "Q_to_mispredict_levels": {
+        "3": 20
+      },
+      "Q_to_resolve_levels": {
+        "3": 20
+      },
+      "cells": {
+        "FDRE": 80,
+        "LUT2": 20,
+        "LUT3": 16,
+        "LUT5": 20,
+        "LUT6": 160,
+        "MUXF7": 80,
+        "MUXF8": 40
+      },
+      "core_sha256": "83d2af2c0d599fc8e6088c40e6a2c15b3ffa54b1b6701324fb402469cdda18be",
+      "cut_sha256": "d7606a07a261524aa9dbba0eabb7f380cfc3af0b58c0aaea6aa08c892e2e8e15",
+      "input_to_D_max": {
+        "flush": 1,
+        "miss": 1,
+        "tag": 1,
+        "valid": 1
+      }
+    },
+    "decode": {
+      "Q_to_mispredict_levels": {
+        "2": 20
+      },
+      "Q_to_resolve_levels": {
+        "2": 20
+      },
+      "cells": {
+        "FDRE": 108,
+        "LUT2": 46,
+        "LUT3": 8,
+        "LUT5": 96,
+        "LUT6": 40
+      },
+      "core_sha256": "acec5d5861605b7090c3512d9250c68284032fec3f6f877606fa3dcb810f92eb",
+      "cut_sha256": "fec3e4622e103a8c0c594b3fabc3b23e0bf46c133738da0bf103afe2482fc9f8",
+      "input_to_D_max": {
+        "flush": 1,
+        "miss": 0,
+        "tag": 1,
+        "valid": 1
+      }
+    },
+    "qualified": {
+      "Q_to_mispredict_levels": {
+        "1": 20
+      },
+      "Q_to_resolve_levels": {
+        "1": 20
+      },
+      "cells": {
+        "FDRE": 188,
+        "LUT2": 4,
+        "LUT4": 40,
+        "LUT6": 480,
+        "MUXF7": 240,
+        "MUXF8": 80
+      },
+      "core_sha256": "2cef603616bdca5f0862981cd09ca9e6b551292d7ddc60e783d217cb94fa9144",
+      "cut_sha256": "c9f9778da8048577bf1ffc4aca4ed2bfed825716b469f969838dc1f2bd45025e",
+      "input_to_D_max": {
+        "flush": 3,
+        "miss": 3,
+        "tag": 3,
+        "valid": 3
+      }
+    },
+    "stock": {
+      "Q_to_mispredict_levels": {
+        "3": 16,
+        "4": 4
+      },
+      "Q_to_resolve_levels": {
+        "2": 20
+      },
+      "cells": {
+        "FDRE": 28,
+        "LUT2": 6,
+        "LUT4": 20,
+        "LUT5": 4,
+        "LUT6": 171,
+        "MUXF7": 40,
+        "MUXF8": 4
+      },
+      "core_sha256": "815c0140d41682fafa4df0e9cfa6ae7d3138bdb63c6f7d29440b497409218b24",
+      "cut_sha256": "ad97fd427d66836b0108585f9ca457b00a9cc78e75021d49c7dcb25d937489d3",
+      "input_to_D_max": {
+        "flush": 1,
+        "miss": 0,
+        "tag": 0,
+        "valid": 1
+      }
+    }
+  },
+  "mapping_command": "read_verilog -noautowire cut.v; synth_xilinx -top top -family xcup -flatten; check -assert; write_json mapped.json",
+  "proofs": {
+    "banked-proof": {
+      "miter_sha256": "51cc77c3b857096bf6b9a399d5a258cae9c1ac1e22461716d65391861d556e52",
+      "result": "proved"
+    },
+    "decode-proof": {
+      "miter_sha256": "fff52e7f72729b516fd3819f1227601f5e36f675197b359cbfc54b8d622cb119",
+      "result": "proved"
+    },
+    "ignore-flush": {
+      "miter_sha256": "6a7bfc8a4461a9d3bdbce3021df36082d25f4122dfbff162bc001d017fced8db",
+      "result": "counterexample"
+    },
+    "late-tag": {
+      "miter_sha256": "fa0d8fc996658d54e03f03f8bce70a1423f4ac55515e3b3363dac146137da709",
+      "result": "counterexample"
+    },
+    "qualified-proof": {
+      "miter_sha256": "f32bf8f10bbf61e501688009466d3e8e16b810c047b94a0040e8d08748afe2d2",
+      "result": "proved"
+    },
+    "wrong-lane": {
+      "miter_sha256": "e6852ba61165a9c356fe0b25206d6a84bf8e7dbe4e452558a2fc625ad5c29045",
+      "result": "counterexample"
+    }
+  },
+  "scope": "Isolated B1 register cut only. No placement, route, CPU timing, hardware or benchmark result.",
+  "stock_kit_sha256": "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+  "yosys_elf_sha256": "f58d1dfcbc9b48a81357283e93b53e4c78415f6d28f227f0db34a79f316e6a64",
+  "yosys_version": "Yosys 0.9 (git sha1 1979e0b)"
+}

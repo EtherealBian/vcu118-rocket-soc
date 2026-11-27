@@ -44,3 +44,5 @@ python3 scripts/map-mega-issue-cut.py "$kit" "$out/cut-802" --yosys "$yosys" --f
 ```
 
 第一条会重新求解正、负用例，再组合两种修改，检查两种组合次序得到同一份字节，分别在 `grouped_grants` 和 `both` 中封存两个候选。三条命令都不运行 Vivado、不访问板卡。公开记录不包含生成的第三方 HDL、主机绝对路径或线缆标识。
+
+若违例经过执行槽的分支标签而非发射器，请先对照[分支掩码寄存边界的四种映射](perf-mega175-branch-mask.md)：该实验分别检查沿前、沿后代价，未改变主线。
