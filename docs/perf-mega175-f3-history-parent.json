@@ -1,0 +1,30 @@
+{
+  "scope": "Known input differential samples on unextracted BoomFrontend RTL. Child interfaces are stubs, parent cut signals driven, clock held still, not a clocked fetch or boot test.",
+  "source_sha256": "5ba06d634a5d84720501b281b8adb406af68113ff105ef5fa39182077b7c0ffd",
+  "proof_sha256": "3be98711cc7cf35eaec7e6ea053a864b63f9e381706212ccc5b0a17dbf115deb",
+  "direct_child_inputs": {
+    "Arbiter2_BranchPredictionUpdate": "b28ffe99c23d14b8a0106f540de114f3424d9a1cb63fa932473181d06ae994f8",
+    "BoomRAS": "2820ec2d6eae09bc5a7a2b8f8d1a6d58556737d7c984e359bcdf05edf1f014c4",
+    "BranchDecode": "aede49a94e21ac6b52daf2ef2e91a10a750cdb08e07cbb552c6d1f5453fe6b5f",
+    "BranchPredictor": "229d0ca49bd8bc8cf706cd02e28ce25ca5afe92fcd10643d030364afef27187d",
+    "FetchBuffer": "a3c9510a0ac9c8f2ec7dd2bf3ff849adde8581c6847b181f22d7f7cec5a047dc",
+    "FetchTargetQueue": "727c9d2591c208cfdfd4fe9cc4e33d8f36e4e5eaf4e6ceb2a2a2143f3c9cd30e",
+    "ICache": "784f34988e5efdd48dd06e539c4213185dd11313b2f91575dd39ebd0ccb2e3f8",
+    "ITLB": "280e689d38a352b42fb52a19b047e4228a9023218ef183d62cd106004e21d0b2",
+    "Queue1_BranchPredictionBundle": "6ffab6a3b0884cc9067a58710c8fdbf8d9e26e3189caa0cc46907fb26f07b147",
+    "Queue1_FetchBundle": "9e2e40ba826843b270b15272b91664cd2b9b01bda124b5c78a19a38d0968e716",
+    "Queue1_FrontendResp": "26dd9c445e22602bd885754cecfa09d129c0f76f172d9900ca348af77ea6cd09",
+    "Queue2_BranchPredictionUpdate": "3c26f81f0f11b6953d5b9836a19ccb5a104c94254cbe9d01998f655c1f4552ef",
+    "RVCExpander": "243e0260b839c395c2f718d6da3226355b4e66634fc9e48e6f02e7a65af0cb4b"
+  },
+  "fixture_sha256": "afd59de6e60037ed21fba9c4b6dc45fca80f51ce13d05b647944208c0fc0345c",
+  "sampled_output_bits": 122,
+  "samples": 3072,
+  "all_eight_pc_groups_and_taken_lanes": true,
+  "history_mismatch_bit_coverage_each_stage": 64,
+  "mutant_disagreements": 44,
+  "f3_pc_selected_distinct": 472,
+  "s2_pc_selected_distinct": 102,
+  "exact_f1": 2256,
+  "exact_f2": 2256
+}

@@ -64,3 +64,5 @@
 后端慢路径的整数队列 RTL、形式验证和完整队列定向/带时钟复核见[同拍 miss 选择](perf-mega175-miss-select.md)。
 
 两条 CPU ↔ MIG AW 有效位的 CDC-10 已追到实际 MIG AXI 前端引脚：[CPU 失锁与写地址队列实验](perf-mega175-aw-recovery.md)。该实验没有解除告警。
+
+前端历史比较与取指地址校正的后续候选，见[两组四路分支与 64 位历史比较](perf-mega175-f3-history.md)。这是未布局、同周期的等价对照，未合入在跑的物理版。

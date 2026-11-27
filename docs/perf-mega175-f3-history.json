@@ -1,0 +1,496 @@
+{
+  "scope": "F3 history correction combinational cuts, binary inputs; isolated xcup primitive mapping, not routed timing, IPC, or board throughput.",
+  "kit_sha256": "ce0ef1171c7b0077282602c5c97230d03850b71c350c6c9ddcdf0b7ebcb5a456",
+  "stock_leaf_sha256": "5ba06d634a5d84720501b281b8adb406af68113ff105ef5fa39182077b7c0ffd",
+  "derived_leaf_sha256": {
+    "early_compare": "cad8ade8a426232ec7eb78a89e6400e147f0ef94054485de70f0fcf2d6ea221a",
+    "bank_prefix": "6f9fcffb17577bc9bcc9dac67caf74e8a519f6e27b6c9e23107d79ec2b157eac",
+    "prefix_and_compare": "18d1d3700acf9f6c9b9a4657a6198b7fc497eb117351bfd17dca043b7b0c2421",
+    "eligible_lanes": "4c1ec80dc7eeb54d52a59c0f2eeb3078d0a3e9cf2fd726a4153a3964ffe4bbd9",
+    "lanes_and_compare": "5d65877e7f02ff276344ad64507076c4d06a5569701c2daa2d43d3ccd3c09591"
+  },
+  "yosys": "Yosys 0.9 (git sha1 1979e0b)",
+  "yosys_sha256": "f58d1dfcbc9b48a81357283e93b53e4c78415f6d28f227f0db34a79f316e6a64",
+  "abc_sha256": "6b6d93004494101bed191ddf29c411df55c50f990d7db56796767a3efbb03b09",
+  "cut_sha256": {
+    "stock": "551546406dd5fda1e1726cb7fe0d246159f794f1814a90aa217468a24989eaf1",
+    "early_compare": "c27fbe34bc00e197d040d0ac1dd7d648c02e02ecdc95d1c1a6f09ef728684eb4",
+    "bank_prefix": "a5ac4247f012aa716924450e48cdfe5f58059074dc8fecbddb4c4f9d45b081f9",
+    "prefix_and_compare": "714852824855d5cf31d045b8e5104c4123ae1d51deb23c203d38e9eb77176e33",
+    "eligible_lanes": "1c854bc8f238abcf41bcd05f1f44953ca966835d37e5c2da4d5fcf06fece79af",
+    "lanes_and_compare": "a942909ed0143401294a6ab93970fed004466dee66679c2d927ce63b67641282",
+    "unmask_lane2": "cefc24bf66cb2f9e02fa66caaef8c5b73213c17b01ac14a660203b860692a2e2",
+    "drop_lane3_not_taken": "58ff38457cc256350079c7cda73d272b7e582824004da4e0fdc72363da52f68d",
+    "ignore_pc_boundary": "b5882bd043b4a7663112ef1d12ce2686d7de739d4d7cee5e1423779d4a3cf6d7",
+    "swap_f2_shifted_operand": "af9e96fb65f64a97e3035bfd5fdb43a233781fd3ff0b5e8d4f8959c6f4cfe8ad"
+  },
+  "proofs": {
+    "early_compare": "equivalent",
+    "bank_prefix": "equivalent",
+    "prefix_and_compare": "equivalent",
+    "eligible_lanes": "equivalent",
+    "lanes_and_compare": "equivalent",
+    "unmask_lane2": "counterexample",
+    "drop_lane3_not_taken": "counterexample",
+    "ignore_pc_boundary": "counterexample",
+    "swap_f2_shifted_operand": "counterexample"
+  },
+  "outputs": [
+    "_f3_correct_f1_ghist_T_4",
+    "_f3_correct_f2_ghist_T_4",
+    "f3_predicted_ghist_old_history",
+    "f3_predicted_ghist_new_saw_branch_not_taken",
+    "f3_predicted_ghist_new_saw_branch_taken",
+    "_GEN_133",
+    "f2_clear",
+    "f4_io_enq_bits_cfi_idx_bits",
+    "f4_io_enq_bits_cfi_idx_valid",
+    "f4_io_enq_bits_br_mask"
+  ],
+  "mapping": {
+    "stock": {
+      "cells": {
+        "LUT2": 37,
+        "LUT3": 75,
+        "LUT4": 23,
+        "LUT5": 8,
+        "LUT6": 668,
+        "MUXF7": 304,
+        "MUXF8": 117
+      },
+      "total": 1232,
+      "primitive_depth_by_start": {
+        "all": [
+          24,
+          24,
+          16,
+          16,
+          13,
+          26,
+          27,
+          10,
+          10,
+          11
+        ],
+        "predicted_directions": [
+          24,
+          24,
+          16,
+          16,
+          13,
+          26,
+          27,
+          10,
+          10,
+          11
+        ],
+        "decoded_cfi": [
+          24,
+          24,
+          16,
+          16,
+          13,
+          26,
+          27,
+          10,
+          10,
+          11
+        ],
+        "s1_s2_old_histories": [
+          8,
+          8,
+          null,
+          null,
+          null,
+          10,
+          11,
+          null,
+          null,
+          null
+        ],
+        "f3_old_history": [
+          11,
+          11,
+          3,
+          null,
+          null,
+          13,
+          14,
+          null,
+          null,
+          null
+        ]
+      }
+    },
+    "early_compare": {
+      "cells": {
+        "LUT2": 128,
+        "LUT3": 144,
+        "LUT4": 18,
+        "LUT5": 32,
+        "LUT6": 208,
+        "MUXF7": 28,
+        "MUXF8": 10
+      },
+      "total": 568,
+      "primitive_depth_by_start": {
+        "all": [
+          18,
+          18,
+          17,
+          16,
+          13,
+          20,
+          20,
+          10,
+          10,
+          10
+        ],
+        "predicted_directions": [
+          18,
+          18,
+          17,
+          16,
+          13,
+          20,
+          20,
+          10,
+          10,
+          10
+        ],
+        "decoded_cfi": [
+          18,
+          18,
+          17,
+          16,
+          13,
+          20,
+          20,
+          10,
+          10,
+          10
+        ],
+        "s1_s2_old_histories": [
+          7,
+          8,
+          null,
+          null,
+          null,
+          10,
+          10,
+          null,
+          null,
+          null
+        ],
+        "f3_old_history": [
+          8,
+          9,
+          2,
+          null,
+          null,
+          11,
+          11,
+          null,
+          null,
+          null
+        ]
+      }
+    },
+    "bank_prefix": {
+      "cells": {
+        "LUT2": 71,
+        "LUT3": 140,
+        "LUT4": 116,
+        "LUT5": 8,
+        "LUT6": 181,
+        "MUXF7": 57,
+        "MUXF8": 15
+      },
+      "total": 588,
+      "primitive_depth_by_start": {
+        "all": [
+          17,
+          17,
+          7,
+          14,
+          13,
+          18,
+          19,
+          11,
+          11,
+          11
+        ],
+        "predicted_directions": [
+          17,
+          17,
+          7,
+          14,
+          13,
+          18,
+          19,
+          11,
+          11,
+          11
+        ],
+        "decoded_cfi": [
+          17,
+          17,
+          7,
+          14,
+          13,
+          18,
+          19,
+          11,
+          11,
+          11
+        ],
+        "s1_s2_old_histories": [
+          9,
+          8,
+          null,
+          null,
+          null,
+          10,
+          11,
+          null,
+          null,
+          null
+        ],
+        "f3_old_history": [
+          10,
+          9,
+          2,
+          null,
+          null,
+          11,
+          12,
+          null,
+          null,
+          null
+        ]
+      }
+    },
+    "prefix_and_compare": {
+      "cells": {
+        "LUT2": 62,
+        "LUT3": 84,
+        "LUT4": 82,
+        "LUT5": 129,
+        "LUT6": 241,
+        "MUXF7": 65,
+        "MUXF8": 14
+      },
+      "total": 677,
+      "primitive_depth_by_start": {
+        "all": [
+          14,
+          14,
+          7,
+          13,
+          13,
+          15,
+          16,
+          10,
+          11,
+          11
+        ],
+        "predicted_directions": [
+          14,
+          14,
+          7,
+          13,
+          13,
+          15,
+          16,
+          10,
+          11,
+          11
+        ],
+        "decoded_cfi": [
+          14,
+          14,
+          7,
+          13,
+          13,
+          15,
+          16,
+          10,
+          11,
+          11
+        ],
+        "s1_s2_old_histories": [
+          9,
+          8,
+          null,
+          null,
+          null,
+          10,
+          11,
+          null,
+          null,
+          null
+        ],
+        "f3_old_history": [
+          9,
+          8,
+          2,
+          null,
+          null,
+          10,
+          11,
+          null,
+          null,
+          null
+        ]
+      }
+    },
+    "eligible_lanes": {
+      "cells": {
+        "LUT2": 45,
+        "LUT3": 86,
+        "LUT4": 27,
+        "LUT5": 86,
+        "LUT6": 229,
+        "MUXF7": 61,
+        "MUXF8": 21
+      },
+      "total": 555,
+      "primitive_depth_by_start": {
+        "all": [
+          16,
+          17,
+          8,
+          14,
+          14,
+          18,
+          18,
+          11,
+          14,
+          13
+        ],
+        "predicted_directions": [
+          16,
+          17,
+          8,
+          14,
+          14,
+          18,
+          18,
+          11,
+          14,
+          13
+        ],
+        "decoded_cfi": [
+          16,
+          17,
+          8,
+          14,
+          14,
+          18,
+          18,
+          11,
+          14,
+          13
+        ],
+        "s1_s2_old_histories": [
+          7,
+          8,
+          null,
+          null,
+          null,
+          9,
+          9,
+          null,
+          null,
+          null
+        ],
+        "f3_old_history": [
+          8,
+          9,
+          2,
+          null,
+          null,
+          10,
+          10,
+          null,
+          null,
+          null
+        ]
+      }
+    },
+    "lanes_and_compare": {
+      "cells": {
+        "LUT2": 65,
+        "LUT3": 90,
+        "LUT4": 77,
+        "LUT5": 143,
+        "LUT6": 235,
+        "MUXF7": 56,
+        "MUXF8": 15
+      },
+      "total": 681,
+      "primitive_depth_by_start": {
+        "all": [
+          16,
+          16,
+          8,
+          14,
+          14,
+          17,
+          18,
+          11,
+          13,
+          13
+        ],
+        "predicted_directions": [
+          16,
+          16,
+          8,
+          14,
+          14,
+          17,
+          18,
+          11,
+          13,
+          13
+        ],
+        "decoded_cfi": [
+          16,
+          16,
+          8,
+          14,
+          14,
+          17,
+          18,
+          11,
+          13,
+          13
+        ],
+        "s1_s2_old_histories": [
+          10,
+          10,
+          null,
+          null,
+          null,
+          11,
+          12,
+          null,
+          null,
+          null
+        ],
+        "f3_old_history": [
+          11,
+          10,
+          2,
+          null,
+          null,
+          12,
+          13,
+          null,
+          null,
+          null
+        ]
+      }
+    }
+  }
+}
