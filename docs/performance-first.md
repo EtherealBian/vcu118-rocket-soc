@@ -182,3 +182,11 @@ ChipTop 引脚仿真不包含 VCU118 的外层串口接线。用 Vivado 2024.2 x
 在共同的 S1 标签掩码和替换索引上，穷举 **256 × 8 = 2,048** 个组合：下一拍给 MSHR 的完整 8 位值全部相等；其中 1,976 个输入有多个命中位。例：掩码 `0x81` 应原样输出 `0x81`，丢掉最高位会得到 `0x01`；从 `(0x00,7)` 切换到 `(0x03,2)` 时，额外延迟一拍会错误地给出 `0x80` 而非 `0x03`。两次从封存 HDL 重新提取得到相同摘要。[实际模块哈希、输入差异和反例](perf-early-way-cone.json)。仅覆盖二态输入下这一拍的选择，不是整个缓存等价证明、复位检查或提速证明。
 
 复现：`python3 scripts/check-mshr-way-cone.py <原三路模型包> <early-way模型包> <新目录> --verilator <Verilator 5.022可执行文件>`；如使用工程内工具链，沿用整核模型构建时的 `VERILATOR_ROOT` 和 `LD_LIBRARY_PATH`。
+
+### 单核四路 175 MHz：修订版可以送去做物理实现了吗？
+
+**可以送实现，但还不能上板。** 用修订核心自己的整核模型，重新从 UART 引脚发帧。64 字节正确帧在第 1,491,491 拍收到交接及程序回复，20 字节坏 CRC 帧在第 823,132 拍确认拒绝，故意用 868 拍/位接收也被拒绝。原版与修订版的封存模型、可执行仿真器和整核库各不相同；然而 ROM、探针、两份测试帧和观测周期一致。[修订版串口记录](perf-mega175-fixed-rom-link.json)。
+
+从这对模型重建了单 hart、四路、128 项 ROB 的 VCU118 实现输入。549 个 HDL 包含修订过的调试通路；外层 UART 接收引脚另以板壳 xsim 记录核对。两次在新目录封装，整个输入清单哈希相同；又从实际输入反推修订整核模型清单，核对设备树、ROM、175 MHz PLL 请求、I/O、DDR 配置和固定版本的实现脚本。[完整输入复核摘要](perf-mega175-implementation-inputs.json)。这一步没有产生 bit，也没有测量 Linux 分数。物理实现的 setup/hold、时钟覆盖、CDC、DRC 和实板计时仍是独立关卡。
+
+复现：令 `VCU_IMPL_RECIPE_REVISION` 为摘要中的 `implementation_revision`，执行 `bash scripts/qualify-mega175-split.sh <100MHz四路包> <175MHz原包> <原模型对象> <原串口证据> <新修订包> <新模型对象目录> <新证据目录> <新私有实现包>`，再用 `python3 scripts/verify-mega-impl-inputs.py <私有实现包> <证据目录>` 复核。封装流程不运行 Vivado，也不会接触板卡。

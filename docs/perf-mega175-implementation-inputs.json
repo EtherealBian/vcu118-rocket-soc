@@ -1,0 +1,15 @@
+{
+  "scope": "Private implementation input check only; no synthesized/routed or hardware claims.",
+  "family": "Mega",
+  "physical_harts_in_dts": 1,
+  "decode_lanes": 4,
+  "rob_entries": 128,
+  "pll_request_mhz": 175,
+  "hdl_sources": 549,
+  "board_input_seal": "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+  "implementation_revision": "bb79a354f178902e0047a495cbf49643262b7b45",
+  "physical_rx_review": "ba58349434bea996081d404bc0e22e48e369b0ef86daa081d282009f46a50f91",
+  "halt_review": "2788da4ee92199295bcbee7b53447cf2905087407071b2b452558cda1cbbf396",
+  "stock_pin_review": "65a3ef736a94483ed442ff4a9f0896b2f48f3f79f10ac87ad940e2b99b952645",
+  "corrected_pin_review": "e0cb9ff66d0c6c4fc070ff28b0d38817f50088bb4100abd9842efed85bebcb67"
+}
