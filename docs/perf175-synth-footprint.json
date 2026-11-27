@@ -1,0 +1,42 @@
+{
+  "scope": "Whole-SoC synthesis table, 175 MHz requested. Different BOOM organizations and debug/RX revisions. Raw primitive instances, not occupied CLB LUT sites, post-route utilization, timing, or a CPU-only area measurement.",
+  "three_wide_stock": {
+    "board_input_seal": "6c9528b1f3c8d18584b3b095d7d20399fc7b5cb56668a9d656af31cc7df93147",
+    "post_synth_dcp_sha256": "f0d5672da25c505436aeb7fdd030e07b826a4c5fd652fefaab358009a6561d42",
+    "cell_table_sha256": "b06eefc24aa9205bb4a20293829000e81311b4c7eca502ebb49acd0b73e6d029",
+    "primitives": {
+      "LUT1": 989,
+      "LUT2": 8926,
+      "LUT3": 34932,
+      "LUT4": 29518,
+      "LUT5": 50084,
+      "LUT6": 140955,
+      "FDRE": 120884,
+      "RAMB18E2": 17,
+      "RAMB36E2": 194,
+      "MUXF7": 18958,
+      "MUXF8": 7008
+    },
+    "sum_LUT1_to_LUT6": 265404
+  },
+  "four_wide_split": {
+    "board_input_seal": "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+    "post_synth_dcp_sha256": "c7302bd1cd3565f8d9f85e30416e9d08aa0cbb5a56e2336f80e1d028769fbaad",
+    "cell_table_sha256": "6e832eb54d9d67f1a135a19d8b06d653693ad7e5fff78d11d582b07b6d309a2b",
+    "primitives": {
+      "LUT1": 1084,
+      "LUT2": 12301,
+      "LUT3": 59657,
+      "LUT4": 49752,
+      "LUT5": 76379,
+      "LUT6": 255143,
+      "FDRE": 147652,
+      "RAMB18E2": 17,
+      "RAMB36E2": 210,
+      "MUXF7": 37854,
+      "MUXF8": 13832
+    },
+    "sum_LUT1_to_LUT6": 454316
+  },
+  "LUT1_to_LUT6_delta_percent": 71.179
+}

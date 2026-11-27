@@ -1,0 +1,42 @@
+{
+  "scope": "Derived three-wide functional HDL only: stock 175 MHz request plus the qualified early-way D-cache, not an independent elaboration, timing result, or board score.",
+  "stock100_donor100_stock175_seals": [
+    "9bd04af0410dbad475d7898c438094785fb232c3178fc225a0e38bcaa476d8a1",
+    "78859cb275cc58dae07b1cad529483365c3e6c2c573534af8a26ed0b7e49f933",
+    "748fb6f56d189910df256774a23cd17c1785b596eb216f05e39a7387c2b4a1d0"
+  ],
+  "derived175_seal": "c6acdbfde6e58c80b6d59a9a04a2cdc09373038280dc8fc54f14a87bbaa25131",
+  "stock175_ordered_hdl_files": 535,
+  "changed_from_stock175": [
+    "rtl/BoomNonBlockingDCache.sv"
+  ],
+  "dcache_sha256": [
+    "97f5764f97a945d4b90b7ea9a1711942a40c8a6ceff16844e3574605ff882032",
+    "37cca7447bb4614cb78a28ec2bf45a2e074dbfafa15f88b9f6606694819c7aa5"
+  ],
+  "stock175_source_order_rom_dt_config_preserved": true,
+  "board_contract": "Stock generated single-hart DT/RTC, PLL request, ROM image and handoff checked; no physical PLL measurement.",
+  "verilator": "Verilator 5.022 2024-02-24 rev conda-forge build 1",
+  "shared_mask_bits": 8,
+  "shared_index_bits": 3,
+  "single_edge_vectors": 2048,
+  "multi_hot_vectors": 1976,
+  "high_bit_dropped_witness": {
+    "mask": 129,
+    "index": 0,
+    "reference": 129,
+    "mutant": 1
+  },
+  "extra_register_witness": {
+    "previous": [
+      0,
+      7
+    ],
+    "current": [
+      3,
+      2
+    ],
+    "reference": 3,
+    "mutant": 128
+  }
+}

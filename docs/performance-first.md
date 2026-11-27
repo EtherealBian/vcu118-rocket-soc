@@ -190,3 +190,26 @@ ChipTop 引脚仿真不包含 VCU118 的外层串口接线。用 Vivado 2024.2 x
 从这对模型重建了单 hart、四路、128 项 ROB 的 VCU118 实现输入。549 个 HDL 包含修订过的调试通路；外层 UART 接收引脚另以板壳 xsim 记录核对。两次在新目录封装，整个输入清单哈希相同；又从实际输入反推修订整核模型清单，核对设备树、ROM、175 MHz PLL 请求、I/O、DDR 配置和固定版本的实现脚本。[完整输入复核摘要](perf-mega175-implementation-inputs.json)。这一步没有产生 bit，也没有测量 Linux 分数。物理实现的 setup/hold、时钟覆盖、CDC、DRC 和实板计时仍是独立关卡。
 
 复现：令 `VCU_IMPL_RECIPE_REVISION` 为摘要中的 `implementation_revision`，执行 `bash scripts/qualify-mega175-split.sh <100MHz四路包> <175MHz原包> <原模型对象> <原串口证据> <新修订包> <新模型对象目录> <新证据目录> <新私有实现包>`，再用 `python3 scripts/verify-mega-impl-inputs.py <私有实现包> <证据目录>` 复核。封装流程不运行 Vivado，也不会接触板卡。
+
+### 四路省了周期，综合规模增加了多少？
+
+从两个 175 MHz 请求的**整机综合**日志重读同一顶层的原语表，核对实际 HDL 清单、输入包和各自 `post_synth` 检查点。三路原版的 LUT1–LUT6 实例合计 **265,404**，四路调试同步修订版 **454,316（+71.18%）**；FDRE 分别是 120,884 和 147,652，RAMB36E2 分别是 194 和 210。[可复核的原语表摘要](perf175-synth-footprint.json)。这些不是布局后的 CLB LUT 占用，也不能把差值全算到第四路：队列、缓存和板壳修订也不同。结合前面的同 ELF 周期数据，下一步先看四路能否满足时序，再决定是否继续加宽。
+
+四路已完成综合及 `opt_design`，进入布局。布局器报告外部 JTAG TCK 的 `Place 30-675`；从同次 `post_opt` 中读到 `JTCK` 约束为 100 ns，该网带 `CLOCK_DEDICATED_ROUTE FALSE`。这是调试时钟，不是 175 MHz 的 CPU 时钟。未扩大例外；须以同一次布线复核 JTAG 路径、CPU 的 setup/hold、约束覆盖和 CDC/DRC 后，才决定能否上板。
+
+复现综合对照：`python3 scripts/review-boom-synth-footprint.py <三路日志> <三路实现包> <三路post_synth.dcp> <四路日志> <四路实现包> <四路post_synth.dcp>`。脚本只读，用原日志记录的实现目录和文件位置复核，不启动另一份 Vivado。
+
+### 三路：把缓存路选择提前，并没有减少程序周期
+
+在 100 MHz 请求的三路整核模型上，用 GCC 13.3 的两份裸机程序重查原版与前移版。每个格子是同一 ELF 三个窗口的中位数，单位为**周期/轮**，两种硬件的数值完全相同。
+
+| 同一份程序 | 性能种子：原版 = 前移版 | 验证种子：原版 = 前移版 |
+|---|---:|---:|
+| `-O2` | 177,191.75 | 178,005.00 |
+| `-O3`（无 LTO） | 178,976.00 | 179,914.25 |
+
+不仅中位数相等：[12 对窗口](perf-early-way-windows.json)的周期和退休数逐对一致，各种子的 CRC 通过。每份程序的完整串口输出、模型总周期及后端内存读写数也与原版一致。重新用 GCC 13.3 构建，两个 `window.bin` 分别与原实验逐字节相同；没有把不同 ELF 的退休数互相比对。这一改动值得测试的是**能否提高频率**，而不是每轮少用几拍。
+
+为下一次同频对照，用经核验的 175 MHz 三路原版和已验证的 100 MHz 缓存模块派生了新的功能模型。535 个有序 HDL 文件仅换了一个 D-cache；原版 175 MHz 的 ROM、DT、时钟请求和复位逻辑未换。两次在新目录独立生成相同封存清单，各自从生成后的 RTL 核验 2,048 项一拍路选择。[同频模型与负控](perf175-early-way-model.json)。这是从封存输入派生的模型，**不是**重新运行 Scala 生成器，也不是三路修订版的物理时序或板测结果。
+
+复现：先运行 `python3 scripts/review-early-way-windows.py <原版包> <前移版包> <O2程序目录> <O2原版窗口> <O2前移窗口> <O3程序目录> <O3原版窗口> <O3前移窗口>`。在工程 Verilator 5.022 环境中运行 `python3 scripts/derive-early-way175.py <100MHz三路原版包> <100MHz三路前移版包> <175MHz三路原版包> <新目录> --verilator <可执行文件>`，结果在 `review.json`。

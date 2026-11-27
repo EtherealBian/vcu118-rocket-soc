@@ -1,0 +1,120 @@
+{
+  "scope": "100 MHz request, three-wide BOOM, debug-preloaded bare metal and behavioral RAM. Each row is one matched stock/early-way pair, four iterations; no measured FPGA clock or Linux score.",
+  "kit_seals_stock_early": [
+    "9bd04af0410dbad475d7898c438094785fb232c3178fc225a0e38bcaa476d8a1",
+    "78859cb275cc58dae07b1cad529483365c3e6c2c573534af8a26ed0b7e49f933"
+  ],
+  "sim_sha256_stock_early": [
+    "8623be299c4cf50c4c6370a391ab84867c82acace12782c40525f4cbf2c98b6e",
+    "ce0b20e4f57b7ecd7a93df25dc42db1d28ba9447e60eb952f576619a3707ad05"
+  ],
+  "common_rom_elf": "dc616579418d120f53fde6ae60e918166d13df4570bd14bb7efb56f4c7131d2b",
+  "harness_sha256": "9fd708b984cd078932d1727a881bced76a745a5819f0073a7020b1b9d0ac0ea6",
+  "matched_windows": 12,
+  "profiles": {
+    "o2": {
+      "workload": {
+        "window.elf": "82c9c2ef6ef48e51b6253150ea25931ad28aaa96318f1c0f295d404a377f297c",
+        "window.bin": "2d2525c7f38061d640023d9bc46df11d499b0a169d573124beb2f285fe4f0e1f"
+      },
+      "identical_console_sha256": "e86334018469159e4c753c34f786597f4b9ed9c25cebfe31c7b2845de60e2a69",
+      "identical_model_totals": {
+        "model_cycles": 10599424,
+        "backing_reads": 138,
+        "backing_writes": 0
+      },
+      "performance_seed": {
+        "identical_samples": [
+          {
+            "sample": 0,
+            "cycles": 721179,
+            "retired": 1435527
+          },
+          {
+            "sample": 1,
+            "cycles": 708767,
+            "retired": 1435527
+          },
+          {
+            "sample": 2,
+            "cycles": 708209,
+            "retired": 1435527
+          }
+        ],
+        "median_cycles_per_iteration": 177191.75
+      },
+      "validation_seed": {
+        "identical_samples": [
+          {
+            "sample": 0,
+            "cycles": 715444,
+            "retired": 1438285
+          },
+          {
+            "sample": 1,
+            "cycles": 712020,
+            "retired": 1438285
+          },
+          {
+            "sample": 2,
+            "cycles": 711132,
+            "retired": 1438285
+          }
+        ],
+        "median_cycles_per_iteration": 178005.0
+      }
+    },
+    "o3": {
+      "workload": {
+        "window.elf": "ed00d06bae6bfd11c484d19882cc06f038b6fa22840d0c40bcddd1d6becb90e5",
+        "window.bin": "ed67f11e0e92adc0d03ae020401cfd1101c802dc75613a9e644093fc1b4125b9"
+      },
+      "identical_console_sha256": "3132e33cf1dcf4cf85707a21cb59ee64c502da742f11762b5f94ce7276a4a59b",
+      "identical_model_totals": {
+        "model_cycles": 10641408,
+        "backing_reads": 176,
+        "backing_writes": 0
+      },
+      "performance_seed": {
+        "identical_samples": [
+          {
+            "sample": 0,
+            "cycles": 729160,
+            "retired": 1376429
+          },
+          {
+            "sample": 1,
+            "cycles": 715904,
+            "retired": 1376429
+          },
+          {
+            "sample": 2,
+            "cycles": 714904,
+            "retired": 1376429
+          }
+        ],
+        "median_cycles_per_iteration": 178976.0
+      },
+      "validation_seed": {
+        "identical_samples": [
+          {
+            "sample": 0,
+            "cycles": 723752,
+            "retired": 1378998
+          },
+          {
+            "sample": 1,
+            "cycles": 719003,
+            "retired": 1378998
+          },
+          {
+            "sample": 2,
+            "cycles": 719657,
+            "retired": 1378998
+          }
+        ],
+        "median_cycles_per_iteration": 179914.25
+      }
+    }
+  }
+}
