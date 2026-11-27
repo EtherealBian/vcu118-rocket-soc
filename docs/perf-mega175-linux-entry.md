@@ -48,3 +48,5 @@ PY
 ```
 
 如需独立定位此发行的两个链接符号，用同一工具链的 `nm -n vmlinux` 查 `_start`、`__initramfs_start` 和 `__initramfs_size`，后两者各减 `_start` 得到上面的偏移。对应 `vmlinux` 的 SHA-256 为 `9d66a82b453123e893ee82e4c0ca090b6401a317ccd97519d033088a0e5c0d7f`。离线程序均不连接 JTAG 或串口。
+
+后续：[从同一个复位入口继续到用户态的实验与验收边界](perf-mega175-linux-shell.md)。
