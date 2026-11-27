@@ -1,0 +1,101 @@
+{
+  "native_endpoint_map_sha256": "ebacd98eef56dc6db1f9b5b9cd907f9e06143ec88d5867de3ef6dbbabbfbf95a",
+  "equivalent_binary_msb_launches": [
+    "aw:widx:3",
+    "aw:ridx:3",
+    "w:widx:3",
+    "w:ridx:3",
+    "b:widx:3",
+    "b:ridx:3",
+    "ar:widx:3",
+    "ar:ridx:3",
+    "r:widx:3",
+    "r:ridx:3"
+  ],
+  "scripts_sha256_lf": {
+    "test-mega-gray-attributes.py": "51f647f27c6eaaa65c7f74ad23ce1dbe3286d5447393ec540f2eeac4af082c79",
+    "probe-mega-gray-attributes.tcl": "a6bd3f7009822e154fc2b24e39537acd7a76289cd3866777a22973f0a598414c",
+    "annotate-mega-gray-pointers.tcl": "b7cca983a58364af55c186eaae8372866bcb1e1bf5379496626ee4047d73275e"
+  },
+  "scope": "Vivado post-synthesis OOC experiment on the real 5-channel CPU/MIG AXI crossing. Same live netlist, same clocks; change only receiver FF attributes. No placement, route, MTBF, full-system CDC closure or board result.",
+  "inputs": {
+    "physical_kit_sha256": [
+      "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+      "ce0ef1171c7b0077282602c5c97230d03850b71c350c6c9ddcdf0b7ebcb5a456"
+    ],
+    "archived_cdc_sha256": "b7b4ff7357a3f7f21b5c79a1cc8ed90f21e925c374712f6ade8d7aa767b5c3a6",
+    "archived_pointer_map_sha256": "e0ccdfbfe55047f3197cf415e4344f1ac002a79c8d0959877cc5094a865f9a1b",
+    "board_wiring_and_crossing_rtl_sha256": {
+      "AXI4AsyncCrossingSource": "be82306ce224b2c03834545a3b17e8c0fd575dc79c1a7f2c50c82a74e3fb86ee",
+      "AsyncQueueSource_AXI4BundleAR": "1cae0974f80c971566205ea4826fda56c8586e82663cc368461f5bb81a00749b",
+      "AsyncResetSynchronizerShiftReg_w4_d3_i0": "862f5b3c19ecc8cd1eb3ccdf104b835224d702657ee4647633128e7bbffa0073",
+      "AsyncResetSynchronizerPrimitiveShiftReg_d3_i0": "05c3f0eca3dcc0696bf95af33c71bdf4d224543bf698f2bfb3a67d16ab4aa0fb",
+      "AsyncValidSync": "3bed243e2afa1c3ca595b62a562f190789564f6a25a7ce4b35c7c275211bd8d7",
+      "AsyncResetSynchronizerShiftReg_w1_d3_i0_2": "1c41cb67f4c6450fcfb262a7c1279bc7d555c4254ca3dcad97f888b2409df7ea",
+      "AsyncQueueSource_AXI4BundleAW": "6aed5dbcd59a02db067d82d77299ff386036ef6aa942aee244235bb27f605746",
+      "AsyncQueueSource_AXI4BundleW": "3873bd18717a6d60bd45c6651fdda0bcb48d0124eab5d637471abe0e17b2f181",
+      "AsyncQueueSink_AXI4BundleR": "3ea35ad4d1664fd692ee7eb1053aff28b8f5675e9530c76b4175d4c831b29619",
+      "ClockCrossingReg_w71": "2068d9c1387312e2c822532a379472928437694c4979a3e4960ff734cd9741c0",
+      "AsyncQueueSink_AXI4BundleB": "37b42590299fb563bb959ec8ddc34c3e6558e08bd2464194e124f3dcc22eee62",
+      "ClockCrossingReg_w6": "04c5729d6598e9e0118f03dfb97125f64b76a1bd704e90794649f849d15d86e2",
+      "AXI4AsyncCrossingSink": "bbb1b9bf3876298b1395774ff72ca498ba375ce5a44b528eab293e8b453c4750",
+      "AsyncQueueSink_AXI4BundleAR": "10cacb72e6e53caed95c5ecfce132ebc29c12c179bef943ed534fbd0016f6324",
+      "ClockCrossingReg_w61": "69391c7b556f097cfaca222d20afca71562ffb7521a558f2d420a35c087d6b61",
+      "AsyncQueueSink_AXI4BundleAW": "dd7bdb0ea7f879167c8183a1b8258481042b10fbcdb5485e8213f0babd7b3615",
+      "AsyncQueueSink_AXI4BundleW": "435ea38c45f6da3f7fa87f8cba6f342227d615e90213be054803962a99092cb5",
+      "ClockCrossingReg_w73": "063b7511c961a539494c0b4ca6b694afde3c258472b44b1cc6b109fc1b9714a1",
+      "AsyncQueueSource_AXI4BundleR": "b741d3c71e1b7077ba274f31dea1f78188a1f28343ae91c6248f8961b16d4006",
+      "AsyncQueueSource_AXI4BundleB": "d3062d4b407243e5d09e472d8eb7b3c3cb9934fdb588a79394496dc488a9f855",
+      "XilinxVCU118MIG": "0c22842380e8e952fa9dedd97629dc6c6d3ea3a436236146d79e88ad08c92df2",
+      "XilinxVCU118MIGIsland": "e6a34285d76e72b9989efcfceaaddb849d082c18c262aa5cdc1f1e35d9812920"
+    },
+    "fixture_sha256": "99f0f52f4b76125c59277a5c01cbdc5870833f6dabb742ede782d528b609259f",
+    "async_fields_checked": 246,
+    "synthesized_modules": 20,
+    "part": "xcvu9p-flga2104-2L-e"
+  },
+  "receiver_FFs_checked": 120,
+  "unique_launch_FFs_checked": 40,
+  "interstage_links_checked_for_exclusive_fanout": 80,
+  "other_report_rows_unchanged": 266,
+  "other_rules": {
+    "CDC-15": 264,
+    "CDC-2": 2
+  },
+  "negative_control": {
+    "channel": "aw",
+    "pointer": "widx",
+    "bit": 0
+  },
+  "stages": {
+    "baseline": {
+      "target_rules": {
+        "CDC-2": 40
+      },
+      "all_classified_rows": 306,
+      "report_sha256": "48e239020a88b6fe30dc9da98055d9bef7459a5bab2d988f2de9675c08101635"
+    },
+    "candidate": {
+      "target_rules": {
+        "CDC-3": 40
+      },
+      "all_classified_rows": 306,
+      "report_sha256": "30ae67135742c3a1303d405a44ea998a5eb749b51a2f93403be3a17a1ec5e515"
+    },
+    "omitted-one-bit": {
+      "target_rules": {
+        "CDC-2": 1,
+        "CDC-3": 39
+      },
+      "all_classified_rows": 306,
+      "report_sha256": "1e8e6ae2911beba836791f330714ca4ebf2788940c7942cc807bdd1679c5967b"
+    }
+  },
+  "reviewer_negative_controls_rejected": [
+    "reverse pointer order",
+    "alias lower bit",
+    "swap native stages",
+    "drop non-target row",
+    "change non-target endpoint"
+  ]
+}

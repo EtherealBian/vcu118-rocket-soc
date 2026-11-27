@@ -72,3 +72,5 @@
 两条 CPU ↔ JTCK 调试队列 CDC-10 的停钟实验，见[一笔 DMI 写在复位前是否已经执行](perf-mega175-dmi-reset.md)。
 
 两个慢路径族的共同走线，以及恢复版 CoreMark 用户态窗口中哪些拍实际使用加载失败信号，见[加载失败与整数发射队列搬移](perf-mega175-miss-activity.md)。
+
+CPU ↔ MIG 的 40 个 Gray 指针位能否定向标记、哪些 CDC 告警仍在，见[局部同步链属性实验](perf-mega175-gray-attributes.md)。
