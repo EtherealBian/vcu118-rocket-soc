@@ -42,3 +42,5 @@ python3 scripts/test-strict-replay-oracle.py "$PRIVATE/stock" "$PRIVATE/guest" "
 [计时前置检查：四路 BOOM 的 mtime、机器定时器中断和严格 ELF 的起止调用](perf-mega175-timebase.md)。
 
 [逐条追踪后端重定向：哪条链表比较分支最常重新取指，正确路径几拍后派发？](perf-strict-redirects.md)
+
+[哪些指令真的挡在退休队首？两种种子的逐拍核验与链表反转循环](perf-strict-rob-heads.md)

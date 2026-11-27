@@ -1,0 +1,239 @@
+{
+  "scope": "Four rounds in each user-mode RTL snapshot, stock BOOM. Oldest ROB busy is a retirement gate, not the underlying execution cause or removable latency. Not full Linux, physical timing or board throughput.",
+  "elf_sha256": "61f7c4579b762f86d7d7dc93d4c385d08e50248f3dd6a8a9105fd5e88b58886a",
+  "model_sha256": "12a7db44c498918558fdfcbf1753c70afc1bef78709e55154a80ff39bb890ede",
+  "probe_source_sha256": "a92ac8dd459f0645f6ca24dff0c53bf9e545f18e4deab50a60d416de8a8aedf1",
+  "head_probe_sha256": "efba238af2084971d3f44e45795fbbf2bab7da1bdbe8912b17a88e024ef5d100",
+  "results": {
+    "performance": {
+      "hot_cycle_span": 653447,
+      "idle_edges": 122447,
+      "head_gate_counts": {
+        "busy": 116232,
+        "exception": 10,
+        "global+exception": 98,
+        "no_valid_head_lane": 6107
+      },
+      "next_instruction_dispatch": {
+        "not_previously_dispatched": 6215,
+        "previously_dispatched": 116232
+      },
+      "next_ticket_is_busy_head": 116232,
+      "other_ticket_is_busy_head": 0,
+      "top_busy_heads": [
+        {
+          "pc": "0x13b6a",
+          "retirements": 24480,
+          "own_b2": 8,
+          "preceding_idle_edges": 27960,
+          "oldest_busy_edges": 27960,
+          "oldest_busy_edges_with_own_b2": 12
+        },
+        {
+          "pc": "0x13bdc",
+          "retirements": 11164,
+          "own_b2": 65,
+          "preceding_idle_edges": 21063,
+          "oldest_busy_edges": 21063,
+          "oldest_busy_edges_with_own_b2": 101
+        },
+        {
+          "pc": "0x13b5a",
+          "retirements": 11580,
+          "own_b2": 28,
+          "preceding_idle_edges": 20356,
+          "oldest_busy_edges": 20356,
+          "oldest_busy_edges_with_own_b2": 36
+        },
+        {
+          "pc": "0x13b64",
+          "retirements": 24480,
+          "own_b2": 0,
+          "preceding_idle_edges": 13690,
+          "oldest_busy_edges": 13690,
+          "oldest_busy_edges_with_own_b2": 0
+        },
+        {
+          "pc": "0x13b54",
+          "retirements": 11580,
+          "own_b2": 0,
+          "preceding_idle_edges": 4963,
+          "oldest_busy_edges": 4963,
+          "oldest_busy_edges_with_own_b2": 0
+        },
+        {
+          "pc": "0x13c02",
+          "retirements": 732,
+          "own_b2": 0,
+          "preceding_idle_edges": 2196,
+          "oldest_busy_edges": 2196,
+          "oldest_busy_edges_with_own_b2": 0
+        },
+        {
+          "pc": "0x13c06",
+          "retirements": 732,
+          "own_b2": 0,
+          "preceding_idle_edges": 1464,
+          "oldest_busy_edges": 1464,
+          "oldest_busy_edges_with_own_b2": 0
+        },
+        {
+          "pc": "0x124d8",
+          "retirements": 2048,
+          "own_b2": 0,
+          "preceding_idle_edges": 999,
+          "oldest_busy_edges": 999,
+          "oldest_busy_edges_with_own_b2": 0
+        }
+      ],
+      "compare_branch": {
+        "pc": "0x13eda",
+        "retirements": 830,
+        "own_b2": 325,
+        "preceding_idle_edges": 0,
+        "oldest_busy_edges": 0,
+        "oldest_busy_edges_with_own_b2": 0
+      },
+      "head_capture_sha256": "b8bd4c8a10ef5d2f8a44a7fa673a36ace037b9c55e614840549d9b7673e33998",
+      "tickets_sha256": "4434454eed08424c4cae7c82081d6600045d9449df48bbd182a9b1ba0b2dd3bc",
+      "reversal_loop": {
+        "taken": 23664,
+        "fallthrough": 816,
+        "taken_with_own_b2": 2,
+        "branch_to_branch_retirement": {
+          "n": 23664,
+          "min": 1,
+          "p50": 5,
+          "p95": 5,
+          "max": 36,
+          "sum_cycles": 99078,
+          "exactly_five": 18305
+        },
+        "branch_to_branch_dispatch": {
+          "n": 23664,
+          "min": 1,
+          "p50": 2,
+          "p95": 10,
+          "max": 64,
+          "sum_cycles": 77028,
+          "exactly_five": 2799
+        }
+      }
+    },
+    "validation": {
+      "hot_cycle_span": 657536,
+      "idle_edges": 116025,
+      "head_gate_counts": {
+        "busy": 109759,
+        "exception": 10,
+        "global+exception": 125,
+        "no_valid_head_lane": 6131
+      },
+      "next_instruction_dispatch": {
+        "not_previously_dispatched": 6266,
+        "previously_dispatched": 109759
+      },
+      "next_ticket_is_busy_head": 109759,
+      "other_ticket_is_busy_head": 0,
+      "top_busy_heads": [
+        {
+          "pc": "0x13b6a",
+          "retirements": 24480,
+          "own_b2": 10,
+          "preceding_idle_edges": 27692,
+          "oldest_busy_edges": 27692,
+          "oldest_busy_edges_with_own_b2": 16
+        },
+        {
+          "pc": "0x13bdc",
+          "retirements": 11600,
+          "own_b2": 55,
+          "preceding_idle_edges": 21986,
+          "oldest_busy_edges": 21986,
+          "oldest_busy_edges_with_own_b2": 108
+        },
+        {
+          "pc": "0x13b5a",
+          "retirements": 11892,
+          "own_b2": 16,
+          "preceding_idle_edges": 16200,
+          "oldest_busy_edges": 16200,
+          "oldest_busy_edges_with_own_b2": 20
+        },
+        {
+          "pc": "0x13b64",
+          "retirements": 24480,
+          "own_b2": 0,
+          "preceding_idle_edges": 13994,
+          "oldest_busy_edges": 13994,
+          "oldest_busy_edges_with_own_b2": 0
+        },
+        {
+          "pc": "0x13c02",
+          "retirements": 744,
+          "own_b2": 0,
+          "preceding_idle_edges": 2231,
+          "oldest_busy_edges": 2231,
+          "oldest_busy_edges_with_own_b2": 0
+        },
+        {
+          "pc": "0x13c06",
+          "retirements": 744,
+          "own_b2": 0,
+          "preceding_idle_edges": 1488,
+          "oldest_busy_edges": 1488,
+          "oldest_busy_edges_with_own_b2": 0
+        },
+        {
+          "pc": "0x13bd8",
+          "retirements": 11600,
+          "own_b2": 0,
+          "preceding_idle_edges": 1054,
+          "oldest_busy_edges": 1054,
+          "oldest_busy_edges_with_own_b2": 0
+        },
+        {
+          "pc": "0x124d2",
+          "retirements": 1984,
+          "own_b2": 0,
+          "preceding_idle_edges": 947,
+          "oldest_busy_edges": 947,
+          "oldest_busy_edges_with_own_b2": 0
+        }
+      ],
+      "compare_branch": {
+        "pc": "0x13eda",
+        "retirements": 837,
+        "own_b2": 308,
+        "preceding_idle_edges": 0,
+        "oldest_busy_edges": 0,
+        "oldest_busy_edges_with_own_b2": 0
+      },
+      "head_capture_sha256": "64ad1f72901b65a19b2f58c5cb4c224a546c6961cb1d41e48c2663336da626ea",
+      "tickets_sha256": "2778a1b8d5705a8d39ded751bbaf60d63c8c968743debfff52b3c0b52e842fa4",
+      "reversal_loop": {
+        "taken": 23664,
+        "fallthrough": 816,
+        "taken_with_own_b2": 2,
+        "branch_to_branch_retirement": {
+          "n": 23664,
+          "min": 1,
+          "p50": 5,
+          "p95": 5,
+          "max": 35,
+          "sum_cycles": 98996,
+          "exactly_five": 18262
+        },
+        "branch_to_branch_dispatch": {
+          "n": 23664,
+          "min": 1,
+          "p50": 2,
+          "p95": 10,
+          "max": 58,
+          "sum_cycles": 77159,
+          "exactly_five": 2863
+        }
+      }
+    }
+  }
+}

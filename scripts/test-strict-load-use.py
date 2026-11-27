@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Observe true load result values, ALU branch inputs and B1 without altering the guest or RTL."""
+"""Observe load/branch operands or zero-retirement ROB head gates without changing the guest or RTL."""
 import argparse
 from hashlib import sha256
 import json
@@ -46,7 +46,18 @@ def instrument(base_source, address_chain=False, left_load=False):
     return src
 
 
-def run(kit,obj,guest,baseline,out,include,address_chain=False, left_load=False):
+def head_probe(source):
+    src=BP['instrument'](source)
+    for old,new in [('#define V(n)', '#include "strict_rob_heads.hpp"\n#define V(n)'),
+                    ('Redirects bp(argv[5]);','HeadGaps bp(argv[5]);'),
+                    ('          ++lanes[k];','          ++lanes[k];\n          if(active) bp.observe(r,i);')]:
+        if src.count(old)!=1: raise ValueError('changed ROB head probe hook')
+        src=src.replace(old,new)
+    return src
+
+
+def run(kit,obj,guest,baseline,out,include,address_chain=False, left_load=False, rob_heads=False):
+    if rob_heads and (address_chain or left_load): raise ValueError('standalone head probe required')
     lock=json.loads((ROOT/'docs/perf-strict-user-lvt.json').read_bytes())
     oracle=json.loads((ROOT/'docs/perf-strict-redirects.json').read_bytes())
     runpy.run_path(str(HERE/'check-model-kit.py'))['check'](obj,kit)
@@ -63,13 +74,16 @@ def run(kit,obj,guest,baseline,out,include,address_chain=False, left_load=False)
             p=(kit if k=='CANDIDATE.sha256' else obj)/k
         if digest(p)!=h: raise ValueError('changed sealed input: '+k)
         inputs[k]=p
-    for name in ['strict_redirects.hpp','strict_load_use.hpp'] + (['strict_address_chain.hpp'] if address_chain else []) + (['strict_left_load.hpp'] if left_load else []):
+    for name in ['strict_redirects.hpp', 'strict_rob_heads.hpp' if rob_heads else 'strict_load_use.hpp'] + (['strict_address_chain.hpp'] if address_chain else []) + (['strict_left_load.hpp'] if left_load else []):
         p=out/name; p.write_bytes((ROOT/'tests'/name).read_text().encode()); inputs[name]=p
     cpp=out/'probe.cpp'; exe=out/'model'
-    src=instrument(inputs['mega_user_replay.cpp'].read_text(),address_chain,left_load)
+    source=inputs['mega_user_replay.cpp'].read_text()
+    src=head_probe(source) if rob_heads else instrument(source,address_chain,left_load)
     cpp.write_bytes(src.encode()); inputs[cpp.name]=cpp
     for seed in BP['LIB']['SEEDS']:
-        p=out/(seed+'.select'); p.write_bytes(selection(checked_capture(baseline,seed,oracle), PCS + ((0x13ea2,) if address_chain else ()) + ((0x13e9e,) if left_load else ())).encode()); inputs[p.name]=p
+        raw=checked_capture(baseline,seed,oracle)
+        if rob_heads: continue  # sample all head rows, not a PC or ticket selection
+        p=out/(seed+'.select'); p.write_bytes(selection(raw, PCS + ((0x13ea2,) if address_chain else ()) + ((0x13e9e,) if left_load else ())).encode()); inputs[p.name]=p
     hashes={k:digest(p) for k,p in inputs.items()}
     BP['LIB']['link'](cpp,exe,obj,include)
     inputs['model']=exe; hashes['model']=digest(exe)
@@ -87,4 +101,5 @@ if __name__=='__main__':
     for name in ('kit','obj','guest','baseline','out','include'): ap.add_argument(name,type=Path)
     ap.add_argument('--address-chain',action='store_true',help='also capture the x10 pointer-to-halfword address chain')
     ap.add_argument('--left-load',action='store_true',help='also trace x6 and its fall-through pointer through the cache port')
-    a=ap.parse_args(); run(*(getattr(a,k).resolve() for k in ('kit','obj','guest','baseline','out','include')), address_chain=a.address_chain or a.left_load,left_load=a.left_load)
+    ap.add_argument('--rob-heads',action='store_true',help='record actual ROB head gates on all zero-retirement hot edges')
+    a=ap.parse_args(); run(*(getattr(a,k).resolve() for k in ('kit','obj','guest','baseline','out','include')), address_chain=a.address_chain or a.left_load,left_load=a.left_load,rob_heads=a.rob_heads)
