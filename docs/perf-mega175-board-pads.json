@@ -1,0 +1,251 @@
+{
+  "scope": "Isolated synthesized shell-pin fixtures only. Neither placed nor routed; not integrated or tested on hardware.",
+  "tool": "Vivado 2024.2",
+  "part": "xcvu9p-flga2104-2L-e",
+  "fixture_input_sha256": "817c093bea76891ce5e132327a4ee9d0571d937afd2ae6e9123740f9dd3b8558",
+  "source_seals": [
+    "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+    "ce0ef1171c7b0077282602c5c97230d03850b71c350c6c9ddcdf0b7ebcb5a456"
+  ],
+  "archived_report_sha256": {
+    "routed-drc.rpt": "5432682eef3f66fed23d763137203c535f049aab1c32fe9976914ffe18ca23b9",
+    "io.rpt": "e1d6b3491b1bca2a93611dcfaa41bc034adbfd0a94b42c136ca1696168e9c1e3",
+    "methodology.rpt": "58bdb85a73143514d2563ccb758f597566edea27a40a3ba0284e85b73ccc176e",
+    "check-timing.rpt": "c72de60720fc034eb5baa6c2b3ba1f50a187d66a60df4827fb58fb1ef9643f0b"
+  },
+  "simulation": {
+    "samples": 1044,
+    "all_binary_combinations": 1024,
+    "extra_x_or_z_samples": 20,
+    "wrong_spi_select_disagreements": 516,
+    "testbench_sha256": "0c04ce19294f323454afe6d39ca6bce2540bdd9989dc552ac9e866e8f0b5caca",
+    "fixture_inputs_sha256": "817c093bea76891ce5e132327a4ee9d0571d937afd2ae6e9123740f9dd3b8558"
+  },
+  "synthesized": {
+    "stock": {
+      "ports": [
+        {
+          "pad": "uart_rxd",
+          "package_pin": "AW25",
+          "direction": "INOUT",
+          "standard": "LVCMOS18",
+          "primitive": "INBUF",
+          "primitive_pin": "PAD",
+          "drive_enable": "-"
+        },
+        {
+          "pad": "sdio_spi_dat_0",
+          "package_pin": "AW15",
+          "direction": "INOUT",
+          "standard": "LVCMOS18",
+          "primitive": "INBUF",
+          "primitive_pin": "PAD",
+          "drive_enable": "-"
+        },
+        {
+          "pad": "jtag_jtag_TCK",
+          "package_pin": "AL12",
+          "direction": "INOUT",
+          "standard": "LVCMOS18",
+          "primitive": "INBUF",
+          "primitive_pin": "PAD",
+          "drive_enable": "-"
+        },
+        {
+          "pad": "jtag_jtag_TDI",
+          "package_pin": "AP15",
+          "direction": "INOUT",
+          "standard": "LVCMOS18",
+          "primitive": "INBUF",
+          "primitive_pin": "PAD",
+          "drive_enable": "-"
+        },
+        {
+          "pad": "jtag_jtag_TMS",
+          "package_pin": "AN15",
+          "direction": "INOUT",
+          "standard": "LVCMOS18",
+          "primitive": "INBUF",
+          "primitive_pin": "PAD",
+          "drive_enable": "-"
+        },
+        {
+          "pad": "uart_txd",
+          "package_pin": "BB21",
+          "direction": "INOUT",
+          "standard": "LVCMOS18",
+          "primitive": "OBUFT",
+          "primitive_pin": "O",
+          "drive_enable": "T=NOT_VCC"
+        },
+        {
+          "pad": "sdio_spi_clk",
+          "package_pin": "AV15",
+          "direction": "INOUT",
+          "standard": "LVCMOS18",
+          "primitive": "OBUFT",
+          "primitive_pin": "O",
+          "drive_enable": "T=NOT_VCC"
+        },
+        {
+          "pad": "sdio_spi_cs",
+          "package_pin": "AY15",
+          "direction": "INOUT",
+          "standard": "LVCMOS18",
+          "primitive": "OBUFT",
+          "primitive_pin": "O",
+          "drive_enable": "T=NOT_VCC"
+        },
+        {
+          "pad": "sdio_spi_dat_3",
+          "package_pin": "AY14",
+          "direction": "INOUT",
+          "standard": "LVCMOS18",
+          "primitive": "OBUFT",
+          "primitive_pin": "O",
+          "drive_enable": "T=NOT_VCC"
+        },
+        {
+          "pad": "jtag_jtag_TDO",
+          "package_pin": "AM12",
+          "direction": "INOUT",
+          "standard": "LVCMOS18",
+          "primitive": "OBUFT",
+          "primitive_pin": "O",
+          "drive_enable": "T=NOT_VCC"
+        }
+      ],
+      "rpbf_ports": [
+        "jtag_jtag_TCK",
+        "jtag_jtag_TDI",
+        "jtag_jtag_TDO",
+        "jtag_jtag_TMS",
+        "sdio_spi_clk",
+        "sdio_spi_cs",
+        "sdio_spi_dat_0",
+        "sdio_spi_dat_3",
+        "uart_rxd",
+        "uart_txd"
+      ],
+      "hpdr_ports": [
+        "jtag_jtag_TDO",
+        "sdio_spi_clk",
+        "sdio_spi_cs",
+        "sdio_spi_dat_3",
+        "uart_txd"
+      ],
+      "sha256": {
+        "ports.tsv": "cf2e8c4272b67cc824cf0b8aad15a6a22ed9a64748e8116820f26b7ccfb668cd",
+        "drc.rpt": "224680315052f6879faf74682d8bc9001cccd6520f35292e65e1d6f6989c2631",
+        "methodology.rpt": "5ab1f6653e82d58a8de5be3eaa79770c68fdf506b602dc66ea3fe324c561cb5c",
+        "synthesized.dcp": "4e31cfdd13318128f0524081d6ba21ee24e8c7fe16b8c73d1b8cdb8cb1ae6e2a",
+        "RPBF-3-properties.txt": "43d16a3d1c4d60c45086dfb9c0cdfd2d4f6a6d3a198b6698854180bdbfcdddc0",
+        "HPDR-1-properties.txt": "5e2937c778d3eb7331e0f0622a9fac9b3d278756f5024270df20fb6618cf3dbd"
+      }
+    },
+    "typed": {
+      "ports": [
+        {
+          "pad": "uart_rxd",
+          "package_pin": "AW25",
+          "direction": "IN",
+          "standard": "LVCMOS18",
+          "primitive": "INBUF",
+          "primitive_pin": "PAD",
+          "drive_enable": "-"
+        },
+        {
+          "pad": "sdio_spi_dat_0",
+          "package_pin": "AW15",
+          "direction": "IN",
+          "standard": "LVCMOS18",
+          "primitive": "INBUF",
+          "primitive_pin": "PAD",
+          "drive_enable": "-"
+        },
+        {
+          "pad": "jtag_jtag_TCK",
+          "package_pin": "AL12",
+          "direction": "IN",
+          "standard": "LVCMOS18",
+          "primitive": "INBUF",
+          "primitive_pin": "PAD",
+          "drive_enable": "-"
+        },
+        {
+          "pad": "jtag_jtag_TDI",
+          "package_pin": "AP15",
+          "direction": "IN",
+          "standard": "LVCMOS18",
+          "primitive": "INBUF",
+          "primitive_pin": "PAD",
+          "drive_enable": "-"
+        },
+        {
+          "pad": "jtag_jtag_TMS",
+          "package_pin": "AN15",
+          "direction": "IN",
+          "standard": "LVCMOS18",
+          "primitive": "INBUF",
+          "primitive_pin": "PAD",
+          "drive_enable": "-"
+        },
+        {
+          "pad": "uart_txd",
+          "package_pin": "BB21",
+          "direction": "OUT",
+          "standard": "LVCMOS18",
+          "primitive": "OBUF",
+          "primitive_pin": "O",
+          "drive_enable": "-"
+        },
+        {
+          "pad": "sdio_spi_clk",
+          "package_pin": "AV15",
+          "direction": "OUT",
+          "standard": "LVCMOS18",
+          "primitive": "OBUF",
+          "primitive_pin": "O",
+          "drive_enable": "-"
+        },
+        {
+          "pad": "sdio_spi_cs",
+          "package_pin": "AY15",
+          "direction": "OUT",
+          "standard": "LVCMOS18",
+          "primitive": "OBUF",
+          "primitive_pin": "O",
+          "drive_enable": "-"
+        },
+        {
+          "pad": "sdio_spi_dat_3",
+          "package_pin": "AY14",
+          "direction": "OUT",
+          "standard": "LVCMOS18",
+          "primitive": "OBUF",
+          "primitive_pin": "O",
+          "drive_enable": "-"
+        },
+        {
+          "pad": "jtag_jtag_TDO",
+          "package_pin": "AM12",
+          "direction": "OUT",
+          "standard": "LVCMOS18",
+          "primitive": "OBUF",
+          "primitive_pin": "O",
+          "drive_enable": "-"
+        }
+      ],
+      "rpbf_ports": [],
+      "hpdr_ports": [],
+      "sha256": {
+        "ports.tsv": "08b792369bae962d2f0bc0c2a53638b071ff320fc947a9c99d8561071be045eb",
+        "drc.rpt": "8cadf38392c887064cfc84e4eff9c7ba080d57c81ee0314d144f6ec3276d63a3",
+        "methodology.rpt": "579c5bc0720ecdf324271249cc056efb63197f8f916d10aac8afbf94eaf3b880",
+        "synthesized.dcp": "0eaf19cd5e8074cdd0eeb4305b11c9d060ceba6c2f3b15dc49c0ca790c0712aa",
+        "RPBF-3-properties.txt": "43d16a3d1c4d60c45086dfb9c0cdfd2d4f6a6d3a198b6698854180bdbfcdddc0",
+        "HPDR-1-properties.txt": "5e2937c778d3eb7331e0f0622a9fac9b3d278756f5024270df20fb6618cf3dbd"
+      }
+    }
+  }
+}

@@ -74,3 +74,5 @@
 两个慢路径族的共同走线，以及恢复版 CoreMark 用户态窗口中哪些拍实际使用加载失败信号，见[加载失败与整数发射队列搬移](perf-mega175-miss-activity.md)。
 
 CPU ↔ MIG 的 40 个 Gray 指针位能否定向标记、哪些 CDC 告警仍在，见[局部同步链属性实验](perf-mega175-gray-attributes.md)。
+
+UART、SD-SPI 和软核 TAP 的十个单向引脚为何引发 `RPBF-3`，以及方向修正的局部综合与反例，见[板级引脚对照](perf-mega175-board-pads.md)。
