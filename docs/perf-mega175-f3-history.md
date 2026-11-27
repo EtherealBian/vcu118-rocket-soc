@@ -37,3 +37,20 @@
 python3 scripts/test-mega-f3-history-compare.py "$KIT" "$PROOF" --yosys "$YOSYS"
 python3 scripts/test-mega-f3-history-parent.py "$KIT" "$PROOF" "$VIVADO_INSTALL" "$PARENT"
 ```
+
+## 哪些预测方向真正影响哪些取指结果？
+
+为了判断布线报告里的“无路径”是正常现象还是边界接错，先在原版组合电路上逐位做 SAT 查询。每次只把一条预测方向分别钉为 0 和 1，其余 555 个输入在两份电路上相同但可任意取值。8 条方向 × 82 个捕获位 = 656 对，其中 **357 对存在使输出不同的输入**，另 **299 对在这个二态逻辑边界内不依赖**。每条方向能影响的输出位数依次为 **81、80、79、78、12、11、9、7**。这里不是按网表连线计数：逻辑上不依赖，布线后仍可能有工具分析得到的物理路径；不能据此加 false path。
+
+具体来说，前四条方向中的任意一条，都能在合适输入下影响 64 位历史的任意一位；后四条均不能影响这 64 位。**但八条方向全能影响 F1/F2 两个历史比较结果、`_GEN_133`、`f2_clear` 和 CFI 索引有效位。** 因而只看“方向 → 历史总线”的延迟会漏掉后四条方向上的瓶颈。各对结论、位序、候选与证据哈希见[寄存边界证明](perf-mega175-f3-registered.json)。
+
+为保证三种物理实验可比，同样的 556 位输入寄存器和 82 位输出寄存器包住每个组合电路。在命名端口原版先运算再延迟两沿，与实际打包的原版、两种候选各做一次三步 SAT；任意输入、无初值假定，在前两沿填满后 82 位都一致。交换第 0/7 条预测方向、交换两个比较结果、绕过输出寄存器，各有反例。**这两层仅用于测量，未给 BOOM 增加流水级。**
+
+预备好的 Vivado 对照逐一检查保留 556+82 个寄存器，对所有 82 个 D 脚记录最差建立/保持路径，另分别记录 8 个方向到每个 D 脚的最差建立路径；上述 357 对任一无路径就停止。候选文件互换、依赖表被改也会在开综合前被拒绝。**截至本记录，仅完成上述逻辑证明、输入校验和采集程序的离线检查，尚无三版局部物理结果。** 局部实验不含 I-cache 和整机跨 SLR 布线，不代替整机检查。
+
+```sh
+python3 scripts/test-mega-f3-registered.py "$KIT" "$PROOF" "$PARENT/result.json" "$FRESH_REGISTERED" "$YOSYS"
+python3 scripts/test-mega-f3-registered.py --check-prepared "$FRESH_REGISTERED"
+# 有独立实现资源后再运行。Vivado 调用输入校验时需要 PATH 上的 python 3。
+vivado -mode batch -source scripts/implement-mega-f3-registered.tcl -tclargs "$FRESH_REGISTERED" "$FRESH_ROUTES"
+```
