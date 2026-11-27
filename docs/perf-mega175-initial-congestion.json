@@ -1,0 +1,84 @@
+{
+  "scope": "Vivado route_design Explore, immediately after initial routing only. Not final timing, CDC, DRC, permission to program, or board throughput.",
+  "board_input_seal": "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+  "post_place_sha256": "e5be273c5dae935df5b0e114a94b7c55ee1825bd7dedad2f2ec63ae4fdf3858e",
+  "native_log_prefix_bytes": 4952390,
+  "native_log_prefix_sha256": "0873046d91b1501b3d10ed2a34c16beb516f8bbc6f5161c39168c540eabac3e5",
+  "native_tight_pins_sha256": "fe2d2ef233e373df16bc57d24c14caf0ace6a891ade0234127e1193b95c46fb9",
+  "native_tight_pins_bytes": 5640,
+  "initial_timing_congestion_level": 7,
+  "initial_congestion": {
+    "NORTH": {
+      "global": [
+        "8x8",
+        2.45
+      ],
+      "long": [
+        "128x128",
+        6.8
+      ],
+      "short": [
+        "16x16",
+        1.33
+      ]
+    },
+    "SOUTH": {
+      "global": [
+        "8x8",
+        0.48
+      ],
+      "long": [
+        "8x8",
+        1.97
+      ],
+      "short": [
+        "16x16",
+        0.7
+      ]
+    },
+    "EAST": {
+      "global": [
+        "4x4",
+        0.42
+      ],
+      "long": [
+        "16x16",
+        1.13
+      ],
+      "short": [
+        "16x16",
+        1.03
+      ]
+    },
+    "WEST": {
+      "global": [
+        "4x4",
+        0.56
+      ],
+      "long": [
+        "16x16",
+        1.54
+      ],
+      "short": [
+        "8x8",
+        1.07
+      ]
+    }
+  },
+  "congestion_pair_units": [
+    "window_size",
+    "reported_percent_tiles"
+  ],
+  "pins": 26,
+  "launch_setup_and_hold_clocks": "clk_out1_harnessSysPLL",
+  "pin_families": {
+    "core_csr": 1,
+    "fpu_register_file": 3,
+    "frontend_fetch_buffer_instruction": 4,
+    "frontend_s2_history": 1,
+    "l2_banked_store_bram_control": 1,
+    "l2_mshr_meta_tag": 8,
+    "mig_axi_w_source_data": 4,
+    "predictor_banked_history": 4
+  }
+}
