@@ -1,0 +1,55 @@
+{
+  "scope": "xsim digital pad-to-ChipTop RX latency. Full outer HDL and real pad converter; forced receiving clock, CPU/DDR/PLL excluded. Not metastability, routed timing, UART firmware or board performance.",
+  "cases": {
+    "raw": {
+      "expected_stages": 0,
+      "inputs": {
+        "VCU118FPGATestHarness.sv": "472603ea4787b55f4b0794aaac56cf93e7e7ab48aba8b80360458532590bd55a",
+        "boundaries.v": "c0d9970a4a36175a4c102697938db26ce03ff2d5e623e92005c86a64b9287407",
+        "shell_rx_tb.v": "35ea0ad9df47bbdeefed46e917bc8232431c72cc9cca803e162d93e8670f17f7",
+        "AnalogToUInt_1.v": "283548d73a840448c15e840374579ac902b1ab98c19a57f5162cbfd941561787",
+        "UIntToAnalog_1.v": "152b113ac4e11a826678171c17e835e0a46926f0ffe44401e0d1afef9b740998",
+        "PowerOnResetFPGAOnly.v": "cc76bdf78714e201a10ce50f0dcf379f73a75eab1b22e5147e842d70bf22558f",
+        "plusarg_reader.v": "08de6a683d07eb22091e793d97fdcfa74b14ec35cac33ad0e2efce0a8e0337bc"
+      },
+      "positive": [
+        {
+          "half_period_ps": 5000,
+          "samples": 1025,
+          "different_from_other_latency": 517
+        },
+        {
+          "half_period_ps": 2857,
+          "samples": 1025,
+          "different_from_other_latency": 517
+        }
+      ],
+      "wrong_latency_rejected": 2
+    },
+    "fixed": {
+      "expected_stages": 2,
+      "inputs": {
+        "VCU118FPGATestHarness.sv": "31646f1a0ff1f85d94474108f4f21895969400cb83ffab8f5a7e93351c062823",
+        "boundaries.v": "c0d9970a4a36175a4c102697938db26ce03ff2d5e623e92005c86a64b9287407",
+        "shell_rx_tb.v": "35ea0ad9df47bbdeefed46e917bc8232431c72cc9cca803e162d93e8670f17f7",
+        "AnalogToUInt_1.v": "283548d73a840448c15e840374579ac902b1ab98c19a57f5162cbfd941561787",
+        "UIntToAnalog_1.v": "152b113ac4e11a826678171c17e835e0a46926f0ffe44401e0d1afef9b740998",
+        "PowerOnResetFPGAOnly.v": "cc76bdf78714e201a10ce50f0dcf379f73a75eab1b22e5147e842d70bf22558f",
+        "plusarg_reader.v": "08de6a683d07eb22091e793d97fdcfa74b14ec35cac33ad0e2efce0a8e0337bc"
+      },
+      "positive": [
+        {
+          "half_period_ps": 5000,
+          "samples": 1025,
+          "different_from_other_latency": 517
+        },
+        {
+          "half_period_ps": 2857,
+          "samples": 1025,
+          "different_from_other_latency": 517
+        }
+      ],
+      "wrong_latency_rejected": 2
+    }
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "scope": "Two-state one-edge dispatch-ready cones, arbitrary shared availability vector. Uninitialized outputs before first edge, upstream slot logic, whole-core functionality, PPA and board CoreMark are outside the proof.",
+  "solver": "Yosys 0.9 (git sha1 1979e0b)",
+  "hdl_inventory": {
+    "ordered_hdl_inputs": 548,
+    "byte_identical": 545,
+    "changed_files": [
+      "IssueUnitCollapsing.sv",
+      "IssueUnitCollapsing_1.sv",
+      "IssueUnitCollapsing_2.sv"
+    ],
+    "ordered_hashes_and_basenames_sha256": [
+      "01aefbf29b60643d6d08d7d90ee3321abea6f8de1e3c1e0bc37bcced12d26f71",
+      "7a5538cf9e6e35c33df919361fcfd9e5b039ed58c51bbccde5532177e53b0ddb"
+    ]
+  },
+  "queues": {
+    "IssueUnitCollapsing.sv": {
+      "slots": 32,
+      "registered_4_slot_groups": 8,
+      "reference_sha256": "f8603d9f22a80a730d4424a16b2bf4e9a95d480a3ea86d7f19f0859fc24ffef6",
+      "candidate_sha256": "14081645c7a824e85db3a3410a18965edfd3025e9d7b7f93afb5eac0a2394c0a",
+      "identical_availability_predicates": 32,
+      "unconstrained_vectors": 4294967296,
+      "ready_lanes": 4,
+      "last_slot_drop_counterexample": {
+        "input_hex": "80000000",
+        "reference_ready": 1,
+        "mutant_ready": 0
+      },
+      "all_lanes_equivalent_after_one_edge": true
+    },
+    "IssueUnitCollapsing_1.sv": {
+      "slots": 24,
+      "registered_4_slot_groups": 6,
+      "reference_sha256": "79fb7edd37d8dfd782877b7c8980825fab420a2bec0f688523ceafcee8a97917",
+      "candidate_sha256": "e6db6d01273fbe554ec7a197f8efb6dc0e41f3a5546311072cd09b9fb0978a0e",
+      "identical_availability_predicates": 24,
+      "unconstrained_vectors": 16777216,
+      "ready_lanes": 4,
+      "last_slot_drop_counterexample": {
+        "input_hex": "800040",
+        "reference_ready": 3,
+        "mutant_ready": 1
+      },
+      "all_lanes_equivalent_after_one_edge": true
+    },
+    "IssueUnitCollapsing_2.sv": {
+      "slots": 40,
+      "registered_4_slot_groups": 10,
+      "reference_sha256": "af0a6ce24faafd5867336e055cd6511cfb083d1deda7002e17e1ee5da2ec631f",
+      "candidate_sha256": "6155dcfdb2cfe0e8316e6fecd5957a3a0a58237a724dd8c8addce337c52bcd1c",
+      "identical_availability_predicates": 40,
+      "unconstrained_vectors": 1099511627776,
+      "ready_lanes": 4,
+      "last_slot_drop_counterexample": {
+        "input_hex": "8000068000",
+        "reference_ready": 15,
+        "mutant_ready": 7
+      },
+      "all_lanes_equivalent_after_one_edge": true
+    }
+  }
+}
