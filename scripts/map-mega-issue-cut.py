@@ -50,11 +50,13 @@ def fixture(stock,variant,fields):
     return arb+'module top('+', '.join(ins+outputs)+');\n'+'\n'.join(nets)+'\nendmodule\n'
 
 
-def topology(top,expected):
+def topology(top,expected,*,allow_muxcy=False):
     ports=top['ports'];drivers={};cells=Counter();sources={b for p in ports.values() if p['direction']=='input' for b in p['bits']}
     for c in top['cells'].values():
         kind=c['type']
-        if not re.fullmatch(r'LUT[1-6]|MUXF[789]|INV',kind):raise ValueError('unexpected mapped primitive: '+kind)
+        if kind=='MUXCY' and allow_muxcy:
+            if c['port_directions']!={'CI':'input','DI':'input','S':'input','O':'output'}:raise ValueError('unexpected MUXCY interface')
+        elif not re.fullmatch(r'LUT[1-6]|MUXF[789]|INV',kind):raise ValueError('unexpected mapped primitive: '+kind)
         cells[kind]+=1
         if any(d not in ('input','output') for d in c['port_directions'].values()):raise ValueError('unexpected primitive direction')
         con=c['connections']; dirs=c['port_directions']

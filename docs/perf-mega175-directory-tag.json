@@ -1,0 +1,118 @@
+{
+  "scope": "Full 24-bit combinational directory result cone with independent two-state inputs. Unplaced primitive counts and levels only; not timing or a board run.",
+  "board_input_seal": "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+  "source_sha256": {
+    "Directory": "539577c8fb744ef1b37f4f6d738fb1e893b93c18582935366b08d28006140d99",
+    "MSHR": "c18630c48a3b8986d30e2f576dbc22b233c08e4d5725a897932fd1749686d8e4",
+    "InclusiveCacheBankScheduler": "a57cf1807fe92ad14c9bc3e8c497d3a14ca289b98430ac0aa0691ec47bad0e8d"
+  },
+  "candidate_directory_sha256": {
+    "hit_tag": "422720363eb9558f7507405e01e52e3f24f781c1dac354216193be54eabfbe21",
+    "partition": "e167ea485f9f326428b2476fcdac67c99fbb3446f71aaf6a15b9635b414ce1b0",
+    "parallel": "8d41d1af29d5dacafdef438a95c3c855da2ecdf9c074e53efcfb1decfa7e887a"
+  },
+  "mshr_instances_on_shared_tag": 12,
+  "solver": "Yosys 0.9 (git sha1 1979e0b)",
+  "yosys_sha256": "f58d1dfcbc9b48a81357283e93b53e4c78415f6d28f227f0db34a79f316e6a64",
+  "abc_sha256": "6b6d93004494101bed191ddf29c411df55c50f990d7db56796767a3efbb03b09",
+  "proofs": {
+    "hit_tag": "equivalent",
+    "partition": "equivalent",
+    "parallel": "equivalent",
+    "wrong_hit": "counterexample",
+    "wrong_forward": "counterexample",
+    "wrong_priority": "counterexample",
+    "wrong_mask": "counterexample",
+    "wrong_victim": "counterexample"
+  },
+  "maps": {
+    "stock": {
+      "cells": {
+        "LUT1": 10,
+        "LUT2": 35,
+        "LUT3": 40,
+        "LUT4": 27,
+        "LUT5": 18,
+        "LUT6": 373,
+        "MUXCY": 40,
+        "MUXF7": 93,
+        "MUXF8": 26
+      },
+      "total": 662,
+      "max_primitive_levels": {
+        "io_result_bits_dirty": 17,
+        "io_result_bits_state": 17,
+        "io_result_bits_clients": 17,
+        "io_result_bits_tag": 18,
+        "io_result_bits_hit": 10,
+        "io_result_bits_way": 16
+      }
+    },
+    "hit_tag": {
+      "cells": {
+        "LUT1": 10,
+        "LUT2": 38,
+        "LUT3": 36,
+        "LUT4": 42,
+        "LUT5": 56,
+        "LUT6": 371,
+        "MUXCY": 40,
+        "MUXF7": 115,
+        "MUXF8": 47
+      },
+      "total": 755,
+      "max_primitive_levels": {
+        "io_result_bits_dirty": 18,
+        "io_result_bits_state": 18,
+        "io_result_bits_clients": 18,
+        "io_result_bits_tag": 17,
+        "io_result_bits_hit": 10,
+        "io_result_bits_way": 15
+      }
+    },
+    "partition": {
+      "cells": {
+        "LUT1": 10,
+        "LUT2": 70,
+        "LUT3": 92,
+        "LUT4": 54,
+        "LUT5": 20,
+        "LUT6": 601,
+        "MUXCY": 40,
+        "MUXF7": 219,
+        "MUXF8": 92
+      },
+      "total": 1198,
+      "max_primitive_levels": {
+        "io_result_bits_dirty": 21,
+        "io_result_bits_state": 21,
+        "io_result_bits_clients": 21,
+        "io_result_bits_tag": 21,
+        "io_result_bits_hit": 9,
+        "io_result_bits_way": 15
+      }
+    },
+    "parallel": {
+      "cells": {
+        "LUT1": 10,
+        "LUT2": 66,
+        "LUT3": 22,
+        "LUT4": 49,
+        "LUT5": 25,
+        "LUT6": 481,
+        "MUXCY": 40,
+        "MUXF7": 182,
+        "MUXF8": 74
+      },
+      "total": 949,
+      "max_primitive_levels": {
+        "io_result_bits_dirty": 20,
+        "io_result_bits_state": 20,
+        "io_result_bits_clients": 20,
+        "io_result_bits_tag": 18,
+        "io_result_bits_hit": 10,
+        "io_result_bits_way": 15
+      }
+    }
+  }
+}
