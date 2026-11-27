@@ -145,3 +145,20 @@ ChipTop 引脚仿真不包含 VCU118 的外层串口接线。用 Vivado 2024.2 x
 在**原版双路**的同次布线输出中，重新找到 CDC 报告的两个 `CDC-7` 起点：DDR 控制器组 0 的复位寄存器和上电复位寄存器。不是凭端点近似命名归类：从 SDF 的 `INTERCONNECT` 反查到具体的 LUT4，再与同时导出的时序网表比对输入和 LUT 真值表。4 个输入为 PLL 锁定、外部复位、DDR 复位和上电复位；16 种输入组合均与“未锁定或任一复位有效”一致。LUT 输出进入消毛刺寄存器的异步 preset；该寄存器 Q 恰好连接两个时钟域内共 6 个异步 clear，每域 3 个寄存器、两条 Q→D 级间连接。[布线连接、真值表和五项产物哈希](perf-medium-reset-trace.json)。复现：`python3 scripts/trace-medium-reset.py <原双路布线输出的 obj 目录>`。
 
 这只解释了这两条报告路径**实际连到哪里**，不证明无毛刺、亚稳态安全或恢复/撤销时间，不修改 CDC 豁免。原版调试中断的问题仍在；修订版需要用自己的布线重新检查，不能凭此上板。
+
+### 同一单核四路 BOOM：哪种程序先拿去上板？
+
+在相同的四路整核 RTL 和行为内存上，GCC 15.1 `-O3 -flto` 的性能种子比 GCC 13.3 `-O2` **少退休 5.8792% 的指令，却多用 2.2308% 的周期**。以下均为三个裸机窗口的中位数，每个窗口四轮，不是 Linux 计时得分。
+
+| 每轮周期（越小越好） | 三路，GCC 15.1 `-O3 -flto` | 四路，同一份 GCC 15.1 ELF | 四路，GCC 13.3 `-O2` |
+|---|---:|---:|---:|
+| 性能种子 | 177,917.50 | 165,742.25 | **162,125.50** |
+| 验证种子 | 178,305.50 | 166,299.00 | **162,806.00** |
+
+横向先看前两列：相同程序在四路上每轮少用 **6.8432% / 6.7337%** 的周期，各种子的三个窗口都更快。两种硬件的队列、缓存等组织也有差异，不能把收益全归给发射宽度。[同 ELF 的逐窗口比较](perf-mega-g15gc-hardware.json)。后两列才是同一硬件上的软件比较：[六对窗口、退休数量与程序哈希](perf-mega-g15gc-software.json)。因此四路首轮 Linux 板测应保留 GCC 13.3 `-O2` 对照，并与通用 GCC 15.1 程序同板交错测试。本表裸机诊断编译为 `-march=rv64imac_zicsr -mabi=lp64`；前述实板通用程序是 `rv64gc/lp64d` 的 Linux ELF，不能混为同一二进制。
+
+为测试四路在更高频率下能否工作，新增单 hart、四路、128 项 ROB 的 **175 MHz 请求配置**。对照 100 MHz 四路原版，548 个有序 HDL 输入中 **544 个逐字节相同**。改变的是启动 ROM、UART 分频、复位延时及其计数器（14 位变为 15 位）；处理器 RTL 未变。[逐文件时钟差异记录](perf-mega175-clock-delta.json)。频率请求不代表已达到的 FPGA 主频。
+
+复现：以 `bash scripts/build-cpu-window.sh <新目录> control` 构建 GCC 13.3 诊断程序，另以 `VCU_WINDOW_CC=15 bash scripts/build-cpu-window.sh <另一新目录> o3-lto` 构建 GCC 15.1 程序。在三个硬件/程序组合分别执行 `run-cpu-window.sh`，用 `screen-core-windows.py` 比同一 ELF、`compare-window-software.py` 比同一硬件。四路时钟对照用 `bash scripts/generate-mega175.sh <新的175MHz模型包> <封存的100MHz四路模型包>`，再用 `python3 scripts/check-wide-clock-delta.py <100MHz包> <175MHz包> --family Mega` 复核。
+
+四路 175 MHz 原版模型还单独测试了真实 ROM 的 UART 引脚。主机没有预装模拟 RAM：64 字节正确帧在第 **1,491,491** 个模拟周期收到交接标志和小程序回复 `K`；20 字节坏 CRC 帧在第 **823,132** 个模拟周期确认停机提示及静默窗口。两项均检查 20 个比特时间的空闲。首字节 9 个边沿间距均符合每位 **1,519 拍**；用 100 MHz 对应的 868 拍解码被负控拒绝。[原版串口引脚测试与输入哈希](perf-mega175-rom-link.json)。复现：`bash scripts/test-clocked-rom-link.sh <175MHz四路包> <匹配的模型对象目录> 175 single <新输出目录>`，再运行 `python3 scripts/review-clocked-rom-link.py <输出目录> <同一模型包> 175 single`。这些测试不含板级 PLL、DDR PHY 或 Linux，也不能替代修订版自己的串口测试。

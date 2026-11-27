@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
-"""Compare two complete sealed HDL manifests for the 100/175 MHz three-wide clock change."""
+"""Compare two complete sealed HDL manifests for the 100/175 MHz BOOM clock change."""
 from hashlib import sha256
 import json
 from pathlib import Path
 import argparse
 
 
-def check(old,new):
+def check(old,new,family='Large'):
+    if family not in ('Large','Mega'):
+        raise ValueError('unknown BOOM family')
     def read(kit):
         paths=(kit/'sources.f').read_text().splitlines(); data={}
         manifest={}
@@ -25,9 +27,14 @@ def check(old,new):
     a,b=read(old),read(new)
     # The generated memory wrapper filenames include the config class. Their
     # contents, and the BOOM core hierarchy, must remain byte-identical.
-    def name(p):return p.replace('PerfLargeBoomVCU118Config.', 'Perf175LargeBoomVCU118Config.').replace('AsyncResetRegVec_w14_i0.sv','AsyncResetRegVec_w15_i0.sv')
+    def name(p):return p.replace('Perf'+family+'BoomVCU118Config.', 'Perf175'+family+'BoomVCU118Config.').replace('AsyncResetRegVec_w14_i0.sv','AsyncResetRegVec_w15_i0.sv')
     names=[p for p in a if p!='sources.f']
+    wrapper = 'rtl/chipyard.fpga.vcu118.VCU118FPGATestHarness.Perf'+family+'BoomVCU118Config.'
+    if not {wrapper+'top.mems.v', wrapper+'model.mems.v'} <= set(names):
+        raise ValueError('control is not the selected BOOM family')
     if len({name(p) for p in names})!=len(names) or set(map(name,names))!=set(b)-{'sources.f'}:raise ValueError('unmatched HDL files')
+    if [name(p) for p in names] != [p for p in b if p!='sources.f']:
+        raise ValueError('HDL source order differs')
     changes={p:[a[p],b[name(p)]] for p in names if a[p]!=b[name(p)]}
     translations={
         'rtl/TLUART.sv': [(b"div <= 16'h364;",b"div <= 16'h5EF;")],
@@ -44,4 +51,4 @@ def check(old,new):
     return dict(scope='Sealed HDL inputs, including the board harness. PLL constraints, generated ROM/DT semantics, routed frequency, and board performance require separate checks.',hdl_files=len(names),byte_identical_hdl_files=len(names)-len(changes),ordered_list_preserved_after_renaming=[name(p) for p in names]==[p for p in b if p!='sources.f'],changes=changes,renamed={p:name(p) for p in names if name(p)!=p},inputs=[sha256((p/'CANDIDATE.sha256').read_bytes()).hexdigest() for p in (old,new)])
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('control',type=Path);p.add_argument('candidate',type=Path);a=p.parse_args();print(json.dumps(check(a.control,a.candidate),indent=2))
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('control',type=Path);p.add_argument('candidate',type=Path);p.add_argument('--family',choices=('Large','Mega'),default='Large');a=p.parse_args();print(json.dumps(check(a.control,a.candidate,a.family),indent=2))

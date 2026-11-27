@@ -1,0 +1,36 @@
+{
+  "scope": "Functional ChipTop pin simulation, behavioral TL memory, ROM and DT checked against HDL. Not board, PLL, physical DDR or Linux validation.",
+  "harts": 1,
+  "uart_pbus_design_mhz": 175,
+  "ticks_per_bit": 1519,
+  "first_byte_edge_intervals": 9,
+  "wrong_rate_ticks_rejected": 868,
+  "rom_dtb_sha256": "7a561da71813d499a4d396b18702c79184fed4bc08694c7b099bc8af070b000c",
+  "inputs": {
+    "model": "9e8d8d678b464857156ba30da71e5eccb78a5c738b758d337291fa5afae05766",
+    "CANDIDATE.sha256": "720ae4fecc47ff4ac22401567c3045a6e809a2fddee036d104eaf1eb48e9b9d9",
+    "sdboot.bin": "f578841d5ebb35ed5ab541d3be739d8275215fe838cac7e3043f59f5e3be76f0",
+    "VChipTop__ALL.a": "1afafa6395cf36dce037a838112eb72668e2ad4edb139a2279fc94bcbd806d34",
+    "probe.elf": "5127c5c54c0ff481ff139149ccaf322efbab03b5e8eafb3775ed7c8ef08176a9",
+    "probe.frame": "c05df79b063afac55ae12ce79d90e99d07be1464f84695306fc5c236a7314b9a",
+    "crc.frame": "397175d673f49fdf3e4e0e374bcd822d25f236bcf394314ac3eb5d3a3ad736e7",
+    "rom_link.cpp": "adf047c2485e90e0fb8fda49702408dc9282cad2ba06e4b67c429cea6609ad4c",
+    "rocket_chiptop.cpp": "9fd708b984cd078932d1727a881bced76a745a5819f0073a7020b1b9d0ac0ea6",
+    "chiptop_address.hpp": "1a79c1e91ac8f1b34e4922f5b9069115a19b7f1e53d36274a332bf17a50c2315",
+    "chiptop_debug.hpp": "aaa4817843798f11cf68f41dcffc0c2dfde059cc7f79b7273ecf020f7e0be78f",
+    "chiptop_debug_slave.hpp": "070f4c91a7ef46f329b12584093c2d65a0e0082bfce605c734c4a84b4b0da18b",
+    "chiptop_recovery.hpp": "f44541458bb364bf1e0d5039562406530a5280fc6801ff7a79c08724a21e1cd9",
+    "chiptop_sba.hpp": "ab2f34bd3025d4d0c012a7f48f3177e1a0b396207a3b10e183a0cb2717050417",
+    "chiptop_sd.hpp": "a5f5d11134f1b40dadc7b58cd749d47e09dafd1fdda6f9ac25b1f6e7329f57d4"
+  },
+  "valid_frame": {
+    "mode": "single",
+    "frame_bytes": 64,
+    "cycles": 1491491
+  },
+  "corrupt_frame": {
+    "mode": "crc",
+    "frame_bytes": 20,
+    "cycles": 823132
+  }
+}

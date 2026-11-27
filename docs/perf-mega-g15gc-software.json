@@ -1,0 +1,157 @@
+{
+  "scope": "Same functional hardware model, debug-preloaded different software. Four iterations per sample; not a Linux or physical score.",
+  "reference": {
+    "scope": "Functional ChipTop RTL, behavioral memory, debug-preloaded, bare-metal; not a board or Linux CoreMark score.",
+    "inputs": {
+      "sim": "89649eef2cc91516c0a74ea172d06d13d1f198730f4343089dcaad17e1795e96",
+      "CANDIDATE.sha256": "38567bc0a3e7fbf5e87869db6b1408d478781f80203c3d4226fe3612194768b3",
+      "window.bin": "2d2525c7f38061d640023d9bc46df11d499b0a169d573124beb2f285fe4f0e1f",
+      "window.elf": "82c9c2ef6ef48e51b6253150ea25931ad28aaa96318f1c0f295d404a377f297c",
+      "sdboot.elf": "dc616579418d120f53fde6ae60e918166d13df4570bd14bb7efb56f4c7131d2b",
+      "rocket_chiptop.cpp": "9fd708b984cd078932d1727a881bced76a745a5819f0073a7020b1b9d0ac0ea6"
+    },
+    "console_sha256": "29c4bc3ba9334c349adf44ef704612369764e126ebf67e376426d428647800b8",
+    "performance_seed": {
+      "samples": [
+        {
+          "sample": 0,
+          "cycles": 659992,
+          "retired": 1435527
+        },
+        {
+          "sample": 1,
+          "cycles": 648502,
+          "retired": 1435527
+        },
+        {
+          "sample": 2,
+          "cycles": 646979,
+          "retired": 1435527
+        }
+      ],
+      "median_cycles_per_iteration": 162125.5,
+      "median_retired_per_iteration": 358881.75,
+      "median_ipc": 2.213605
+    },
+    "validation_seed": {
+      "samples": [
+        {
+          "sample": 0,
+          "cycles": 654425,
+          "retired": 1438285
+        },
+        {
+          "sample": 1,
+          "cycles": 651224,
+          "retired": 1438285
+        },
+        {
+          "sample": 2,
+          "cycles": 650837,
+          "retired": 1438285
+        }
+      ],
+      "median_cycles_per_iteration": 162806.0,
+      "median_retired_per_iteration": 359571.25,
+      "median_ipc": 2.208587
+    },
+    "model_cycles": 10229760,
+    "backing_reads": 140,
+    "backing_writes": 0
+  },
+  "candidate": {
+    "scope": "Functional ChipTop RTL, behavioral memory, debug-preloaded, bare-metal; not a board or Linux CoreMark score.",
+    "inputs": {
+      "sim": "89649eef2cc91516c0a74ea172d06d13d1f198730f4343089dcaad17e1795e96",
+      "CANDIDATE.sha256": "38567bc0a3e7fbf5e87869db6b1408d478781f80203c3d4226fe3612194768b3",
+      "window.bin": "ce784026871901e91ba19016f17d90b6565d7ab1a3aa05bf1df41c0a8a282cfd",
+      "window.elf": "df4b82b28a36c276e5dedeb80b354657cfe6ebddc287f9d146b5ac81e31fd22f",
+      "sdboot.elf": "dc616579418d120f53fde6ae60e918166d13df4570bd14bb7efb56f4c7131d2b",
+      "rocket_chiptop.cpp": "9fd708b984cd078932d1727a881bced76a745a5819f0073a7020b1b9d0ac0ea6"
+    },
+    "console_sha256": "41dcb0e0832cb387192178f6778ca581ebacaeb36436f574fcca919af3982276",
+    "performance_seed": {
+      "samples": [
+        {
+          "sample": 0,
+          "cycles": 676632,
+          "retired": 1351129
+        },
+        {
+          "sample": 1,
+          "cycles": 662969,
+          "retired": 1351129
+        },
+        {
+          "sample": 2,
+          "cycles": 661336,
+          "retired": 1351129
+        }
+      ],
+      "median_cycles_per_iteration": 165742.25,
+      "median_retired_per_iteration": 337782.25,
+      "median_ipc": 2.037997
+    },
+    "validation_seed": {
+      "samples": [
+        {
+          "sample": 0,
+          "cycles": 668757,
+          "retired": 1350887
+        },
+        {
+          "sample": 1,
+          "cycles": 665196,
+          "retired": 1350887
+        },
+        {
+          "sample": 2,
+          "cycles": 663841,
+          "retired": 1350887
+        }
+      ],
+      "median_cycles_per_iteration": 166299.0,
+      "median_retired_per_iteration": 337721.75,
+      "median_ipc": 2.03081
+    },
+    "model_cycles": 10313728,
+    "backing_reads": 275,
+    "backing_writes": 0
+  },
+  "comparison": {
+    "performance_seed": {
+      "reference_cycles_per_iteration": [
+        164998.0,
+        162125.5,
+        161744.75
+      ],
+      "candidate_cycles_per_iteration": [
+        169158.0,
+        165742.25,
+        165334.0
+      ],
+      "reference_median": 162125.5,
+      "candidate_median": 165742.25,
+      "median_cycle_change_pct": 2.2308,
+      "median_retired_change_pct": -5.8792,
+      "candidate_lower_cycles_count": 0
+    },
+    "validation_seed": {
+      "reference_cycles_per_iteration": [
+        163606.25,
+        162806.0,
+        162709.25
+      ],
+      "candidate_cycles_per_iteration": [
+        167189.25,
+        166299.0,
+        165960.25
+      ],
+      "reference_median": 162806.0,
+      "candidate_median": 166299.0,
+      "median_cycle_change_pct": 2.1455,
+      "median_retired_change_pct": -6.0765,
+      "candidate_lower_cycles_count": 0
+    }
+  }
+}
