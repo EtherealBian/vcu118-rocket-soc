@@ -1,0 +1,243 @@
+{
+  "scope": "Historical controls and four-wide post-opt declaration only; no four-wide routed results or board authorization.",
+  "current": {
+    "stage": "four-wide post-opt declaration only",
+    "post_opt_sha256": "98e6d4f6c545a4f0f07c0618dad28e5de23dc9330ff98bc2cc81d2038a54db5f",
+    "xdc_command": "set_clock_groups -asynchronous -group [get_clocks -of_objects [get_pins mig/island/blackbox/c0_ddr4_ui_clk]] -group [get_clocks -of_objects [get_pins harnessSysPLL/clk_out1]] -group [get_clocks JTCK]"
+  },
+  "historical_controls": {
+    "split5h-impl-a": {
+      "sha256": {
+        "post_opt.dcp": "bea90f70e656a177a9744b879b9edb2a9229f7b9087a5cdf36ca58685affc5f3",
+        "post_route.dcp": "f2c0ca03e7078c9b8b81853733d4bd033e0c80ed83da095e7e6932a5d9791f13",
+        "report/clock-interaction.rpt": "bb5cca52e5d2a99298c8b87a3dbfb60d7f0a8e801253e984a3a5a0e8104dd6b4",
+        "report/full-timing.rpt": "92f6928ce9a3e7b865f2df92fae10c23b68f034766d557b061f38326a2d378cb",
+        "report/cdc.rpt": "bc7f1e8ac06ef9f02af742d5a7c1a4702feb13a5629cc4be8f87cc4d52e0482d",
+        "report/routed-clocks.rpt": "2b135964b838898b80065e8243824b82ab66cf71df5d952a00d0b3a1eeeaa1b5"
+      },
+      "group_directions": [
+        {
+          "from": "clk_out1_harnessSysPLL",
+          "to": "mmcm_clkout0",
+          "scope": "group-excluded from ordinary setup",
+          "interaction_endpoints": 188,
+          "cdc_rule_counts": {
+            "Critical CDC-10": 1,
+            "Warning CDC-15": 155,
+            "Warning CDC-2": 21,
+            "Warning CDC-8": 1
+          }
+        },
+        {
+          "from": "clk_out1_harnessSysPLL",
+          "to": "JTCK",
+          "scope": "group-excluded from ordinary setup",
+          "interaction_endpoints": 49,
+          "cdc_rule_counts": {
+            "Critical CDC-10": 1,
+            "Warning CDC-15": 32,
+            "Warning CDC-2": 5,
+            "Warning CDC-8": 1
+          }
+        },
+        {
+          "from": "mmcm_clkout0",
+          "to": "clk_out1_harnessSysPLL",
+          "scope": "group-excluded from ordinary setup",
+          "interaction_endpoints": 118,
+          "cdc_rule_counts": {
+            "Critical CDC-10": 1,
+            "Critical CDC-7": 1,
+            "Warning CDC-15": 87,
+            "Warning CDC-2": 21
+          }
+        },
+        {
+          "from": "mmcm_clkout0",
+          "to": "JTCK",
+          "scope": "pair not reported (not a safety conclusion)"
+        },
+        {
+          "from": "JTCK",
+          "to": "clk_out1_harnessSysPLL",
+          "scope": "group-excluded from ordinary setup",
+          "interaction_endpoints": 61,
+          "cdc_rule_counts": {
+            "Critical CDC-10": 1,
+            "Info CDC-3": 1,
+            "Warning CDC-15": 43,
+            "Warning CDC-2": 5,
+            "Warning CDC-8": 1
+          }
+        },
+        {
+          "from": "JTCK",
+          "to": "mmcm_clkout0",
+          "scope": "pair not reported (not a safety conclusion)"
+        }
+      ],
+      "timed_controls": [
+        {
+          "source": "clk_out1_harnessSysPLL",
+          "destination": "clk_out1_harnessSysPLL",
+          "classification": "Clean",
+          "constraint": "Timed",
+          "interaction_endpoints": 76401,
+          "setup_endpoints_by_group": [
+            76239,
+            162
+          ],
+          "setup_wns_ns": "1.063",
+          "also_user_ignored": false
+        },
+        {
+          "source": "mmcm_clkout0",
+          "destination": "mmcm_clkout5",
+          "classification": "Ignored",
+          "constraint": "Max Delay Datapath Only",
+          "interaction_endpoints": 10,
+          "setup_endpoints_by_group": [
+            10
+          ],
+          "setup_wns_ns": "11.569",
+          "also_user_ignored": true
+        },
+        {
+          "source": "sys_clock",
+          "destination": "sys_clock",
+          "classification": "Clean",
+          "constraint": "Partial False Path",
+          "interaction_endpoints": 25,
+          "setup_endpoints_by_group": [
+            23
+          ],
+          "setup_wns_ns": "2.614",
+          "also_user_ignored": true
+        }
+      ],
+      "cdc_only": [
+        {
+          "source": "input port clock",
+          "destination": "sys_clock",
+          "rows": 1
+        }
+      ]
+    },
+    "perf-boom5i-impl-a": {
+      "sha256": {
+        "post_opt.dcp": "6e8eea82d4e97872359926a7f3df6499f116c360492e3b725eea4b088d876f3d",
+        "post_route.dcp": "302d476ef334cbe683dbdba3221effc2c6824b6179002fa2882cf0ea9f680230",
+        "report/clock-interaction.rpt": "ce6a6e677385cd410622c6266fd12216d2dea708ffdd23d66442337ac5f31bb2",
+        "report/full-timing.rpt": "103a133b1e338734cbd4d4fae87cf56708fd39b83c83666dd0eefa46c0c2ca60",
+        "report/cdc.rpt": "a0f0203238f6c44a01ba6ba629eaf36745cbb02d9d626b39a0ff842dfbc82115",
+        "report/routed-clocks.rpt": "b5291a88cbbdfc2dc7b934ec97def9ec17ca683061e96f96e5a8cbbe3721486d"
+      },
+      "group_directions": [
+        {
+          "from": "clk_out1_harnessSysPLL",
+          "to": "mmcm_clkout0",
+          "scope": "group-excluded from ordinary setup",
+          "interaction_endpoints": 188,
+          "cdc_rule_counts": {
+            "Critical CDC-10": 1,
+            "Warning CDC-15": 155,
+            "Warning CDC-2": 21,
+            "Warning CDC-8": 1
+          }
+        },
+        {
+          "from": "clk_out1_harnessSysPLL",
+          "to": "JTCK",
+          "scope": "group-excluded from ordinary setup",
+          "interaction_endpoints": 49,
+          "cdc_rule_counts": {
+            "Critical CDC-10": 1,
+            "Warning CDC-15": 32,
+            "Warning CDC-2": 5,
+            "Warning CDC-8": 1
+          }
+        },
+        {
+          "from": "mmcm_clkout0",
+          "to": "clk_out1_harnessSysPLL",
+          "scope": "group-excluded from ordinary setup",
+          "interaction_endpoints": 118,
+          "cdc_rule_counts": {
+            "Critical CDC-10": 1,
+            "Critical CDC-7": 1,
+            "Warning CDC-15": 87,
+            "Warning CDC-2": 21
+          }
+        },
+        {
+          "from": "mmcm_clkout0",
+          "to": "JTCK",
+          "scope": "pair not reported (not a safety conclusion)"
+        },
+        {
+          "from": "JTCK",
+          "to": "clk_out1_harnessSysPLL",
+          "scope": "group-excluded from ordinary setup",
+          "interaction_endpoints": 61,
+          "cdc_rule_counts": {
+            "Critical CDC-10": 2,
+            "Warning CDC-15": 43,
+            "Warning CDC-2": 5,
+            "Warning CDC-8": 1
+          }
+        },
+        {
+          "from": "JTCK",
+          "to": "mmcm_clkout0",
+          "scope": "pair not reported (not a safety conclusion)"
+        }
+      ],
+      "timed_controls": [
+        {
+          "source": "clk_out1_harnessSysPLL",
+          "destination": "clk_out1_harnessSysPLL",
+          "classification": "Clean",
+          "constraint": "Timed",
+          "interaction_endpoints": 185486,
+          "setup_endpoints_by_group": [
+            185323,
+            163
+          ],
+          "setup_wns_ns": "0.510",
+          "also_user_ignored": false
+        },
+        {
+          "source": "mmcm_clkout0",
+          "destination": "mmcm_clkout5",
+          "classification": "Ignored",
+          "constraint": "Max Delay Datapath Only",
+          "interaction_endpoints": 10,
+          "setup_endpoints_by_group": [
+            10
+          ],
+          "setup_wns_ns": "11.551",
+          "also_user_ignored": true
+        },
+        {
+          "source": "sys_clock",
+          "destination": "sys_clock",
+          "classification": "Clean",
+          "constraint": "Partial False Path",
+          "interaction_endpoints": 25,
+          "setup_endpoints_by_group": [
+            23
+          ],
+          "setup_wns_ns": "1.927",
+          "also_user_ignored": true
+        }
+      ],
+      "cdc_only": [
+        {
+          "source": "input port clock",
+          "destination": "sys_clock",
+          "rows": 1
+        }
+      ]
+    }
+  }
+}
