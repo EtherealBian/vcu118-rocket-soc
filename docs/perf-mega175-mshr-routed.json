@@ -1,0 +1,365 @@
+{
+  "scope": "One isolated registered memory-control cut per case, not whole-chip timing, pipeline or board performance.",
+  "period_ns": "5.714",
+  "preplace_record_sha256": "ef95f3dc7fc50403b617ebfc516ffebb2a27fc254c651a633d46d0e2547cf185",
+  "driver_sha256": "8be3be48b40667cde2a85ed91098b7a8a93114846bf2ca084e64a3f680deb177",
+  "cases": {
+    "stock": {
+      "place": {
+        "checkpoint_sha256": "17c9342b7bb8a6c041ec5c74b6aed01cd2769103c34e14eb0ca39f3d59ce9886",
+        "source_checkpoint_sha256": "081dd60dde4228c4df5ae5ca9b5ab3a8b0339a3630b5fda331170476b62cba13",
+        "log_sha256": "db6e45fdb1cff054d10b4faed48163db4c860ad6bb2cd1200a2b815d235b9a8f",
+        "completed_stage": "place_design",
+        "qor_header_state": "Routed",
+        "qor_tasks": [
+          "synth_design",
+          "opt_design",
+          "place_design"
+        ]
+      },
+      "route": {
+        "checkpoint_sha256": "e60d0de60cc9de75aab6fbea5cc2c0cb1cf9d34f90755b53f6c08c6630e9be01",
+        "source_checkpoint_sha256": "17c9342b7bb8a6c041ec5c74b6aed01cd2769103c34e14eb0ca39f3d59ce9886",
+        "log_sha256": "e7caf1f047fdcd36890fc8453ecc3ab8c8bdd3851b292c63481a66286ce0beb0",
+        "completed_stage": "route_design",
+        "qor_header_state": "Routed",
+        "qor_tasks": [
+          "synth_design",
+          "opt_design",
+          "place_design",
+          "route_design"
+        ],
+        "clock_boundary": "OOC clock input: HD.CLK_SRC unset, not a routed board clock tree.",
+        "measurements": {
+          "setup_wns_ns": "0.384",
+          "hold_whs_ns": "0.107",
+          "pulse_wpws_ns": "2.582",
+          "fully_routed_nets": 2866,
+          "setup_failing_endpoints": 0,
+          "design_state": "Routed",
+          "register_setup_endpoints": 3,
+          "luts": 1370,
+          "registers": 1838,
+          "paths": {
+            "all-0": {
+              "start": "q_dc_s2_req_1_addr_reg[17]/C",
+              "end": "result_reg[0]/D",
+              "slack_ns": "1.872",
+              "data_ns": "3.824",
+              "logic_ns": "1.215",
+              "route_ns": "2.609",
+              "levels": 14
+            },
+            "all-1": {
+              "start": "q_dc_s2_req_1_addr_reg[17]/C",
+              "end": "result_reg[1]/D",
+              "slack_ns": "1.588",
+              "data_ns": "4.108",
+              "logic_ns": "1.363",
+              "route_ns": "2.745",
+              "levels": 15
+            },
+            "all-2": {
+              "start": "q_dc_s2_req_1_addr_reg[17]/C",
+              "end": "result_reg[2]/D",
+              "slack_ns": "0.384",
+              "data_ns": "5.311",
+              "logic_ns": "1.881",
+              "route_ns": "3.430",
+              "levels": 19
+            },
+            "branch-2": {
+              "start": "q_dc_io_lsu_brupdate_b1_mispredict_mask_reg[17]/C",
+              "end": "result_reg[2]/D",
+              "slack_ns": "1.239",
+              "data_ns": "4.455",
+              "logic_ns": "1.492",
+              "route_ns": "2.963",
+              "levels": 16
+            },
+            "address1-2": {
+              "start": "q_dc_s2_req_1_addr_reg[17]/C",
+              "end": "result_reg[2]/D",
+              "slack_ns": "0.384",
+              "data_ns": "5.311",
+              "logic_ns": "1.881",
+              "route_ns": "3.430",
+              "levels": 19
+            },
+            "state-2": {
+              "start": "q_m0_state_reg[3]/C",
+              "end": "result_reg[2]/D",
+              "slack_ns": "0.518",
+              "data_ns": "5.175",
+              "logic_ns": "2.001",
+              "route_ns": "3.174",
+              "levels": 19
+            },
+            "rpq-2": {
+              "start": "q_q2_deq_ptr_value_reg[0]/C",
+              "end": "result_reg[2]/D",
+              "slack_ns": "2.067",
+              "data_ns": "3.627",
+              "logic_ns": "1.365",
+              "route_ns": "2.262",
+              "levels": 13
+            }
+          },
+          "log_sha256": "e7caf1f047fdcd36890fc8453ecc3ab8c8bdd3851b292c63481a66286ce0beb0",
+          "checkpoint_sha256": "e60d0de60cc9de75aab6fbea5cc2c0cb1cf9d34f90755b53f6c08c6630e9be01",
+          "report_sha256": {
+            "timing.rpt": "8aa0dc94f362def72dea9f4a0e5e24edaf9cd9ea1980dfa9859c32e701b9d10a",
+            "util.rpt": "fd62369156533b1e365875c51c30bfde390c4b4c19192bff8d1f6fb872114035",
+            "paths.tsv": "f9c925cf4e01ecf70fe9675df197914895b0048bc236632958480b92488721a6",
+            "route.rpt": "1fbbdae9a853a48761dce337c338433b6e7ceeb112520895cdb4d655f6ebb427",
+            "path-all-0.rpt": "119f30ec0432718d86dfc547a3c52bb3a9a935bf059c330601dea8c5f35def82",
+            "path-all-1.rpt": "11ddebbc8dd6ef91025493979303e38bcf7b042d97c8fa2b073a6a6159a76703",
+            "path-all-2.rpt": "13ae775d8e518e30bfba3f789c97012a1345479ce44a17f6d39faf52eb36fd07",
+            "path-branch-2.rpt": "75e6e7028bec71b14e932d6827b2627ac2536d2f0a0fc64211719809e92bd320",
+            "path-address1-2.rpt": "aebdb8516a64253dbc0352af54e156fddd1c6f6aa620b2770bedcec1fea0ee80",
+            "path-state-2.rpt": "5cd9b02b6eeedef1455e6127c396402c5fdafc588c07270ebe4e6256a8673612",
+            "path-rpq-2.rpt": "f81f1d6f4050a2a8bbeffe6b2b58318351e618a63eb3af06c8d46bb66b2e3145"
+          }
+        }
+      }
+    },
+    "class_local": {
+      "place": {
+        "checkpoint_sha256": "c96dad683ffb0083e5ec104c984e97f64d030e772468860520309c60fd059397",
+        "source_checkpoint_sha256": "b5f0c1ccb9b4cd1e935ed8ec0a0aabeddb089e54b9a11597515f272d9a08f00e",
+        "log_sha256": "743d21d3b64cd808461aee0fd4df24adcb6ba46b0fe7f8074bd48c09bbdc645c",
+        "completed_stage": "place_design",
+        "qor_header_state": "Routed",
+        "qor_tasks": [
+          "synth_design",
+          "opt_design",
+          "place_design"
+        ]
+      },
+      "route": {
+        "checkpoint_sha256": "da7b0cb0a79cb01432117107473ba4ac52e30d5bd3bf9e616cd9738b50799b87",
+        "source_checkpoint_sha256": "c96dad683ffb0083e5ec104c984e97f64d030e772468860520309c60fd059397",
+        "log_sha256": "8a3cbdaa1d510c6dae728437ec3e9221bdd0f559919c7f53fbe946d8bf84a48f",
+        "completed_stage": "route_design",
+        "qor_header_state": "Routed",
+        "qor_tasks": [
+          "synth_design",
+          "opt_design",
+          "place_design",
+          "route_design"
+        ],
+        "clock_boundary": "OOC clock input: HD.CLK_SRC unset, not a routed board clock tree.",
+        "measurements": {
+          "setup_wns_ns": "0.956",
+          "hold_whs_ns": "0.080",
+          "pulse_wpws_ns": "2.582",
+          "fully_routed_nets": 2943,
+          "setup_failing_endpoints": 0,
+          "design_state": "Routed",
+          "register_setup_endpoints": 3,
+          "luts": 1442,
+          "registers": 1838,
+          "paths": {
+            "all-0": {
+              "start": "q_dc_s2_req_0_addr_reg[26]/C",
+              "end": "result_reg[0]/D",
+              "slack_ns": "2.552",
+              "data_ns": "3.143",
+              "logic_ns": "1.092",
+              "route_ns": "2.051",
+              "levels": 12
+            },
+            "all-1": {
+              "start": "q_dc_s2_req_0_addr_reg[26]/C",
+              "end": "result_reg[1]/D",
+              "slack_ns": "2.463",
+              "data_ns": "3.232",
+              "logic_ns": "1.154",
+              "route_ns": "2.078",
+              "levels": 13
+            },
+            "all-2": {
+              "start": "q_dc_s2_tag_match_way_1_reg[7]/C",
+              "end": "result_reg[2]/D",
+              "slack_ns": "0.956",
+              "data_ns": "4.738",
+              "logic_ns": "1.763",
+              "route_ns": "2.975",
+              "levels": 16
+            },
+            "branch-2": {
+              "start": "q_dc_io_lsu_brupdate_b1_mispredict_mask_reg[13]/C",
+              "end": "result_reg[2]/D",
+              "slack_ns": "1.368",
+              "data_ns": "4.328",
+              "logic_ns": "1.355",
+              "route_ns": "2.973",
+              "levels": 13
+            },
+            "address1-2": {
+              "start": "q_dc_s2_req_1_addr_reg[25]/C",
+              "end": "result_reg[2]/D",
+              "slack_ns": "0.982",
+              "data_ns": "4.713",
+              "logic_ns": "1.695",
+              "route_ns": "3.018",
+              "levels": 17
+            },
+            "state-2": {
+              "start": "q_m0_state_reg[2]/C",
+              "end": "result_reg[2]/D",
+              "slack_ns": "1.027",
+              "data_ns": "4.668",
+              "logic_ns": "1.735",
+              "route_ns": "2.933",
+              "levels": 16
+            },
+            "rpq-2": {
+              "start": "q_q6_deq_ptr_value_reg[2]/C",
+              "end": "result_reg[2]/D",
+              "slack_ns": "1.591",
+              "data_ns": "4.103",
+              "logic_ns": "1.591",
+              "route_ns": "2.512",
+              "levels": 14
+            }
+          },
+          "log_sha256": "8a3cbdaa1d510c6dae728437ec3e9221bdd0f559919c7f53fbe946d8bf84a48f",
+          "checkpoint_sha256": "da7b0cb0a79cb01432117107473ba4ac52e30d5bd3bf9e616cd9738b50799b87",
+          "report_sha256": {
+            "timing.rpt": "f6e877504f125454a1d6886f5257fe16ce407da264b7e7adad0038a6269e3cd8",
+            "util.rpt": "fc5bce120e3ead84f4124da2d8256769c2e0efbad5ad61c1fada941d83ab34d3",
+            "paths.tsv": "d120c0633249ae9c4bd1eaa9214e6e8e1f018483d55d31872714629a0d131d8a",
+            "route.rpt": "b08ca18f8de52839f196772dc02d32864ec3c69acdbc469f6b8219ca7ff63569",
+            "path-all-0.rpt": "5aae55766a9889666a028713e8710e2a7e01dd6d2a7fa239ad2f87a8acc67642",
+            "path-all-1.rpt": "0e90190835899dbc18f133e5e0a1c4edd4ca6f47c5399f71b70cd09f6fc881de",
+            "path-all-2.rpt": "5998451a5b09dd454c28a244a413000697b75300d91a1ac50cda6279a08a2e27",
+            "path-branch-2.rpt": "60896bc2f76ba0f759eb517b0f3c10e00839e5dccbe26b81e46f81a0076e02cd",
+            "path-address1-2.rpt": "dc32206cf568d16f110665e89c66f730c3bed6ad4f83f609a62b1a7f78bae38a",
+            "path-state-2.rpt": "7473029e360d692f60c1cf725c57be7c1416df12bc2ea8e6d68b2df28b8b13e5",
+            "path-rpq-2.rpt": "294cb6c8c7ff8acdd04567ca9d900d45dd7ed78176e6fac61dd45674df4d92a0"
+          }
+        }
+      }
+    },
+    "split_rsp": {
+      "place": {
+        "checkpoint_sha256": "837daa8b5f57a3b1425cdb36fb90558f6e59fcf8a0c657dc122e9428d7dc1316",
+        "source_checkpoint_sha256": "2bc9b1b25585f16a696e10af11738ca9d021965eb7d2f3abd5bec1b2615d521a",
+        "log_sha256": "14e89f9577cbabd782c5e94d88690f7f11ae397c3058bc6a81903cf78f809153",
+        "completed_stage": "place_design",
+        "qor_header_state": "Routed",
+        "qor_tasks": [
+          "synth_design",
+          "opt_design",
+          "place_design"
+        ]
+      },
+      "route": {
+        "checkpoint_sha256": "f4340ccbe575d1c763a2363d853c73bed96afb2763c8f08cb8fb358963ebefd4",
+        "source_checkpoint_sha256": "837daa8b5f57a3b1425cdb36fb90558f6e59fcf8a0c657dc122e9428d7dc1316",
+        "log_sha256": "aeb974ce789c065d62e220f8e42dd4ef298a4eb1fb4311c2b61791c678fa3555",
+        "completed_stage": "route_design",
+        "qor_header_state": "Routed",
+        "qor_tasks": [
+          "synth_design",
+          "opt_design",
+          "place_design",
+          "route_design"
+        ],
+        "clock_boundary": "OOC clock input: HD.CLK_SRC unset, not a routed board clock tree.",
+        "measurements": {
+          "setup_wns_ns": "0.758",
+          "hold_whs_ns": "0.110",
+          "pulse_wpws_ns": "2.582",
+          "fully_routed_nets": 2935,
+          "setup_failing_endpoints": 0,
+          "design_state": "Routed",
+          "register_setup_endpoints": 3,
+          "luts": 1459,
+          "registers": 1840,
+          "paths": {
+            "all-0": {
+              "start": "q_dc_s2_req_1_addr_reg[30]/C",
+              "end": "result_reg[0]/D",
+              "slack_ns": "2.333",
+              "data_ns": "3.361",
+              "logic_ns": "0.994",
+              "route_ns": "2.367",
+              "levels": 14
+            },
+            "all-1": {
+              "start": "q_dc_s2_req_1_addr_reg[30]/C",
+              "end": "result_reg[1]/D",
+              "slack_ns": "2.082",
+              "data_ns": "3.613",
+              "logic_ns": "1.014",
+              "route_ns": "2.599",
+              "levels": 14
+            },
+            "all-2": {
+              "start": "q_dc_s2_req_1_addr_reg[30]/C",
+              "end": "result_reg[2]/D",
+              "slack_ns": "0.758",
+              "data_ns": "4.937",
+              "logic_ns": "1.707",
+              "route_ns": "3.230",
+              "levels": 20
+            },
+            "branch-2": {
+              "start": "q_dc_io_lsu_brupdate_b1_mispredict_mask_reg[12]/C",
+              "end": "result_reg[2]/D",
+              "slack_ns": "1.028",
+              "data_ns": "4.666",
+              "logic_ns": "1.740",
+              "route_ns": "2.926",
+              "levels": 16
+            },
+            "address1-2": {
+              "start": "q_dc_s2_req_1_addr_reg[30]/C",
+              "end": "result_reg[2]/D",
+              "slack_ns": "0.758",
+              "data_ns": "4.937",
+              "logic_ns": "1.707",
+              "route_ns": "3.230",
+              "levels": 20
+            },
+            "state-2": {
+              "start": "q_m4_state_reg[2]/C",
+              "end": "result_reg[2]/D",
+              "slack_ns": "1.011",
+              "data_ns": "4.684",
+              "logic_ns": "1.881",
+              "route_ns": "2.803",
+              "levels": 18
+            },
+            "rpq-2": {
+              "start": "q_q6_enq_ptr_value_reg[0]/C",
+              "end": "result_reg[2]/D",
+              "slack_ns": "2.065",
+              "data_ns": "3.629",
+              "logic_ns": "1.510",
+              "route_ns": "2.119",
+              "levels": 14
+            }
+          },
+          "log_sha256": "aeb974ce789c065d62e220f8e42dd4ef298a4eb1fb4311c2b61791c678fa3555",
+          "checkpoint_sha256": "f4340ccbe575d1c763a2363d853c73bed96afb2763c8f08cb8fb358963ebefd4",
+          "report_sha256": {
+            "timing.rpt": "c1e76042e7eb64d7f81dfb531603f76dd5c74c64b93856ccf01ba21c7abc823e",
+            "util.rpt": "efcab8d692d82a923e0d951788cd0b783f7342dd3f3cfcebbb1857dd2ba344ec",
+            "paths.tsv": "0b73a28d4655987613cd407d14ea8820aed86380b2cea4375fa6b452deabcfbf",
+            "route.rpt": "ee08d8a0424d1b9bb2a32572d089596ed3b235fa92a7ecc652b6795941d0c686",
+            "path-all-0.rpt": "0630d86c117c3ef4daf7ba37c6abd75d0802f152808811abc3335cc849b7d5bd",
+            "path-all-1.rpt": "4d71f63cca683c2bc3db043740356f36a556a01245af3d0c88d40c42c12778fa",
+            "path-all-2.rpt": "7171a11998d3b41f37030fe40669143eb56d13faa9372a0e734a6854fb3cb9dd",
+            "path-branch-2.rpt": "36e367da40805c696e2b15279f56052744b430aa9e93e1b3178cda1d10195a35",
+            "path-address1-2.rpt": "e4f501de0640e75201ccea5bc53aa63bc8d02cab3c74c87f9efebe7d7134213a",
+            "path-state-2.rpt": "12d16259cbedb4e9a935fef89957ed5bfe2478ffec9e233e0e6186b1afff2acf",
+            "path-rpq-2.rpt": "7c3860f9a17f6c6e35c5d53ea3dcbb26f50be95acc2bcb56ac84bb3a2047f220"
+          }
+        }
+      }
+    }
+  }
+}

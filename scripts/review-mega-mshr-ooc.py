@@ -47,12 +47,12 @@ def check_header(text, name, cmd, device, state):
     need(actual.startswith(cmd+' ') and actual.endswith(' -file '+name),'wrong report command '+name)
 
 
-def path(row, text, name, state):
+def path(row, text, name, state, *, input_pins):
     g,i=row['group'],int(row['output']); start,end=row['from'],row['to']
     need((g,i) in WANT and end==f'result_reg[{i}]/D' and re.fullmatch(PAT[g]+r'_reg(?:\[\d+\])?/C',start),'wrong capture or launch group')
     check_header(text,name,'report_timing -of_objects','xcvu9p-flga2104',state)
     source='[all_registers -clock [get_clocks cpu]]' if g=='all' else '[get_cells -hierarchical -quiet -filter {IS_SEQUENTIAL == 1 && NAME =~ '+FILTER[g]+'}]'
-    want='report_timing -of_objects [get_timing_paths -quiet -from '+source+' -to [get_pins {'+end+'}] -delay_type max -max_paths 1] -input_pins -file '+name
+    want='report_timing -of_objects [get_timing_paths -quiet -from '+source+' -to [get_pins {'+end+'}] -delay_type max -max_paths 1]'+(' -input_pins' if input_pins else '')+' -file '+name
     need(single(r'^\| Command\s*:\s*(.+)$',text).strip()==want, 'wrong query for '+name)
     need(re.findall(r'^  (?:Source|Destination):\s+(\S+)\n[^\n]+clocked by cpu  \{rise@0.000ns fall@2.857ns period=5.714ns\}',text,re.M)==[start,end], 'path/table mismatch')
     need(single(r'^  Path Group:\s+(\S+)',text)=='cpu' and single(r'^  Path Type:\s+(\w+)',text)=='Setup' and single(r'^  Requirement:\s+'+N+'ns',text)=='5.714','not same setup path group')
@@ -78,6 +78,11 @@ def review(inp, group, case, opt_only):
     if opt_only: need(not any(v in lines for v in place),'optimized-only logs contain physical stages')
     ordered([f'Command: synth_design -mode out_of_context -top boundary -part {PART}','Command: opt_design',*([] if opt_only else place),mark,('MSHR_OOC_OPT_ONLY_NOT_ROUTED ' if opt_only else 'MSHR_REGISTERED_OOC_COLLECTED ')+case]);need(not re.search(r'^ERROR:',log,re.M),'Vivado reported error')
     begin=stamp(single(r'^# Start of session at:\s+(.+)$',log));end=stamp(single(r'^INFO: \[Common 17-206\] Exiting Vivado at (.+)\.\.\.$',log))
+    return measurements(d, log_path, dcp, begin, end, opt_only, input_pins=True)
+
+
+def measurements(d, log_path, dcp, begin, end, opt_only, *, input_pins):
+    """Parse native reports only after the caller has verified the producing stage."""
     def native(n):
         t=(d/n).read_text();need(begin<=stamp(single(r'^\| Date\s*:\s*(.+)$',t))<=end,'foreign report timestamp: '+n);return t
     with ZipFile(dcp) as z:
@@ -99,7 +104,7 @@ def review(inp, group, case, opt_only):
     keys=[(r['group'],int(r['output'])) for r in rows];need(set(keys)==WANT and len(keys)==len(WANT),'incomplete path sampling')
     obs={}
     for (g,i),r in zip(keys,rows):
-        n=f'path-{g}-{i}.rpt';names.append(n);obs[f'{g}-{i}']=path(r,native(n),n,state)
+        n=f'path-{g}-{i}.rpt';names.append(n);obs[f'{g}-{i}']=path(r,native(n),n,state,input_pins=input_pins)
     need(min(D(obs[f'all-{i}']['slack_ns']) for i in range(3))==D(sta[0]) and int(sta[3])==int(sta[7])==3,'unaccounted register-to-register endpoints')
     u=util.split('1.1 Summary of Registers by Type\n---',1)[0]
     if opt_only:

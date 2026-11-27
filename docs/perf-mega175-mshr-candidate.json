@@ -1,0 +1,13 @@
+{
+  "scope": "Sealed physical inputs only; a separate test candidate, not a synthesized design, OOC timing transfer, or board score.",
+  "base_sha256": "ce0ef1171c7b0077282602c5c97230d03850b71c350c6c9ddcdf0b7ebcb5a456",
+  "candidate_sha256": "16cd73557d903199e890ebc97358120d005998719a0d7ca7c0054caf4318d4e3",
+  "ordered_hdl": 549,
+  "ordered_list_sha256": "6aa36414a276880c092dd8a9eb63aed3a5c98433318bb0c44e3e41a32281b0a7",
+  "sealed_members": 589,
+  "changed": {
+    "rtl/BoomMSHR.sv": "700928dccf70f1880ba69631af5acd576bcd0504d3df4b92ca0a55346a2e2afd",
+    "rtl/BoomMSHRFile.sv": "c45149a5c6b807527bd6ab56280b984af1f3c0d56ff6936836dbdc0b061f6318"
+  },
+  "connected_cut_sha256": "432b2367e35fd99995ac60950855fce42439dd86a1121a5230d77e8756ceb035"
+}

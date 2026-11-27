@@ -1,0 +1,35 @@
+{
+  "scope": "Static D-cache hierarchy and selected port ownership only; no simulation, whole-core equivalence, timing or score.",
+  "parser": "Verilator 5.022 2024-02-24 rev conda-forge build 1",
+  "parser_sha256": "7276ac7090bc151d8366e120f108dc1b8ef4bc76bb66af051206a90fe165a462",
+  "tool_std_sha256": "6f7f35a5e9ef796379b32108134ae90543c8509818286ba99a8b1de080a29824",
+  "cases": {
+    "stock": {
+      "kit_sha256": "ce0ef1171c7b0077282602c5c97230d03850b71c350c6c9ddcdf0b7ebcb5a456",
+      "timescale_warnings": 146,
+      "parsed_hdl": 549,
+      "cache_source_files": 50,
+      "elaborated_modules": 53,
+      "mshr_instances": 8,
+      "lane_outputs": 2,
+      "class_output_connections": 0,
+      "rejected": [
+        "cache lane swapped"
+      ]
+    },
+    "class_local": {
+      "kit_sha256": "16cd73557d903199e890ebc97358120d005998719a0d7ca7c0054caf4318d4e3",
+      "timescale_warnings": 146,
+      "parsed_hdl": 549,
+      "cache_source_files": 50,
+      "elaborated_modules": 53,
+      "mshr_instances": 8,
+      "lane_outputs": 2,
+      "class_output_connections": 16,
+      "rejected": [
+        "cache lane swapped",
+        "bank readiness swapped"
+      ]
+    }
+  }
+}

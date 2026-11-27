@@ -1,6 +1,6 @@
 # 把八个 MSHR 的 ready 接回 D-cache 和 LSU 后，哪里有希望缩短？
 
-目标是[旧版布线](perf-mega175-routed-recovery.md)中分支撤销经过缓存到整数发射队列的慢路径。下面只比较恢复版组合逻辑；**没有改动正在综合的物理输入，没有新的布线时序或实板成绩。**
+目标是[旧版布线](perf-mega175-routed-recovery.md)中分支撤销经过缓存到整数发射队列的慢路径。前两节比较恢复版组合逻辑，末节比较同一逻辑边界的实际局部布线。**没有改动正在综合的整机输入，没有新版整机时序或实板成绩。**
 
 ## 从两路 ready 看：优化了选择信号，却没有优化整体最深路径
 
@@ -71,4 +71,38 @@ done
 ```text
 vivado -mode batch -log vivado.log -nojournal -source SCRIPT_DIR/implement-mega-mshr-ooc.tcl -tclargs PREPARED RUNS/CASE CASE opt-only
 python -B SCRIPT_DIR/review-mega-mshr-ooc.py CONNECTED PREPARED RUNS stock class_local split_rsp --opt-only
+```
+
+## 局部布线后，改善的是哪条路径？
+
+从上节各自的 `opt_design` 检查点出发，各用两个独立的 Vivado 进程先布局、后布线，单线程、同器件、同一 5.714 ns 约束。每案只取得一份完整的布局布线结果；未在多个成功结果中择优。三个捕获端分别是 D-cache 响应 0、响应 1 和 LSU miss。表中延时取自已布线的数据段，不含源/目的时钟树；每列按相同条件分别选择最差路径，启动寄存器不一定相同。[逐条路径、余量和检查点指纹](perf-mega175-mshr-routed.json)。
+
+| 已布线，单次布局 | 基准 | MSHR 命令分类 | 拆 D-cache 响应 |
+|---|---:|---:|---:|
+| 响应 0 / 响应 1 / LSU miss 最差数据延时（ns） | 3.824 / 4.108 / 5.311 | 3.143 / 3.232 / 4.738 | 3.361 / 3.613 / 4.937 |
+| 分支掩码 / 通道 1 地址至 miss（ns） | 4.455 / 5.311 | 4.328 / 4.713 | 4.666 / 4.937 |
+| MSHR 状态 / RPQ 至 miss（ns） | 5.175 / 3.627 | 4.668 / 4.103 | 4.684 / 3.629 |
+| 局部 WNS / WHS（ns） | +0.384 / +0.107 | +0.956 / +0.080 | +0.758 / +0.110 |
+| CLB LUT / 寄存器 | 1,370 / 1,838 | 1,442 / 1,838 | 1,459 / 1,840 |
+| 完全布通网络 / 可布网络 | 2,866 / 2,866 | 2,943 / 2,943 | 2,935 / 2,935 |
+
+在命令分类版中，至 LSU miss 的最差数据延时从 **5.311 降至 4.738 ns**，其中布线从 3.430 降至 2.975 ns。最慢的启动位也从通道 1 地址变成了通道 1 的 tag 匹配位。对旧整机暴露出的**分支掩码**路径单独查询，改善只有 **0.127 ns**（4.455 → 4.328）；该组的布线部分反由 2.963 微增至 2.973 ns。RPQ 指针/满位组则慢了 **0.476 ns**，保持余量也小了 0.027 ns。这是准备候选的理由，不是解决旧整机 −9.237 ns 余量的证据。
+
+拆响应也缩短了 miss 最差数据延时，但其分支掩码路径比基准慢 0.211 ns。就本次实验而言，优先保留命令分类做整机对照，拆响应作为备选。复核器对每案各拒绝 8 个损坏对照，包括用已布局检查点冒充已布线、混入布局前报告、将实际布线数据段偷换成估计值。
+
+**局部时钟的限制：** 数据网络实际布通，七条报告逐网复核；每条路径两端时钟都标作 `unset`。未指定 `HD.CLK_SRC`，也未给独立引脚指定 `HD.PARTPIN_LOCS`。这里的建立/保持余量只用于解释这次局部结果，不能外推整机频率、跨 SLR 网络、取指关键路径或 CoreMark。
+
+[独立整机候选清单](perf-mega175-mshr-candidate.json)：从正在综合的恢复版输入另拷两份，各自重建命令分类改写；589 个封存成员、549 个有序 HDL 文件，只有 `BoomMSHRFile.sv` 和 `BoomMSHR.sv` 内容改变。两个新包的 SHA-256 完全相同。脚本对照父子源码、两级组合边界与之前的等价验证；**没有向运行中的整机替换文件，没有启动另一份整机综合。**
+
+用 Verilator 5.022 分别按两包相同顺序读取全部 549 份 HDL，以完整 D-cache 为顶层展开。两边都从 50 份实际 HDL 展开出 53 个模块定义；核对两路 ready 的归属、8 个 MSHR 实例，以及候选新增的 16 条命令分类输出接线。互换通道或将第 7 项的权限接至第 6 项分别被检查器拒绝。两边同一批 146 处缺少 timescale 的告警均保留，无其他解析诊断。这是[层次与接线检查](perf-mega175-mshr-dcache.json)，不是全缓存功能等价或时序验收。
+
+复核这批归档（`PRE` 为上节带已发布 SHA-256 的优化后 DCP，`RUNS` 为新的分阶段输出根目录，`PRIMARY_DCP` 为主作业将写出的综合检查点）。每案顺序执行 `place`、`route`，每次使用空的阶段目录；驱动在主作业完成综合或可用内存低时让路。重建的另一批 DCP 若指纹不同，不可冒充本批。归档原始 DCP、生成 RTL 和带路径日志不公开。
+
+```text
+python -B scripts/run-mega-mshr-resume.py VIVADO_BAT PRE RUNS PRIMARY_DCP CASE place
+python -B scripts/run-mega-mshr-resume.py VIVADO_BAT PRE RUNS PRIMARY_DCP CASE route
+python -B scripts/review-mega-mshr-resume.py PRE RUNS stock class_local split_rsp
+python -B scripts/test-mega-mshr-resume-review.py PRE RUNS stock class_local split_rsp
+python -B scripts/prepare-mega-class-local.py RECOVERY_KIT FRESH_KIT
+python3 -B scripts/check-mega-class-dcache.py RECOVERY_KIT FRESH_KIT VERILATOR_BIN NEW_OUTPUT
 ```
