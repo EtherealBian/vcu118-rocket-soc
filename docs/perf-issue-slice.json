@@ -1,0 +1,108 @@
+{
+  "scope": "40 already-computed slot availability bits to four dispatch credits; registered-port OOC fixture, not whole CPU timing, Fmax or a board benchmark.",
+  "part": "xcvu9p-flga2104-2L-e",
+  "period_ns": 5.714,
+  "rtl_cycle_checks": 210701,
+  "miter_inputs": {
+    "issue_ref.sv": "618eaefb2ddb6091b9a99a4754af30b28264ab069513f347b026078e24d27caf",
+    "issue_partial.sv": "20c41a2a931e588e34909a6b5bc3fb6c5ef620982dc163e33e65a7d5d80e9904",
+    "issue_ready_miter.v": "d71d1fad99902e04777bfa9df2fd13e69afe3232c231199c993e4a5fb1e75912",
+    "issue_ready_slice.cpp": "3ad1eb3686fef23650ce8c51076934174985b7b12528b0d5494411207cc5e403"
+  },
+  "stock_issue_sha256": "af0a6ce24faafd5867336e055cd6511cfb083d1deda7002e17e1ee5da2ec631f",
+  "runs": {
+    "issue_ref": {
+      "route": {
+        "routable": 95,
+        "fully_routed": 95,
+        "routing_errors": 0
+      },
+      "timing": {
+        "setup": {
+          "slack_ns": 3.943,
+          "total_negative_ns": 0.0,
+          "failed": 0,
+          "count": 8
+        },
+        "hold": {
+          "slack_ns": 0.06,
+          "total_negative_ns": 0.0,
+          "failed": 0,
+          "count": 8
+        },
+        "pulse_width": {
+          "slack_ns": 2.582,
+          "total_negative_ns": 0.0,
+          "failed": 0,
+          "count": 48
+        }
+      },
+      "unconstrained_ports": {
+        "no_input_delay": 40,
+        "no_output_delay": 4
+      },
+      "worst_setup_logic_levels": 5,
+      "worst_setup_data_ns": 1.752,
+      "start": "a_reg[39]/C",
+      "end": "credits_reg[1]/D",
+      "cells": {
+        "CLB LUTs": 42,
+        "CLB Registers": 48
+      },
+      "hashes": {
+        "issue_ref.sv": "618eaefb2ddb6091b9a99a4754af30b28264ab069513f347b026078e24d27caf",
+        "route.rpt": "36c9d8df678d2d79f69e42dc84f889d18e2c1467ed70daa9453689908dd3c057",
+        "summary.rpt": "4c05e753bda29b4db73c316ce282ad200ba96175cd1a80291d9e9ed0959c5c50",
+        "setup.rpt": "20525acc96621b5c0df98243e785065c48f5063c11f772633e136aad8d93db49",
+        "util.rpt": "61105fb9f807dca8c0e607895da6b63e03cfd811e7ebe22ea8cdc617af716598"
+      }
+    },
+    "issue_partial": {
+      "route": {
+        "routable": 111,
+        "fully_routed": 111,
+        "routing_errors": 0
+      },
+      "timing": {
+        "setup": {
+          "slack_ns": 4.187,
+          "total_negative_ns": 0.0,
+          "failed": 0,
+          "count": 34
+        },
+        "hold": {
+          "slack_ns": 0.053,
+          "total_negative_ns": 0.0,
+          "failed": 0,
+          "count": 34
+        },
+        "pulse_width": {
+          "slack_ns": 2.582,
+          "total_negative_ns": 0.0,
+          "failed": 0,
+          "count": 74
+        }
+      },
+      "unconstrained_ports": {
+        "no_input_delay": 40,
+        "no_output_delay": 4
+      },
+      "worst_setup_logic_levels": 5,
+      "worst_setup_data_ns": 1.507,
+      "start": "g3_reg[0]/C",
+      "end": "ready_reg[0]/D",
+      "cells": {
+        "CLB LUTs": 50,
+        "CLB Registers": 74
+      },
+      "hashes": {
+        "issue_partial.sv": "20c41a2a931e588e34909a6b5bc3fb6c5ef620982dc163e33e65a7d5d80e9904",
+        "route.rpt": "b4d8aff0a7431e621826ac5ef1c75bd3354d94ce83db8c4cde4b1eee5b5e3d7d",
+        "summary.rpt": "221e0a28abef852ca6eb9c2c8788ccd1fdc61a03056cea060eaf1db42c512cab",
+        "setup.rpt": "c73b795676f857f519df61112566aafaf5703009bb6a20e4b95bb177dead91a7",
+        "util.rpt": "96febc3ec0aa996d0e88204b45a2f1256acf76e004eae3328676c19d47640a7f"
+      }
+    }
+  },
+  "setup_slack_change_ns": 0.244
+}

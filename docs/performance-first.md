@@ -82,6 +82,31 @@ python3 scripts/test-coremark-qemu.py <产物>/fw_payload.bin <产物>/coremark-
 * **三路 175 MHz：[优化后、布局前的端点报告](perf175-path-estimate.json)**。原实现止于布局后的物理优化，没有最终布线报告或 bit。重新打开保存的 `post_opt` 检查点：系统时钟最差的 40 个不同 setup 端点都从同一个 D-cache tag-match 寄存器发起。最差路径经过 MSHR 响应队列，到整数发射单元的 dispatch-ready；38 级逻辑，估算数据路径 9.918 ns（逻辑 1.636、估算连线 8.282），要求 5.714 ns，余量 −4.414 ns。这是**布线前估算，不是 Fmax**。可用 `scripts/diagnose-routed.tcl` 中的 `vcu_endpoint_reports` 从已打开的检查点导出，再用 `scripts/review-preplace-path.py <报告目录>` 核对阶段、时钟和端点。
 * **175 MHz ROM/UART**：[独立引脚测试](rom-link-175.json)实测 9 个连续边沿间隔均为 1,519 个模型时钟，故意用 868 拍解码会被拒绝；20 字节 CRC 错帧停在 ROM，64 字节正确帧交接到载荷。这不是物理串口波特率、PLL 或完整 Linux 实板验收。
 
+### 发射队列末段：分组计数是否划算？
+
+抽取四路 Mega 的 40 槽整数发射队列，用相同已注册输入与输出，只比较「40 个槽可用位 → 4 路 dispatch 信用」：原版注册阈值结果，候选版每四槽注册一个部分计数，下一段做总和与阈值判断。它不包含产生槽可用位的 D-cache/MSHR 路径，也不模拟下游扇出。
+
+| 5.714 ns 约束，VU9P 独立布线 | setup 余量 | hold 余量 | 最差数据路径 | LUT / FF |
+|---|---:|---:|---:|---:|
+| 原版计数 | +3.943 ns | +0.060 ns | 1.752 ns | 42 / 48 |
+| 每四槽注册部分计数 | +4.187 ns | +0.053 ns | 1.507 ns | 50 / 74 |
+
+两版都布通；210,701 个可观察周期中，两组输出均与独立软件计数器逐拍相同。测试涵盖 0–40 的所有置位数，以及所有至多 3 个置位的位置组合。这个切片用 **8 个 LUT 和 26 个 FF** 换到 **0.244 ns** 的最差 setup 余量，hold 余量略少。值得做整核对照，但不能把局部余量加到整核时序上，也不能由此宣称达到 175 MHz。[两组布线摘要与测试输入哈希](perf-issue-slice.json)。
+
+复现：`issue-ready-fixture.py <锁定的四路 IssueUnitCollapsing_2.sv> <新目录>` 提取测试输入；运行 `bash scripts/test-issue-slice.sh <同一目录> <新模型目录>` 保存 stdout。用 Vivado 2024.2 执行 `-mode batch -log <同一目录>/vivado.log -source scripts/route-issue-slice.tcl -tclargs <同一目录>`，再以 `review-issue-slice.py <同一目录> <锁定的 HDL> <模型 stdout>` 交叉核对。生成的 HDL 和原始工具报告留在本地。
+
 ### 板卡重新开机后的通用软件对照（2026-11-27）
 
 11 月 26 日的[未找到 JTAG 的记录](portable-board-preflight.json)保留作为历史，不代表本轮状态。11 月 27 日重新识别板卡并易失配置已验证的 **100 MHz 单核 Rocket**，没有写 Flash 或 SD。[独立复核的启动记录](portable-linux-rocket-boot.json)：串口发送 2,150,168 字节阶段载荷，在板上解压出 5,473,288 字节固件并核对 CRC32 `aa8d5d35`；从主机开始发送到 Linux shell 回答挑战为 **207.202 秒**。同一镜像中的三个 RV64GC 程序不要求 Zba/Zbb，可作为以后 BOOM 上板的共同对照。
+
+同一次启动按 ABC / BCA / CAB 交错运行，每份程序测试三次。两套标准种子每次各 12,000 轮，单个 Linux 上下文，2,000 字节。[本次 18 次计时与输入身份](coremark-portable-rocket-board.json)：
+
+| 通用 `rv64gc` 程序 | 性能种子三次（次/秒，按实际顺序） | 性能中位数 | 验证中位数 | 较同批 `-O2` |
+|---|---|---:|---:|---:|
+| GCC 13.3 `-O2` | 216.923661 / 216.927582 / 216.923661 | 216.923661 | 215.691561 | +0.000% |
+| GCC 13.3 `-O3` | 223.742845 / 223.738673 / 223.797091 | 223.742845 | 222.733685 | +3.144% |
+| GCC 15.1 `-O3 -flto` | 228.323534 / 228.236681 / 228.241023 | 228.241023 | 227.040527 | +5.217% |
+
+两套种子的最终 CRC 分别为 `0xd340` 和 `0xbc68`；18 次主机墙钟范围 52.612–55.659 秒，与客机计时最大绝对差 0.094 秒。通用软件最快中位数为 **228.241023**。此前 Rocket 上使用 Zba/Zbb 的[最快实板中位数 254.231902](coremark-1000-compilers-board.json)仍未被超过；它是另一份程序，不能作为三路/四路 BOOM 的同 ELF 对照。单核 1,000 的目标尚未达到。
+
+复现时，在已审核 Rocket 上用上述通用固件完成 `linux-oscheck` 启动，将本次启动目录及串口桥交给 `test-board-coremark-matrix.ps1 -Experiment portable`；保留原始 UART 与主机计时，再用 `review-coremark-matrix.py <实现目录> <本次启动记录> <stage.bin> <Linux 产物> <矩阵记录> --experiment portable` 离线重验。

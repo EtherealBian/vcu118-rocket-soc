@@ -51,6 +51,10 @@ python scripts/review-coremark-matrix.py artifacts/split5h-impl-a $capture artif
 
 最快配置的三次性能种子：**254.285775 / 254.215744 / 254.231902** 次/秒，非认证成绩。三次验证种子均通过，所有 18 次计时均超过 10 秒，主机墙钟与客机相符。对同批次对照快 3.047%，还需 3.93 倍才到单核 1,000。参见[完整记录](coremark-1000-compilers-board.json)和[复现命令](performance-first.md#复现实验)。本实验比较组合，不把收益全部归给 GCC 版本或 LTO。
 
+## 通用 RV64GC 的实板起点（2026-11-27）
+
+重启后在同一个 100 MHz Rocket 上实测，不用 Zba/Zbb。GCC 13.3 `-O2`、`-O3` 和 GCC 15.1 `-O3 -flto` 的三次性能中位数分别为 216.923661、223.742845、**228.241023** 次/秒；[两套种子、每次成绩和墙钟](coremark-portable-rocket-board.json)。这三份 ELF 可供 BOOM 直接比较，不改变上述 254.231902 的实板纪录。
+
 ## 硬件候选和预算
 
 第一个对照是单 hart 的 BOOM v3 Medium（两路译码、乱序），板级时钟目标仍为 100 MHz；用 `bash scripts/generate-perf-boom.sh` 独立生成。即使生成 RTL 也不是实板成绩。优先比较同一通用 `rv64gc` ELF，再做专门优化；不假设该核也支持 Rocket 的 Zba/Zbb。
