@@ -18,3 +18,21 @@
 
 针对这 8 个 L2 MSHR 标签引脚，另见[目录返回标签的三种等价改写与取舍](perf-mega175-directory-tag.md)。
 四个 MIG W 数据引脚则在[两份历史整机网表中逐线核对](perf-mega175-wdata-controls.md)，区分源端旁路和八槽扇出。
+
+## 初布线日志的前五项能定位最终慢路径吗？
+
+在[原版 100 MHz Rocket 的旧布线恢复运行](validation.md)里，答案是否定的。那一次只执行了 `route_design -directive Explore`，没有布线后物理优化，也没有生成 bitstream。我们将**该次**初布线列出的 2,415 个引脚与**同次**布线后 CPU 捕获时钟内的最差 40 个建立端点、最差 40 个保持端点精确比较。比较使用完整引脚名，区分 `/CE`、`/D`、`/R`，不把同一寄存器的不同引脚合并。
+
+| Rocket 旧构建：各 40 个不同捕获端点 | 出现在完整初布线表 | 出现在日志前五项 | 样本最差余量 |
+| --- | ---: | ---: | ---: |
+| 建立 | 40 | 0 | −3.977 ns |
+| 保持 | 0 | 0 | +0.010 ns |
+
+最差建立端点在初布线完整表的**第 128 项**；这个序号不是 STA 排名。40 条建立路径全从控制总线的 `wrap_1_reg/C` 发出，终点却有 **21 个 CE、11 个 R、8 个 D**。仅看前五项会漏掉全部 40 个终点；仅看终点也会漏掉共同起点。
+
+同样的方法可在四路 BOOM 的最终报告就绪后直接运行，无须重开 Vivado。它逐项给出初表序号、布线后名次、起点、终点和余量，另核对最差八条建立及八条保持的详细报告。若四路的 26 个引脚在 40 项样本里没有命中，结论只是“样本未包含”，不是“时序通过”。旧 Rocket 的命中率和公共起点不外推到 BOOM。
+
+```sh
+python3 scripts/review-route-pin-overlap.py "$ROCKET_RECOVERY_RUN" "$ROCKET_RECOVERY_LOG"
+python3 scripts/review-route-pin-overlap.py "$FOUR_WIDE_RUN" "$FOUR_WIDE_LOG" --four-wide-kit "$FOUR_WIDE_BOARD_KIT"
+```
