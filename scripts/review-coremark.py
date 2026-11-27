@@ -69,7 +69,14 @@ def inspect(data, nonce, elf_sha, iterations, host_ms=None, profile='baseline'):
         def once(s):
             if lines.count(s)!=1:raise ValueError('missing or repeated '+s)
         once('2K '+name+' run parameters for coremark.');once('Correct operation validated. See README.md for run and reporting rules.')
-        if ([field(k) for k in ('seedcrc','[0]crclist','[0]crcmatrix','[0]crcstate')] != [seed,lst,mat,state] or field('CoreMark Size')!='666' or any(line.startswith('Parallel ') for line in lines)):
+        # The guest prints one indexed row per context for each enabled kernel
+        # and the final CRC. Checking only [0] would ignore mixed-context output.
+        crc_labels = [line.partition(':')[0].rstrip() for line in lines
+                      if re.match(r'^\s*\[\s*[0-9]+\s*\]\s*crc',line)]
+        if (sorted(crc_labels) != ['[0]crcfinal','[0]crclist','[0]crcmatrix','[0]crcstate'] or
+                any(re.match(r'^\s*Parallel(?:\s|:|$)',line) for line in lines)):
+            raise ValueError('expected exactly one CoreMark context in '+name)
+        if ([field(k) for k in ('seedcrc','[0]crclist','[0]crcmatrix','[0]crcstate')] != [seed,lst,mat,state] or field('CoreMark Size')!='666'):
             raise ValueError('wrong CRC, data size or context count')
         flags=' '.join(field('Compiler flags').split());compiler=field('Compiler version');ticks=int(field('Total ticks'));secs=Decimal(field('Total time (secs)'));rate=Decimal(field('Iterations/Sec'));n=int(field('Iterations'));final=field('[0]crcfinal')
         if (compiler!=expected_compiler(profile) or flags!=PROFILES[profile][1] or not re.fullmatch('0x[0-9a-f]{4}',final) or not secs.is_finite() or not rate.is_finite() or secs<10 or ticks!=secs*1000 or n<=0 or (iterations and n!=iterations) or abs(rate - n/secs)>Decimal('.000002')):raise ValueError('invalid build, duration or rate')

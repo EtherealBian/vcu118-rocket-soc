@@ -21,6 +21,19 @@ class BenchmarkTests(unittest.TestCase):
         return ('\r\n'.join(lines+[f'CM_DONE_42_{self.nonce}'])+'\r\n').encode()
     def test_check_both_runs(self):
         s=cm.inspect(self.fixture(),self.nonce,self.elf,6000,dict(performance=20105,validation=20123));self.assertEqual(s['runs']['performance']['iterations_per_s'],'300.000000')
+    def test_each_seed_rejects_extra_context_even_without_parallel_banner(self):
+        # Keep [0], its CRCs, timings, successful exit and summary unchanged.
+        for kind in ('performance','validation'):
+            end=f'CM_{kind}_RC_0_{self.nonce}'.encode()
+            for extra in (b'[1]crclist : 0xe714',b'[1]crcmatrix : 0x1fd7',
+                          b'[1]crcstate : 0x8e3a',b'[12]crcfinal : 0xbeef',
+                          b'[00]crcfinal : 0xbeef',b'[0]crcfinal : 0xbeef',b'Parallel PThreads : 2'):
+                with self.subTest(kind=kind,extra=extra), self.assertRaisesRegex(ValueError,'one CoreMark context in '+kind):
+                    cm.inspect(self.fixture().replace(end,extra+b'\r\n'+end),self.nonce,self.elf,6000)
+        # A kernel printk timestamp is not a context index.
+        end=f'CM_validation_RC_0_{self.nonce}'.encode()
+        valid=self.fixture().replace(end,b'[   10.000000] mmc: card absent\r\n'+end)
+        self.assertEqual(cm.inspect(valid,self.nonce,self.elf,6000)['context_count'],1)
     def test_host_and_guest_each_need_ten_seconds(self):
         # Synthetic boundary case: unchanged CRCs, consistent guest ticks, rate and summary.
         raw=(self.fixture().replace(b'20000',b'10000').replace(b'20.000000',b'10.000000')
