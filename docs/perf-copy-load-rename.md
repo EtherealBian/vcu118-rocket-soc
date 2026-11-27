@@ -12,3 +12,15 @@
 python3 scripts/test-copy-load-rename.py "$STOCK_MODEL_KIT/rtl" "$FRESH_PAIRED"  # Icarus Verilog + vvp
 python3 scripts/derive-copy-load-model.py "$STOCK_MODEL_KIT" "$FRESH_PAIRED" "$FRESH_FUNCTIONAL_KIT"
 ```
+
+整核比较入口（Linux，Verilator 与原归档一致；不连接硬件）：
+
+```bash
+inputs=("$STOCK_MODEL_KIT" "$STOCK_OBJ" "$STOCK_REPLAY" "$FRESH_FUNCTIONAL_KIT" "$GUEST_PAIR" "$STRICT_ELF" "$VERILATOR_PREFIX")
+python3 scripts/test-copy-load-fullcore.py preflight "${inputs[@]}"
+# 以下两步在主机资源允许时执行；输出必须是私有候选 kit 的全新同级目录。
+python3 scripts/test-copy-load-fullcore.py run "${inputs[@]}" --out "$FRESH_RUN"
+python3 scripts/test-copy-load-fullcore.py review "${inputs[@]}" --out "$FRESH_RUN"
+```
+
+`preflight` 已在原版两份真实归档上作零差对照：两种种子的四轮逐项均为零。这是比较工具的对照，不是候选的结果。`run` 从封存源码重新翻译、单线程编译并独立链接，再记录原始 PC、UART 和事件。`review` 从原始文件重算，与已存摘要逐项核对，不重编模型。周期差按“候选减原版”保留正负号，不能把退步算成加速。

@@ -26,11 +26,12 @@ def harness(source):
     return source
 
 
-def link(cpp, exe, obj, include):
-    subprocess.run([os.environ.get('CXX', 'g++'), '-std=c++17', '-O2', '-ffunction-sections', '-fdata-sections',
+def link(cpp, exe, obj, include, *, env=None):
+    compiler = (os.environ if env is None else env).get('CXX', 'g++')
+    subprocess.run([compiler, '-std=c++17', '-O2', '-ffunction-sections', '-fdata-sections',
                     '-Wl,--gc-sections', '-I'+str(TEST), '-I'+str(obj), '-I'+str(include), '-I'+str(include/'vltstd'),
                     cpp, obj/'VChipTop__ALL.a', obj/'verilated.o', obj/'verilated_threads.o',
-                    '-pthread', '-latomic', '-o', exe], check=True)
+                    '-pthread', '-latomic', '-o', exe], check=True, env=env)
 
 
 def sealed(kit, obj):
