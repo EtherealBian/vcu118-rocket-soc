@@ -40,3 +40,5 @@ python3 scripts/test-strict-replay-oracle.py "$PRIVATE/stock" "$PRIVATE/guest" "
 [外部读响应刻意推迟 32 拍：首轮和后三轮的周期分别变了多少？](perf-strict-tl-wait.md)
 
 [计时前置检查：四路 BOOM 的 mtime、机器定时器中断和严格 ELF 的起止调用](perf-mega175-timebase.md)。
+
+[逐条追踪后端重定向：哪条链表比较分支最常重新取指，正确路径几拍后派发？](perf-strict-redirects.md)
