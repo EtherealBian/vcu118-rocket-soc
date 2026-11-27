@@ -1,0 +1,274 @@
+{
+  "scope": "Original four-wide BOOM, two four-round user-mode RTL snapshot replays; integer load result ports, branch ALU input values and registered B1. Not a DDR latency, cycle savings estimate or board score.",
+  "elf_sha256": "61f7c4579b762f86d7d7dc93d4c385d08e50248f3dd6a8a9105fd5e88b58886a",
+  "probe_model_sha256": "ad7900e49f1492f5dbfeb4c2c10956351fdac01ea8b4552ea00a69518aa74a55",
+  "results": {
+    "performance": {
+      "retired_by_round": [
+        209,
+        208,
+        208,
+        205
+      ],
+      "redirects_by_round": [
+        103,
+        84,
+        76,
+        62
+      ],
+      "preceding_pc_pairs": {
+        "0x13e9e,0x13ea2": 798,
+        "0x13f50,0x13ea2": 32
+      },
+      "cohorts": {
+        "all": {
+          "later_load_minus_dispatch": {
+            "n": 830,
+            "min": 5,
+            "p50": 5,
+            "p95": 14,
+            "max": 49
+          },
+          "alu_input_minus_later_load": {
+            "n": 830,
+            "min": 2,
+            "p50": 2,
+            "p95": 2,
+            "max": 3
+          },
+          "registered_B1_minus_alu_input": {
+            "n": 830,
+            "min": 1,
+            "p50": 1,
+            "p95": 1,
+            "max": 1
+          },
+          "alu_gap_distribution": {
+            "2": 826,
+            "3": 4
+          },
+          "last_load": {
+            "x28": 676,
+            "x6": 154
+          },
+          "last_relative_to_dispatch": {
+            "after": 830
+          }
+        },
+        "without_B2": {
+          "later_load_minus_dispatch": {
+            "n": 505,
+            "min": 5,
+            "p50": 5,
+            "p95": 15,
+            "max": 49
+          },
+          "alu_input_minus_later_load": {
+            "n": 505,
+            "min": 2,
+            "p50": 2,
+            "p95": 2,
+            "max": 3
+          },
+          "registered_B1_minus_alu_input": {
+            "n": 505,
+            "min": 1,
+            "p50": 1,
+            "p95": 1,
+            "max": 1
+          },
+          "alu_gap_distribution": {
+            "2": 502,
+            "3": 3
+          },
+          "last_load": {
+            "x28": 396,
+            "x6": 109
+          },
+          "last_relative_to_dispatch": {
+            "after": 505
+          }
+        },
+        "with_B2": {
+          "later_load_minus_dispatch": {
+            "n": 325,
+            "min": 5,
+            "p50": 5,
+            "p95": 8,
+            "max": 37
+          },
+          "alu_input_minus_later_load": {
+            "n": 325,
+            "min": 2,
+            "p50": 2,
+            "p95": 2,
+            "max": 3
+          },
+          "registered_B1_minus_alu_input": {
+            "n": 325,
+            "min": 1,
+            "p50": 1,
+            "p95": 1,
+            "max": 1
+          },
+          "alu_gap_distribution": {
+            "2": 324,
+            "3": 1
+          },
+          "last_load": {
+            "x6": 45,
+            "x28": 280
+          },
+          "last_relative_to_dispatch": {
+            "after": 325
+          }
+        }
+      },
+      "private_trace_controls": [
+        "operand_bit_flip_rejected",
+        "B1_edge_shift_rejected"
+      ],
+      "operand_capture_sha256": "14b823d8e3faa2aa4ae52da499a8d954a8f340417cfff683def9abe264b63f6e",
+      "reference_capture_sha256": {
+        "pc": "416ac8d959c93fdc7b2c57778b2bfe53488c3b105901127d226f5a3c0fc564c4",
+        "tickets": "4434454eed08424c4cae7c82081d6600045d9449df48bbd182a9b1ba0b2dd3bc",
+        "redirects": "d66e4086f898d837e237423a4703222e0af29444fa55797bc30394bfebf68823",
+        "events": "8f71c7b3d7812d06d9e161683b61fc499f95009cb010f876d5a9c5bb4123015b",
+        "uart": "66144f24d734d9eb39e2fd75f5c3aabfb92007c4425be6fb10ef558bdf5fc30c"
+      }
+    },
+    "validation": {
+      "retired_by_round": [
+        206,
+        213,
+        211,
+        207
+      ],
+      "redirects_by_round": [
+        91,
+        87,
+        69,
+        61
+      ],
+      "preceding_pc_pairs": {
+        "0x13e9e,0x13ea2": 805,
+        "0x13f50,0x13ea2": 32
+      },
+      "cohorts": {
+        "all": {
+          "later_load_minus_dispatch": {
+            "n": 837,
+            "min": 3,
+            "p50": 5,
+            "p95": 9,
+            "max": 50
+          },
+          "alu_input_minus_later_load": {
+            "n": 837,
+            "min": 2,
+            "p50": 2,
+            "p95": 2,
+            "max": 3
+          },
+          "registered_B1_minus_alu_input": {
+            "n": 837,
+            "min": 1,
+            "p50": 1,
+            "p95": 1,
+            "max": 1
+          },
+          "alu_gap_distribution": {
+            "2": 836,
+            "3": 1
+          },
+          "last_load": {
+            "x28": 716,
+            "x6": 121
+          },
+          "last_relative_to_dispatch": {
+            "after": 837
+          }
+        },
+        "without_B2": {
+          "later_load_minus_dispatch": {
+            "n": 529,
+            "min": 3,
+            "p50": 5,
+            "p95": 9,
+            "max": 50
+          },
+          "alu_input_minus_later_load": {
+            "n": 529,
+            "min": 2,
+            "p50": 2,
+            "p95": 2,
+            "max": 3
+          },
+          "registered_B1_minus_alu_input": {
+            "n": 529,
+            "min": 1,
+            "p50": 1,
+            "p95": 1,
+            "max": 1
+          },
+          "alu_gap_distribution": {
+            "2": 528,
+            "3": 1
+          },
+          "last_load": {
+            "x28": 448,
+            "x6": 81
+          },
+          "last_relative_to_dispatch": {
+            "after": 529
+          }
+        },
+        "with_B2": {
+          "later_load_minus_dispatch": {
+            "n": 308,
+            "min": 4,
+            "p50": 5,
+            "p95": 9,
+            "max": 40
+          },
+          "alu_input_minus_later_load": {
+            "n": 308,
+            "min": 2,
+            "p50": 2,
+            "p95": 2,
+            "max": 2
+          },
+          "registered_B1_minus_alu_input": {
+            "n": 308,
+            "min": 1,
+            "p50": 1,
+            "p95": 1,
+            "max": 1
+          },
+          "alu_gap_distribution": {
+            "2": 308
+          },
+          "last_load": {
+            "x28": 268,
+            "x6": 40
+          },
+          "last_relative_to_dispatch": {
+            "after": 308
+          }
+        }
+      },
+      "private_trace_controls": [
+        "operand_bit_flip_rejected",
+        "B1_edge_shift_rejected"
+      ],
+      "operand_capture_sha256": "b5f4e7203efa1b630ff1643ba6b31a5d30290ea7c88bd2185e37381b9598c915",
+      "reference_capture_sha256": {
+        "pc": "e7a7695d0811ac0b87d007dfecfb7c339135028b8568f08944bbd602b5d4b6e6",
+        "tickets": "2778a1b8d5705a8d39ded751bbaf60d63c8c968743debfff52b3c0b52e842fa4",
+        "redirects": "868d729c58f015eab2e374086641c5b6cd2814bd7b461aeba1777128d6790a53",
+        "events": "6e41f33710140b4c84b4c204948e40f95ec344ff44b3849a283f6d418fd4f787",
+        "uart": "66144f24d734d9eb39e2fd75f5c3aabfb92007c4425be6fb10ef558bdf5fc30c"
+      }
+    }
+  }
+}
