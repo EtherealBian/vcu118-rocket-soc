@@ -1,0 +1,76 @@
+{
+  "scope": "Stock four-wide BOOM RTL; Sv39 U-mode snapshot replay, not Linux boot or FPGA throughput.",
+  "elf_sha256": "61f7c4579b762f86d7d7dc93d4c385d08e50248f3dd6a8a9105fd5e88b58886a",
+  "results": {
+    "performance": {
+      "ordered_pc_sha256": "416ac8d959c93fdc7b2c57778b2bfe53488c3b105901127d226f5a3c0fc564c4",
+      "user_window_instructions": 1347261,
+      "user_window_cycles": 653447,
+      "by_round_cycles": [
+        171404,
+        161746,
+        160691,
+        159606
+      ],
+      "by_round_instructions": [
+        336815,
+        336902,
+        336808,
+        336736
+      ],
+      "fence_ticks": [
+        701581,
+        872985,
+        1034731,
+        1195422,
+        1355028
+      ],
+      "mret_tick": 701352,
+      "user_ecall_trap_tick": 1355038,
+      "privilege_interval_cycles": 653686,
+      "prefix_arch_valid_pc": [
+        "0x800000ec"
+      ],
+      "suffix_arch_valid_pc": [
+        "0x10f3a",
+        "0x147ac",
+        "0x147b0"
+      ]
+    },
+    "validation": {
+      "ordered_pc_sha256": "e7a7695d0811ac0b87d007dfecfb7c339135028b8568f08944bbd602b5d4b6e6",
+      "user_window_instructions": 1348735,
+      "user_window_cycles": 657536,
+      "by_round_cycles": [
+        173150,
+        162949,
+        161180,
+        160257
+      ],
+      "by_round_instructions": [
+        337115,
+        337270,
+        337193,
+        337157
+      ],
+      "fence_ticks": [
+        701581,
+        874731,
+        1037680,
+        1198860,
+        1359117
+      ],
+      "mret_tick": 701352,
+      "user_ecall_trap_tick": 1359128,
+      "privilege_interval_cycles": 657776,
+      "prefix_arch_valid_pc": [
+        "0x800000ec"
+      ],
+      "suffix_arch_valid_pc": [
+        "0x10f3a",
+        "0x147ac",
+        "0x147b0"
+      ]
+    }
+  }
+}

@@ -1,0 +1,72 @@
+/* M-mode diagnostic entry for a behavioral RAM preload. Not the board boot image. */
+.option norvc
+.section .text.init,"ax",@progbits
+.globl _start
+_start:
+  csrw mie,zero
+  csrw medeleg,zero
+  csrw mideleg,zero
+  la t0,trap
+  csrw mtvec,t0
+  li t0,-1
+  csrw pmpaddr0,t0
+  li t0,15
+  csrw pmpcfg0,t0
+  li t0,@SATP@
+  csrw satp,t0
+  sfence.vma
+  li t0,0x1888
+  csrc mstatus,t0
+  li t0,0x106b0
+  csrw mepc,t0
+  la t0,saved
+  csrw mscratch,t0
+  la x31,initial
+@RESTORE@
+  mret
+.balign 4
+trap:
+  /* mscratch retains original x31 while x31 becomes the save-area pointer. */
+  csrrw x31,mscratch,x31
+@SAVE@
+  csrr x30,mscratch
+  sd x30,248(x31)
+  csrr t0,mcause
+  li t1,8
+  bne t0,t1,fail
+  csrr t0,mepc
+  li t1,0x147b4
+  bne t0,t1,fail
+  la t0,saved
+  la t1,expected
+  li t2,256
+  jal ra,compare
+@COMPARE_MEMORY@
+  li t2,75 /* K */
+  j print
+compare:
+  lbu t3,0(t0)
+  lbu t4,0(t1)
+  bne t3,t4,fail
+  addi t0,t0,1
+  addi t1,t1,1
+  addi t2,t2,-1
+  bnez t2,compare
+  ret
+fail:
+  li t2,33 /* ! */
+print:
+  li t0,0x64000000
+1:lw t1,0(t0)
+  bltz t1,1b
+  sw t2,0(t0)
+2:wfi
+  j 2b
+.section .rodata
+.balign 8
+initial: .quad @INITIAL@
+expected: .quad @EXPECTED@
+@ORACLES@
+.section .data
+.balign 8
+saved: .zero 256
