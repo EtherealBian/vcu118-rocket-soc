@@ -1,0 +1,65 @@
+{
+  "scope": "Generated MIG clock/reset infrastructure only, simulated buffered 4 ns reference, fixed PLL-lock input. No PHY/calibration, DDR, metastability, recovery/removal margin or new routed signoff.",
+  "candidate_seal_sha256": "ce0ef1171c7b0077282602c5c97230d03850b71c350c6c9ddcdf0b7ebcb5a456",
+  "kit_rtl_sha256": {
+    "VCU118FPGATestHarness": "31646f1a0ff1f85d94474108f4f21895969400cb83ffab8f5a7e93351c062823",
+    "XilinxVCU118MIG": "0c22842380e8e952fa9dedd97629dc6c6d3ea3a436236146d79e88ad08c92df2",
+    "XilinxVCU118MIGIsland": "e6a34285d76e72b9989efcfceaaddb849d082c18c262aa5cdc1f1e35d9812920"
+  },
+  "matching_generated_ip_sha256": {
+    "rtl/ip_top/vcu118mig.sv": "ea105daaac424b41d3d08db77b780db80ca029a64458ba5011187ccb7b663fbe",
+    "rtl/ip_top/vcu118mig_ddr4.sv": "6911567d1d38847a9056c55c5f9d2ba866cee58893d1c1dc666422e5f4442391",
+    "rtl/clocking/ddr4_v2_2_infrastructure.sv": "de08ce8c822ffc571626d2ec88662b6f1effe037603222a4176d7f8c69535dc3",
+    "par/vcu118mig.xdc": "67bf3c9ccad786f34e7f3ad9e3c4c2bc4a5a130eca0fcc6ea3876e3ad3424142"
+  },
+  "parameters": {
+    "CLKIN_PERIOD_MMCM": "4000",
+    "CLKFBOUT_MULT_MMCM": "8",
+    "DIVCLK_DIVIDE_MMCM": "2",
+    "CLKOUT0_DIVIDE_MMCM": "5",
+    "CLKOUT1_DIVIDE_MMCM": "5",
+    "CLKOUT2_DIVIDE_MMCM": "5",
+    "CLKOUT3_DIVIDE_MMCM": "5",
+    "CLKOUT4_DIVIDE_MMCM": "5",
+    "CLKOUT6_DIVIDE_MMCM": "10",
+    "C_FAMILY": "\"virtexuplus\"",
+    "TCQ": "100"
+  },
+  "fixture_sha256": "4f0b62138ab7ce34a3bf6eae0a85b709940f13fe18c81844a9cc33d2a0b19dc8",
+  "glbl_sha256": "6270251cf35e1fce3119fc79f8fb968912f7983027e43cf030409ba68f048936",
+  "cases": [
+    "stopped-clock external pulse",
+    "sub-cycle POR only",
+    "overlapping external and POR",
+    "release after one rising edge",
+    "release while clock stopped",
+    "reassert during stretch"
+  ],
+  "positive_run_warnings": [
+    "Unisim MMCME4_ADV-39"
+  ],
+  "release_edges": {
+    "async_pair_idle": 2,
+    "stretch_counter_last_at_50": 6,
+    "design_reset_low": 57
+  },
+  "negative_controls": {
+    "drop_por": "PRESET_MISSING case=1",
+    "second_synchronous_only": "PRESET_MISSING case=0"
+  },
+  "log_sha256": {
+    "actual": {
+      "actual.log": "4ffe6eaeeedf2ef99d6626badf0e1e34fc16730776992f330e813e11e2a2525b",
+      "compile.log": "b6fcd12a049ccf9c6bf4b0438d9ef8f97613176d15880a0fced4bb6331102f0f",
+      "drop_por.log": "d7594df81454f5374a4385f9e998a59d0e724582675104051ab24a18a329ba61",
+      "elab.log": "332a14163595cb90c977814ff7b48dd4a230b46427dc8b111338aa823df72290",
+      "glbl.log": "938792b5e1eb707cc7115787983ebe83d9027705c4f4d650c8b9f0873a090952"
+    },
+    "second_synchronous_only": {
+      "compile.log": "1fca42934a90eb462e0690f5d27f0d9cb8a1f4df924c5d574c0f04d36b055814",
+      "elab.log": "73629e8b579eac55c7a92b15657c359c0a185ac3bb57d2dd81a2b5a3eaca5373",
+      "glbl.log": "938792b5e1eb707cc7115787983ebe83d9027705c4f4d650c8b9f0873a090952",
+      "missing_preset.log": "e1fed28bcf1997ef57354cf76acf5fd5c9b6e57ab38bb06c5e239b48b2da951a"
+    }
+  }
+}

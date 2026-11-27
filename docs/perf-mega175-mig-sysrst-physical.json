@@ -1,0 +1,68 @@
+{
+  "scope": "Original build only. Serialized constraints in four checkpoints plus the pinned old routed path report to bit 0. No CDC waiver, no new-build STA.",
+  "stages": [
+    {
+      "checkpoint_sha256": "c7302bd1cd3565f8d9f85e30416e9d08aa0cbb5a56e2336f80e1d028769fbaad",
+      "stage_filename": "post_synth.dcp",
+      "early_xdc_sha256": "c2ca2b0a7da6edd085457d848a327a140e3a30b77fb9878298ad745da0fc6704",
+      "generated_xdc_sha256": "67bf3c9ccad786f34e7f3ad9e3c4c2bc4a5a130eca0fcc6ea3876e3ad3424142",
+      "scope": "mig/island/blackbox/inst",
+      "source_line": 295,
+      "serialized": true
+    },
+    {
+      "checkpoint_sha256": "98e6d4f6c545a4f0f07c0618dad28e5de23dc9330ff98bc2cc81d2038a54db5f",
+      "stage_filename": "post_opt.dcp",
+      "early_xdc_sha256": "7fe4282a4769aa3941140474af13d3bf4386f2290eb7b2a58536a74b972ed841",
+      "generated_xdc_sha256": "67bf3c9ccad786f34e7f3ad9e3c4c2bc4a5a130eca0fcc6ea3876e3ad3424142",
+      "scope": "mig/island/blackbox/inst",
+      "source_line": 295,
+      "serialized": true
+    },
+    {
+      "checkpoint_sha256": "e5be273c5dae935df5b0e114a94b7c55ee1825bd7dedad2f2ec63ae4fdf3858e",
+      "stage_filename": "post_place.dcp",
+      "early_xdc_sha256": "7fe4282a4769aa3941140474af13d3bf4386f2290eb7b2a58536a74b972ed841",
+      "generated_xdc_sha256": "67bf3c9ccad786f34e7f3ad9e3c4c2bc4a5a130eca0fcc6ea3876e3ad3424142",
+      "scope": "mig/island/blackbox/inst",
+      "source_line": 295,
+      "serialized": true
+    },
+    {
+      "checkpoint_sha256": "d0ead1ae8498f90d6ec268dc12c7f26d745448bcf2c20b4ce681a4dd356ef581",
+      "stage_filename": "routed_before_physopt.dcp",
+      "early_xdc_sha256": "7fe4282a4769aa3941140474af13d3bf4386f2290eb7b2a58536a74b972ed841",
+      "generated_xdc_sha256": "67bf3c9ccad786f34e7f3ad9e3c4c2bc4a5a130eca0fcc6ea3876e3ad3424142",
+      "scope": "mig/island/blackbox/inst",
+      "source_line": 295,
+      "serialized": true,
+      "original_routed_evidence": {
+        "timing_report_sha256": "120b9ea1c595fabe7db8aaa657f000c036a3dfbd92b86ee9342f9868b4096d8a",
+        "endpoint": "mig/island/blackbox/inst/u_ddr4_infrastructure/rst_input_async_reg[0]/PRE",
+        "paths": [
+          {
+            "source": "fpga_power_on/power_on_reset_reg/C",
+            "kind": "Recovery",
+            "data_delay_ns": 0.544
+          },
+          {
+            "source": "fpga_power_on/power_on_reset_reg/C",
+            "kind": "Removal",
+            "data_delay_ns": 0.244
+          },
+          {
+            "source": "reset",
+            "kind": "Recovery",
+            "data_delay_ns": 2.666
+          },
+          {
+            "source": "reset",
+            "kind": "Removal",
+            "data_delay_ns": 1.066
+          }
+        ],
+        "slack": "inf (False Path); no physical recovery/removal margin"
+      }
+    }
+  ]
+}
