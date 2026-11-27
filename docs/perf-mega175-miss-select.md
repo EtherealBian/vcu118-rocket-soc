@@ -70,3 +70,17 @@ vivado -mode batch -source scripts/run-mega-route-recovery.tcl -tclargs "$NEW_KI
 python3 scripts/test-mega-recovery-fullcore.py run "$MODEL" "$MODEL_OBJ" "$STOCK_RUN" "$KIT" "$NEW_KIT" "$GUEST" "$ELF" "$VERILATOR_ROOT" --out "$NEW_OUT"
 python3 scripts/test-mega-recovery-fullcore.py review "$MODEL" "$MODEL_OBJ" "$STOCK_RUN" "$KIT" "$NEW_KIT" "$GUEST" "$ELF" "$VERILATOR_ROOT" --out "$NEW_OUT"
 ```
+
+### Vivado 实际综合的是哪个版本？
+
+旧版与改版的 Vivado 工程都登记了同序的 549 份 HDL 和两个顶层 IP（CPU 时钟、DDR4）。在两份整机综合日志中，整数发射队列和循环预测器的 Bank、Column 均从各自封存包读取；改版比旧版多展开一个模块定义 `VcuIntMissSlot`。逐条配对模块开始及结束记录：旧版 766 对，改版 767 对。这里数的是工具记录的模块展开，不是硬件实例或面积。
+
+对日志实际指到的源文件和约束逐项比对：只有这三份目标 RTL 内容改变，另外 646 份相同。两份构建的 15 次约束文件解析有相同的顺序和实例作用域；这并不证明每条例外都命中正确端点。另查各自生成的 PLL/MIG 目录：154 份 HDL/头文件、15 份 XCI、19 份 XDC 和 3 份 ELF 内容相同。这 191 份是按文件类型核对的生成输入，不表示每一份都在本次综合中用到；没有把其它元数据算作相同。
+
+[去敏指纹及计数](perf-mega175-synth-lineage.json) · [复核脚本](../scripts/review-mega-recovery-synthesis.py)。在原构建所在 Windows 主机上运行：
+
+```sh
+python scripts/review-mega-recovery-synthesis.py "$OLD_LOG" "$OLD_KIT" "$OLD_RUN" "$OLD_WRAPPER" "$NEW_LOG" "$NEW_KIT" "$NEW_RUN" "$VIVADO_INSTALL"
+```
+
+要比较**整机综合原语数**，给相同命令加 `--completed`。两份日志都必须有完整原语表、零错误/零严重告警的综合成功标志、对应检查点生成记录及 `opt` 阶段标志；还会复核 DCP 内的器件、顶层和该构建自己的 MIG XDC 路径。本次抽查时改版仍在 `synth_design`，该模式明确拒绝出数；把旧日志替换到新版位置也被拒绝。没有新版 LUT 占用、时序或板测结论。

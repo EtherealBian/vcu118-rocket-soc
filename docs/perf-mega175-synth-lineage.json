@@ -1,0 +1,88 @@
+{
+  "scope": "Log-confirmed elaboration and constraint parse scopes, not routed timing, exception coverage, bitstream, or board performance.",
+  "archived": {
+    "kit_seal_sha256": "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+    "wrapper_lf_sha256": "b629e39591895a7aefab2ec164b6bc74cf0527c2fe7d10dea920742549a279bb",
+    "log_prefix_bytes": 4081160,
+    "log_prefix_sha256": "06cac3e683c9c02a774fd43cd9abf70234a31d8973bbeccf99c8f29796f5cc12",
+    "ordered_hdl_sha256": "6aa36414a276880c092dd8a9eb63aed3a5c98433318bb0c44e3e41a32281b0a7",
+    "project_ip": {
+      "project_design_sources": 551,
+      "top_xci_sha256": {
+        "harnessSysPLL/harnessSysPLL.xci": "5c46e5c20221b6b0fdfb426f9ef3c8be861bc9b229ba450b56bbdfc2bf89fc8a",
+        "vcu118mig/vcu118mig.xci": "be47ca3d0594b66ea2d1a1afe97b6ba7bf29f6db512fccb1b02539e4c734bd28"
+      },
+      "selected_file_counts": {
+        ".elf": 3,
+        ".sv": 96,
+        ".v": 13,
+        ".vh": 13,
+        ".vhd": 32,
+        ".xci": 15,
+        ".xdc": 19
+      },
+      "selected_names_and_bytes_sha256": "4b5bfeeb24797c8b14cae2e1fbda7eddcb2a8b3636dedd112100be54b1e9a76f"
+    },
+    "elaborations": 766,
+    "vhdl_elaborations": 42,
+    "verilog_elaborations": 724,
+    "module_source_line_map_sha256": "6cbc10564cbec8a91d4519adfa5beda019bd25452ba706ed8e729dd147116743",
+    "elaborated_files": {
+      "ip": 94,
+      "kit": 539,
+      "tool": 1
+    },
+    "ordered_xdc_scopes_sha256": "affcd8edc4613a63108dfaaa926d50a7f4ba28dfca64504c83a8e74709083bc3",
+    "constraint_files": 15,
+    "observed_input_names_and_hashes_sha256": "4923538b45b67a034133fc152cd53d418b09174f3e81102f0f6feb6ee5e03a9d"
+  },
+  "candidate": {
+    "kit_seal_sha256": "ce0ef1171c7b0077282602c5c97230d03850b71c350c6c9ddcdf0b7ebcb5a456",
+    "wrapper_lf_sha256": "71018179a3db6b0ad0265a03b337b52bd92abe9e391d353bee93e5cf2f8b9213",
+    "log_prefix_bytes": 4089836,
+    "log_prefix_sha256": "19f43f9e136baf9a622417f5c05489f532416fa1b7408a3c6d28a6c8c0fa596c",
+    "ordered_hdl_sha256": "6aa36414a276880c092dd8a9eb63aed3a5c98433318bb0c44e3e41a32281b0a7",
+    "project_ip": {
+      "project_design_sources": 551,
+      "top_xci_sha256": {
+        "harnessSysPLL/harnessSysPLL.xci": "5c46e5c20221b6b0fdfb426f9ef3c8be861bc9b229ba450b56bbdfc2bf89fc8a",
+        "vcu118mig/vcu118mig.xci": "be47ca3d0594b66ea2d1a1afe97b6ba7bf29f6db512fccb1b02539e4c734bd28"
+      },
+      "selected_file_counts": {
+        ".elf": 3,
+        ".sv": 96,
+        ".v": 13,
+        ".vh": 13,
+        ".vhd": 32,
+        ".xci": 15,
+        ".xdc": 19
+      },
+      "selected_names_and_bytes_sha256": "4b5bfeeb24797c8b14cae2e1fbda7eddcb2a8b3636dedd112100be54b1e9a76f"
+    },
+    "elaborations": 767,
+    "vhdl_elaborations": 42,
+    "verilog_elaborations": 725,
+    "module_source_line_map_sha256": "30b8d2db7f9b5bc61dd57da66fdc39a1d2620412ca292ee310995660af9dcf4d",
+    "elaborated_files": {
+      "ip": 94,
+      "kit": 539,
+      "tool": 1
+    },
+    "ordered_xdc_scopes_sha256": "affcd8edc4613a63108dfaaa926d50a7f4ba28dfca64504c83a8e74709083bc3",
+    "constraint_files": 15,
+    "observed_input_names_and_hashes_sha256": "fe4dc090cdecafc69caa96f998b29a9f8ffdd0af70eb2382b149200ed08534f5"
+  },
+  "comparison": {
+    "added_module": "VcuIntMissSlot",
+    "added_in": "kit/rtl/IssueUnitCollapsing_2.sv",
+    "changed_observed_files": {
+      "kit/rtl/IssueUnitCollapsing_2.sv": "bc770d913c2b51a8846e023e94458c5e3dc7855358b41b9cb2de78a12f4c15fb",
+      "kit/rtl/LoopBranchPredictorBank.sv": "7da16fdcc7a0ef6c282e6b61ba2b90a62f3ba6b0551d6746ffc1daaa6bcc31db",
+      "kit/rtl/LoopBranchPredictorColumn.sv": "5dd17bd06c4a1f26c9a82c8eeceab0e6168d9fbb46df978c2f774dae3aee1555"
+    },
+    "identical_observed_files": 646,
+    "identical_generated_ip_hdl_or_constraints": 106,
+    "identical_tool_primitive_library_sha256": "167ab7941af5fe0251d190d70eb5245caa3407c61e72936ce17dedd33476991a",
+    "identical_constraint_scopes_in_order": 15
+  }
+}

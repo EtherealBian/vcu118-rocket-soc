@@ -39,6 +39,25 @@ def cell_table(text):
     return counts,sha256(got[0].encode()).hexdigest()
 
 
+def completed_table(stage, dcp):
+    """Stage text is isolated by the caller between the synth and opt markers."""
+    cmd = '\nCommand: synth_design -top ' + TOP + ' -flatten_hierarchy rebuilt\n'
+    if stage.count(cmd) != 1:
+        raise ValueError('missing or ambiguous top-level synth command')
+    body, tail = stage.split(cmd)[1].split('\nsynth_design completed successfully\n')
+    paths = re.findall(r"^INFO: \[Common 17-1381\] The checkpoint '([^']+/post_synth.dcp)' has been generated\.$", tail, re.M)
+    if (len(paths) != 1 or portable(paths[0]) != portable(dcp.resolve()) or
+            not re.search(r'^Synthesis finished with 0 errors, 0 critical warnings and \d+ warnings\.$', body, re.M) or
+            not re.search(r'^\+[-+]+\n-{20,}\nFinished Writing Synthesis Report :', body, re.M)):
+        raise ValueError('unconfirmed top-level synthesis/checkpoint')
+    with ZipFile(dcp) as z:
+        xml = ET.fromstring(z.read('dcp.xml'))
+    for tag, value in (('PRODUCT','Vivado v2024.2 (64-bit)'), ('Top',TOP), ('Part',PART), ('OutOfContext','0')):
+        if [x.get('Name') for x in xml.findall(tag)] != [value]:
+            raise ValueError('checkpoint metadata: '+tag)
+    return cell_table(body)
+
+
 def review(log,kit,dcp,seal):
     for p in (log,kit,dcp): p.resolve(strict=True)
     if digest(kit/'CANDIDATE.sha256')!=seal: raise ValueError('incorrect implementation seal')
@@ -57,14 +76,7 @@ def review(log,kit,dcp,seal):
     args=command.split(' -tclargs ',1)[1]; expected=[kit.resolve()/'implement.tcl',kit.resolve()/'sources.f',kit.resolve()/'shell/xilinx/common/tcl',run]
     if portable(args) != ' '.join(portable(p) for p in expected) or '# Vivado v2024.2 (64-bit)' not in header:
         raise ValueError('wrong implementation inputs, run directory or tool')
-    stage=stage.split('Command: synth_design -top '+TOP+' -flatten_hierarchy rebuilt\n')[1]
-    success="synth_design completed successfully"; body,tail=stage.split('\n'+success+'\n'); cp,=re.findall(r"^INFO: \[Common 17-1381\] The checkpoint '([^']+/post_synth.dcp)' has been generated\.$",tail,re.M)
-    if portable(cp)!=portable(dcp.resolve()) or not re.search(r'^Synthesis finished with 0 errors, 0 critical warnings and \d+ warnings\.$',body,re.M):
-        raise ValueError('unconfirmed top-level synthesis/checkpoint')
-    with ZipFile(dcp) as z: xml=ET.fromstring(z.read('dcp.xml'))
-    for tag,value in (('PRODUCT','Vivado v2024.2 (64-bit)'),('Top',TOP),('Part',PART),('OutOfContext','0')):
-        if [x.get('Name') for x in xml.findall(tag)] != [value]: raise ValueError('checkpoint metadata: '+tag)
-    counts,table_hash=cell_table(body)
+    counts,table_hash=completed_table(stage,dcp)
     return dict(board_input_seal=seal,post_synth_dcp_sha256=digest(dcp),cell_table_sha256=table_hash,
                 primitives={k:counts[k] for k in KEYS},sum_LUT1_to_LUT6=sum(counts['LUT'+str(i)] for i in range(1,7)))
 
