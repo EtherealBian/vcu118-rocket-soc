@@ -39,3 +39,22 @@ python3 scripts/review-clock-domain-coverage.py routed "$RUN" "$BOARD_KIT" "$IMP
 后者核对四路输入与最终 DCP，重新校验六份重放报告及其哈希。原实现的 clock interaction **没有独立重打**：校验命令来源、列和上述方向的时序/CDC 交叉证据，不宣称所有方向或每个端点均已覆盖。标签、方向或报告格式与预期不符时应审查原件，不增设豁免、不批准上板。
 
 四路本次的[布局后物理优化归因与精确走线对照](perf-mega175-aw-physopt.md)把 DDR 写地址通道的**系统时钟入队侧**与跨域接收侧分开。布线完成后可据此查证是数据、使能、其他路径，还是样本中未出现；不把 MIG 层级整体当作异步例外。
+
+## 两份全局 WPWS 相同的报告，能互换吗？
+
+不能。历史 Rocket 与旧 BOOM 两份 100 MHz 实现的全局最差脉宽余量都是 **0.143 ns**；CPU 时钟的最差值也同为 **3.562 ns**。但 CPU 脉宽检查的端点数分别为 **27,212** 和 **78,752**。在各自 13 个时钟、45 条代表检查中，有 **15 条**的内容在两版之间不同。去掉命令路径等报告头，只交换两份脉宽明细正文，两个方向都被拒绝。[两次归档的输入哈希、分时钟统计与差异](route-pulse-controls.json)仅作方法对照，不是 175 MHz 四路 BOOM 的结果。
+
+| 100 MHz 历史实现 | 全设计脉宽端点数 | `pll_clk[2]` 域 WPWS / 明细最小余量 | `mmcm_clkout6` 最小余量及检查类型 |
+| --- | ---: | --- | --- |
+| Rocket | 51,152 | 0.143 / 0.144 ns | 1.494 ns，Max Skew |
+| 旧 BOOM | 102,702 | 0.143 / 0.143 ns | 1.461 ns，Max Skew |
+
+Rocket 的一处 **0.001 ns 打印差异**保留两个原数；没有据此给当前构建设置容差。一个时钟块每种检查只打印一个代表端点，并非逐一列出所有被分析的端点。
+
+```sh
+python3 scripts/review-pulse-width.py controls "$ARTIFACTS"
+# 四路最终布线和现有六份 DCP 重放完成之后；不再启动另一个 Vivado。
+python3 scripts/review-pulse-width.py routed "$RUN" "$BOARD_KIT" "$IMPLEMENTATION_LOG" "$POSTROUTE_DIAGNOSTICS"
+```
+
+第二条命令把原实现的 `report_pulse_width` 与**原实现及重新打开同一 DCP 后**两份 `report_timing_summary` 内嵌的代表行逐字段核对，包括分析角、库引脚、参考引脚、要求、实际值、余量、位置和端点。周期、波形和完整的源引脚列表对照 `report_clocks`；各时钟的最差值、总负余量和失败数与对应的时钟分组对照，端点数与全局表相加核对。最小周期和高/低脉宽用实际值减要求；最大周期、最大偏斜则反过来。合法的负余量和失败端点照实输出，**命令成功表示报告相符，不表示时序通过**。独立的 `report_pulse_width` 未重新执行；如果重新打开 DCP 后打印了并列最差的另一个引脚，严格对照会停下来要求审阅两份原件，不自动放行。

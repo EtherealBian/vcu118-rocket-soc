@@ -1,0 +1,405 @@
+{
+  "scope": "Historical controls only; no four-wide routed or hardware result.",
+  "controls": {
+    "split5h-impl-a": {
+      "post_route_sha256": "f2c0ca03e7078c9b8b81853733d4bd033e0c80ed83da095e7e6932a5d9791f13",
+      "reports_sha256": {
+        "full-timing.rpt": "92f6928ce9a3e7b865f2df92fae10c23b68f034766d557b061f38326a2d378cb",
+        "routed-clocks.rpt": "2b135964b838898b80065e8243824b82ab66cf71df5d952a00d0b3a1eeeaa1b5",
+        "pulse-width.rpt": "6ea6d7b6fcb2313538f45b833b366fc85123ed4de803b8ca7039aef841038270"
+      },
+      "wpws_ns": "0.143",
+      "tpws_ns": "0.000",
+      "failing": 0,
+      "endpoints": 51152,
+      "clocks": {
+        "JTCK": {
+          "period_ns": "100.000",
+          "source_count": 1,
+          "representative_checks": 3,
+          "representative_min_ns": "48.562",
+          "representative_min_checks": [
+            "Low Pulse Width",
+            "High Pulse Width"
+          ],
+          "wpws_ns": "48.562",
+          "tpws_ns": "0.000",
+          "failing": 0,
+          "endpoints": 289
+        },
+        "clk_out1_harnessSysPLL": {
+          "period_ns": "10.000",
+          "source_count": 1,
+          "representative_checks": 3,
+          "representative_min_ns": "3.562",
+          "representative_min_checks": [
+            "Low Pulse Width",
+            "High Pulse Width"
+          ],
+          "wpws_ns": "3.562",
+          "tpws_ns": "0.000",
+          "failing": 0,
+          "endpoints": 27212
+        },
+        "dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_N_EXT_BSCAN.bscan_inst/SERIES7_BSCAN.bscan_inst/INTERNAL_TCK": {
+          "period_ns": "50.000",
+          "source_count": 1,
+          "representative_checks": 3,
+          "representative_min_ns": "24.468",
+          "representative_min_checks": [
+            "Low Pulse Width",
+            "High Pulse Width"
+          ],
+          "wpws_ns": "24.468",
+          "tpws_ns": "0.000",
+          "failing": 0,
+          "endpoints": 479
+        },
+        "mmcm_clkout0": {
+          "period_ns": "5.000",
+          "source_count": 1,
+          "representative_checks": 4,
+          "representative_min_ns": "0.750",
+          "representative_min_checks": [
+            "Low Pulse Width",
+            "High Pulse Width"
+          ],
+          "wpws_ns": "0.750",
+          "tpws_ns": "0.000",
+          "failing": 0,
+          "endpoints": 20729
+        },
+        "mmcm_clkout5": {
+          "period_ns": "20.000",
+          "source_count": 1,
+          "representative_checks": 3,
+          "representative_min_ns": "9.468",
+          "representative_min_checks": [
+            "Low Pulse Width",
+            "High Pulse Width"
+          ],
+          "wpws_ns": "9.468",
+          "tpws_ns": "0.000",
+          "failing": 0,
+          "endpoints": 570
+        },
+        "mmcm_clkout6": {
+          "period_ns": "10.000",
+          "source_count": 1,
+          "representative_checks": 4,
+          "representative_min_ns": "1.494",
+          "representative_min_checks": [
+            "Max Skew"
+          ],
+          "wpws_ns": "1.494",
+          "tpws_ns": "0.000",
+          "failing": 0,
+          "endpoints": 1722
+        },
+        "pll_clk[0]": {
+          "period_ns": "0.625",
+          "source_count": 1,
+          "representative_checks": 4,
+          "representative_min_ns": "0.143",
+          "representative_min_checks": [
+            "High Pulse Width"
+          ],
+          "wpws_ns": "0.143",
+          "tpws_ns": "0.000",
+          "failing": 0,
+          "endpoints": 9
+        },
+        "pll_clk[0]_DIV": {
+          "period_ns": "5.000",
+          "source_count": 16,
+          "representative_checks": 3,
+          "representative_min_ns": "1.300",
+          "representative_min_checks": [
+            "Low Pulse Width",
+            "High Pulse Width"
+          ],
+          "wpws_ns": "1.300",
+          "tpws_ns": "0.000",
+          "failing": 0,
+          "endpoints": 35
+        },
+        "pll_clk[1]": {
+          "period_ns": "0.625",
+          "source_count": 1,
+          "representative_checks": 4,
+          "representative_min_ns": "0.143",
+          "representative_min_checks": [
+            "High Pulse Width"
+          ],
+          "wpws_ns": "0.143",
+          "tpws_ns": "0.000",
+          "failing": 0,
+          "endpoints": 7
+        },
+        "pll_clk[1]_DIV": {
+          "period_ns": "5.000",
+          "source_count": 12,
+          "representative_checks": 3,
+          "representative_min_ns": "1.300",
+          "representative_min_checks": [
+            "Low Pulse Width",
+            "High Pulse Width"
+          ],
+          "wpws_ns": "1.300",
+          "tpws_ns": "0.000",
+          "failing": 0,
+          "endpoints": 30
+        },
+        "pll_clk[2]": {
+          "period_ns": "0.625",
+          "source_count": 1,
+          "representative_checks": 4,
+          "representative_min_ns": "0.144",
+          "representative_min_checks": [
+            "Low Pulse Width",
+            "High Pulse Width"
+          ],
+          "wpws_ns": "0.143",
+          "tpws_ns": "0.000",
+          "failing": 0,
+          "endpoints": 9
+        },
+        "pll_clk[2]_DIV": {
+          "period_ns": "5.000",
+          "source_count": 16,
+          "representative_checks": 3,
+          "representative_min_ns": "1.300",
+          "representative_min_checks": [
+            "Low Pulse Width",
+            "High Pulse Width"
+          ],
+          "wpws_ns": "1.300",
+          "tpws_ns": "0.000",
+          "failing": 0,
+          "endpoints": 40
+        },
+        "sys_clock": {
+          "period_ns": "4.000",
+          "source_count": 1,
+          "representative_checks": 4,
+          "representative_min_ns": "0.600",
+          "representative_min_checks": [
+            "Low Pulse Width",
+            "High Pulse Width"
+          ],
+          "wpws_ns": "0.600",
+          "tpws_ns": "0.000",
+          "failing": 0,
+          "endpoints": 21
+        }
+      }
+    },
+    "perf-boom5i-impl-a": {
+      "post_route_sha256": "302d476ef334cbe683dbdba3221effc2c6824b6179002fa2882cf0ea9f680230",
+      "reports_sha256": {
+        "full-timing.rpt": "103a133b1e338734cbd4d4fae87cf56708fd39b83c83666dd0eefa46c0c2ca60",
+        "routed-clocks.rpt": "b5291a88cbbdfc2dc7b934ec97def9ec17ca683061e96f96e5a8cbbe3721486d",
+        "pulse-width.rpt": "d25eee44bd08e658bbc31fd526b93bbe3ba70f1d5715e264d5de98545a057ca6"
+      },
+      "wpws_ns": "0.143",
+      "tpws_ns": "0.000",
+      "failing": 0,
+      "endpoints": 102702,
+      "clocks": {
+        "JTCK": {
+          "period_ns": "100.000",
+          "source_count": 1,
+          "representative_checks": 3,
+          "representative_min_ns": "48.562",
+          "representative_min_checks": [
+            "Low Pulse Width",
+            "High Pulse Width"
+          ],
+          "wpws_ns": "48.562",
+          "tpws_ns": "0.000",
+          "failing": 0,
+          "endpoints": 289
+        },
+        "clk_out1_harnessSysPLL": {
+          "period_ns": "10.000",
+          "source_count": 1,
+          "representative_checks": 3,
+          "representative_min_ns": "3.562",
+          "representative_min_checks": [
+            "Low Pulse Width",
+            "High Pulse Width"
+          ],
+          "wpws_ns": "3.562",
+          "tpws_ns": "0.000",
+          "failing": 0,
+          "endpoints": 78752
+        },
+        "dbg_hub/inst/BSCANID.u_xsdbm_id/SWITCH_N_EXT_BSCAN.bscan_inst/SERIES7_BSCAN.bscan_inst/INTERNAL_TCK": {
+          "period_ns": "50.000",
+          "source_count": 1,
+          "representative_checks": 3,
+          "representative_min_ns": "24.468",
+          "representative_min_checks": [
+            "Low Pulse Width",
+            "High Pulse Width"
+          ],
+          "wpws_ns": "24.468",
+          "tpws_ns": "0.000",
+          "failing": 0,
+          "endpoints": 479
+        },
+        "mmcm_clkout0": {
+          "period_ns": "5.000",
+          "source_count": 1,
+          "representative_checks": 4,
+          "representative_min_ns": "0.750",
+          "representative_min_checks": [
+            "Low Pulse Width",
+            "High Pulse Width"
+          ],
+          "wpws_ns": "0.750",
+          "tpws_ns": "0.000",
+          "failing": 0,
+          "endpoints": 20739
+        },
+        "mmcm_clkout5": {
+          "period_ns": "20.000",
+          "source_count": 1,
+          "representative_checks": 3,
+          "representative_min_ns": "9.468",
+          "representative_min_checks": [
+            "Low Pulse Width",
+            "High Pulse Width"
+          ],
+          "wpws_ns": "9.468",
+          "tpws_ns": "0.000",
+          "failing": 0,
+          "endpoints": 570
+        },
+        "mmcm_clkout6": {
+          "period_ns": "10.000",
+          "source_count": 1,
+          "representative_checks": 4,
+          "representative_min_ns": "1.461",
+          "representative_min_checks": [
+            "Max Skew"
+          ],
+          "wpws_ns": "1.461",
+          "tpws_ns": "0.000",
+          "failing": 0,
+          "endpoints": 1722
+        },
+        "pll_clk[0]": {
+          "period_ns": "0.625",
+          "source_count": 1,
+          "representative_checks": 4,
+          "representative_min_ns": "0.143",
+          "representative_min_checks": [
+            "Low Pulse Width"
+          ],
+          "wpws_ns": "0.143",
+          "tpws_ns": "0.000",
+          "failing": 0,
+          "endpoints": 9
+        },
+        "pll_clk[0]_DIV": {
+          "period_ns": "5.000",
+          "source_count": 16,
+          "representative_checks": 3,
+          "representative_min_ns": "1.300",
+          "representative_min_checks": [
+            "Low Pulse Width",
+            "High Pulse Width"
+          ],
+          "wpws_ns": "1.300",
+          "tpws_ns": "0.000",
+          "failing": 0,
+          "endpoints": 35
+        },
+        "pll_clk[1]": {
+          "period_ns": "0.625",
+          "source_count": 1,
+          "representative_checks": 4,
+          "representative_min_ns": "0.143",
+          "representative_min_checks": [
+            "Low Pulse Width"
+          ],
+          "wpws_ns": "0.143",
+          "tpws_ns": "0.000",
+          "failing": 0,
+          "endpoints": 7
+        },
+        "pll_clk[1]_DIV": {
+          "period_ns": "5.000",
+          "source_count": 12,
+          "representative_checks": 3,
+          "representative_min_ns": "1.300",
+          "representative_min_checks": [
+            "Low Pulse Width",
+            "High Pulse Width"
+          ],
+          "wpws_ns": "1.300",
+          "tpws_ns": "0.000",
+          "failing": 0,
+          "endpoints": 30
+        },
+        "pll_clk[2]": {
+          "period_ns": "0.625",
+          "source_count": 1,
+          "representative_checks": 4,
+          "representative_min_ns": "0.143",
+          "representative_min_checks": [
+            "Low Pulse Width"
+          ],
+          "wpws_ns": "0.143",
+          "tpws_ns": "0.000",
+          "failing": 0,
+          "endpoints": 9
+        },
+        "pll_clk[2]_DIV": {
+          "period_ns": "5.000",
+          "source_count": 16,
+          "representative_checks": 3,
+          "representative_min_ns": "1.300",
+          "representative_min_checks": [
+            "Low Pulse Width",
+            "High Pulse Width"
+          ],
+          "wpws_ns": "1.300",
+          "tpws_ns": "0.000",
+          "failing": 0,
+          "endpoints": 40
+        },
+        "sys_clock": {
+          "period_ns": "4.000",
+          "source_count": 1,
+          "representative_checks": 4,
+          "representative_min_ns": "0.600",
+          "representative_min_checks": [
+            "Low Pulse Width",
+            "High Pulse Width"
+          ],
+          "wpws_ns": "0.600",
+          "tpws_ns": "0.000",
+          "failing": 0,
+          "endpoints": 21
+        }
+      }
+    }
+  },
+  "control_comparison": {
+    "representatives": 45,
+    "different_rows": 15,
+    "different_rows_by_field": {
+      "Check Type": 0,
+      "Corner": 0,
+      "Lib Pin": 0,
+      "Reference Pin": 0,
+      "Required(ns)": 0,
+      "Actual(ns)": 9,
+      "Slack(ns)": 9,
+      "Location": 7,
+      "Pin": 1
+    }
+  }
+}
