@@ -1,0 +1,26 @@
+{
+  "scope": "Stock four-wide ChipTop RTL, from reset through two interactive shell replies. No benchmark execution attested.",
+  "online_cpu": 0,
+  "hart": 0,
+  "uarch": "ucb-bar,boom0",
+  "mmu": "sv39",
+  "dt_properties_checked": 3,
+  "ram_check_bytes": 16777216,
+  "oscheck_rounds": 64,
+  "shell_tx_ticks": [
+    233881387,
+    236184123
+  ],
+  "shell_reply_ticks": [
+    236153721,
+    257812222
+  ],
+  "uart_prefix_bytes": 7702,
+  "uart_prefix_sha256": "8d90a7cf06253c8239cd6dc329a006e352140539ecf376153bf79b40755fec9d",
+  "events_prefix_bytes": 3186,
+  "events_prefix_sha256": "8d5f9735484da098e8f8ab778bc510ac5b3498a955ac9b36819ce5d28ffee008",
+  "rejected_controls": 6,
+  "model_sha256": "ebee9a8e8925b65ec77890962b7254ff54c5c5a06ae2af90db38d837cd7c576b",
+  "stock_kit_sha256": "890bca3009ed260c81112d72ebcf6c985453568329aead9e9515dcc109d0e417",
+  "inputs_sha256": "45fe9bb96ae4dc0e3df5ee251692074c260e9abfc6cd047bbbc1d7f75b10459e"
+}

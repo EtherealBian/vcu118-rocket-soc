@@ -1,0 +1,14 @@
+{
+  "scope": "Two recovery ChipTop resets, behavioral external TL RAM; ROM only. No FPGA or Linux benchmark.",
+  "physical_kit_sha256": "ce0ef1171c7b0077282602c5c97230d03850b71c350c6c9ddcdf0b7ebcb5a456",
+  "fault_sha256": {
+    "crc.events": "f10e60c6028e07ee37c2fb69986da96d6615179780d729a758caf4528935f410",
+    "crc.uart": "03c77fdbb9a03bf9b97c49b3143cf982711c7325a5b133cdd8d12fbd5c5e7faa"
+  },
+  "bad_crc_stop_tick": 883890,
+  "valid_handoff_tick": 838329,
+  "valid_uart_prefix_bytes": 31,
+  "valid_uart_prefix_sha256": "1c7d29d40187b19708fdf8b7868363afee6af254658f2ce8cfc8ae98957cf6de",
+  "valid_events_prefix_bytes": 94,
+  "valid_events_prefix_sha256": "0e37af2f53391a216f2a8ebc600f5cea8f1ac2fcf53d2afafdf72eabbc3cb170"
+}
