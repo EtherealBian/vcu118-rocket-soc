@@ -5,6 +5,8 @@ from hashlib import sha256
 from pathlib import Path, PurePosixPath
 import re
 import runpy
+import subprocess
+import sys
 
 HERE = Path(__file__).resolve().parent
 MERGE = runpy.run_path(str(HERE/'prepare-halt-merge.py'))
@@ -33,10 +35,30 @@ def read(kit):
     return files
 
 
-def derive(stock, dest):
+def validate_clock_pair(control, stock):
+    if control is None: raise ValueError('175 MHz requires the 100 MHz stock Mega control')
+    delta = runpy.run_path(str(HERE/'check-wide-clock-delta.py'))['check']
+    delta(control, stock, 'Mega')
+    for kit,mhz,stem in ((control,100,'PerfMegaBoom'),(stock,175,'Perf175MegaBoom')):
+        files = read(kit)
+        if files['config.scala']!=(HERE.parent/'rtl/perf'/(stem+'.scala')).read_bytes():
+            raise ValueError('incorrect reference clock or family')
+        base = 'chipyard.fpga.vcu118.VCU118FPGATestHarness.'+stem+'VCU118Config'
+        gen = HERE.parent/'third_party/chipyard/fpga/generated-src'/base
+        # Check the *same* ROM+DT against the generated TLROM, the ELF handoff,
+        # RTC divider and generated PLL. A filename or clock-only diff is insufficient.
+        dts = gen/(base+'.dts'); gd = gen/'gen-collateral'
+        if (files['board.dts']!=dts.read_bytes() or any(files['rtl/'+n]!=(gd/n).read_bytes() for n in ('TLROM.sv','DigitalTop.sv'))):
+            raise ValueError('sealed boot contract differs from generated input')
+        subprocess.run([sys.executable,str(HERE/'check-board-dt.py'),str(dts),'--rom',str(kit/'rom/sdboot.elf'),'--mhz',str(mhz)],check=True,stdout=subprocess.DEVNULL)
+
+
+def derive(stock, dest, control100=None):
     if dest.exists(): raise ValueError('fresh output directory required')
     files = read(stock)
-    if files['config.scala'] != (HERE.parent/'rtl/perf/PerfMegaBoom.scala').read_bytes():
+    if files['config.scala'] == (HERE.parent/'rtl/perf/Perf175MegaBoom.scala').read_bytes():
+        validate_clock_pair(control100, stock)
+    elif control100 is not None or files['config.scala'] != (HERE.parent/'rtl/perf/PerfMegaBoom.scala').read_bytes():
         raise ValueError('expected a stock four-wide overlay')
     MERGE['require_graph'](MERGE['MEGA_PINS'], lambda name: sha256(files['rtl/'+name+'.sv']).hexdigest())
     leaf = 'rtl/'+SYNC['NAME']; marked = SYNC['annotated'](files[leaf]); dest.mkdir()
@@ -58,4 +80,4 @@ def derive(stock, dest):
 
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__); p.add_argument('stock',type=Path); p.add_argument('dest',type=Path)
-    a=p.parse_args(); derive(a.stock.resolve(strict=True),a.dest.resolve())
+    p.add_argument('--control100',type=Path); a=p.parse_args(); derive(a.stock.resolve(strict=True),a.dest.resolve(),a.control100)

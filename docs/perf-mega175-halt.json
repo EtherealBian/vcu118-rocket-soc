@@ -1,0 +1,24 @@
+{
+  "scope": "Four-wide BOOM debug module only, functional RTL with asynchronous clock phase cases. Not CDC signoff, a routed clock, Linux, or a CoreMark score.",
+  "decoded_lanes": 4,
+  "rob_entries": 128,
+  "clock_cases": 9,
+  "transactions_per_case": 16,
+  "registered_delay_in_debug_edges": 2,
+  "observations": 110205,
+  "observably_delayed": 536,
+  "original": {
+    "kit_sha256": "720ae4fecc47ff4ac22401567c3045a6e809a2fddee036d104eaf1eb48e9b9d9",
+    "fixture_sha256": "9f7a4dfa234f55ae62a5e7d33dc4f0dcba15ad1a3e2bde26a46b851608b3d3dc",
+    "simulation_sha256": "6ed72b050a0859db76675dda0f3aebce873a20c6596b275a1ef1b96887dae696",
+    "debug_rtl_sha256": "b1d4e00d3762225acf0462728caef91f0bebff61e74a8e3774301a27e88f2aab",
+    "trace_sha256": "6d4c6b06b6a6ef064a0a460b667bdf87f403dfd3f51b4936c1f42f3084e6d853"
+  },
+  "candidate": {
+    "kit_sha256": "890bca3009ed260c81112d72ebcf6c985453568329aead9e9515dcc109d0e417",
+    "fixture_sha256": "9f7a4dfa234f55ae62a5e7d33dc4f0dcba15ad1a3e2bde26a46b851608b3d3dc",
+    "simulation_sha256": "24c309434c296e5ddba8da384695f97eecf9ec9282e1ff06f18df1787273047c",
+    "debug_rtl_sha256": "9dc83bb41b586725916910c09c25fa1679dbdafbe7384da117a6919aab5da581",
+    "trace_sha256": "bd301ed2ad049ddd98b9c48f3e071506a5a7284bf8072b7e2c6dc3b244dc8e2b"
+  }
+}

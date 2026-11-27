@@ -1,0 +1,40 @@
+{
+  "scope": "Worst same-clock setup arrival to each selected register D on original three-wide post-opt design only. Unplaced estimates, not the retimed candidate, overall WNS, routing, Fmax or a score.",
+  "requested_period_ns": "5.714",
+  "groups": {
+    "s2_tag_match_way_0_reg": {
+      "endpoints": 8,
+      "levels_range": [
+        6,
+        6
+      ],
+      "max_data_ns": "1.447",
+      "min_slack_ns": "4.057"
+    },
+    "s2_replaced_way_en_REG_reg": {
+      "endpoints": 3,
+      "levels_range": [
+        0,
+        0
+      ],
+      "max_data_ns": "0.276",
+      "min_slack_ns": "5.228"
+    }
+  },
+  "inputs_sha256": {
+    "paths.tsv": "5abbbe08cfe58437eac971a7fbac201b0d748a9828a35e5a3a5f9cf5b02da3db",
+    "s2_tag_match_way_0_reg-0.rpt": "86be65ddda1e876b2aca5936902449e0c84589bc7017ee8783a36bb3ee525a53",
+    "s2_tag_match_way_0_reg-1.rpt": "9253d44277721c9625929fa800232422d6c7ccb2757182f496dcb335f1457cc2",
+    "s2_tag_match_way_0_reg-2.rpt": "85181cfb17c850a0b865d0d7ae80f60359077a9ac7a002c40128b70ba6b0f50f",
+    "s2_tag_match_way_0_reg-3.rpt": "476ef6eea16a47a36c3fff330fd5f1c9554a821f7a373cdf9626ee2e12e33b89",
+    "s2_tag_match_way_0_reg-4.rpt": "777cc926d0057cd60d30964e5bd757bbd5d6d41fadb7f76eafda3c1735b21843",
+    "s2_tag_match_way_0_reg-5.rpt": "eff7047e6fab4aab46eb0f9811b7a9e5f106a382934f15205787c6768a72a246",
+    "s2_tag_match_way_0_reg-6.rpt": "ed8b65d139d323e1c748650e94cf00f5d7b1fbe202a989152d27ff2d4fe36ef4",
+    "s2_tag_match_way_0_reg-7.rpt": "281a88c76f5a3ad4a570b9bb4711b6d1cf03ce7f69da67e8bef7c30b8a4849e6",
+    "s2_replaced_way_en_REG_reg-0.rpt": "c108500474805ac2c7cfc6d0497cc0328aebb28613591f05cb4c8e1654967d7f",
+    "s2_replaced_way_en_REG_reg-1.rpt": "cc4f254add80d93d0aa107c787fe8333710eb09dea0ef82e04c1115a2729ca9c",
+    "s2_replaced_way_en_REG_reg-2.rpt": "ba5f8400751f8827c5c0ed1bd434135fa54f4c8fe24ba9d41b3ba5cd3196dedb"
+  },
+  "checkpoint_sha256": "592e127cae12ede785e506b3d96eab099ea4918f4cde3aeb88241832a7c67a20",
+  "vivado_log_sha256": "79ebdfe3b8711366a149d6e1290ae5597f98cf695c7c0c3237474de3750a7ae3"
+}

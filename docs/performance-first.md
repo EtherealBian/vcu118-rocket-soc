@@ -162,3 +162,15 @@ ChipTop 引脚仿真不包含 VCU118 的外层串口接线。用 Vivado 2024.2 x
 复现：以 `bash scripts/build-cpu-window.sh <新目录> control` 构建 GCC 13.3 诊断程序，另以 `VCU_WINDOW_CC=15 bash scripts/build-cpu-window.sh <另一新目录> o3-lto` 构建 GCC 15.1 程序。在三个硬件/程序组合分别执行 `run-cpu-window.sh`，用 `screen-core-windows.py` 比同一 ELF、`compare-window-software.py` 比同一硬件。四路时钟对照用 `bash scripts/generate-mega175.sh <新的175MHz模型包> <封存的100MHz四路模型包>`，再用 `python3 scripts/check-wide-clock-delta.py <100MHz包> <175MHz包> --family Mega` 复核。
 
 四路 175 MHz 原版模型还单独测试了真实 ROM 的 UART 引脚。主机没有预装模拟 RAM：64 字节正确帧在第 **1,491,491** 个模拟周期收到交接标志和小程序回复 `K`；20 字节坏 CRC 帧在第 **823,132** 个模拟周期确认停机提示及静默窗口。两项均检查 20 个比特时间的空闲。首字节 9 个边沿间距均符合每位 **1,519 拍**；用 100 MHz 对应的 868 拍解码被负控拒绝。[原版串口引脚测试与输入哈希](perf-mega175-rom-link.json)。复现：`bash scripts/test-clocked-rom-link.sh <175MHz四路包> <匹配的模型对象目录> 175 single <新输出目录>`，再运行 `python3 scripts/review-clocked-rom-link.py <输出目录> <同一模型包> 175 single`。这些测试不含板级 PLL、DDR PHY 或 Linux，也不能替代修订版自己的串口测试。
+
+### 选择逻辑前移：原版的上一拍还有多少余量？
+
+在**原版三路**同一个 175 MHz `post_opt` 检查点，逐位查了选择器两个输入端的最差同域 setup 路径。8 个标签掩码位的 D 端都是 6 级，数据路径估算 1.447 ns、最小余量 **+4.057 ns**；3 个替换索引位的 D 端没有组合逻辑级，数据路径估算 0.276 ns、最小余量 **+5.228 ns**。这与寄存器后方到发射队列的负余量形成对照，支持**试验**把选择器前移。不能把两侧余量相加；新增逻辑与布线会改变路径，其他扇出也可能成为瓶颈。这不是修订版时序或新的工作频率。[检查点和 11 个端点的复核摘要](perf175-mshr-way-inputs.json)。
+
+复现：`vivado -mode batch -log <日志> -source scripts/measure-mshr-way-inputs.tcl -tclargs <原版post_opt.dcp绝对路径> <新报告目录绝对路径>`，再执行 `python scripts/review-mshr-way-inputs.py <报告目录> <同一DCP> <日志>`。复核将每份报告的源/目的引脚、时钟、路径类型、级数、延时和余量与 Vivado 的路径对象表逐项配对，并核对实际运行的脚本和检查点路径。
+
+### 四路修订版：调试中断跨时钟先做功能对照
+
+使用各自封存的 **175 MHz 请求**四路模型，在原版和两拍同步修订版的真实调试模块上分别模拟 9 组异步时钟关系，每组 16 笔事务。共 110,205 次观测，536 次可以区分修订后的两拍；从原版重新派生修订版、重读两份输入与轨迹，摘要一致。[调试接口复核](perf-mega175-halt.json)。这只验证数字功能；既不是物理 CDC 签核，也不表示整核串口、Linux 或板上性能通过。
+
+复现：`python3 scripts/derive-mega-halt-model.py <175MHz原版包> <新修订包> --control100 <100MHz四路包>`；以两个包分别设置 `VCU_SIM_KIT` 并运行 `bash scripts/test-debug-halt-sources.sh <新输出>`，最后用 `python3 scripts/review-mega-halt.py <原版包> <修订包> <原版输出> <修订输出> --control100 <100MHz四路包>` 复核。

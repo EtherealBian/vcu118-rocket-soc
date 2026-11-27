@@ -17,7 +17,7 @@ fixture = ROOT/'tests/debug_halt_sources.cpp'
 
 def digest(f): return sha256(f.read_bytes()).hexdigest()
 
-def review(original, modified, old_run, new_run):
+def review(original, modified, old_run, new_run, control100=None):
     derive = runpy.run_path(str(HERE/'derive-mega-halt-model.py'))['derive']
     verify = runpy.run_path(str(HERE/'check-model-kit.py'))['check']
     compare = runpy.run_path(str(HERE/'compare-halt-traces.py'))['compare']
@@ -25,7 +25,7 @@ def review(original, modified, old_run, new_run):
     records = []
     with tempfile.TemporaryDirectory() as tmp:
         tmp = Path(tmp); clone = tmp/'re-derived'
-        with redirect_stdout(io.StringIO()): derive(original, clone)
+        with redirect_stdout(io.StringIO()): derive(original, clone, control100)
         if (clone/'CANDIDATE.sha256').read_bytes() != (modified/'CANDIDATE.sha256').read_bytes():
             raise ValueError('cannot re-derive candidate from stock')
         for kit, out in ((original,old_run),(modified,new_run)):
@@ -60,4 +60,5 @@ def review(original, modified, old_run, new_run):
 if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
     for key in ('original','modified','old_run','new_run'): p.add_argument(key,type=Path)
-    a=p.parse_args();print(json.dumps(review(*(q.resolve(strict=True) for q in vars(a).values())),indent=2))
+    p.add_argument('--control100',type=Path); a=p.parse_args()
+    print(json.dumps(review(*(q.resolve(strict=True) for q in (a.original,a.modified,a.old_run,a.new_run)),a.control100),indent=2))
