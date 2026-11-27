@@ -1,0 +1,281 @@
+{
+  "scope": "One-edge induction and combinational enabled read laws for the actual sealed RAM leaves including flat adapters, all 128 addresses and whole words. Two-state defined data after first write. No reset semantics or claim for unwritten/disabled/X reads, optimized netlists, timing or CPU performance.",
+  "stock_seal": "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+  "candidate_seal": "386d2848c9b143c1c4887b179c365c2257fce6eb33ae3e8f46ca71809dc3841b",
+  "yosys": "Yosys 0.9 (git sha1 1979e0b)",
+  "z3": "Z3 version 4.8.7 - 64 bit",
+  "yosys_sha256": "f58d1dfcbc9b48a81357283e93b53e4c78415f6d28f227f0db34a79f316e6a64",
+  "z3_sha256": "1d8070b851b2938080c21a0a16e99ced941d8a80025ddec3d3550f2b7e47f8e3",
+  "flat_writer_to_parent_port": {
+    "64": [
+      5,
+      4,
+      3,
+      2,
+      1,
+      0
+    ],
+    "65": [
+      3,
+      2,
+      1,
+      0
+    ]
+  },
+  "cases": {
+    "64-ref": {
+      "laws": [
+        "hold",
+        "write0",
+        "write1",
+        "write2",
+        "write3",
+        "write4",
+        "write5",
+        "read0",
+        "read1",
+        "read2",
+        "read3",
+        "read4",
+        "read5",
+        "read6",
+        "read7",
+        "read8",
+        "read9",
+        "read10",
+        "read11"
+      ],
+      "antecedents_satisfiable": 19,
+      "counterexamples": 0,
+      "proved": 19,
+      "smt2_sha256": "dc9292f485aceb6922c6caa20f2ea900c2b3b52b09bf9474701ca5381eaefccc",
+      "answer_sha256": "87d61babb406e95e74df9bd66c800af1ea2f1743d6842150d6c67bc6495fbc6a"
+    },
+    "64-alt": {
+      "laws": [
+        "hold",
+        "write0",
+        "write1",
+        "write2",
+        "write3",
+        "write4",
+        "write5",
+        "read0_bank0",
+        "read0_bank1",
+        "read0_bank2",
+        "read0_bank3",
+        "read0_bank4",
+        "read0_bank5",
+        "read1_bank0",
+        "read1_bank1",
+        "read1_bank2",
+        "read1_bank3",
+        "read1_bank4",
+        "read1_bank5",
+        "read2_bank0",
+        "read2_bank1",
+        "read2_bank2",
+        "read2_bank3",
+        "read2_bank4",
+        "read2_bank5",
+        "read3_bank0",
+        "read3_bank1",
+        "read3_bank2",
+        "read3_bank3",
+        "read3_bank4",
+        "read3_bank5",
+        "read4_bank0",
+        "read4_bank1",
+        "read4_bank2",
+        "read4_bank3",
+        "read4_bank4",
+        "read4_bank5",
+        "read5_bank0",
+        "read5_bank1",
+        "read5_bank2",
+        "read5_bank3",
+        "read5_bank4",
+        "read5_bank5",
+        "read6_bank0",
+        "read6_bank1",
+        "read6_bank2",
+        "read6_bank3",
+        "read6_bank4",
+        "read6_bank5",
+        "read7_bank0",
+        "read7_bank1",
+        "read7_bank2",
+        "read7_bank3",
+        "read7_bank4",
+        "read7_bank5",
+        "read8_bank0",
+        "read8_bank1",
+        "read8_bank2",
+        "read8_bank3",
+        "read8_bank4",
+        "read8_bank5",
+        "read9_bank0",
+        "read9_bank1",
+        "read9_bank2",
+        "read9_bank3",
+        "read9_bank4",
+        "read9_bank5",
+        "read10_bank0",
+        "read10_bank1",
+        "read10_bank2",
+        "read10_bank3",
+        "read10_bank4",
+        "read10_bank5",
+        "read11_bank0",
+        "read11_bank1",
+        "read11_bank2",
+        "read11_bank3",
+        "read11_bank4",
+        "read11_bank5"
+      ],
+      "antecedents_satisfiable": 79,
+      "counterexamples": 0,
+      "proved": 79,
+      "smt2_sha256": "9bfb4b004bf664f4bf0dcf52d00f9607451ac0e08afb25ae8256f7a192bf9a57",
+      "answer_sha256": "227e77ce1988ebaef003142b0db3acb8bd74ab378a38e766eee0afece664c747"
+    },
+    "64-wrong_priority": {
+      "laws": [
+        "write5"
+      ],
+      "antecedents_satisfiable": 1,
+      "counterexamples": 1,
+      "proved": 0,
+      "smt2_sha256": "a40f7a9fc7eb1680437748a75f3f774b823bfc5889492821d541e13b913ee761",
+      "answer_sha256": "dc9b1f502871b6830ce267082ec6eac2babc15a6062049e705764474ad6adb04"
+    },
+    "64-wrong_bank_data": {
+      "laws": [
+        "write5"
+      ],
+      "antecedents_satisfiable": 1,
+      "counterexamples": 1,
+      "proved": 0,
+      "smt2_sha256": "25b92ca9a8fb35e49a7b58e4ddfcd91d809f96435b7779490a6d0412e743cf07",
+      "answer_sha256": "dc9b1f502871b6830ce267082ec6eac2babc15a6062049e705764474ad6adb04"
+    },
+    "64-wrong_read_lane": {
+      "laws": [
+        "read0_bank0"
+      ],
+      "antecedents_satisfiable": 1,
+      "counterexamples": 1,
+      "proved": 0,
+      "smt2_sha256": "9bbf201c4a9c9df5b57b7f6feeb32b427f43d83609bf392f95fb2bfc1606279c",
+      "answer_sha256": "2eb9b1fd0f18edf6b4d335866b2a51186c869fbab06f54a4626dd8f68a682fe5"
+    },
+    "64-stray_write": {
+      "laws": [
+        "hold"
+      ],
+      "antecedents_satisfiable": 1,
+      "counterexamples": 1,
+      "proved": 0,
+      "smt2_sha256": "46da9876211c052ff2bd63a6a08af08d41aecb9aad23eb7f669d89cdbc9121ce",
+      "answer_sha256": "743b2bff69da5376c8a463ed0e45aef1923359c797a65c37f773aabee3e68036"
+    },
+    "65-ref": {
+      "laws": [
+        "hold",
+        "write0",
+        "write1",
+        "write2",
+        "write3",
+        "read0",
+        "read1",
+        "read2",
+        "read3",
+        "read4",
+        "read5"
+      ],
+      "antecedents_satisfiable": 11,
+      "counterexamples": 0,
+      "proved": 11,
+      "smt2_sha256": "33e77fcd338b121bee488101a7a155b2c788f18c26b6afd39c2f6045d4833669",
+      "answer_sha256": "ebc091286399878ede70274a3b60a3b6da8adb744d8025bd448a8f004db59796"
+    },
+    "65-alt": {
+      "laws": [
+        "hold",
+        "write0",
+        "write1",
+        "write2",
+        "write3",
+        "read0_bank0",
+        "read0_bank1",
+        "read0_bank2",
+        "read0_bank3",
+        "read1_bank0",
+        "read1_bank1",
+        "read1_bank2",
+        "read1_bank3",
+        "read2_bank0",
+        "read2_bank1",
+        "read2_bank2",
+        "read2_bank3",
+        "read3_bank0",
+        "read3_bank1",
+        "read3_bank2",
+        "read3_bank3",
+        "read4_bank0",
+        "read4_bank1",
+        "read4_bank2",
+        "read4_bank3",
+        "read5_bank0",
+        "read5_bank1",
+        "read5_bank2",
+        "read5_bank3"
+      ],
+      "antecedents_satisfiable": 29,
+      "counterexamples": 0,
+      "proved": 29,
+      "smt2_sha256": "7615efd602ec3220a21bfc21af2371673c8248c3f2dc12bfe498b577aaf1e5f1",
+      "answer_sha256": "590c55b5222ceb5a0d5463be6236e3b089f63d85aae7507c98a5ea16848b3177"
+    },
+    "65-wrong_priority": {
+      "laws": [
+        "write3"
+      ],
+      "antecedents_satisfiable": 1,
+      "counterexamples": 1,
+      "proved": 0,
+      "smt2_sha256": "4beb8f7d6cf9cddb0d613af6bda0949c8a32d9916654f6464368df5f4baaf5fe",
+      "answer_sha256": "a8c9d0c05de318ed5c7d6bbbb8555dc604bb37ac367925f3a7178aa88ee7a5ab"
+    },
+    "65-wrong_bank_data": {
+      "laws": [
+        "write3"
+      ],
+      "antecedents_satisfiable": 1,
+      "counterexamples": 1,
+      "proved": 0,
+      "smt2_sha256": "390ccd924dda21309de24bab9c9cb2163b946fcf3b57f12a600c4a56977376b2",
+      "answer_sha256": "a8c9d0c05de318ed5c7d6bbbb8555dc604bb37ac367925f3a7178aa88ee7a5ab"
+    },
+    "65-wrong_read_lane": {
+      "laws": [
+        "read0_bank0"
+      ],
+      "antecedents_satisfiable": 1,
+      "counterexamples": 1,
+      "proved": 0,
+      "smt2_sha256": "24eac4dfbd71c3fdcceb72c3da9b23235a518790b87eaee236dec0be7e3c1013",
+      "answer_sha256": "2eb9b1fd0f18edf6b4d335866b2a51186c869fbab06f54a4626dd8f68a682fe5"
+    },
+    "65-stray_write": {
+      "laws": [
+        "hold"
+      ],
+      "antecedents_satisfiable": 1,
+      "counterexamples": 1,
+      "proved": 0,
+      "smt2_sha256": "9946569ba05fec81341088a0d15af7b11f6866d51a0ee20f260c3e96924d276f",
+      "answer_sha256": "743b2bff69da5376c8a463ed0e45aef1923359c797a65c37f773aabee3e68036"
+    }
+  }
+}
