@@ -1,0 +1,39 @@
+{
+  "scope": "Four-state behavioral test through the original BOOM parent inside a registered OOC measurement fixture. Legal writes only. No extra stages in the actual SoC; no vendor implementation, physical timing or CoreMark result.",
+  "part": "xcvu9p-flga2104-2L-e",
+  "ooc_period_ns": "5.714",
+  "stock_seal": "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+  "lvt_seal": "386d2848c9b143c1c4887b179c365c2257fce6eb33ae3e8f46ca71809dc3841b",
+  "bench_sha256": "cc4d9acdbeaf9df33c9fa9bbf5c6b32ff1ec8938dce367c7d22fd64ded9e996e",
+  "simulator": "Icarus Verilog version 10.3 (stable) ()",
+  "cases": {
+    "64-stock": {
+      "edges": 1024,
+      "checked_reads": 10728,
+      "overlapping_new_values": 4816,
+      "wrong_read_lane_rejected": true,
+      "fixture_sha256": "420475c4b18136fd166172911603a2b4767d024af7d0fef167e70e2e9f14b418"
+    },
+    "64-lvt": {
+      "edges": 1024,
+      "checked_reads": 10728,
+      "overlapping_new_values": 4816,
+      "wrong_read_lane_rejected": true,
+      "fixture_sha256": "850c6a3177caf4390cf9829d8ac42b5189c39ba4ff0081f45b7a22327a7f549f"
+    },
+    "65-stock": {
+      "edges": 1024,
+      "checked_reads": 5364,
+      "overlapping_new_values": 2371,
+      "wrong_read_lane_rejected": true,
+      "fixture_sha256": "a045865215d8bf9c237387b4f0918e358520e6647abbf2d489bc7fcab1889b1e"
+    },
+    "65-lvt": {
+      "edges": 1024,
+      "checked_reads": 5364,
+      "overlapping_new_values": 2371,
+      "wrong_read_lane_rejected": true,
+      "fixture_sha256": "2c29c1b17d7aed4a8223f788979aae1031cf6268216a2b861b472c0f5186c1ec"
+    }
+  }
+}

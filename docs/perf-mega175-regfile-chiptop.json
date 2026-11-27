@@ -1,0 +1,80 @@
+{
+  "scope": "Four-wide functional ChipTop with behavioral TL memory. Same two 8N1 frames in stock and LVT; not a proof of general CPU equivalence, FPGA timing, Linux or physical performance.",
+  "stock_physical_seal": "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+  "candidate_physical_seal": "386d2848c9b143c1c4887b179c365c2257fce6eb33ae3e8f46ca71809dc3841b",
+  "rom_dtb_sha256": "7a561da71813d499a4d396b18702c79184fed4bc08694c7b099bc8af070b000c",
+  "compiler": "13.3.0",
+  "compiler_flags": [
+    "-nostdlib",
+    "-static",
+    "-no-pie",
+    "-fno-pie",
+    "-march=rv64imafdc_zicsr",
+    "-mabi=lp64d",
+    "-mno-relax",
+    "-Wl,--build-id=none"
+  ],
+  "sources": {
+    "assembly": "f2483cd390a599f10630844c5c0f0551cc3257c5fec7103f414c4e9aa223408a",
+    "linker_script": "cef1fc84ef5bf5d41fee679462ea3fd04153013543ac6d649b0c1a4f91af773c",
+    "pin_harness": "adf047c2485e90e0fb8fda49702408dc9282cad2ba06e4b67c429cea6609ad4c"
+  },
+  "fixtures": {
+    "good": {
+      "elf_sha256": "721edda65153e9b7585279688ad7e9c0bf1009b80991b2476a3984ff20b808d2",
+      "payload_sha256": "416f9990ed16483cc5e09306f2a080b343574982300bf5980fef041ed77d3b96",
+      "frame_sha256": "a7bf69ea74d99fdefe15c77c14316e2048b431350d6a1a1cfaf1d78b42090ac3",
+      "frame_bytes": 440
+    },
+    "wrong": {
+      "elf_sha256": "802891a23134478aa83ee39e8b7d5c877441f979cdad2024ee2ef83d5dbf1c38",
+      "payload_sha256": "8c727355622e7dc5ac9d254441bff878aa89f31ae1a9a4944b7a4d0efa444b39",
+      "frame_sha256": "b500a0fa91aefd172c1626a26474fc0879098a0aca5c86b13e77ddb2cc942b10",
+      "frame_bytes": 440
+    }
+  },
+  "controlled_change": {
+    "payload_offset": 320,
+    "expected": 264,
+    "wrong_expected": 265
+  },
+  "original_rom_controls": {
+    "harts": 1,
+    "ticks_per_bit": 1519,
+    "wrong_rate_ticks_rejected": 868,
+    "valid_frame": {
+      "mode": "single",
+      "frame_bytes": 64,
+      "cycles": 1491491
+    },
+    "corrupt_frame": {
+      "mode": "crc",
+      "frame_bytes": 20,
+      "cycles": 823132
+    }
+  },
+  "models": {
+    "stock": {
+      "kit_seal": "890bca3009ed260c81112d72ebcf6c985453568329aead9e9515dcc109d0e417",
+      "model_sha256": "60c3857c3d086d3fe41d47cb5ebf724ca2bd4872f5b93b20a67351e058242a93",
+      "model_archive_sha256": "69cd3fc0369d056f38b5cd67e2123f3e33dc8d3d344fc27a4e394efac2bd0b2b",
+      "valid": {
+        "mode": "single",
+        "frame_bytes": 440,
+        "cycles": 7202911
+      },
+      "wrong_expected_value_rejected": true
+    },
+    "lvt": {
+      "kit_seal": "386d2848c9b143c1c4887b179c365c2257fce6eb33ae3e8f46ca71809dc3841b",
+      "model_sha256": "9d0709360b57e28db5c2eeef086da4d580dd03e52f936b5015267fa06a427619",
+      "model_archive_sha256": "c7ebe57d2220c1ec020cf6cf898e810a6da80339d64090f8179ddf0f9190c408",
+      "valid": {
+        "mode": "single",
+        "frame_bytes": 440,
+        "cycles": 7202911
+      },
+      "wrong_expected_value_rejected": true
+    }
+  }
+}

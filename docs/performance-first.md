@@ -288,3 +288,11 @@ Icarus 四态测试在全部地址覆盖同址写使能组合，另测独立写�
 [四态功能对照](perf-mega175-regfile-lvt.json) · [隔离映射的全部原语](perf-mega175-regfile-map.json) · [独立候选的封存和读口负控](perf-mega175-regfile-input.json)。复现：分别运行 `scripts/check-mega-regfile.py`、`scripts/map-mega-regfile.py` 和 `scripts/derive-mega-regfile.py`，各传入原版四路板级输入和不同的新目录。生成的第三方源码和工具日志不发布。
 
 对原版最终布线可运行 `scripts/inspect-mega-postroute.py <实现目录> <封存包> <实现日志> <新目录> <Vivado启动器>`。它先核原布局布线输入和同次端点，再单独开只读诊断：异常约束的覆盖/忽略对象、waiver 和被豁免的结果、SLR/层级资源、拥塞、高扇出与最多 40 条 CPU setup/hold 路径各自的物理特征。第二次打开同一 DCP，单独量十组 DDR Gray 指针的 40 个直连位及临时 5 ns 偏斜，**不改原约束**。在原版 `post_route.dcp` 出来之前，这一节只是可执行的复核方法，没有新的签核结果。
+
+### 换寄存器堆后，整核还能执行同一程序吗？
+
+原版与 LVT 备选的四路 BOOM 模型，分别通过真实 ROM 的 UART 引脚接收同一个 440 字节帧。载荷同时更新 8 个整数和 8 个双精度浮点寄存器，重复 257 轮，并检查单精度乘除和浮点异常标志。两个模型都在第 **7,202,911** 个模型周期完成正确串口响应。随后只把载荷偏移 320 的一条指令从“期望 264”改成“期望 265”，重新生成有效 CRC；两个模型的响应都被同一 UART 检查器判错。这与损坏帧 CRC、由 ROM 拒绝执行是两个不同的负控。[模型、固件和逐次记录](perf-mega175-regfile-chiptop.json)。
+
+另取原始 BOOM 整数/浮点寄存器堆父模块，保留其旁路，把两种存储各放进带寄存器的独立测量夹具。在 1,024 拍内，每个整数版本核对 10,728 次读取，其中 4,816 次地址重叠且新旧值不同；浮点分别为 5,364 和 2,371。整数父模块应返回旁路值，浮点父模块应返回旧值。交换读地址后，四种夹具都在第 130 个零基边沿、读口 0 报错。[逐夹具结果和输入哈希](perf-mega175-regfile-boundary.json)。这里的边界寄存器只属于测量夹具，未增加 CPU 流水级；测的是测试用例，不是形式等价或 FPGA 时序。
+
+复现整核实验：对两套封存输入分别用 `test-clocked-rom-link.sh` 建立原有引脚对照，再运行 `check-mega-regfile-chiptop.py <stock 或 lvt> <kit> <pins> <新目录>`，将标准输出保存为新目录内的 `result.json`（先输出到临时文件，待命令成功再移动）。用 `compare-mega-regfile-chiptop.py` 将两套 `<kit> <pins> <新目录>` 依次传入，独立重建正反载荷并比对。测量夹具用 `test-mega-regfile-boundary.py <原版 kit> <LVT kit> <新目录>`。这些结果没有产生新的 Linux 板分。
