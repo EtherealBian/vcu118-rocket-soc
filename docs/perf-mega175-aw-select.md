@@ -22,3 +22,26 @@ python3 scripts/prove-aw-slot-select.py "$BOARD_KIT" "$NEW_OUTPUT" \
   --unisim-lut6 "$XILINX_VIVADO/data/verilog/src/unisims/LUT6.v"
 cmp "$NEW_OUTPUT/result.json" docs/perf-mega175-aw-select.json
 ```
+
+## 四路布局日志里的 42 条网，更像写使能还是载荷出线？
+
+**先查载荷寄存器的 `Q` 出线和接收侧，再决定要不要改写使能。** 上面隔离映射节省的是 `CE` 上的一级逻辑。四路构建最后两轮布局优化却给出了另一条线索：对每次动作同时取**处理的网名和被移动的单元名**，在两份归档的 100 MHz 整机布线网表中逐对匹配。两个对照里，同样的 **42/42 对**都唯一匹配该寄存器的 **`Q` 输出**，没有一对匹配它的 `D` 或 `CE`。各自的 SDF 还显示，这 42 个输出各自只驱动一个引脚，首跳落在 MIG 的 AXI 异步接收侧，分布在 **34 个不同的 LUT6**。这是跨构建的同名连接对照；四路自身的最终布线还不能用它代替。
+
+| 历史整机（CPU 时钟 100 MHz） | 42 条载荷 Q → 首个接收侧 LUT6 输入 | 共享控制 → 8 个选槽 LUT5 输入 | 8 个选槽 LUT5 → 328 个载荷 CE |
+| --- | ---: | ---: | ---: |
+| 单核 Rocket | 52.0–1,020.0 ps | 444.7–491.5 ps | 238.1–1,109.2 ps |
+| 双路译码的单核 BOOM（未上板） | 50.0–235.0 ps | 204.2–292.7 ps | 150.1–822.5 ps |
+
+每条线取该 SDF `INTERCONNECT` 上升、下降两个 `MAX` 项的较大值，表内列出同组导线的最小至最大值。没有计入单元延迟、时钟或约束，不能跨列相加、比较路径余量或推算频率。
+
+两个整机网表都保留八槽，每槽 41 个具名载荷寄存器（地址 27、长度 8、ID 4、大小 2），所以这里是 328 个 `CE`，不是隔离模块中的 488 位。每槽的 LUT5 取四个写指针 Gray 位和同一个控制输入；这个控制输入实际由 AW 源端层级**之外**、上游 AXI ARW 队列中的 LUT3 驱动，输入之一来自该队列的 `full_reg/Q`。共享输出共有 17 个不同接收引脚，只有 8 个是槽译码器。不能把隔离映射看到的 LUT2 直接认作整机里的这个 LUT3，也不能认为换一个槽译码器即可移除另九个负载。
+
+**四路布线出来后如何判别：** 先按四路同一份报告核对这些 `Q` 后的第一跳、真实发起/捕获时钟和生效的例外，再查最慢路径是否经过入队 `CE` 或 `D`。如果最终关键路径不经过这组寄存器，就转到真正的慢路径。这里不新增异步时钟分组、假路径或 CDC 豁免，不改正在运行的实现。
+
+[去敏聚合与输入 SHA-256](perf-aw-routed-controls.json)。两份原始构建日志均记录了在各自运行目录生成 `post_route.dcp` 和 bitstream，随后完成 SDF 和 timesim Verilog 导出；导出文件的顶层、版本、Verilog 头部的运行目录和最终时钟报告也已核对。脚本将每个 bit 的身份绑定到对应网表、SDF、源文件清单与 kit 清单，并检查五份 AW 输入 RTL 与四路相同。用原始四路日志和两份归档复算，无需启动 Vivado：
+
+```sh
+python3 scripts/review-aw-control-fanout.py "$FOUR_WIDE_LOG" \
+  "$ROCKET_RUN" "$ROCKET_KIT" "$MEDIUM_BOOM_RUN" "$MEDIUM_BOOM_KIT" > controls.json
+cmp controls.json docs/perf-aw-routed-controls.json
+```

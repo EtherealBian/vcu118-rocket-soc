@@ -1,0 +1,78 @@
+{
+  "scope": "Historical routing controls only. Interconnect delays: larger of rising/falling MAX per wire, in ps. Not path slack, four-wide STA or a board benchmark.",
+  "four_wide_placed_physopt_body_lf_sha256": "8807881f2f58bf7eca59c44aaaaf9feac0eb88457743ff3ad5d6dc49b814c2c1",
+  "rocket": {
+    "bit_sha256": "d77b13dbf75b4773e33ba48f7b177f320572cb62ffe8a9cd930ab196edd6f520",
+    "verilog_sha256": "d204ae0d979ade29bfac7d962edfcdd66952d95628e6d4fcfa2863f30344bdeb",
+    "sdf_sha256": "3ac55cbbab5bea3b9281d590b6ee3b5a056853c57a3a3d5d408c0347a7b844f2",
+    "manifest_sha256": "e28f9b3cbadbff993bf9d0861776490e841e1b613dfc5bc81ed194b4c2db571e",
+    "source_list_sha256": "26740c5078a945d7644beb1d4da42154dadbf85dfa1b977d3b3017ce9eb15e1d",
+    "routed_cpu_clock_period_ns": "10.000",
+    "slot_count": 8,
+    "bits_per_slot": {
+      "addr": 27,
+      "id": 4,
+      "len": 8,
+      "size": 2
+    },
+    "physical_ce_pins": 328,
+    "final_decoder": "8 x LUT5",
+    "shared_driver": "1 x LUT3 in upstream AXI ARW queue hierarchy",
+    "shared_output_sink_pins": 17,
+    "shared_output_slot_decoder_inputs": 8,
+    "shared_to_decoder_wire_max_ps_range": [
+      "444.7",
+      "491.5"
+    ],
+    "decoder_to_ce_wire_max_ps_range": [
+      "238.1",
+      "1109.2"
+    ],
+    "matched_four_wide_placed_names_in_this_control": {
+      "exact_net_and_cell_pairs_on_Q": 42,
+      "first_sink_pins_in_receive_LUT6s": 42,
+      "distinct_receive_LUT6s": 34,
+      "Q_to_first_sink_wire_max_ps_range": [
+        "52.0",
+        "1020.0"
+      ]
+    }
+  },
+  "two_wide_boom_withheld_from_board": {
+    "bit_sha256": "156fa7e878ee11eb1cd961e581cf66bc5925d2ee908bbf880c5bf896a38aace3",
+    "verilog_sha256": "1c01026406c5bbb29fa9d83467c8999270617891b77e68b79f91de5da835117f",
+    "sdf_sha256": "91ccd7c0c9fc567e1b9edda55f10242fe97c9faab9566904815fae9f698b8dc4",
+    "manifest_sha256": "c4e81bec2143a33472f962cd2705ec9b3f2f8d8a7791966dbefcf27f10cf1b0c",
+    "source_list_sha256": "efb1847bf8992724041111c3e1fe12ca8dce66d93f1dcb02425331e038c9a47f",
+    "routed_cpu_clock_period_ns": "10.000",
+    "slot_count": 8,
+    "bits_per_slot": {
+      "addr": 27,
+      "id": 4,
+      "len": 8,
+      "size": 2
+    },
+    "physical_ce_pins": 328,
+    "final_decoder": "8 x LUT5",
+    "shared_driver": "1 x LUT3 in upstream AXI ARW queue hierarchy",
+    "shared_output_sink_pins": 17,
+    "shared_output_slot_decoder_inputs": 8,
+    "shared_to_decoder_wire_max_ps_range": [
+      "204.2",
+      "292.7"
+    ],
+    "decoder_to_ce_wire_max_ps_range": [
+      "150.1",
+      "822.5"
+    ],
+    "matched_four_wide_placed_names_in_this_control": {
+      "exact_net_and_cell_pairs_on_Q": 42,
+      "first_sink_pins_in_receive_LUT6s": 42,
+      "distinct_receive_LUT6s": 34,
+      "Q_to_first_sink_wire_max_ps_range": [
+        "50.0",
+        "235.0"
+      ]
+    }
+  }
+}
