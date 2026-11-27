@@ -1,0 +1,101 @@
+{
+  "scope": "Original routed-before-physopt CPU setup, 8 detailed paths only. Not a recovery-build timing result.",
+  "dcp_sha256": "d0ead1ae8498f90d6ec268dc12c7f26d745448bcf2c20b4ce681a4dd356ef581",
+  "endpoint_table_sha256": "df1c4915dbf7d2aa48b17bd232709d84b17582b38ff5b3d96b92c3a4d1b7f399",
+  "input_pins_report_sha256": "93b76287507813bceb77d8b85b48897fe0068cbd223ab30ba3fa218ef23c8d05",
+  "families": [
+    {
+      "launch": "core/brinfos_0_valid_reg/C",
+      "common_routed_hops": 22,
+      "common_route_sum_ns": "6.018",
+      "fork_driver": "lsu/state[1]_i_3__61_rewire/O",
+      "data_elapsed_at_driver_ns": "7.961",
+      "captures": [
+        {
+          "rank": 1,
+          "pin": "core/int_issue_unit/slots_8/p2_reg/D",
+          "fork_fanout": 122,
+          "fork_to_first_sink_ns": "1.640",
+          "fork_crossings": [
+            [
+              1,
+              2
+            ]
+          ],
+          "remaining_data_ns": "6.764"
+        },
+        {
+          "rank": 8,
+          "pin": "core/int_issue_unit/slots_4/p2_reg/D",
+          "fork_fanout": 122,
+          "fork_to_first_sink_ns": "1.920",
+          "fork_crossings": [
+            [
+              1,
+              2
+            ]
+          ],
+          "remaining_data_ns": "6.737"
+        }
+      ]
+    },
+    {
+      "launch": "frontend/bpd/banked_predictors_1/loop/columns_0/f3_scnt_REG_reg[35]/C",
+      "common_routed_hops": 21,
+      "common_route_sum_ns": "5.731",
+      "fork_driver": "frontend/bpd/banked_predictors_1/btb/meta_0/meta_0_ext/mem_0_0/s2_ghist_current_saw_branch_not_taken_reg_i_4/CO[5]",
+      "data_elapsed_at_driver_ns": "7.816",
+      "captures": [
+        {
+          "rank": 2,
+          "pin": "frontend/icache/dataArrayB0Way_2/dataArrayB0Way_0_ext/mem_0_0/ram_reg/ADDRARDADDR[7]",
+          "fork_fanout": 4,
+          "fork_to_first_sink_ns": "0.726",
+          "fork_crossings": [],
+          "remaining_data_ns": "6.712"
+        },
+        {
+          "rank": 3,
+          "pin": "frontend/icache/dataArrayB1Way_4/dataArrayB0Way_0_ext/mem_0_0/ram_reg/ADDRARDADDR[12]",
+          "fork_fanout": 4,
+          "fork_to_first_sink_ns": "0.726",
+          "fork_crossings": [],
+          "remaining_data_ns": "6.683"
+        },
+        {
+          "rank": 4,
+          "pin": "frontend/bpd/banked_predictors_1/bim/data/data_ext/mem_0_1/ram_reg_bram_0/ADDRBWRADDR[11]",
+          "fork_fanout": 4,
+          "fork_to_first_sink_ns": "0.553",
+          "fork_crossings": [],
+          "remaining_data_ns": "6.706"
+        },
+        {
+          "rank": 5,
+          "pin": "frontend/icache/dataArrayB0Way_5/dataArrayB0Way_0_ext/mem_0_0/ram_reg/ADDRARDADDR[7]",
+          "fork_fanout": 4,
+          "fork_to_first_sink_ns": "0.726",
+          "fork_crossings": [],
+          "remaining_data_ns": "6.582"
+        },
+        {
+          "rank": 6,
+          "pin": "frontend/bpd/banked_predictors_0/ubtb/s1_idx_reg[3]/D",
+          "fork_fanout": 4,
+          "fork_to_first_sink_ns": "0.553",
+          "fork_crossings": [],
+          "remaining_data_ns": "7.169"
+        },
+        {
+          "rank": 7,
+          "pin": "frontend/icache/dataArrayB0Way_7/dataArrayB0Way_0_ext/mem_0_0/ram_reg/ADDRARDADDR[7]",
+          "fork_fanout": 4,
+          "fork_to_first_sink_ns": "0.726",
+          "fork_crossings": [],
+          "remaining_data_ns": "6.616"
+        }
+      ]
+    }
+  ],
+  "negative_controls_rejected": 2
+}

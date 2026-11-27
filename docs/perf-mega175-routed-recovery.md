@@ -70,3 +70,5 @@
 综合时 MIG 输入复位的例外匹配为空，旧版布线报告却有对应的置位路径；见[原版实体路径和新版停钟复位实验](perf-mega175-mig-sysrst.md)。
 
 两条 CPU ↔ JTCK 调试队列 CDC-10 的停钟实验，见[一笔 DMI 写在复位前是否已经执行](perf-mega175-dmi-reset.md)。
+
+两个慢路径族的共同走线，以及恢复版 CoreMark 用户态窗口中哪些拍实际使用加载失败信号，见[加载失败与整数发射队列搬移](perf-mega175-miss-activity.md)。

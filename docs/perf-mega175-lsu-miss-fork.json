@@ -1,0 +1,93 @@
+{
+  "scope": "Actual dual-lane LSU miss equations cut after queue reads; arbitrary two-state inputs. Generic 6-LUT mapping, no placement, timing or board score.",
+  "kit_sha256": "ce0ef1171c7b0077282602c5c97230d03850b71c350c6c9ddcdf0b7ebcb5a456",
+  "stock_parent_sha256": "5749f211d5093a7ef4ac6bba75706d2a4ab3a016b2fb814da34fd7bed44d80d7",
+  "candidate_parent_sha256": "3f678f30b7ba977bacfd5598662fc007137a74a04040af319a87e91bb6e23a54",
+  "cut_bits": 63,
+  "yosys_sha256": "f58d1dfcbc9b48a81357283e93b53e4c78415f6d28f227f0db34a79f316e6a64",
+  "yosys_version": "Yosys 0.9 (git sha1 1979e0b)",
+  "abc_sha256": "6b6d93004494101bed191ddf29c411df55c50f990d7db56796767a3efbb03b09",
+  "abc_version": "UC Berkeley, ABC 1.01",
+  "sat": {
+    "candidate": "equivalent",
+    "no_priority": "counterexample",
+    "wrong_forward_tag": "counterexample",
+    "no_store_response": "counterexample"
+  },
+  "cut_sha256": {
+    "stock": "94786266e943f34c3a9586d1b739b8c374a0fb680bcbb56606b63d22c35b797c",
+    "candidate": "72e0778ac60c318eb6933e5c6fdc9b3bbca124668a80143a128e63c6d925227c"
+  },
+  "mapping": {
+    "stock": {
+      "luts": 21,
+      "max_depth": 4,
+      "input_depth": {
+        "io_core_ld_miss_REG": 1,
+        "io_dmem_resp_0_valid": 4,
+        "io_dmem_resp_0_bits_uop_uses_ldq": 4,
+        "io_dmem_resp_0_bits_uop_uses_stq": 4,
+        "io_dmem_resp_0_bits_uop_is_amo": 4,
+        "wb_forward_valid_0": 4,
+        "_GEN_1768": 3,
+        "_GEN_1769": 3,
+        "live": 3,
+        "send_iresp": 3,
+        "spec_ld_succeed_REG_1": 3,
+        "spec_ld_succeed_REG": 1,
+        "ldtag0": 3,
+        "sttag0": 3,
+        "fwtag0": 3,
+        "io_dmem_resp_1_valid": 4,
+        "io_dmem_resp_1_bits_uop_uses_ldq": 4,
+        "io_dmem_resp_1_bits_uop_uses_stq": 4,
+        "io_dmem_resp_1_bits_uop_is_amo": 4,
+        "wb_forward_valid_1": 4,
+        "_GEN_1819": 4,
+        "_GEN_1820": 4,
+        "live_1": 4,
+        "send_iresp_1": 4,
+        "spec_ld_succeed_REG_3": 3,
+        "spec_ld_succeed_REG_2": 1,
+        "ldtag1": 4,
+        "sttag1": 4,
+        "fwtag1": 3
+      }
+    },
+    "candidate": {
+      "luts": 22,
+      "max_depth": 4,
+      "input_depth": {
+        "io_core_ld_miss_REG": 1,
+        "io_dmem_resp_0_valid": 4,
+        "io_dmem_resp_0_bits_uop_uses_ldq": 4,
+        "io_dmem_resp_0_bits_uop_uses_stq": 4,
+        "io_dmem_resp_0_bits_uop_is_amo": 4,
+        "wb_forward_valid_0": 4,
+        "_GEN_1768": 4,
+        "_GEN_1769": 4,
+        "live": 4,
+        "send_iresp": 4,
+        "spec_ld_succeed_REG_1": 4,
+        "spec_ld_succeed_REG": 2,
+        "ldtag0": 4,
+        "sttag0": 4,
+        "fwtag0": 4,
+        "io_dmem_resp_1_valid": 3,
+        "io_dmem_resp_1_bits_uop_uses_ldq": 3,
+        "io_dmem_resp_1_bits_uop_uses_stq": 3,
+        "io_dmem_resp_1_bits_uop_is_amo": 3,
+        "wb_forward_valid_1": 4,
+        "_GEN_1819": 3,
+        "_GEN_1820": 4,
+        "live_1": 4,
+        "send_iresp_1": 3,
+        "spec_ld_succeed_REG_3": 4,
+        "spec_ld_succeed_REG_2": 1,
+        "ldtag1": 3,
+        "sttag1": 4,
+        "fwtag1": 4
+      }
+    }
+  }
+}
