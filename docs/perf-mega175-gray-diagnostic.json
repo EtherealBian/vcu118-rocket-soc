@@ -1,0 +1,76 @@
+{
+  "design_state": "Routed",
+  "transfers": {
+    "ar:ridx": {
+      "minimum_reported_skew_slack_ns": 5.291,
+      "largest_signed_vendor_skew_ns": -0.291,
+      "min_data_ns": 0.12,
+      "max_data_ns": 0.47
+    },
+    "ar:widx": {
+      "minimum_reported_skew_slack_ns": 5.066,
+      "largest_signed_vendor_skew_ns": -0.066,
+      "min_data_ns": 0.103,
+      "max_data_ns": 0.664
+    },
+    "aw:ridx": {
+      "minimum_reported_skew_slack_ns": 5.104,
+      "largest_signed_vendor_skew_ns": -0.104,
+      "min_data_ns": 0.192,
+      "max_data_ns": 0.691
+    },
+    "aw:widx": {
+      "minimum_reported_skew_slack_ns": 5.028,
+      "largest_signed_vendor_skew_ns": -0.028,
+      "min_data_ns": 0.337,
+      "max_data_ns": 0.946
+    },
+    "b:ridx": {
+      "minimum_reported_skew_slack_ns": 5.234,
+      "largest_signed_vendor_skew_ns": -0.234,
+      "min_data_ns": 0.117,
+      "max_data_ns": 0.499
+    },
+    "b:widx": {
+      "minimum_reported_skew_slack_ns": 5.347,
+      "largest_signed_vendor_skew_ns": -0.347,
+      "min_data_ns": 0.113,
+      "max_data_ns": 0.368
+    },
+    "r:ridx": {
+      "minimum_reported_skew_slack_ns": 5.318,
+      "largest_signed_vendor_skew_ns": -0.318,
+      "min_data_ns": 0.112,
+      "max_data_ns": 0.343
+    },
+    "r:widx": {
+      "minimum_reported_skew_slack_ns": 5.235,
+      "largest_signed_vendor_skew_ns": -0.235,
+      "min_data_ns": 0.163,
+      "max_data_ns": 0.473
+    },
+    "w:ridx": {
+      "minimum_reported_skew_slack_ns": 5.35,
+      "largest_signed_vendor_skew_ns": -0.35,
+      "min_data_ns": 0.126,
+      "max_data_ns": 0.352
+    },
+    "w:widx": {
+      "minimum_reported_skew_slack_ns": 5.095,
+      "largest_signed_vendor_skew_ns": -0.095,
+      "min_data_ns": 0.116,
+      "max_data_ns": 0.465
+    }
+  },
+  "input_sha256": {
+    "bits.tsv": "e0ccdfbfe55047f3197cf415e4344f1ac002a79c8d0959877cc5094a865f9a1b",
+    "data-delays.tsv": "594c4cca304a289003d7356f0d6610eeace7526b4e9c688182cc3bc2bcc4317d",
+    "bus-skew.rpt": "5dfc7c2da1e877967e3f849811b0cf8d45de28db995396bb402f2f43a33c9130"
+  },
+  "scope": "Temporary 5 ns bus-skew characterization on an already routed design, not an implemented constraint, CDC waiver, guaranteed MTBF or hardware calibration. Signed vendor skew is not a physical one-way flight time.",
+  "board_kit_sha256": "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+  "routed_checkpoint_sha256": "d0ead1ae8498f90d6ec268dc12c7f26d745448bcf2c20b4ce681a4dd356ef581",
+  "individual_paths": 40,
+  "path_corner_rows": 80,
+  "diagnostic_budget_ns": 5
+}

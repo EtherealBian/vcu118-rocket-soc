@@ -26,7 +26,7 @@
 
 ### 后端：从 load-miss 到槽 8 不只是一次就绪判断
 
-在上述 −9.237 ns 的同一条路径中，`lsu/io_core_ld_miss3` 后的 miss 网络跨 SLR 1 → 2，扇出 122，本段 1.640 ns。随后经过槽 9 的 `io_will_be_valid`，再到 `issue_slots_8_in_uop_valid`（扇出 151，本段 0.634 ns）。对照同版 `IssueSlot_32` 和 `IssueUnitCollapsing_1`：当源槽获准发射，但依赖推测唤醒且此次 load miss 时，槽可能需要保留；槽 8 搬入有效位的一个数据来源正是槽 9。再往后的两条单负载网络分别跨 SLR 2 → 1、1 → 2，用了 1.132 和 1.012 ns，最后抵达 `slots_8/p2_reg/D`。这是报告中的物理网络名与 RTL 的对照，不把中间组合逻辑的归属名解读成队列实际移动了多次。
+在上述 −9.237 ns 的同一条路径中，`lsu/io_core_ld_miss3` 后的 miss 网络跨 SLR 1 → 2，扇出 122，本段 1.640 ns。随后经过槽 9 的 `io_will_be_valid`，再到 `issue_slots_8_in_uop_valid`（扇出 151，本段 0.634 ns）。按同版 `BoomCore` 的实例连线核实：整数 `int_issue_unit` 对应 40 槽的 `IssueUnitCollapsing_2`，而不是先前误引的 `IssueUnitCollapsing_1`（那是 24 槽的 `mem_issue_unit`）；两者都用 `IssueSlot_32`。对照实际整数队列：当源槽获准发射，但依赖推测唤醒且此次 load miss 时，槽可能需要保留；槽 8 搬入有效位的一个数据来源正是槽 9。再往后的两条单负载网络分别跨 SLR 2 → 1、1 → 2，用了 1.132 和 1.012 ns，最后抵达 `slots_8/p2_reg/D`。这是报告中的物理网络名与 RTL 的对照，不把中间组合逻辑的归属名解读成队列实际移动了多次。
 
 因此后端实验应比较两个量：miss 到搬入有效位的选择深度，以及搬入有效位到 `p2` 的布线。直接把 miss 寄存会改变推测唤醒失败时的行为；即便前端修好，这一条仍可能限制整机。
 
@@ -56,3 +56,9 @@
 本次 `report_bus_skew` 的 4 个报告项都属于调试集线器的读写 FIFO，最差余量 +19.496 ns；这不能替代对 MIG/CPU 桥 Gray 指针的审查。`report_exceptions -ignored` 另列 5 条无实际路径的例外。完成报告采集不代表签核通过。
 
 前端慢路径的首个实体 RTL 候选及整组等价验证见[循环预测修复旁路](perf-mega175-loop-repair.md)。
+
+### 补记：40 位 MIG Gray 指针的布线偏斜已逐组测量
+
+对同一份 `Routed` 检查点在内存中临时设置 10 条 5.000 ns 诊断约束。5 个 AXI 通道各含一组读指针、一组写指针。40 个同位直连、每位 min/max 两条数据路径（均为 0 级组合逻辑）、以及工具给出的 40 个偏斜捕获终点均已核对。10 组均未违反这个临时门限，最小报告余量 **+5.028 ns**（AW 写指针），直接数据路径跨角落范围为 0.103–0.946 ns。Vivado 的带符号偏斜含两条路径的时钟项，并非负的物理传播时间。**该诊断没改变原布线或原实现约束，不能解除 6 条 CDC Critical，也没有补上 `ASYNC_REG`。** [逐组结果与报告指纹](perf-mega175-gray-diagnostic.json)。
+
+后端慢路径的整数队列 RTL、形式验证和完整队列定向/带时钟复核见[同拍 miss 选择](perf-mega175-miss-select.md)。

@@ -22,6 +22,12 @@ def fixture():
 class GrayTest(unittest.TestCase):
     def test_all_40_bits_with_80_corner_values(self):
         b,d,r=fixture(); result=g.analyze(b,d,r.replace('\n','\r\n'));self.assertEqual(len(result),10); self.assertEqual(result['ar:ridx']['minimum_reported_skew_slack_ns'],4.8)
+    def test_routed_requires_explicit_exact_state(self):
+        b,d,r=fixture(); r=r.replace('Physopt postRoute |','Routed')
+        with self.assertRaises(ValueError): g.analyze(b,d,r)
+        self.assertEqual(len(g.analyze(b,d,r,'Routed')),10)
+        for bad in (r.replace('Routed','Routed example'),r+'| Design State : Routed\n'):
+            with self.assertRaises(ValueError): g.analyze(b,d,bad,'Routed')
     def test_corruption_not_characterized(self):
         b,d,r=fixture()
         for bad in [(b.replace('chain_1','chain_2',1),d,r),(b,d.replace('\tmin\t','\tmax\t',1),r),(b,d.replace('0.6','nan',1),r),(b,d.replace('0.2','0.9',1),r),(b,d,r.replace('Endpoints: 4','Endpoints: 3',1)),(b,d,r.replace('Actual Bus Skew: 0.200','Actual Bus Skew: 1.200',1)),(b,d,r.replace('sync_2_reg/D','sync_1_reg/D',1)),(b,d,r[:r.rindex('Id:')]),(b,d,r.replace('Physopt postRoute','Synth Design'))]:

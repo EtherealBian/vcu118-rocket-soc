@@ -1,0 +1,171 @@
+{
+  "scope": "Registered extracted integer-issue move and keep cones only, one placement and route per variant; no LSU, payload, p2 capture or SoC congestion. Not board timing or CoreMark.",
+  "period_ns": 5.714,
+  "part": "xcvu9p-flga2104-2L-e",
+  "cone_sha256": {
+    "stock.v": "8db9f99a7fa4233bb235f2ad6a3546adeb045b1d0b6288ea45ad435237280267",
+    "candidate.v": "c5108d59bc77c2d8aaad59bbde66bd13d18c9a8d8735975e2e6f555d6a6023a0",
+    "boundary.v": "0a5fec51ed82e75871c863ef4d6591a63b9b9cb1d30e0a3f8b1fd6da5bd8b963",
+    "clock.xdc": "2ce6e590fd43bf60a45d85cb844464dd35e3ad3ea2efd42dc83ca207647af15d"
+  },
+  "cases": {
+    "stock": {
+      "routed_nets": 642,
+      "routing_errors": 0,
+      "wns_ns": 4.001,
+      "whs_ns": 0.043,
+      "wpws_ns": 2.582,
+      "lut": 199,
+      "registers": 565,
+      "slot8": {
+        "all-qm": {
+          "slot": 8,
+          "slack_ns": 4.501,
+          "data_ns": 1.194,
+          "levels": 3,
+          "start": "q_miss_reg/C",
+          "end": "qm_reg[8]/D"
+        },
+        "miss-qm": {
+          "slot": 8,
+          "slack_ns": 4.501,
+          "data_ns": 1.194,
+          "levels": 3,
+          "start": "q_miss_reg/C",
+          "end": "qm_reg[8]/D"
+        },
+        "all-qk": {
+          "slot": 8,
+          "slack_ns": 4.813,
+          "data_ns": 0.883,
+          "levels": 2,
+          "start": "q_miss_reg/C",
+          "end": "qk_reg[8]/D"
+        },
+        "miss-qk": {
+          "slot": 8,
+          "slack_ns": 4.813,
+          "data_ns": 0.883,
+          "levels": 2,
+          "start": "q_miss_reg/C",
+          "end": "qk_reg[8]/D"
+        }
+      },
+      "worst_miss_to_move": {
+        "slot": 13,
+        "slack_ns": 4.001,
+        "data_ns": 1.695,
+        "levels": 3,
+        "start": "q_miss_reg/C",
+        "end": "qm_reg[13]/D"
+      },
+      "report_sha256": {
+        "route.rpt": "bc4819caecb3e272bc205c34d0f6ec2b7b287cae2bb252f7b333fcdc6ccbd0c8",
+        "timing.rpt": "8bdc998f7d469ad6eea8592a5f77cb34ebb7d72641fa21b620e1d6d85d010832",
+        "util.rpt": "72eb4d1ffa13fda1aa4c51d27d2b13a3f1aed8458c3f08ae55b509d45a016ad8",
+        "paths.tsv": "ac87d9541e0db35f3cb52f3ef27bb33be55915a5319e8c27982ac299bfdf1084"
+      }
+    },
+    "candidate": {
+      "routed_nets": 683,
+      "routing_errors": 0,
+      "wns_ns": 4.18,
+      "whs_ns": 0.057,
+      "wpws_ns": 2.582,
+      "lut": 276,
+      "registers": 565,
+      "slot8": {
+        "all-qm": {
+          "slot": 8,
+          "slack_ns": 4.627,
+          "data_ns": 1.067,
+          "levels": 1,
+          "start": "q_miss_reg/C",
+          "end": "qm_reg[8]/D"
+        },
+        "miss-qm": {
+          "slot": 8,
+          "slack_ns": 4.627,
+          "data_ns": 1.067,
+          "levels": 1,
+          "start": "q_miss_reg/C",
+          "end": "qm_reg[8]/D"
+        },
+        "all-qk": {
+          "slot": 8,
+          "slack_ns": 4.586,
+          "data_ns": 1.108,
+          "levels": 1,
+          "start": "q_poison2_reg[8]/C",
+          "end": "qk_reg[8]/D"
+        },
+        "miss-qk": {
+          "slot": 8,
+          "slack_ns": 4.878,
+          "data_ns": 0.817,
+          "levels": 1,
+          "start": "q_miss_reg/C",
+          "end": "qk_reg[8]/D"
+        }
+      },
+      "worst_miss_to_move": {
+        "slot": 10,
+        "slack_ns": 4.197,
+        "data_ns": 1.496,
+        "levels": 1,
+        "start": "q_miss_reg/C",
+        "end": "qm_reg[10]/D"
+      },
+      "report_sha256": {
+        "route.rpt": "8d27b79c43975834dc4a969a3100baf3dcccfcd02d31a7e43843ce56ab41e0c4",
+        "timing.rpt": "8cfd1566510f3850579deba989bc0c73ba0510e7c655db1462d424169237d7d8",
+        "util.rpt": "6ef2f6d43cabfec9bba4016c55e8b2a6f90bd98ef66bf2ef2b79ec49ef12f4f4",
+        "paths.tsv": "f91d0e43cb3b784aaf25d74792adc4c4f127880eafb09d7ea67ac09b31c42212"
+      }
+    }
+  },
+  "miss_to_move_improved": 33,
+  "miss_to_move_unchanged": 0,
+  "miss_to_move_worsened": 6,
+  "miss_to_move_slack_gain_ns_by_slot": [
+    0.021,
+    0.107,
+    0.227,
+    0.136,
+    -0.153,
+    0.126,
+    0.191,
+    -0.048,
+    0.126,
+    0.283,
+    -0.224,
+    0.05,
+    0.235,
+    0.828,
+    0.533,
+    -0.386,
+    -0.223,
+    0.135,
+    0.244,
+    0.306,
+    0.319,
+    0.451,
+    0.553,
+    0.976,
+    1.005,
+    0.378,
+    0.974,
+    1.077,
+    1.004,
+    1.226,
+    1.283,
+    0.72,
+    0.75,
+    0.662,
+    0.495,
+    0.301,
+    0.428,
+    -0.075,
+    0.13
+  ]
+}

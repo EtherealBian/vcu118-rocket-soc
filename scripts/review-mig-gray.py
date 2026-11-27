@@ -18,7 +18,9 @@ def rows(text, cols):
     if reader.fieldnames != cols.split(): raise ValueError('wrong TSV header')
     return reader
 
-def analyze(bits, delays, report):
+STATES = ('Physopt postRoute', 'Routed')
+
+def analyze(bits, delays, report, expected_state=STATES[0]):
     report=report.replace('\r\n','\n'); groups={k:{} for k in GROUPS}; times={}
     for row in rows(bits, 'channel pointer bit launch_clock capture_clock launch capture'):
         ch,p = row['channel'],row['pointer']; i=int(row['bit']); group=groups[ch,p]; outgoing=ch in ('aw','ar','w'); write=p=='widx'; forward=outgoing==write
@@ -33,7 +35,8 @@ def analyze(bits, delays, report):
         if i not in groups[ch,p] or k not in ('min','max') or key in times or row['logic_levels']!='0' or not math.isfinite(delay) or delay<0: raise ValueError('invalid data-path entry')
         times[key]=delay
     if len(times)!=80 or any(times[ch,p,i,'min']>times[ch,p,i,'max'] for ch,p in GROUPS for i in range(4)): raise ValueError('incomplete or inconsistent corner delays')
-    if not re.search(r'Design State\s*:\s*Physopt postRoute\b',report): raise ValueError('not a post-route report')
+    states=re.findall(r'^\|[ \t]*Design State[ \t]*:[ \t]*([^|\n]+?)[ \t]*\|?[ \t]*$',report,re.M)
+    if expected_state not in STATES or states!=[expected_state]: raise ValueError('wrong or ambiguous physical design state')
     found={}
     for section in re.split(r'^Id:\s*\d+\s*$',report,flags=re.M)[1:]:
         x=re.search(r'^set_bus_skew -from (.*?) -to (.*?) ([\d.]+)$',section,re.M)
@@ -64,6 +67,6 @@ def analyze(bits, delays, report):
     return {ch+':'+p:found[ch,p] for ch,p in sorted(found)}
 
 def main():
-    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('folder',type=Path);a=ap.parse_args();files={n:(a.folder/n).read_bytes() for n in ('bits.tsv','data-delays.tsv','bus-skew.rpt')}
-    print(json.dumps({'transfers':analyze(*(b.decode() for b in files.values())),'input_sha256':{n:hashlib.sha256(b).hexdigest() for n,b in files.items()},'scope':'Temporary 5 ns bus-skew characterization on an already routed design, not an implemented constraint, CDC waiver, guaranteed MTBF or hardware calibration. Signed vendor skew is not a physical one-way flight time.'},indent=2))
+    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('folder',type=Path);ap.add_argument('--expected-state',choices=STATES,default=STATES[0]);a=ap.parse_args();files={n:(a.folder/n).read_bytes() for n in ('bits.tsv','data-delays.tsv','bus-skew.rpt')}
+    print(json.dumps({'design_state':a.expected_state,'transfers':analyze(*(b.decode() for b in files.values()),expected_state=a.expected_state),'input_sha256':{n:hashlib.sha256(b).hexdigest() for n,b in files.items()},'scope':'Temporary 5 ns bus-skew characterization on an already routed design, not an implemented constraint, CDC waiver, guaranteed MTBF or hardware calibration. Signed vendor skew is not a physical one-way flight time.'},indent=2))
 if __name__=='__main__':main()
