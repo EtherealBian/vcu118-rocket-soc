@@ -13,13 +13,20 @@ import time
 
 
 
-def gdb_commands(d, port):
+def gdb_commands(d, port, tail=False):
+    # Match the actual loop registers, not a debugger hit count: asynchronous
+    # guest traps can re-present the same PC without completing another round.
+    entry = 0x10af0 if tail else 0x106b0
+    condition = 'condition 1 $x14 == 23992 && $x25 == 24000' if tail else ''
+    check = ("assert rec['priv']==0 and rec['satp']>>60==8 and regs[25]==24000 and "
+             "regs[14]==(23992 if tag=='in' else 24000)") if tail else 'pass'
     return f'''set pagination off
 set confirm off
 set architecture riscv:rv64
 set riscv use-compressed-breakpoints on
 target remote 127.0.0.1:{port}
-hbreak *0x106b0
+hbreak *{entry:#x}
+{condition}
 python open({str(d/'armed')!r},'w').close()
 continue
 python
@@ -32,8 +39,9 @@ def snap(tag):
  for k in ['priv','satp','mstatus']:
   try: rec[k]=r('$'+k)
   except Exception: pass
- print('SNAP',tag,hex(pc),hex(sp),'s1=',hex(regs[9]),rec.get('priv'),flush=True)
- assert pc=={{'in':0x106b0,'out':0x10f3a}}[tag]
+ print('SNAP',tag,hex(pc),hex(sp),'s1=',hex(regs[9]),rec.get('priv'),'x14/x25=',regs[14],regs[25],flush=True)
+ assert pc=={{'in':{entry},'out':0x10f3a}}[tag]
+ {check}
  # GCC keeps memblock[0] in s1 at the start fence.
  heap=regs[9] if tag=='in' else recin['regs'][9]
  areas=[('text',0x10158,0x1b000-0x10158),('rw',0x20f50,0xc30),('stack',sp-1536,1536+192),('heap',heap,2000)]
@@ -52,7 +60,8 @@ quit
 '''
 
 
-def capture(d, port, command, env, elf):
+def capture(d, port, command, env, elf, tail=False):
+    rounds = 24000 if tail else 4
     raw = bytearray()
     with subprocess.Popen(command, stdout=subprocess.PIPE, stdin=subprocess.PIPE,
                           stderr=subprocess.STDOUT, env=env) as vm, selectors.DefaultSelector() as sel:
@@ -82,7 +91,7 @@ def capture(d, port, command, env, elf):
                 raise ValueError('running guest did not confirm the ELF and command line')
             for name,seed in [('performance','0x0'), ('validation','0x3415')]:
                 sub = d/name; sub.mkdir(); script = sub/'cmds'
-                script.write_text(gdb_commands(sub, port))
+                script.write_text(gdb_commands(sub, port, tail))
                 with (sub/'gdb.txt').open('wb') as log, subprocess.Popen(
                         ['gdb-multiarch','-nx','-q','-batch',elf,'-x',script],
                         stdout=log, stderr=subprocess.STDOUT) as debugger:
@@ -91,21 +100,23 @@ def capture(d, port, command, env, elf):
                         while time.monotonic()<deadline and not (sub/'armed').exists() and debugger.poll() is None:
                             time.sleep(.05)
                         if not (sub/'armed').exists(): raise RuntimeError('debugger did not arm the start fence')
-                        send(f'/bin/{elf.stem} {seed} {seed} 0x66 4 7 1 2000; echo {name}_END_$?_$((2+2))')
-                        if debugger.wait(timeout=25) != 0: raise RuntimeError('guest capture failed: '+name)
+                        send(f'/bin/{elf.stem} {seed} {seed} 0x66 {rounds} 7 1 2000; echo {name}_END_$?_$((2+2))')
+                        if debugger.wait(timeout=420 if tail else 25) != 0: raise RuntimeError('guest capture failed: '+name)
                     finally:
                         if debugger.poll() is None: debugger.kill()
                 wait(f'\n{name}_END_0_4\r\n'.encode())
         finally:
             vm.terminate(); (d/'guest.uart').write_bytes(raw)
     crcs = re.findall(rb'^\[0\]crcfinal\s*:\s*(0x[0-9a-f]+)\s*$', bytes(raw), re.M)
-    if crcs != [b'0x9f95',b'0x19d9']: raise ValueError('wrong guest CRC pair')
+    expected = [b'0x4983',b'0xeb93'] if tail else [b'0x9f95',b'0x19d9']
+    if crcs != expected: raise ValueError('wrong guest CRC pair')
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     for arg in ['release', 'fw_jump', 'qemu_prefix', 'fresh_private_dir']:
         parser.add_argument(arg, type=Path)
+    parser.add_argument('--target-tail', action='store_true', help='capture final eight rounds inside the unchanged 24000-round workload')
     a = parser.parse_args()
     release, fw, q, D = (p.resolve() for p in (a.release,a.fw_jump,a.qemu_prefix,a.fresh_private_dir))
     D.mkdir(mode=0o700)
@@ -121,5 +132,5 @@ if __name__ == '__main__':
     cmd=[q/'usr/bin/qemu-system-riscv64', '-M','virt', '-cpu','rv64gcsu-v1.10.0', '-smp','1',
          '-m','256M', '-nographic', '-monitor','none', '-bios',fw, '-kernel',release/'Image',
          '-append','console=ttyS0,115200 no4lvl', '-gdb',f'tcp:127.0.0.1:{port}']
-    capture(D, port, cmd, env, elf)
+    capture(D, port, cmd, env, elf, a.target_tail)
     print('CAPTURED_TWO_LINUX_GUEST_WINDOWS_NOT_A_BOARD_SCORE')

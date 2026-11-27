@@ -14,6 +14,7 @@ static struct span *spans;
 static uint64_t count, last, list_calls;
 static int phase, clocks, vcpus, rounds, expected, scalar;
 static FILE *report, *order;
+static int trace_from_round; /* zero-based; an enabled tail includes its first loop header */
 
 static void require(int ok) {
     if (!ok) { fputs("inconsistent workload window\n", stderr); abort(); }
@@ -28,7 +29,7 @@ static void close_round(void) {
 }
 static void trace_span(unsigned cpu, void *opaque) {
     struct span *s = opaque; require(cpu == 0);
-    if (phase != 2) return;
+    if (phase != 2 || rounds < trace_from_round) return;
     for (size_t i = 0; i < s->len; i++) {
         uint64_t pc = s->pc[i]; require(pc <= UINT32_MAX);
         for (unsigned b = 0; b < 4; b++) require(fputc((pc >> (8*b)) & 255,order) != EOF);
@@ -87,8 +88,14 @@ QEMU_PLUGIN_EXPORT int qemu_plugin_install(qemu_plugin_id_t id, const qemu_info_
     if (argc || info->system_emulation || strcmp(info->target_name,"riscv64") || !m || !n) return -1;
     if (!strcmp(m,"insn")) scalar = 1; else if (strcmp(m,"span")) return -1;
     if (!strcmp(n,"4")) expected = 4; else if (!strcmp(n,"24000")) expected = 24000; else return -1;
-    report = fopen("counts.txt","wx"); require(report != NULL);
+    const char *tail = getenv("VCU_WINDOW_ORDER");
+    if (tail) {
+        if (expected != 24000 || strcmp(tail,"tail8")) return -1;
+        trace_from_round = expected - 8;
+        order = fopen("tail8.pcs","wbx"); require(order != NULL);
+    }
     if (expected == 4) { order = fopen("short.pcs","wbx"); require(order != NULL); }
+    report = fopen("counts.txt","wx"); require(report != NULL);
     qemu_plugin_register_vcpu_init_cb(id,init_cpu); qemu_plugin_register_vcpu_tb_trans_cb(id,translate);
     qemu_plugin_register_atexit_cb(id,finish,NULL); return 0;
 }

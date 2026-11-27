@@ -18,13 +18,18 @@ def require(ok, message):
         raise ValueError(message)
 
 
-def build(guest, elf, prefix):
+def build(guest, elf, prefix, tail=False):
     folder = guest/'replay'; folder.mkdir()
     snap, end = [json.loads((guest/(tag+'.json')).read_text()) for tag in ('in', 'out')]
-    for state, pc in ((snap, 0x106b0), (end, 0x10f3a)):
+    entry = 0x10af0 if tail else 0x106b0
+    for state, pc in ((snap, entry), (end, 0x10f3a)):
         require(state['priv'] == 0 and state['satp'] >> 60 == 8 and state['pc'] == pc,
                 'expected an Sv39 user window fence')
         require(len(state['regs']) == 32 and state['regs'][0] == 0, 'expected all GPRs')
+    if tail:
+        require(snap['regs'][14] == 23992 and end['regs'][14] == 24000 and
+                snap['regs'][25] == end['regs'][25] == 24000, 'wrong target-tail round boundaries')
+        require(snap['satp'] == end['satp'], 'changed user address space')
     areas = snap['areas']
     require(areas == end['areas'] and [(k,n) for k,_,n in areas] == AREAS, 'bad memory spans')
     require([x[1] for x in areas] == [0x10158, 0x20f50, snap['regs'][2]-1536, snap['regs'][9]],
@@ -71,7 +76,7 @@ def build(guest, elf, prefix):
     expected = end['regs'][:]
     # Execute the unchanged clock-call JAL and two libc instructions before ECALL.
     expected[1], expected[13], expected[17] = 0x10f3e, expected[10], 113
-    slots = dict(SATP=str((8<<60) | (TABLES>>12)), COMPARE_MEMORY='\n'.join(compare),
+    slots = dict(ENTRY=hex(entry), SATP=str((8<<60) | (TABLES>>12)), COMPARE_MEMORY='\n'.join(compare),
                  RESTORE='\n'.join(f'ld x{i},{8*i}(x31)' for i in range(1,32)),
                  SAVE='\n'.join(f'sd x{i},{8*i}(x31)' for i in range(1,31)),
                  INITIAL=','.join(map(hex, snap['regs'])), EXPECTED=','.join(map(hex, expected)),
@@ -97,8 +102,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('guest', type=Path); parser.add_argument('elf', type=Path)
     parser.add_argument('tool_prefix', help='RISC-V GCC/objcopy executable prefix')
+    parser.add_argument('--target-tail', action='store_true', help='require an eight-round tail of the 24000-round workload')
     args = parser.parse_args(); elf = args.elf.read_bytes()
     ref = json.loads((ROOT/'docs/perf-strict-user-window.json').read_bytes())
     require(sha256(elf).hexdigest() == ref['elf_sha256'], 'unexpected release ELF')
     for seed in ('performance', 'validation'):
-        build(args.guest.resolve()/seed, elf, args.tool_prefix)
+        build(args.guest.resolve()/seed, elf, args.tool_prefix, args.target_tail)

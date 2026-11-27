@@ -1,0 +1,64 @@
+{
+  "scope": "Stock four-wide BOOM Sv39 snapshot replay; behavioral RAM, cold microarchitecture at round 23993. Not a board score or a full-length RTL run.",
+  "elf_sha256": "61f7c4579b762f86d7d7dc93d4c385d08e50248f3dd6a8a9105fd5e88b58886a",
+  "first_round": 23993,
+  "last_round": 24000,
+  "results": {
+    "performance": {
+      "guest_full_run_crcfinal": "0x4983",
+      "ordered_pc_sha256": "9c559a739d84f7d35b6599f9da0351c7fddd9d1844728dd4c7703c71d3c84f99",
+      "user_window_instructions": 2695170,
+      "user_window_cycles": 1288049,
+      "by_round_instructions": [
+        337060,
+        336940,
+        336810,
+        336899,
+        336789,
+        336827,
+        337045,
+        336800
+      ],
+      "by_round_cycles": [
+        171156,
+        161607,
+        160435,
+        159660,
+        159338,
+        158582,
+        158718,
+        158553
+      ],
+      "first_four_cycles": 652858,
+      "last_four_cycles": 635191
+    },
+    "validation": {
+      "guest_full_run_crcfinal": "0xeb93",
+      "ordered_pc_sha256": "50cbbcfe7d9a0f0f5067589c075239700d016dae6164afb24f347c3eae1c88b9",
+      "user_window_instructions": 2698341,
+      "user_window_cycles": 1296453,
+      "by_round_instructions": [
+        337201,
+        337231,
+        337176,
+        337258,
+        337337,
+        337345,
+        337375,
+        337418
+      ],
+      "by_round_cycles": [
+        172558,
+        162724,
+        161416,
+        160696,
+        160263,
+        160230,
+        159419,
+        159147
+      ],
+      "first_four_cycles": 657394,
+      "last_four_cycles": 639059
+    }
+  }
+}

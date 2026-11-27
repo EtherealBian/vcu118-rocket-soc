@@ -26,3 +26,5 @@ python3 scripts/count-target-user-window.py "$QEMU_SOURCE_ARCHIVE" \
   "$RELEASE/coremark-g15-gc-lto-ooo-strict.elf" "$RISCV_OBJDUMP" > /tmp/strict-target-window.json
 diff -u docs/perf-strict-target-window.json /tmp/strict-target-window.json
 ```
+
+[后续：用四路 BOOM RTL 从第 23,993 轮的真实客体状态连续重放到第 24,000 轮](perf-strict-target-tail.md)。

@@ -25,11 +25,14 @@ def csv(text, base=10):
 OUTER = ([0x800000ec], [0x10f3a, 0x147ac, 0x147b0])
 
 
-def inspect(events, uart, trace, ref, *, include_widths=False):
+def inspect(events, uart, trace, ref, *, include_widths=False, target_tail=False):
     lines = events.splitlines()
     if len(lines) != 3 or uart != EPOCH:
         raise ValueError('incomplete ROM/result epoch or unexpected events')
-    matches = [re.fullmatch(fmt, row) for fmt, row in zip((MRET, EXIT, WINDOW), lines)]
+    length = 8 if target_tail else 4
+    mret = MRET.replace('epc=106b0', 'epc=10af0') if target_tail else MRET
+    window_format = WINDOW.replace('{5}', '{9}') if target_tail else WINDOW
+    matches = [re.fullmatch(fmt, row) for fmt, row in zip((mret, EXIT, window_format), lines)]
     if not all(matches):
         raise ValueError('missing privilege, ROB or trap witness')
     entry, leave, window = matches
@@ -46,12 +49,13 @@ def inspect(events, uart, trace, ref, *, include_widths=False):
         raise ValueError('ordered ROB PCs differ from independently expanded emulator trace')
     rounds = [0]; lists = [0]
     for i,(pc,) in enumerate(struct.iter_unpack('<I',trace)):
-        if (pc == 0x106b0) != (i == 0) or pc == 0x10f3a:
+        if ((pc == 0x106b0) != (not target_tail and i == 0) or pc == 0x10f3a or
+                (target_tail and i == 0 and pc != 0x10af0)):
             raise ValueError('wrong PC fence')
-        if pc == 0x10af0:
+        if pc == 0x10af0 and i:
             rounds.append(0); lists.append(0)
         rounds[-1] += 1; lists[-1] += pc == 0x13b0c
-    if rounds != ref['by_round'] or lists != [2]*4:
+    if rounds != ref['by_round'] or lists != [2]*length:
         raise ValueError('wrong per-round instruction or list-call counts')
     result = dict(ordered_pc_sha256=sha, user_window_instructions=hot,
                 user_window_cycles=fences[-1]-fences[0], by_round_cycles=cycles,

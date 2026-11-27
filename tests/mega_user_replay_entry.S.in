@@ -17,7 +17,7 @@ _start:
   sfence.vma
   li t0,0x1888
   csrc mstatus,t0
-  li t0,0x106b0
+  li t0,@ENTRY@
   csrw mepc,t0
   la t0,saved
   csrw mscratch,t0
