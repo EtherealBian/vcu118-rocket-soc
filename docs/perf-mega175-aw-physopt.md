@@ -20,3 +20,5 @@ python3 scripts/review-mega-aw-physopt.py "$IMPLEMENTATION_LOG" "$BOARD_KIT" "$R
 ```
 
 `--routed-cpu` 除了列出各目的时钟 setup/hold 样本中这 42 个单元的发起/捕获引脚，还对 CPU 最差的八条 setup 与八条 hold 数据路径逐段比对相关网和实例名（不计时钟树、不合并同名前缀/复制单元）。重点区分入队载荷的 `D`、写使能 `CE`，以及经此处发起的数据路径；样本外、综合改名或没有精确匹配均不能算排除。没有最终报告时不输出这些结果。若最终负余量集中在其他逻辑，就改查真实慢路径，不优先改 AW 或 FPU。该检查不授权上板。
+
+后续：[三种选槽方案的等价性、写使能层数和扇出对照](perf-mega175-aw-select.md)。

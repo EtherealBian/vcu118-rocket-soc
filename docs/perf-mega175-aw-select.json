@@ -1,0 +1,178 @@
+{
+  "scope": "Source-side AW word select only. Two-state guard proof and isolated xcup technology mapping, not routed timing, CDC signoff, or a benchmark.",
+  "board_input_seal": "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+  "input_sha256": {
+    "AsyncQueueSource_AXI4BundleAW.sv": "6aed5dbcd59a02db067d82d77299ff386036ef6aa942aee244235bb27f605746",
+    "AsyncValidSync.sv": "3bed243e2afa1c3ca595b62a562f190789564f6a25a7ce4b35c7c275211bd8d7",
+    "AsyncResetSynchronizerShiftReg_w4_d3_i0.sv": "862f5b3c19ecc8cd1eb3ccdf104b835224d702657ee4647633128e7bbffa0073",
+    "AsyncResetSynchronizerShiftReg_w1_d3_i0_2.sv": "1c41cb67f4c6450fcfb262a7c1279bc7d555c4254ca3dcad97f888b2409df7ea",
+    "AsyncResetSynchronizerPrimitiveShiftReg_d3_i0.sv": "05c3f0eca3dcc0696bf95af33c71bdf4d224543bf698f2bfb3a67d16ab4aa0fb"
+  },
+  "yosys": "Yosys 0.9 (git sha1 1979e0b)",
+  "yosys_sha256": "f58d1dfcbc9b48a81357283e93b53e4c78415f6d28f227f0db34a79f316e6a64",
+  "abc_sha256": "6b6d93004494101bed191ddf29c411df55c50f990d7db56796767a3efbb03b09",
+  "vendor_truth": {
+    "model_sha256": "ad30839aaf8d6b39df914aa3a3d24bbaabd1167bed8c6b6833cea680eebb202c",
+    "distinct_binary_input_vectors": 64,
+    "pointer_high_values": 2,
+    "slots_checked_together": 8
+  },
+  "proofs": {
+    "binary": {
+      "unconditional": "proved"
+    },
+    "wrong_slot": {
+      "unconditional": "counterexample"
+    },
+    "ungated": {
+      "unconditional": "counterexample"
+    },
+    "ring": {
+      "reset": "proved",
+      "step": "proved"
+    },
+    "bad_rotate": {
+      "step": "counterexample"
+    },
+    "bad_reset": {
+      "reset": "counterexample"
+    },
+    "lut6": {
+      "unconditional": "proved"
+    },
+    "bad_init": {
+      "unconditional": "counterexample"
+    }
+  },
+  "maps": {
+    "stock": {
+      "primitive_counts": {
+        "FDCE": 32,
+        "FDRE": 488,
+        "LUT1": 1,
+        "LUT2": 6,
+        "LUT3": 5,
+        "LUT5": 1,
+        "LUT6": 9,
+        "MUXCY": 3,
+        "XORCY": 4
+      },
+      "payload_direct_dq_bits": 488,
+      "enable_logic_levels_by_slot": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "last_lut_per_slot": "LUT6",
+      "shared_ready_luts_on_enables": 1,
+      "direct_input_pin_loads": {
+        "ready_reg": 1,
+        "sink_valid_sync_out": 9,
+        "enqueue_valid": 10
+      },
+      "leaf_sha256": "6aed5dbcd59a02db067d82d77299ff386036ef6aa942aee244235bb27f605746"
+    },
+    "binary": {
+      "primitive_counts": {
+        "FDCE": 32,
+        "FDRE": 488,
+        "LUT1": 1,
+        "LUT2": 6,
+        "LUT3": 5,
+        "LUT5": 9,
+        "LUT6": 1,
+        "MUXCY": 3,
+        "XORCY": 4
+      },
+      "payload_direct_dq_bits": 488,
+      "enable_logic_levels_by_slot": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "last_lut_per_slot": "LUT5",
+      "shared_ready_luts_on_enables": 1,
+      "direct_input_pin_loads": {
+        "ready_reg": 1,
+        "sink_valid_sync_out": 9,
+        "enqueue_valid": 10
+      },
+      "leaf_sha256": "8b0c99437de6a953f9664c80bbf4fd53037d375fe4dc83d6020913dd1450bea1"
+    },
+    "ring": {
+      "primitive_counts": {
+        "FDCE": 39,
+        "FDPE": 1,
+        "FDRE": 488,
+        "LUT1": 1,
+        "LUT2": 6,
+        "LUT3": 13,
+        "LUT5": 9,
+        "LUT6": 1,
+        "MUXCY": 3,
+        "XORCY": 4
+      },
+      "payload_direct_dq_bits": 488,
+      "enable_logic_levels_by_slot": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "last_lut_per_slot": "LUT3",
+      "shared_ready_luts_on_enables": 1,
+      "direct_input_pin_loads": {
+        "ready_reg": 9,
+        "sink_valid_sync_out": 17,
+        "enqueue_valid": 18
+      },
+      "leaf_sha256": "417e9606da2d78758a8762058a5156803d99e62f7de37f4e3f9ce53c1455ce9c"
+    },
+    "lut6": {
+      "primitive_counts": {
+        "FDCE": 32,
+        "FDRE": 488,
+        "LUT1": 1,
+        "LUT2": 6,
+        "LUT3": 5,
+        "LUT5": 1,
+        "LUT6": 9,
+        "MUXCY": 3,
+        "XORCY": 4
+      },
+      "payload_direct_dq_bits": 488,
+      "enable_logic_levels_by_slot": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "last_lut_per_slot": "LUT6",
+      "shared_ready_luts_on_enables": 0,
+      "direct_input_pin_loads": {
+        "ready_reg": 9,
+        "sink_valid_sync_out": 17,
+        "enqueue_valid": 10
+      },
+      "leaf_sha256": "4b3103456022a32bc3693db15f701eeb61634484883785e7388ae671b51a0470"
+    }
+  }
+}
