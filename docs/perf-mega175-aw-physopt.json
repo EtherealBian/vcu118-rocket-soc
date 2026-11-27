@@ -1,0 +1,53 @@
+{
+  "scope": "Four-wide original placement only; association between successive global estimates is not path attribution, routed slack, CPU frequency or board evidence.",
+  "board_input_seal": "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+  "post_opt_sha256": "98e6d4f6c545a4f0f07c0618dad28e5de23dc9330ff98bc2cc81d2038a54db5f",
+  "physopt_body_lf_sha256": "8807881f2f58bf7eca59c44aaaaf9feac0eb88457743ff3ad5d6dc49b814c2c1",
+  "rtl_sha256": {
+    "VCU118FPGATestHarness.sv": "31646f1a0ff1f85d94474108f4f21895969400cb83ffab8f5a7e93351c062823",
+    "XilinxVCU118MIG.sv": "0c22842380e8e952fa9dedd97629dc6c6d3ea3a436236146d79e88ad08c92df2",
+    "AXI4AsyncCrossingSource.sv": "be82306ce224b2c03834545a3b17e8c0fd575dc79c1a7f2c50c82a74e3fb86ee",
+    "ResetWrangler.sv": "4b2df154f1a255df77fb697284c8aa026f1737d3d8c627a7f664725fd6b43724",
+    "AsyncQueueSource_AXI4BundleAW.sv": "6aed5dbcd59a02db067d82d77299ff386036ef6aa942aee244235bb27f605746"
+  },
+  "late_start_wns_ns": "-8.314",
+  "ending_estimate_wns_ns": "-8.258",
+  "ending_estimate_tns_ns": "-544938.492",
+  "critical_path_table_gain_ns": "0.056",
+  "intervals_by_action": {
+    "AXI AW source queue": {
+      "intervals": 42,
+      "wns_changes": 13,
+      "observed_delta_ns": "0.056"
+    },
+    "PRCI clock gater": {
+      "intervals": 3,
+      "wns_changes": 0,
+      "observed_delta_ns": "0.000"
+    },
+    "mixed actions": {
+      "intervals": 1,
+      "wns_changes": 0,
+      "observed_delta_ns": "0.000"
+    },
+    "reset control": {
+      "intervals": 14,
+      "wns_changes": 0,
+      "observed_delta_ns": "0.000"
+    }
+  },
+  "aw_moved_bit_occurrences": {
+    "addr": 29,
+    "id": 4,
+    "len": 8,
+    "size": 1
+  },
+  "aw_unique_cells": 42,
+  "slr": {
+    "optimization_event_count": 670,
+    "unique_named_cells": 665,
+    "fp_pipeline_name_occurrences": 231,
+    "wns_gain_ns": "0.000",
+    "tns_gain_ns": "2106.011"
+  }
+}
