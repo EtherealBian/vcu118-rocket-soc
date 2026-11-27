@@ -13,6 +13,15 @@ foreach name [list $sys mmcm_clkout0] ns [list [expr {1000.0/175}] 5.0] {
  if {[llength $c]!=1 || abs([get_property PERIOD $c]-$ns)>0.001} {error "unexpected clock: $name"}
 }
 file mkdir $out
+# Replay the original whole-design reports before waived or diagnostic queries.
+# Do not change constraints or open another Vivado process for these comparisons.
+set replay [file join $out replay]; file mkdir $replay
+report_route_status -file [file join $replay route-status.rpt]
+report_timing_summary -report_unconstrained -file [file join $replay full-timing.rpt]
+check_timing -verbose -file [file join $replay check-timing.rpt]
+report_cdc -details -file [file join $replay cdc.rpt]
+report_clocks -file [file join $replay routed-clocks.rpt]
+report_drc -file [file join $replay routed-drc.rpt]
 # Report exceptions separately: fully ignored constraints and ignored individual
 # objects are different reports. Compare applied coverage to the original XDC.
 foreach {option name} {-coverage coverage -ignored ignored -ignored_objects ignored-objects} {

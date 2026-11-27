@@ -15,6 +15,8 @@ import sys
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0,str(HERE))
+from routed_replay import compare_reports
+
 paths = runpy.run_path(str(HERE/'review-mega-routed-paths.py'))
 digest = paths['synth'].digest
 REQUIRED = ('exceptions-coverage','exceptions-ignored','exceptions-ignored-objects',
@@ -44,6 +46,10 @@ def audit(run,kit,log,out,vivado):
         if text.splitlines().count(marker)!=1 or digest(dcp)!=same:
             raise ValueError('unfinished collection or changed checkpoint')
     run_tcl('inspect-mega-postroute.tcl',extra,'FOUR_WIDE_ROUTED_DIAGNOSTICS_COLLECTED_NOT_SIGNOFF')
+    replay = compare_reports(obj/'report', extra/'replay')
+    (out/'replay.json').write_bytes((json.dumps(dict(post_route_dcp_sha256=same, reports=replay), indent=2)+'\n').encode())
+    if not all(row['matches'] for row in replay.values()):
+        raise ValueError('original/reopened report mismatch; inspect replay.json and the native reports')
     hashes={}
     for n in REQUIRED:
         f=extra/(n+'.rpt')
@@ -62,7 +68,7 @@ def audit(run,kit,log,out,vivado):
     groups=analyzer(*(p.read_text() for p in gray_files))
     return dict(scope='Additional physical diagnostics only. Gray skew is temporary on a reopened design. Coverage, exception dispositions, I/O, waived and unwaived violations require review; no bitstream authorization.',
                 board_input_seal=anchor['board_input_seal'],post_route_dcp_sha256=same,
-                report_sha256=hashes,gray_input_sha256={p.name:digest(p) for p in gray_files},
+                original_vs_reopened=replay,report_sha256=hashes,gray_input_sha256={p.name:digest(p) for p in gray_files},
                 gray_transfers=groups,matched_cpu_endpoints={'max':40,'min':40})
 
 
