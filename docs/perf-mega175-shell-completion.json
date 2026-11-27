@@ -1,0 +1,22 @@
+{
+  "scope": "Stock functional ChipTop with preloaded external TL RAM; Linux four-iteration CRC diagnostic only, not a board result.",
+  "online_hart": 0,
+  "contexts": 1,
+  "buffer_bytes": 2000,
+  "iterations_per_seed": 4,
+  "final_crcs": {
+    "performance": "0x9f95",
+    "validation": "0x19d9"
+  },
+  "first_post_entry_spi_select_tick": 167104916,
+  "shell_done_model_tick": 298021794,
+  "uart_sha256": "c3a884fda27b08f61179127365245e68e176b10cdeb9134b3ea0928ee6c69e7b",
+  "events_sha256": "3b46c108d5dd3a4177c3133f83981c63ff5be08c58f83c3b572b3362f5ab6830",
+  "uart_bytes": 9649,
+  "events_bytes": 3732,
+  "rejected_controls": 2,
+  "model_sha256": "ebee9a8e8925b65ec77890962b7254ff54c5c5a06ae2af90db38d837cd7c576b",
+  "stock_kit_sha256": "890bca3009ed260c81112d72ebcf6c985453568329aead9e9515dcc109d0e417",
+  "firmware_sha256": "f0db553be5448c4a8754c995cf25413b0e6f48c73cde061657c1bf1dfff46bce",
+  "elf_sha256": "61f7c4579b762f86d7d7dc93d4c385d08e50248f3dd6a8a9105fd5e88b58886a"
+}

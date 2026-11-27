@@ -5,8 +5,10 @@
 | 证据 | 这次能据此判断什么 |
 | --- | --- |
 | QEMU `virt`，同一份发行固件，真实 BusyBox shell 依次执行三条交互命令 | 性能、验证种子各 4 轮，最终 CRC 分别是 `0x9f95`、`0x19d9`；实际 ELF 的 SHA-256 与发行版一致。同一串口记录未通过 BOOM 身份检查，符合负控预期。短跑只取 CRC。 |
-| 原版单 hart 四路 BOOM 整核 RTL，外部行为 TL RAM | 从复位经 OpenSBI 进入 Linux 6.6.65，内核报告的 175 kHz 计时基准与 ROM 一致。已到 BusyBox 交互提示符，两条命令分别确认 shell 活性和 Linux 单 hart 身份；下述截点不含 CoreMark 结果。 |
+| 原版单 hart 四路 BOOM 整核 RTL，外部行为 TL RAM | 从复位经 OpenSBI 进入 Linux 6.6.65，内核报告的 175 kHz 计时基准与 ROM 一致。BusyBox 中执行并核对目标 ELF：性能、验证各 4 轮，最终 CRC 为 `0x9f95`、`0x19d9`。两者来自本次 RTL 串口，不是 QEMU 输出。 |
 | VCU118 | 本实验没有连接板卡、配置 FPGA 或访问物理串口；不更改正式成绩登记。175 MHz 是物理实现请求，不是本实验验证的频率。 |
+
+**终点（北京时间 2026-11-28 06:54）：** 同一次从复位开始的原版整核 RTL 运行，在模型第 **298,021,794** 拍收齐第三条命令的回复。单 hart、单上下文、2,000 字节；发行版 ELF 的性能和验证种子各执行 4 轮，返回码均为 0，两个最终 CRC 均与四轮预期相符。退出后重新读取全部 9,649 字节 UART 及 3,732 字节事件，与此前发布的前缀、模型和输入摘要逐项对照。仅改验证 CRC 的最后一位或截掉最后一个完成事件，复核都会拒绝。[去敏结果](perf-mega175-shell-completion.json)可用下方命令复核。这不是恢复版的冷启动结果，也没有覆盖物理 DDR 或正式的 24,000 轮板测；不据此换算吞吐。
 
 **内核已输出什么？** 这次整核模型没有注入 shell 命令，就已在 UART 上收到完整的 `Linux version 6.6.65 …`。入核时的前 2,352 个串口字节及对应事件仍与[上次证据](perf-mega175-linux-entry.json)的摘要相同。从文件开头保留到版本行的 CRLF 为止，共 **2,540 字节**，SHA-256 为 `6705dacd8703da7d371442012991321fed2012dacb5fd3d4c13cd1d256edd230`。可用 `head -c 2540 linux.uart | sha256sum` 复核同一次运行。
 
@@ -25,9 +27,9 @@
 
 可用 `head -c 6405 linux.uart | sha256sum` 复核第二个截点。另用 `dd if=Image iflag=skip_bytes,count_bytes bs=1M skip=1780552 count=415629 status=none | gzip -dc | cpio --quiet -i --to-stdout init | sha256sum` 从[该版镜像](perf-mega175-linux-entry.json)只读核对脚本；预期 `960e8017d045c84afb0b514b269055feb485dacc632c7d0e0415d90eb1bf0432`。将 `init` 换为 `bin/busybox` 可核对解释器，预期 `04fd02c757ed114677bcc167a5d07917f4a5ebf21aa76d2359195390f04d4297`。
 
-**交互命令现在走通了吗？** 走通了原版的前两条。16 MiB 内存自检执行 1 遍；系统自检报告 64 轮、两个进程、4 KiB 写时复制、128 次共享原子加和 S/D 浮点。BusyBox 1.36.1 中，第一条命令从串口引脚输入算式，来宾回传求值结果 42；第二条从 `/sys`、`/proc` 读到仅 CPU 0 在线、hart 0、`ucb-bar,boom0`、Sv39，三个设备树属性的实际字节摘要与 ROM 契约一致。自检中的两个进程不是两个 hart，也不是 CoreMark 的两个上下文。
+**交互命令现在走通了吗？** 以下是原版前两条命令完成时的历史截点。16 MiB 内存自检执行 1 遍；系统自检报告 64 轮、两个进程、4 KiB 写时复制、128 次共享原子加和 S/D 浮点。BusyBox 1.36.1 中，第一条命令从串口引脚输入算式，来宾回传求值结果 42；第二条从 `/sys`、`/proc` 读到仅 CPU 0 在线、hart 0、`ucb-bar,boom0`、Sv39，三个设备树属性的实际字节摘要与 ROM 契约一致。自检中的两个进程不是两个 hart，也不是 CoreMark 的两个上下文。
 
-第二条回复的最后一个 CRLF 对应模型第 **257,812,222** 拍。[只读前缀检查](../scripts/review-mega-shell-identity-prefix.py)同时截取两个流：UART 前 **7,702** 字节、事件前 **3,186** 字节。重新核对复位直到入核的两个旧摘要、`/init` 前缀、两条命令和回显后的独立回复、字符数、最短收发时间及中间进度计数；在进程活动时另查模型可执行文件、启动参数和日志文件描述符。[去敏记录](perf-mega175-shell-identity-prefix.json)含摘要和时间戳。把回显冒充回复、改动属性、改事件步骤、截断 CRLF、跳过进度点、改 TX 字节数，六种情况都被拒绝。第三条命令不在这个截点内，**没有发布 ELF 运行结果或分数**。
+第二条回复的最后一个 CRLF 对应模型第 **257,812,222** 拍。[只读前缀检查](../scripts/review-mega-shell-identity-prefix.py)同时截取两个流：UART 前 **7,702** 字节、事件前 **3,186** 字节。重新核对复位直到入核的两个旧摘要、`/init` 前缀、两条命令和回显后的独立回复、字符数、最短收发时间及中间进度计数；在进程活动时另查模型可执行文件、启动参数和日志文件描述符。[去敏记录](perf-mega175-shell-identity-prefix.json)含摘要和时间戳。把回显冒充回复、改动属性、改事件步骤、截断 CRLF、跳过进度点、改 TX 字节数，六种情况都被拒绝。这个早期截点不包含第三条命令，不能据此证明 ELF 已运行。
 
 正在综合的恢复版采用同一观测程序，但独立冷启动、有自己的证据，见[恢复版两次冷复位](perf-mega175-recovery-linux.md)。
 
@@ -41,6 +43,9 @@
 
 ```sh
 nice -n 15 python3 scripts/test-mega-linux-shell.py "$KIT" "$OBJ" "$RELEASE" "$FRESH_DIR" "$VERILATOR_INCLUDE"
+# 复核此次归档运行（含两种故意破坏的对照），不再启动模型：
+python3 -B scripts/review-mega-shell-completion.py "$ARCHIVED_STOCK_RUN" > "$ARCHIVED_STOCK_RUN/public-summary.json"
+diff -u docs/perf-mega175-shell-completion.json "$ARCHIVED_STOCK_RUN/public-summary.json"
 # 单独运行 QEMU 控制，与上面的长时模型使用不同的新目录：
 python3 scripts/test-mega-shell-qemu.py "$RELEASE/fw_payload.bin" "$QEMU_ROOT" "$FRESH_QEMU_DIR"
 ```
