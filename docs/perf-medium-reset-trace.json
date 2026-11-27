@@ -1,0 +1,37 @@
+{
+  "scope": "Original two-wide routed reset topology only. No hazard, metastability, recovery/removal, pin timing, debug crossing, automatic waiver or permission to program.",
+  "reported_preset_paths": 2,
+  "mig_source_flipflop": "DDR controller bank group zero reset",
+  "merge": "LUT4",
+  "init_hex": "fffd",
+  "inputs_in_lut_order": [
+    "pll_locked",
+    "external_reset",
+    "mig_reset",
+    "power_on_reset"
+  ],
+  "truth_table_rows": 16,
+  "deglitch_primitive": "FDPE",
+  "deglitch_q_async_clear_loads": 6,
+  "catchers": [
+    {
+      "clock": "SoC",
+      "flip_flops": 3,
+      "primitive": "FDCE",
+      "interstage_data_arcs": 2
+    },
+    {
+      "clock": "MIG UI",
+      "flip_flops": 3,
+      "primitive": "FDCE",
+      "interstage_data_arcs": 2
+    }
+  ],
+  "inputs_sha256": {
+    "routed_sdf": "91ccd7c0c9fc567e1b9edda55f10242fe97c9faab9566904815fae9f698b8dc4",
+    "routed_verilog": "1c01026406c5bbb29fa9d83467c8999270617891b77e68b79f91de5da835117f",
+    "cdc_report": "a0f0203238f6c44a01ba6ba629eaf36745cbb02d9d626b39a0ff842dfbc82115",
+    "post_route_dcp": "302d476ef334cbe683dbdba3221effc2c6824b6179002fa2882cf0ea9f680230",
+    "bit": "156fa7e878ee11eb1cd961e581cf66bc5925d2ee908bbf880c5bf896a38aace3"
+  }
+}

@@ -34,6 +34,9 @@ if __name__=='__main__':
     p=argparse.ArgumentParser(description=__doc__)
     for key in ('reference_out','reference_kit','candidate_out','candidate_kit','diag'):p.add_argument(key,type=Path)
     p.add_argument('--mhz',type=int,default=175);p.add_argument('--iterations-per-second',type=int,default=1000)
+    p.add_argument('--same-organization',action='store_true',help='Label a same-organization experiment without attributing its cycle difference to cache or predictor changes.')
     a=p.parse_args();h=Path(__file__).resolve().parents[1]/'tests/rocket_chiptop.cpp'
     result=screen(cmp.w.review(a.reference_out,a.reference_kit,a.diag,h),cmp.w.review(a.candidate_out,a.candidate_kit,a.diag,h),a.mhz,a.iterations_per_second)
+    if a.same_organization:
+        result['scope']='Two generated ChipTop models, same preloaded executable and behavioral RAM. Same-organization diagnostic selected by caller; not a board measurement or a CoreMark score.'
     print(json.dumps(result,indent=2))

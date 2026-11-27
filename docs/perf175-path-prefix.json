@@ -1,0 +1,81 @@
+{
+  "scope": "Top eight detailed setup paths from the optimized, unplaced three-wide 175 MHz checkpoint. Boundaries use first named mapped issue-unit primitive input, not a portable RTL cut, routed delay or four-wide timing.",
+  "requested_period_ns": "5.714",
+  "shared_combinational_cells_after_launch": 25,
+  "last_shared_output": "lsu/deq_ptr_value[2]_i_6/O",
+  "paths": [
+    {
+      "endpoint": "core/int_issue_unit/io_dis_uops_0_ready_REG_reg/D",
+      "kind": "dispatch_credit",
+      "levels": 38,
+      "levels_before_first_issue_input": 26,
+      "before_first_issue_input_ns": "7.072",
+      "from_first_issue_input_to_capture_ns": "2.846",
+      "reported_data_ns": "9.918"
+    },
+    {
+      "endpoint": "core/int_issue_unit/io_dis_uops_1_ready_REG_reg/D",
+      "kind": "dispatch_credit",
+      "levels": 38,
+      "levels_before_first_issue_input": 26,
+      "before_first_issue_input_ns": "7.072",
+      "from_first_issue_input_to_capture_ns": "2.846",
+      "reported_data_ns": "9.918"
+    },
+    {
+      "endpoint": "core/int_issue_unit/io_dis_uops_2_ready_REG_reg/D",
+      "kind": "dispatch_credit",
+      "levels": 37,
+      "levels_before_first_issue_input": 26,
+      "before_first_issue_input_ns": "7.072",
+      "from_first_issue_input_to_capture_ns": "2.632",
+      "reported_data_ns": "9.704"
+    },
+    {
+      "endpoint": "core/mem_issue_unit/slots_13/p1_reg/D",
+      "kind": "slot_operand",
+      "levels": 37,
+      "levels_before_first_issue_input": 26,
+      "before_first_issue_input_ns": "7.062",
+      "from_first_issue_input_to_capture_ns": "2.601",
+      "reported_data_ns": "9.663"
+    },
+    {
+      "endpoint": "core/mem_issue_unit/slots_13/p2_reg/D",
+      "kind": "slot_operand",
+      "levels": 37,
+      "levels_before_first_issue_input": 26,
+      "before_first_issue_input_ns": "7.062",
+      "from_first_issue_input_to_capture_ns": "2.601",
+      "reported_data_ns": "9.663"
+    },
+    {
+      "endpoint": "core/mem_issue_unit/slots_4/p1_reg/D",
+      "kind": "slot_operand",
+      "levels": 37,
+      "levels_before_first_issue_input": 26,
+      "before_first_issue_input_ns": "7.062",
+      "from_first_issue_input_to_capture_ns": "2.584",
+      "reported_data_ns": "9.646"
+    },
+    {
+      "endpoint": "core/mem_issue_unit/slots_4/p2_reg/D",
+      "kind": "slot_operand",
+      "levels": 37,
+      "levels_before_first_issue_input": 26,
+      "before_first_issue_input_ns": "7.062",
+      "from_first_issue_input_to_capture_ns": "2.584",
+      "reported_data_ns": "9.646"
+    },
+    {
+      "endpoint": "core/int_issue_unit/slots_3/p1_reg/D",
+      "kind": "slot_operand",
+      "levels": 36,
+      "levels_before_first_issue_input": 26,
+      "before_first_issue_input_ns": "7.072",
+      "from_first_issue_input_to_capture_ns": "2.384",
+      "reported_data_ns": "9.456"
+    }
+  ],
+  "report_sha256": "54256ff1bbba0223e298d64160b41bd1c9e23887fc70bd817f2ed108a0c27b70"
+}

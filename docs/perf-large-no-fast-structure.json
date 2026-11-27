@@ -1,0 +1,25 @@
+{
+  "scope": "Generated tile interface only. The ordinary integer load response remains connected; this does not prove that a physical critical path is gone, measure cycles, or sign off timing.",
+  "stock": {
+    "speculative_ports": [
+      "spec_ld_wakeup_0_valid",
+      "spec_ld_wakeup_0_bits",
+      "ld_miss"
+    ],
+    "ordinary_port": "exe_0_iresp_valid",
+    "rtl_sha256": {
+      "BoomTile.sv": "6a5f32c883a82437ee5d38ee0ddc00d503f7314bf3892530c4537871c9c67541",
+      "BoomCore.sv": "617cbcd7fc40e5f0c075d3275ea84405989dc8e42e0ed4dd00577f8ab2a13637",
+      "LSU.sv": "c2a8160a6543671f041e7fdb3b4c93f71e87b1a4e06725c2afffb8a83c1c8fe0"
+    }
+  },
+  "no_fast_load": {
+    "speculative_ports": [],
+    "ordinary_port": "exe_0_iresp_valid",
+    "rtl_sha256": {
+      "BoomTile.sv": "9e9745d46261aba6ab8afdf39d74e802c8b6f2761e15cb8e9784782beb65e6c5",
+      "BoomCore.sv": "ca986c0c2be22feba6ac4466f8d63a73499575c717b2c05af8d847c11de52086",
+      "LSU.sv": "f07f34f0ba7254e3d91956de1c879f8ff5eb8a710bfcae858de4cd7de71b5748"
+    }
+  }
+}
