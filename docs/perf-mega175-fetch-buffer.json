@@ -1,0 +1,229 @@
+{
+  "scope": "Unplaced xcup instruction-write cone, including enqueue capacity and 32 slot write enables. Omits other payload fields, registered tail update, dequeue logic and actual routing. SAT compares 448 prefix/rotation bits for arbitrary two-state tails; masked data writes are proved for all 32 slots (bitwise, independent lanes/old state) under a separately proved one-hot tail after reset or clear. Not whole-core timing.",
+  "board_input_seal": "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+  "instruction_bits": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31
+  ],
+  "yosys_sha256": "f58d1dfcbc9b48a81357283e93b53e4c78415f6d28f227f0db34a79f316e6a64",
+  "abc_sha256": "6b6d93004494101bed191ddf29c411df55c50f990d7db56796767a3efbb03b09",
+  "profiles": {
+    "stock": {
+      "source_sha256": "a3c9510a0ac9c8f2ec7dd2bf3ff849adde8581c6847b181f22d7f7cec5a047dc",
+      "init_ok": "proved",
+      "step_ok": "proved",
+      "cut_sha256": "b34de12775f3c425d7cce89f465f9c6b6be0b6d5a6fe5c3bc6c80abe3ac9663e",
+      "full_unit_elaboration": "checked",
+      "map": {
+        "fdre": 1024,
+        "comb": {
+          "cells": {
+            "LUT2": 1012,
+            "LUT3": 151,
+            "LUT4": 103,
+            "LUT5": 197,
+            "LUT6": 7279,
+            "MUXF7": 3038,
+            "MUXF8": 1021
+          },
+          "total": 12801,
+          "max_primitive_levels": {
+            "all_D": 12,
+            "all_CE": 8,
+            "slot11_bit25_D": 11,
+            "slot12_bit12_D": 11,
+            "slot23_bit25_D": 11,
+            "slot24_bit25_D": 11
+          }
+        }
+      }
+    },
+    "pair_even": {
+      "source_sha256": "f75b818ebc5e1c18a3b38ef168b81b9a2378b79537fa4ae2d53b41616e230cfa",
+      "prefix_equivalence": "proved",
+      "cut_sha256": "636f1b7d0bfb289c46e3b1fab7ef449df222987bc1b8120d2748ecebb1609630",
+      "full_unit_elaboration": "checked",
+      "map": {
+        "fdre": 1024,
+        "comb": {
+          "cells": {
+            "LUT2": 1357,
+            "LUT3": 1773,
+            "LUT4": 56,
+            "LUT5": 138,
+            "LUT6": 6137,
+            "MUXF7": 2681,
+            "MUXF8": 1096
+          },
+          "total": 13238,
+          "max_primitive_levels": {
+            "all_D": 12,
+            "all_CE": 10,
+            "slot11_bit25_D": 11,
+            "slot12_bit12_D": 11,
+            "slot23_bit25_D": 12,
+            "slot24_bit25_D": 11
+          }
+        }
+      }
+    },
+    "pair_all": {
+      "source_sha256": "4b9b0ab5ab68d79a9a412e4011adabce7e3352362ca600397acd022f782d10aa",
+      "prefix_equivalence": "proved",
+      "cut_sha256": "71e8cab35574e47d00d3bb9f6189db719c3f9f71d9a96d351146dbb212c0b9e5",
+      "full_unit_elaboration": "checked",
+      "map": {
+        "fdre": 1024,
+        "comb": {
+          "cells": {
+            "LUT2": 162,
+            "LUT3": 278,
+            "LUT4": 194,
+            "LUT5": 425,
+            "LUT6": 6555,
+            "MUXF7": 2753,
+            "MUXF8": 645
+          },
+          "total": 11012,
+          "max_primitive_levels": {
+            "all_D": 12,
+            "all_CE": 9,
+            "slot11_bit25_D": 11,
+            "slot12_bit12_D": 11,
+            "slot23_bit25_D": 11,
+            "slot24_bit25_D": 12
+          }
+        }
+      }
+    },
+    "onehot": {
+      "source_sha256": "3d832bfb87b203b522fc68bf5fe0ce7d2f1c2988acb652a345996a65d143dd64",
+      "single_bit_all_slots_equivalence": "proved",
+      "cut_sha256": "fd9aaca2fc16212e031d175265d867e9122336024940c585558a2ce82e23b73a",
+      "full_unit_elaboration": "checked",
+      "map": {
+        "fdre": 1024,
+        "comb": {
+          "cells": {
+            "LUT2": 105,
+            "LUT3": 52,
+            "LUT4": 1465,
+            "LUT5": 1018,
+            "LUT6": 7534,
+            "MUXF7": 3022,
+            "MUXF8": 1510
+          },
+          "total": 14706,
+          "max_primitive_levels": {
+            "all_D": 10,
+            "all_CE": 8,
+            "slot11_bit25_D": 10,
+            "slot12_bit12_D": 10,
+            "slot23_bit25_D": 10,
+            "slot24_bit25_D": 10
+          }
+        }
+      }
+    },
+    "onehot_local": {
+      "source_sha256": "9500117d1a8c732022a9de3ca3a6ce9d84b7bb8bf1c68721c72bb851cd66c21a",
+      "single_bit_all_slots_equivalence": "proved",
+      "cut_sha256": "07e275707d389ee5861271f1c19ba5fef665bb459703115d4d95b3098c2896c5",
+      "full_unit_elaboration": "checked",
+      "map": {
+        "fdre": 1024,
+        "comb": {
+          "cells": {
+            "LUT2": 1032,
+            "LUT3": 570,
+            "LUT4": 340,
+            "LUT5": 982,
+            "LUT6": 7376,
+            "MUXF7": 2671,
+            "MUXF8": 1100
+          },
+          "total": 14071,
+          "max_primitive_levels": {
+            "all_D": 10,
+            "all_CE": 10,
+            "slot11_bit25_D": 10,
+            "slot12_bit12_D": 10,
+            "slot23_bit25_D": 10,
+            "slot24_bit25_D": 10
+          }
+        }
+      }
+    },
+    "pair_all_onehot": {
+      "source_sha256": "5a1d4e1d7a25ddfc0eb2564613905765d826fd5a3dda2bc8e928a6462417e828",
+      "single_bit_all_slots_equivalence": "proved",
+      "cut_sha256": "7c5542b07ac101e9179cdae11813a5f8f0d4672778e37fff2ce99c83a44c7dbb",
+      "full_unit_elaboration": "checked",
+      "map": {
+        "fdre": 1024,
+        "comb": {
+          "cells": {
+            "LUT2": 40,
+            "LUT3": 43,
+            "LUT4": 137,
+            "LUT5": 1508,
+            "LUT6": 12110,
+            "MUXF7": 5921,
+            "MUXF8": 2042
+          },
+          "total": 21801,
+          "max_primitive_levels": {
+            "all_D": 11,
+            "all_CE": 10,
+            "slot11_bit25_D": 11,
+            "slot12_bit12_D": 11,
+            "slot23_bit25_D": 11,
+            "slot24_bit25_D": 11
+          }
+        }
+      }
+    },
+    "wrong_wrap": {
+      "source_sha256": "46f21949e1d0263db949ae28e1ab07e09d3e660e95a420ea066bfe6ddfe6a6db",
+      "prefix_equivalence": "counterexample"
+    },
+    "wrong_lane": {
+      "source_sha256": "bed1fb6fddf3e4a006d8faaf90929ac9bb80b75d0fd237f9372a71bea52bb50c",
+      "single_bit_all_slots_equivalence": "counterexample"
+    },
+    "no_tail_invariant": {
+      "source_sha256": "3d832bfb87b203b522fc68bf5fe0ce7d2f1c2988acb652a345996a65d143dd64",
+      "single_bit_all_slots_equivalence": "counterexample"
+    }
+  }
+}

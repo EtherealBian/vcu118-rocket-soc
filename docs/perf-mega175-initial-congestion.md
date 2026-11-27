@@ -18,6 +18,7 @@
 
 针对这 8 个 L2 MSHR 标签引脚，另见[目录返回标签的三种等价改写与取舍](perf-mega175-directory-tag.md)。
 四个 MIG W 数据引脚则在[两份历史整机网表中逐线核对](perf-mega175-wdata-controls.md)，区分源端旁路和八槽扇出。
+四个取指缓冲指令输入则对照[完整 32 槽写口的五种候选](perf-mega175-fetch-buffer.md)，区分数据选择深度、使能深度和资源开销。
 
 ## 冲突节点归零后，时序怎样了？
 

@@ -1,0 +1,37 @@
+{
+  "scope": "Finite complete-module four-state differential simulation, not formal whole-module equivalence or a CoreMark run.",
+  "source_sha256": "a3c9510a0ac9c8f2ec7dd2bf3ff849adde8581c6847b181f22d7f7cec5a047dc",
+  "testbench_sha256": "ebc46efd5ab33cee74c5991519944e05136d9610ce9788abef7dc14f183e5a23",
+  "tool_sha256": {
+    "iverilog": "3b6bfe950e42356b73f5a1847457e63822449a90333a8629ce5c7dbd049fc36d",
+    "vvp": "8892455ad451df6460bf010de007857c0fbe9df7ee0c6aa6c999413edd4ae34d",
+    "ivl": "121b37c485a814d8f34a1880bf41f87c88a2de1f01376cddd65d860da324f562",
+    "ivlpp": "09678ef7728f589313769a21bb29ab03d7c67602abbd0883b1fc24e28de503b4",
+    "vvp.tgt": "b079293158bd1dec6d399d13b69edb3b87f10bc5f33b31ee2cb84e271b5f863b"
+  },
+  "clocks": 2624,
+  "input_bits": 605,
+  "output_bits": 510,
+  "all_accepted_masks": 256,
+  "all_tail_positions": 32,
+  "profiles": {
+    "onehot": {
+      "candidate_module_sha256": "3d832bfb87b203b522fc68bf5fe0ce7d2f1c2988acb652a345996a65d143dd64",
+      "stalled_enqueue_cycles": 112,
+      "nonclear_tail_wraps": 106,
+      "dequeue_handshakes": 956,
+      "valid_lane_samples": 8547
+    },
+    "onehot_local": {
+      "candidate_module_sha256": "9500117d1a8c732022a9de3ca3a6ce9d84b7bb8bf1c68721c72bb851cd66c21a",
+      "stalled_enqueue_cycles": 112,
+      "nonclear_tail_wraps": 106,
+      "dequeue_handshakes": 956,
+      "valid_lane_samples": 8547
+    },
+    "wrong_lane": {
+      "candidate_module_sha256": "bed1fb6fddf3e4a006d8faaf90929ac9bb80b75d0fd237f9372a71bea52bb50c",
+      "detected_at_cycle": 257
+    }
+  }
+}
