@@ -1,0 +1,923 @@
+{
+  "scope": "Independent OOC registered F3 cut; no CPU/cache/board timing or CoreMark.",
+  "qualification_sha256": "eb88490e2c6be8dce5021294afc5e96798aa4b6a36dd5e964f7ec0bce2eabdd6",
+  "stage": "estimate",
+  "cases": {
+    "stock": {
+      "synthesized_dcp_sha256": "bbe9773062f4f326b347e94de67fffd780c47d27b39ebbda604562883eb4e66d",
+      "synthesized_timing": {
+        "wns_ns": 1.947,
+        "whs_ns": 0.079,
+        "wpws_ns": 2.582,
+        "setup_failing": 0,
+        "hold_failing": 0
+      },
+      "estimated_timing_report_sha256": "a383f33d106a4561b593be2087630d747f935b8515f72269d6051dc83738db9e",
+      "path_measurement_state": "Synthesized",
+      "path_timing": {
+        "wns_ns": 1.947,
+        "whs_ns": 0.079,
+        "wpws_ns": 2.582,
+        "setup_failing": 0,
+        "hold_failing": 0
+      },
+      "clb_luts": 238,
+      "sta_lane_pairs_with_path": 613,
+      "required_lane_pairs": 357,
+      "worst_per_output_bus": {
+        "_f3_correct_f1_ghist_T_4": {
+          "all_inputs": {
+            "launch": 55,
+            "capture": 0,
+            "slack_ns": 2.188,
+            "data_ns": 3.508,
+            "logic_levels": 15
+          },
+          "eight_directions": {
+            "launch": 1,
+            "capture": 0,
+            "slack_ns": 2.261,
+            "data_ns": 3.435,
+            "logic_levels": 15
+          }
+        },
+        "_f3_correct_f2_ghist_T_4": {
+          "all_inputs": {
+            "launch": 55,
+            "capture": 1,
+            "slack_ns": 2.188,
+            "data_ns": 3.508,
+            "logic_levels": 15
+          },
+          "eight_directions": {
+            "launch": 1,
+            "capture": 1,
+            "slack_ns": 2.261,
+            "data_ns": 3.435,
+            "logic_levels": 15
+          }
+        },
+        "f3_predicted_ghist_old_history": {
+          "all_inputs": {
+            "launch": 55,
+            "capture": 65,
+            "slack_ns": 2.687,
+            "data_ns": 3.009,
+            "logic_levels": 11
+          },
+          "eight_directions": {
+            "launch": 1,
+            "capture": 65,
+            "slack_ns": 2.76,
+            "data_ns": 2.936,
+            "logic_levels": 11
+          }
+        },
+        "f3_predicted_ghist_new_saw_branch_not_taken": {
+          "all_inputs": {
+            "launch": 55,
+            "capture": 66,
+            "slack_ns": 2.928,
+            "data_ns": 2.768,
+            "logic_levels": 10
+          },
+          "eight_directions": {
+            "launch": 1,
+            "capture": 66,
+            "slack_ns": 3.001,
+            "data_ns": 2.695,
+            "logic_levels": 10
+          }
+        },
+        "f3_predicted_ghist_new_saw_branch_taken": {
+          "all_inputs": {
+            "launch": 55,
+            "capture": 67,
+            "slack_ns": 3.436,
+            "data_ns": 2.26,
+            "logic_levels": 8
+          },
+          "eight_directions": {
+            "launch": 1,
+            "capture": 67,
+            "slack_ns": 3.509,
+            "data_ns": 2.187,
+            "logic_levels": 8
+          }
+        },
+        "_GEN_133": {
+          "all_inputs": {
+            "launch": 55,
+            "capture": 68,
+            "slack_ns": 1.947,
+            "data_ns": 3.749,
+            "logic_levels": 16
+          },
+          "eight_directions": {
+            "launch": 1,
+            "capture": 68,
+            "slack_ns": 2.02,
+            "data_ns": 3.676,
+            "logic_levels": 16
+          }
+        },
+        "f2_clear": {
+          "all_inputs": {
+            "launch": 55,
+            "capture": 69,
+            "slack_ns": 1.947,
+            "data_ns": 3.749,
+            "logic_levels": 16
+          },
+          "eight_directions": {
+            "launch": 1,
+            "capture": 69,
+            "slack_ns": 2.02,
+            "data_ns": 3.676,
+            "logic_levels": 16
+          }
+        },
+        "f4_io_enq_bits_cfi_idx_bits": {
+          "all_inputs": {
+            "launch": 55,
+            "capture": 70,
+            "slack_ns": 3.959,
+            "data_ns": 1.737,
+            "logic_levels": 6
+          },
+          "eight_directions": {
+            "launch": 1,
+            "capture": 70,
+            "slack_ns": 4.032,
+            "data_ns": 1.664,
+            "logic_levels": 6
+          }
+        },
+        "f4_io_enq_bits_cfi_idx_valid": {
+          "all_inputs": {
+            "launch": 55,
+            "capture": 73,
+            "slack_ns": 3.756,
+            "data_ns": 1.94,
+            "logic_levels": 7
+          },
+          "eight_directions": {
+            "launch": 1,
+            "capture": 73,
+            "slack_ns": 3.829,
+            "data_ns": 1.867,
+            "logic_levels": 7
+          }
+        },
+        "f4_io_enq_bits_br_mask": {
+          "all_inputs": {
+            "launch": 55,
+            "capture": 81,
+            "slack_ns": 3.769,
+            "data_ns": 1.927,
+            "logic_levels": 7
+          },
+          "eight_directions": {
+            "launch": 1,
+            "capture": 81,
+            "slack_ns": 3.842,
+            "data_ns": 1.854,
+            "logic_levels": 7
+          }
+        }
+      },
+      "native_report_sha256": {
+        "paths.tsv": "345e8f0a045a465b62da3ef423a880923af6fbb20593fc98ab3938b4954821b4",
+        "timing.rpt": "79d017e2c3f6ee0986f91d03b300058b6beca1ae8fd1080e6518d878b43f8b4a",
+        "util.rpt": "c60b39a4102855e5756b9bef742a743940fc09e5ee9eccbe2362fa0b75a3afa7",
+        "registers-max.rpt": "8595b243127c16a6be7c4f17afc6e35a652a0052cff45a0a2ed95f9654f953ba",
+        "registers-min.rpt": "fe6cb5b8cd253ddc806efdee6221e5b07949735054481b9545a4147ce4a68d42"
+      },
+      "candidate_rtl_sha256": "551546406dd5fda1e1726cb7fe0d246159f794f1814a90aa217468a24989eaf1"
+    },
+    "prefix_and_compare": {
+      "synthesized_dcp_sha256": "e05cbc9b61f00499f0b83434dd68d0481475203da8fe44a628ae99a7a1c0f101",
+      "synthesized_timing": {
+        "wns_ns": 3.217,
+        "whs_ns": 0.079,
+        "wpws_ns": 2.582,
+        "setup_failing": 0,
+        "hold_failing": 0
+      },
+      "estimated_timing_report_sha256": "8f44171f848b797350ecae74300f5a784940dc26dce516c022261a0335aef381",
+      "path_measurement_state": "Synthesized",
+      "path_timing": {
+        "wns_ns": 3.217,
+        "whs_ns": 0.079,
+        "wpws_ns": 2.582,
+        "setup_failing": 0,
+        "hold_failing": 0
+      },
+      "clb_luts": 318,
+      "sta_lane_pairs_with_path": 357,
+      "required_lane_pairs": 357,
+      "worst_per_output_bus": {
+        "_f3_correct_f1_ghist_T_4": {
+          "all_inputs": {
+            "launch": 56,
+            "capture": 0,
+            "slack_ns": 3.458,
+            "data_ns": 2.238,
+            "logic_levels": 8
+          },
+          "eight_directions": {
+            "launch": 1,
+            "capture": 0,
+            "slack_ns": 3.511,
+            "data_ns": 2.185,
+            "logic_levels": 8
+          }
+        },
+        "_f3_correct_f2_ghist_T_4": {
+          "all_inputs": {
+            "launch": 56,
+            "capture": 1,
+            "slack_ns": 3.458,
+            "data_ns": 2.238,
+            "logic_levels": 8
+          },
+          "eight_directions": {
+            "launch": 1,
+            "capture": 1,
+            "slack_ns": 3.511,
+            "data_ns": 2.185,
+            "logic_levels": 8
+          }
+        },
+        "f3_predicted_ghist_old_history": {
+          "all_inputs": {
+            "launch": 56,
+            "capture": 2,
+            "slack_ns": 3.742,
+            "data_ns": 1.954,
+            "logic_levels": 7
+          },
+          "eight_directions": {
+            "launch": 1,
+            "capture": 2,
+            "slack_ns": 3.795,
+            "data_ns": 1.901,
+            "logic_levels": 7
+          }
+        },
+        "f3_predicted_ghist_new_saw_branch_not_taken": {
+          "all_inputs": {
+            "launch": 56,
+            "capture": 66,
+            "slack_ns": 3.699,
+            "data_ns": 1.997,
+            "logic_levels": 7
+          },
+          "eight_directions": {
+            "launch": 1,
+            "capture": 66,
+            "slack_ns": 3.752,
+            "data_ns": 1.944,
+            "logic_levels": 7
+          }
+        },
+        "f3_predicted_ghist_new_saw_branch_taken": {
+          "all_inputs": {
+            "launch": 56,
+            "capture": 67,
+            "slack_ns": 3.731,
+            "data_ns": 1.965,
+            "logic_levels": 7
+          },
+          "eight_directions": {
+            "launch": 1,
+            "capture": 67,
+            "slack_ns": 3.784,
+            "data_ns": 1.912,
+            "logic_levels": 7
+          }
+        },
+        "_GEN_133": {
+          "all_inputs": {
+            "launch": 56,
+            "capture": 68,
+            "slack_ns": 3.217,
+            "data_ns": 2.479,
+            "logic_levels": 9
+          },
+          "eight_directions": {
+            "launch": 1,
+            "capture": 68,
+            "slack_ns": 3.27,
+            "data_ns": 2.426,
+            "logic_levels": 9
+          }
+        },
+        "f2_clear": {
+          "all_inputs": {
+            "launch": 56,
+            "capture": 69,
+            "slack_ns": 3.217,
+            "data_ns": 2.479,
+            "logic_levels": 9
+          },
+          "eight_directions": {
+            "launch": 1,
+            "capture": 69,
+            "slack_ns": 3.27,
+            "data_ns": 2.426,
+            "logic_levels": 9
+          }
+        },
+        "f4_io_enq_bits_cfi_idx_bits": {
+          "all_inputs": {
+            "launch": 56,
+            "capture": 70,
+            "slack_ns": 3.743,
+            "data_ns": 1.953,
+            "logic_levels": 7
+          },
+          "eight_directions": {
+            "launch": 1,
+            "capture": 70,
+            "slack_ns": 3.796,
+            "data_ns": 1.9,
+            "logic_levels": 7
+          }
+        },
+        "f4_io_enq_bits_cfi_idx_valid": {
+          "all_inputs": {
+            "launch": 56,
+            "capture": 73,
+            "slack_ns": 3.767,
+            "data_ns": 1.929,
+            "logic_levels": 7
+          },
+          "eight_directions": {
+            "launch": 1,
+            "capture": 73,
+            "slack_ns": 3.82,
+            "data_ns": 1.876,
+            "logic_levels": 7
+          }
+        },
+        "f4_io_enq_bits_br_mask": {
+          "all_inputs": {
+            "launch": 56,
+            "capture": 81,
+            "slack_ns": 3.972,
+            "data_ns": 1.724,
+            "logic_levels": 6
+          },
+          "eight_directions": {
+            "launch": 1,
+            "capture": 81,
+            "slack_ns": 4.025,
+            "data_ns": 1.671,
+            "logic_levels": 6
+          }
+        }
+      },
+      "native_report_sha256": {
+        "paths.tsv": "0721bd1a4f5159fc61fe2cacb7ae89bf50c04d2f75d21b82880f0bd80e5225f5",
+        "timing.rpt": "e1c133c1330b324bc7eebc38dd622a1f1df7f90164ceddabdfc25ac777910d99",
+        "util.rpt": "e86bfa086fc1dc8b32ef8126958d769375a4cbd51bc84bd3d2d11d1bbac22fe1",
+        "registers-max.rpt": "9838f4ecfcbd14ef533b53df519679611c3ef3bdb429fe4fe6ba4599f84048f8",
+        "registers-min.rpt": "a301c852d5fb3f3e50f8bd9aaff12a01f4ff7a84e454dd6db167d5fadb6d3925"
+      },
+      "candidate_rtl_sha256": "714852824855d5cf31d045b8e5104c4123ae1d51deb23c203d38e9eb77176e33"
+    },
+    "eligible_lanes": {
+      "synthesized_dcp_sha256": "7a57ce0f53af6ae3e93e147482acd16bfc5cbae31f7bb81fef6a76e62248e333",
+      "synthesized_timing": {
+        "wns_ns": 2.564,
+        "whs_ns": 0.077,
+        "wpws_ns": 2.582,
+        "setup_failing": 0,
+        "hold_failing": 0
+      },
+      "estimated_timing_report_sha256": "1f6d42d98d54d15ab0cfecd10a17450a51cb4af95353926c86ab4ca42d495960",
+      "path_measurement_state": "Synthesized",
+      "path_timing": {
+        "wns_ns": 2.564,
+        "whs_ns": 0.077,
+        "wpws_ns": 2.582,
+        "setup_failing": 0,
+        "hold_failing": 0
+      },
+      "clb_luts": 297,
+      "sta_lane_pairs_with_path": 357,
+      "required_lane_pairs": 357,
+      "worst_per_output_bus": {
+        "_f3_correct_f1_ghist_T_4": {
+          "all_inputs": {
+            "launch": 55,
+            "capture": 0,
+            "slack_ns": 2.805,
+            "data_ns": 2.891,
+            "logic_levels": 13
+          },
+          "eight_directions": {
+            "launch": 0,
+            "capture": 0,
+            "slack_ns": 2.89,
+            "data_ns": 2.806,
+            "logic_levels": 13
+          }
+        },
+        "_f3_correct_f2_ghist_T_4": {
+          "all_inputs": {
+            "launch": 55,
+            "capture": 1,
+            "slack_ns": 2.805,
+            "data_ns": 2.891,
+            "logic_levels": 13
+          },
+          "eight_directions": {
+            "launch": 0,
+            "capture": 1,
+            "slack_ns": 2.89,
+            "data_ns": 2.806,
+            "logic_levels": 13
+          }
+        },
+        "f3_predicted_ghist_old_history": {
+          "all_inputs": {
+            "launch": 55,
+            "capture": 2,
+            "slack_ns": 3.539,
+            "data_ns": 2.157,
+            "logic_levels": 8
+          },
+          "eight_directions": {
+            "launch": 0,
+            "capture": 2,
+            "slack_ns": 3.624,
+            "data_ns": 2.072,
+            "logic_levels": 8
+          }
+        },
+        "f3_predicted_ghist_new_saw_branch_not_taken": {
+          "all_inputs": {
+            "launch": 12,
+            "capture": 66,
+            "slack_ns": 3.747,
+            "data_ns": 1.949,
+            "logic_levels": 7
+          },
+          "eight_directions": {
+            "launch": 0,
+            "capture": 66,
+            "slack_ns": 3.822,
+            "data_ns": 1.874,
+            "logic_levels": 7
+          }
+        },
+        "f3_predicted_ghist_new_saw_branch_taken": {
+          "all_inputs": {
+            "launch": 12,
+            "capture": 67,
+            "slack_ns": 3.705,
+            "data_ns": 1.991,
+            "logic_levels": 7
+          },
+          "eight_directions": {
+            "launch": 0,
+            "capture": 67,
+            "slack_ns": 3.78,
+            "data_ns": 1.916,
+            "logic_levels": 7
+          }
+        },
+        "_GEN_133": {
+          "all_inputs": {
+            "launch": 55,
+            "capture": 68,
+            "slack_ns": 2.564,
+            "data_ns": 3.132,
+            "logic_levels": 14
+          },
+          "eight_directions": {
+            "launch": 0,
+            "capture": 68,
+            "slack_ns": 2.649,
+            "data_ns": 3.047,
+            "logic_levels": 14
+          }
+        },
+        "f2_clear": {
+          "all_inputs": {
+            "launch": 55,
+            "capture": 69,
+            "slack_ns": 2.564,
+            "data_ns": 3.132,
+            "logic_levels": 14
+          },
+          "eight_directions": {
+            "launch": 0,
+            "capture": 69,
+            "slack_ns": 2.649,
+            "data_ns": 3.047,
+            "logic_levels": 14
+          }
+        },
+        "f4_io_enq_bits_cfi_idx_bits": {
+          "all_inputs": {
+            "launch": 12,
+            "capture": 70,
+            "slack_ns": 3.747,
+            "data_ns": 1.949,
+            "logic_levels": 7
+          },
+          "eight_directions": {
+            "launch": 0,
+            "capture": 70,
+            "slack_ns": 3.822,
+            "data_ns": 1.874,
+            "logic_levels": 7
+          }
+        },
+        "f4_io_enq_bits_cfi_idx_valid": {
+          "all_inputs": {
+            "launch": 12,
+            "capture": 73,
+            "slack_ns": 3.747,
+            "data_ns": 1.949,
+            "logic_levels": 7
+          },
+          "eight_directions": {
+            "launch": 0,
+            "capture": 73,
+            "slack_ns": 3.822,
+            "data_ns": 1.874,
+            "logic_levels": 7
+          }
+        },
+        "f4_io_enq_bits_br_mask": {
+          "all_inputs": {
+            "launch": 12,
+            "capture": 80,
+            "slack_ns": 3.715,
+            "data_ns": 1.981,
+            "logic_levels": 7
+          },
+          "eight_directions": {
+            "launch": 0,
+            "capture": 80,
+            "slack_ns": 3.79,
+            "data_ns": 1.906,
+            "logic_levels": 7
+          }
+        }
+      },
+      "native_report_sha256": {
+        "paths.tsv": "167f0bfc7afb5f6f9e0f934fce5193606717ae49c45f98476f55e3db41460221",
+        "timing.rpt": "9dc2cc7b0946c43df6c3c12bee08b02da130c4f1e04f6511043983c5f8e9045a",
+        "util.rpt": "a5dc7f742f5581ec143e50acdc10e4f10f9bfe9bc822cd9e9619dc015e3c19d0",
+        "registers-max.rpt": "0c04b9227e6282c972f6ffb533e6a6ce898412ca0bf825a973731236f686ce93",
+        "registers-min.rpt": "30e251f2288b08c016306c9d33a70a0142b077fd0567a9cfa03f211febb3b5f8"
+      },
+      "candidate_rtl_sha256": "1c854bc8f238abcf41bcd05f1f44953ca966835d37e5c2da4d5fcf06fece79af"
+    }
+  },
+  "same_required_pair_vs_stock": {
+    "prefix_and_compare": {
+      "all_required": {
+        "improved": 341,
+        "worsened": 16,
+        "equal": 0,
+        "smallest_delta": {
+          "delta_ps": -275,
+          "lane": 0,
+          "capture_bit": 75
+        },
+        "largest_delta": {
+          "delta_ps": 1361,
+          "lane": 2,
+          "capture_bit": 68
+        }
+      },
+      "by_output_bus": {
+        "_f3_correct_f1_ghist_T_4": {
+          "improved": 8,
+          "worsened": 0,
+          "equal": 0,
+          "smallest_delta": {
+            "delta_ps": 1077,
+            "lane": 5,
+            "capture_bit": 0
+          },
+          "largest_delta": {
+            "delta_ps": 1361,
+            "lane": 2,
+            "capture_bit": 0
+          }
+        },
+        "_f3_correct_f2_ghist_T_4": {
+          "improved": 8,
+          "worsened": 0,
+          "equal": 0,
+          "smallest_delta": {
+            "delta_ps": 1077,
+            "lane": 5,
+            "capture_bit": 1
+          },
+          "largest_delta": {
+            "delta_ps": 1357,
+            "lane": 2,
+            "capture_bit": 1
+          }
+        },
+        "f3_predicted_ghist_old_history": {
+          "improved": 256,
+          "worsened": 0,
+          "equal": 0,
+          "smallest_delta": {
+            "delta_ps": 794,
+            "lane": 1,
+            "capture_bit": 2
+          },
+          "largest_delta": {
+            "delta_ps": 1311,
+            "lane": 3,
+            "capture_bit": 65
+          }
+        },
+        "f3_predicted_ghist_new_saw_branch_not_taken": {
+          "improved": 8,
+          "worsened": 0,
+          "equal": 0,
+          "smallest_delta": {
+            "delta_ps": 578,
+            "lane": 5,
+            "capture_bit": 66
+          },
+          "largest_delta": {
+            "delta_ps": 862,
+            "lane": 2,
+            "capture_bit": 66
+          }
+        },
+        "f3_predicted_ghist_new_saw_branch_taken": {
+          "improved": 8,
+          "worsened": 0,
+          "equal": 0,
+          "smallest_delta": {
+            "delta_ps": 275,
+            "lane": 1,
+            "capture_bit": 67
+          },
+          "largest_delta": {
+            "delta_ps": 545,
+            "lane": 6,
+            "capture_bit": 67
+          }
+        },
+        "_GEN_133": {
+          "improved": 8,
+          "worsened": 0,
+          "equal": 0,
+          "smallest_delta": {
+            "delta_ps": 1077,
+            "lane": 5,
+            "capture_bit": 68
+          },
+          "largest_delta": {
+            "delta_ps": 1361,
+            "lane": 2,
+            "capture_bit": 68
+          }
+        },
+        "f2_clear": {
+          "improved": 8,
+          "worsened": 0,
+          "equal": 0,
+          "smallest_delta": {
+            "delta_ps": 1077,
+            "lane": 5,
+            "capture_bit": 69
+          },
+          "largest_delta": {
+            "delta_ps": 1357,
+            "lane": 2,
+            "capture_bit": 69
+          }
+        },
+        "f4_io_enq_bits_cfi_idx_bits": {
+          "improved": 8,
+          "worsened": 9,
+          "equal": 0,
+          "smallest_delta": {
+            "delta_ps": -269,
+            "lane": 5,
+            "capture_bit": 71
+          },
+          "largest_delta": {
+            "delta_ps": 80,
+            "lane": 2,
+            "capture_bit": 71
+          }
+        },
+        "f4_io_enq_bits_cfi_idx_valid": {
+          "improved": 6,
+          "worsened": 2,
+          "equal": 0,
+          "smallest_delta": {
+            "delta_ps": -18,
+            "lane": 5,
+            "capture_bit": 73
+          },
+          "largest_delta": {
+            "delta_ps": 487,
+            "lane": 7,
+            "capture_bit": 73
+          }
+        },
+        "f4_io_enq_bits_br_mask": {
+          "improved": 23,
+          "worsened": 5,
+          "equal": 0,
+          "smallest_delta": {
+            "delta_ps": -275,
+            "lane": 0,
+            "capture_bit": 75
+          },
+          "largest_delta": {
+            "delta_ps": 531,
+            "lane": 6,
+            "capture_bit": 81
+          }
+        }
+      }
+    },
+    "eligible_lanes": {
+      "all_required": {
+        "improved": 323,
+        "worsened": 33,
+        "equal": 1,
+        "smallest_delta": {
+          "delta_ps": -587,
+          "lane": 3,
+          "capture_bit": 72
+        },
+        "largest_delta": {
+          "delta_ps": 1506,
+          "lane": 7,
+          "capture_bit": 69
+        }
+      },
+      "by_output_bus": {
+        "_f3_correct_f1_ghist_T_4": {
+          "improved": 8,
+          "worsened": 0,
+          "equal": 0,
+          "smallest_delta": {
+            "delta_ps": 625,
+            "lane": 0,
+            "capture_bit": 0
+          },
+          "largest_delta": {
+            "delta_ps": 1506,
+            "lane": 7,
+            "capture_bit": 0
+          }
+        },
+        "_f3_correct_f2_ghist_T_4": {
+          "improved": 8,
+          "worsened": 0,
+          "equal": 0,
+          "smallest_delta": {
+            "delta_ps": 625,
+            "lane": 0,
+            "capture_bit": 1
+          },
+          "largest_delta": {
+            "delta_ps": 1506,
+            "lane": 7,
+            "capture_bit": 1
+          }
+        },
+        "f3_predicted_ghist_old_history": {
+          "improved": 256,
+          "worsened": 0,
+          "equal": 0,
+          "smallest_delta": {
+            "delta_ps": 619,
+            "lane": 0,
+            "capture_bit": 2
+          },
+          "largest_delta": {
+            "delta_ps": 1240,
+            "lane": 3,
+            "capture_bit": 65
+          }
+        },
+        "f3_predicted_ghist_new_saw_branch_not_taken": {
+          "improved": 8,
+          "worsened": 0,
+          "equal": 0,
+          "smallest_delta": {
+            "delta_ps": 598,
+            "lane": 5,
+            "capture_bit": 66
+          },
+          "largest_delta": {
+            "delta_ps": 982,
+            "lane": 7,
+            "capture_bit": 66
+          }
+        },
+        "f3_predicted_ghist_new_saw_branch_taken": {
+          "improved": 8,
+          "worsened": 0,
+          "equal": 0,
+          "smallest_delta": {
+            "delta_ps": 240,
+            "lane": 5,
+            "capture_bit": 67
+          },
+          "largest_delta": {
+            "delta_ps": 727,
+            "lane": 7,
+            "capture_bit": 67
+          }
+        },
+        "_GEN_133": {
+          "improved": 8,
+          "worsened": 0,
+          "equal": 0,
+          "smallest_delta": {
+            "delta_ps": 625,
+            "lane": 0,
+            "capture_bit": 68
+          },
+          "largest_delta": {
+            "delta_ps": 1506,
+            "lane": 7,
+            "capture_bit": 68
+          }
+        },
+        "f2_clear": {
+          "improved": 8,
+          "worsened": 0,
+          "equal": 0,
+          "smallest_delta": {
+            "delta_ps": 625,
+            "lane": 0,
+            "capture_bit": 69
+          },
+          "largest_delta": {
+            "delta_ps": 1506,
+            "lane": 7,
+            "capture_bit": 69
+          }
+        },
+        "f4_io_enq_bits_cfi_idx_bits": {
+          "improved": 4,
+          "worsened": 13,
+          "equal": 0,
+          "smallest_delta": {
+            "delta_ps": -587,
+            "lane": 3,
+            "capture_bit": 72
+          },
+          "largest_delta": {
+            "delta_ps": 75,
+            "lane": 4,
+            "capture_bit": 71
+          }
+        },
+        "f4_io_enq_bits_cfi_idx_valid": {
+          "improved": 4,
+          "worsened": 3,
+          "equal": 1,
+          "smallest_delta": {
+            "delta_ps": -38,
+            "lane": 5,
+            "capture_bit": 73
+          },
+          "largest_delta": {
+            "delta_ps": 439,
+            "lane": 7,
+            "capture_bit": 73
+          }
+        },
+        "f4_io_enq_bits_br_mask": {
+          "improved": 11,
+          "worsened": 17,
+          "equal": 0,
+          "smallest_delta": {
+            "delta_ps": -503,
+            "lane": 0,
+            "capture_bit": 75
+          },
+          "largest_delta": {
+            "delta_ps": 292,
+            "lane": 6,
+            "capture_bit": 81
+          }
+        }
+      }
+    }
+  }
+}

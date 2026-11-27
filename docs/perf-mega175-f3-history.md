@@ -46,11 +46,35 @@ python3 scripts/test-mega-f3-history-parent.py "$KIT" "$PROOF" "$VIVADO_INSTALL"
 
 为保证三种物理实验可比，同样的 556 位输入寄存器和 82 位输出寄存器包住每个组合电路。在命名端口原版先运算再延迟两沿，与实际打包的原版、两种候选各做一次三步 SAT；任意输入、无初值假定，在前两沿填满后 82 位都一致。交换第 0/7 条预测方向、交换两个比较结果、绕过输出寄存器，各有反例。**这两层仅用于测量，未给 BOOM 增加流水级。**
 
-预备好的 Vivado 对照逐一检查保留 556+82 个寄存器，对所有 82 个 D 脚记录最差建立/保持路径，另分别记录 8 个方向到每个 D 脚的最差建立路径；上述 357 对任一无路径就停止。候选文件互换、依赖表被改也会在开综合前被拒绝。**截至本记录，仅完成上述逻辑证明、输入校验和采集程序的离线检查，尚无三版局部物理结果。** 局部实验不含 I-cache 和整机跨 SLR 布线，不代替整机检查。
+预备好的 Vivado 对照逐一检查保留 556+82 个寄存器，对所有 82 个 D 脚记录最差建立/保持路径，另分别记录 8 个方向到每个 D 脚的最差建立路径；上述 357 对任一无路径就停止。候选文件互换、依赖表被改也会在开综合前被拒绝。**这一阶段只有逻辑证明和输入校验；三版综合估计见下节，尚无三版布线对照。** 局部实验不含 I-cache 和整机跨 SLR 布线，不代替整机检查。
 
 ```sh
 python3 scripts/test-mega-f3-registered.py "$KIT" "$PROOF" "$PARENT/result.json" "$FRESH_REGISTERED" "$YOSYS"
 python3 scripts/test-mega-f3-registered.py --check-prepared "$FRESH_REGISTERED"
 # 有独立实现资源后再运行。Vivado 调用输入校验时需要 PATH 上的 python 3。
 vivado -mode batch -source scripts/implement-mega-f3-registered.tcl -tclargs "$FRESH_REGISTERED" "$FRESH_ROUTES"
+```
+
+## 在 VCU118 同型号器件上综合后，哪些路径值得布线？
+
+以下是 Vivado 2024.2（build 5239630）的**综合后、未布局**时序估计。三个方案使用相同的 `xcvu9p-flga2104-2L-e` 器件、5.714 ns 时钟和 638 个边界寄存器。[去敏数据](perf-mega175-f3-synthesized.json)记录了三份综合网表的指纹、全部输出组最差路径，以及逐对比较。SLR 连线、实际时钟树、预测器上游和 I-cache BRAM 均不在这个实验里。
+
+| 写法 | 边界内 LUT | 整段最差建立余量（ns） | 八条方向 → 校正选择 / F2 清除的最差建立余量（ns） | 357 对相同端点较原版改善 / 变差 / 持平 |
+|---|---:|---:|---:|---:|
+| 原版 | 238 | +1.947 | +2.020 / +2.020 | — |
+| 两组前缀 + 历史先比较 | 318 | +3.217 | +3.270 / +3.270 | 341 / 16 / 0 |
+| 仅用有效 lane | 297 | +2.564 | +2.649 / +2.649 | 323 / 33 / 1 |
+
+两组前缀候选比原版多用 80 个 LUT，最差建立余量增加 1.270 ns。但也有端点变慢：方向 0 到分支掩码捕获位 75 的余量减少 0.275 ns。原版、前缀、有效 lane 三版最差保持余量依次为 +0.079、+0.079、+0.077 ns。两种候选在 Vivado 中都比原版占用更多 LUT；不能把此前 ABC 的原语数当作 Vivado 面积。优先布线验证前缀候选与原版，保留有效 lane 版作对照。校正选择是决定从哪里取指的**条件**，不是最终地址。这些结果用于决定接下来布线对比的优先级，不据此修改正在运行的整机，也不能换算为 CoreMark。
+
+每版采集 820 行：所有输入到 82 个捕获位的建立与保持，以及八条方向分别到 82 位的建立。原生两份时序报告各抽查 10 条路径，逐条核对端点、数据延迟和余量。357 个 SAT 证明有依赖的 `(方向, 捕获位)` 在每版均有时序路径；不把另外 299 对设为 false path。逐对变化用报告的 1 ps 精度计，而不是只比较几个最差值。刻意混入另一版的路径表、混入错误控制台、删掉一个目的位、反转一个必需依赖标记，审查均拒绝。
+
+**为什么没有局部布线成绩？** 原版已写出综合网表。第一次布局因可用物理内存接近保护下限而停止；另起进程从同一份网表重试，布局器在 5 GiB 作业限制下报告 `bad allocation`。保留这三个小网表，等整机实现释放资源后做对等的布线比较，不放宽当前内存保护。OOC 的 `HD.CLK_SRC` 未设定，工具不能估计顶层时钟延迟与偏斜；556 个端口输入和 82 个端口输出没有 I/O 延迟，所有内部端点均有时钟并受到约束。没有虚设时钟位置或新增例外以改善结果。
+
+复现时每案用全新的输出目录，保存 Vivado 完整控制台。`NAME` 可取 `stock`、`prefix_and_compare` 或 `eligible_lanes`。下面前两条只收集和审查综合估计；最后一条才从指定指纹的网表开始布局布线。若原版综合已完成而后续布局中止，可用 `measure-synth` 重新打开该网表采集估计，此时审查命令的后两个参数应指向重开后的报告目录与控制台。三案对比时给同一个审查命令传三组 `--case`。
+
+```sh
+vivado -mode batch -source scripts/implement-mega-f3-registered.tcl -tclargs "$QUALIFIED" "$SYN" "$NAME" synth > "$SYN_CONSOLE" 2>&1
+python3 scripts/review-mega-f3-routes.py "$QUALIFIED" estimate --case "$NAME" "$SYN/$NAME" "$SYN_CONSOLE" "$SYN/$NAME" "$SYN_CONSOLE"
+vivado -mode batch -source scripts/implement-mega-f3-registered.tcl -tclargs "$QUALIFIED" "$ROUTE" "$NAME" from-synth "$SYN/$NAME/synthesized.dcp" "$VERIFIED_SHA256"
 ```
