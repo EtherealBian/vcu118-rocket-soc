@@ -24,3 +24,25 @@ python3 scripts/test-copy-load-fullcore.py review "${inputs[@]}" --out "$FRESH_R
 ```
 
 `preflight` 已在原版两份真实归档上作零差对照：两种种子的四轮逐项均为零。这是比较工具的对照，不是候选的结果。`run` 从封存源码重新翻译、单线程编译并独立链接，再记录原始 PC、UART 和事件。`review` 从原始文件重算，与已存摘要逐项核对，不重编模型。周期差按“候选减原版”保留正负号，不能把退步算成加速。
+
+## 译码同拍和派发同拍，是同一批指令吗？
+
+在同一份严格对齐 ELF 的原版四轮用户态 RTL 窗口中，逐个退休票据回查 `c.mv x8,x14` 和下一条 `c.ld x14,0(x8)` 的真实译码沿。每种种子有 23,664 对；另有 816 次从循环入口直接执行加载，没有前驱复制，不进分母。下表的“同拍”均要求占相邻两路。[计数、各槽位命中数与输入指纹](perf-strict-copy-decode.json)。
+
+| 原版出现的情况（对） | 性能种子 | 验证种子 |
+|---|---:|---:|
+| 同拍译码、同拍派发 | 16,620 | 16,735 |
+| 同拍译码、分开派发 | 1,213 | 1,107 |
+| 未同拍相邻译码、同拍相邻派发 | 0 | 0 |
+| 两处均未同拍相邻 | 5,831 | 5,822 |
+| **满足全部旁路条件** | **17,833（75.36%）** | **17,842（75.40%）** |
+
+只看派发会漏掉第二行。当前候选必须在复制已派发、加载仍停顿时保留所选源；这个单元测试场景在两个原版窗口中都实际出现了。覆盖率只针对这个循环，不能换算为少用多少周期。收益仍要看候选整核四轮周期差，以及布线后的时序是否允许采用该修改。
+
+复核时，探针逐拍对照真实重命名有效位，用派发沿和 ROB 槽连接原始译码沿与退休指令。审核器核对锁定 ELF 的压缩编码、展开指令、寄存器及控制字段；有序退休 PC、票据、重定向、UART 和退出事件须保持原版指纹。要复算表格：
+
+```bash
+inputs=("$STOCK_MODEL_KIT" "$STOCK_OBJ" "$GUEST_PAIR" "$PREVIOUS_REDIRECT_CAPTURE" "$FRESH_DECODE_RUN")
+python3 scripts/test-strict-copy-decode.py "${inputs[@]}" "$VERILATOR_INCLUDE"
+python3 scripts/review-strict-copy-decode.py "${inputs[@]}" "$STRICT_ELF" --expect docs/perf-strict-copy-decode.json
+```

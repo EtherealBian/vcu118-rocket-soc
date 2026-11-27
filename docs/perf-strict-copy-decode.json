@@ -1,0 +1,56 @@
+{
+  "scope": "Stock four-wide BOOM, four rounds per seed from user snapshots. Guard opportunities for one retired loop, not cycles saved, a candidate result or an FPGA score.",
+  "elf_sha256": "61f7c4579b762f86d7d7dc93d4c385d08e50248f3dd6a8a9105fd5e88b58886a",
+  "stock_kit_sha256": "890bca3009ed260c81112d72ebcf6c985453568329aead9e9515dcc109d0e417",
+  "candidate_rename_sha256": "9901e30107b56a394ae3edb4ef7c2c397efdca3f6309e8482a5898b8ca8428a2",
+  "probe_sha256": "4b341bea6f895559a3d33443f4ce3e4eeaae631fc08b6da4c6f42c34c5d0d466",
+  "model_sha256": "c26f895221a80283275fe3c96ef8e1a63ec1d3209b7e638cd4ca067bd1c8dd56",
+  "results": {
+    "performance": {
+      "counts": {
+        "branches": 24480,
+        "entry_load_without_copy": 816,
+        "exits": 816,
+        "same_dispatch": 16620,
+        "separate_dispatch": 7044,
+        "taken": 23664
+      },
+      "adjacent_decode_by_adjacent_dispatch": {
+        "yes_yes": 16620,
+        "yes_no": 1213,
+        "no_yes": 0,
+        "no_no": 5831
+      },
+      "guard_matches": 17833,
+      "guard_matches_by_decode_lane": {
+        "0_to_1": 5802,
+        "1_to_2": 6178,
+        "2_to_3": 5853
+      },
+      "decode_sha256": "ad2040ffcf49a4395c168dcd9cd14e667c1955eb3bd0cfe9065d690821fe9cf9"
+    },
+    "validation": {
+      "counts": {
+        "branches": 24480,
+        "entry_load_without_copy": 816,
+        "exits": 816,
+        "same_dispatch": 16735,
+        "separate_dispatch": 6929,
+        "taken": 23664
+      },
+      "adjacent_decode_by_adjacent_dispatch": {
+        "yes_yes": 16735,
+        "yes_no": 1107,
+        "no_yes": 0,
+        "no_no": 5822
+      },
+      "guard_matches": 17842,
+      "guard_matches_by_decode_lane": {
+        "0_to_1": 5885,
+        "1_to_2": 5825,
+        "2_to_3": 6132
+      },
+      "decode_sha256": "0e90425f95a2f1a48d9e8b7f88c344f977d4edc8c3638b9dc80fa2d3bbeab83c"
+    }
+  }
+}
