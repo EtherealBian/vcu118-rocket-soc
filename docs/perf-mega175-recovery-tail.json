@@ -1,0 +1,86 @@
+{
+  "scope": "Recovery ChipTop RTL from the start of round 23993. Behavioral external RAM. CRCs are from the full QEMU guest, not RTL or board scores.",
+  "first_round": 23993,
+  "last_round": 24000,
+  "stock_inputs_sha256": "2f92fab6bf21fffb9ef301b78b106912b177b659e6b1d5e632066493864796a7",
+  "recovery_inputs_sha256": "a42f5f1fcbbc8a4e5d28940496635bc111ee8634be229fca179eaabd6ccb17d5",
+  "verilator_sha256": "7276ac7090bc151d8366e120f108dc1b8ef4bc76bb66af051206a90fe165a462",
+  "elf_sha256": "61f7c4579b762f86d7d7dc93d4c385d08e50248f3dd6a8a9105fd5e88b58886a",
+  "physical_pair_sha256": [
+    "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+    "ce0ef1171c7b0077282602c5c97230d03850b71c350c6c9ddcdf0b7ebcb5a456"
+  ],
+  "candidate_objects": {
+    "VChipTop__ALL.a": "2a4af3a57aa5de8c7f89ed600d23c437a8534eca7d741053b99f25c31f07a909",
+    "VChipTop___024root.h": "ed3cbbe66c4a110856a52aca0502ccba3c4fcd7a7d3e3de409b40d875fd0d117",
+    "verilated.o": "2c3ba69e92629c65c1022ac91fc9065b6ba0c3dfacc78097a5620101cd687902",
+    "verilated_threads.o": "a7f51711612d60da9b567a6d6bd6f167e42c26c620e38252683ec1c9a98fbeb7"
+  },
+  "translation_record_sha256": "fd78ef4bf0bd1fb955f9d32ac5a9be9dbe2c5069639194d21da5db1a58b5aea0",
+  "observer_sha256": "6e2837bed09c3ec531b9eb1c7b80d4fc546a4977c526aa372d881a50a273f97f",
+  "model_sha256": "1a0732ff6413ad2a869a8427d067ac993798c45d22dec925450a4b3d9f307285",
+  "results": {
+    "performance": {
+      "user_window_instructions": 2695170,
+      "ordered_pc_sha256": "9c559a739d84f7d35b6599f9da0351c7fddd9d1844728dd4c7703c71d3c84f99",
+      "by_round_cycles": [
+        171156,
+        161607,
+        160435,
+        159660,
+        159338,
+        158582,
+        158718,
+        158553
+      ],
+      "user_window_cycles": 1288049,
+      "candidate_minus_stock_cycles": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "guest_full_run_crcfinal": "0x4983",
+      "evidence_sha256": {
+        "events": "2010457ba30b05972999fddd3932c832c306c7fda7555ab9bb9bb1b4287ff16e",
+        "uart": "66144f24d734d9eb39e2fd75f5c3aabfb92007c4425be6fb10ef558bdf5fc30c",
+        "pc": "9c559a739d84f7d35b6599f9da0351c7fddd9d1844728dd4c7703c71d3c84f99"
+      }
+    },
+    "validation": {
+      "user_window_instructions": 2698341,
+      "ordered_pc_sha256": "50cbbcfe7d9a0f0f5067589c075239700d016dae6164afb24f347c3eae1c88b9",
+      "by_round_cycles": [
+        172558,
+        162724,
+        161416,
+        160696,
+        160263,
+        160230,
+        159419,
+        159147
+      ],
+      "user_window_cycles": 1296453,
+      "candidate_minus_stock_cycles": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "guest_full_run_crcfinal": "0xeb93",
+      "evidence_sha256": {
+        "events": "2d603d768cbc7485437f4e4b08c57ae5f3d3eadea059f4a3eba7d3a0c8b5860c",
+        "uart": "66144f24d734d9eb39e2fd75f5c3aabfb92007c4425be6fb10ef558bdf5fc30c",
+        "pc": "50cbbcfe7d9a0f0f5067589c075239700d016dae6164afb24f347c3eae1c88b9"
+      }
+    }
+  }
+}
