@@ -1,0 +1,77 @@
+{
+  "kit_sha256": "ce0ef1171c7b0077282602c5c97230d03850b71c350c6c9ddcdf0b7ebcb5a456",
+  "parent_sha256": "fdd20681408038f71c070fc1e8776a43f4ba38af7d5814af6b8e5c61162031d2",
+  "candidate_sha256": "2c07a9ac17630fb752fc19e90ecd9d9087086ec14115bad9821f1dfa41983de4",
+  "archive_tsv_sha256": "df1c4915dbf7d2aa48b17bd232709d84b17582b38ff5b3d96b92c3a4d1b7f399",
+  "archived_endpoints": [
+    {
+      "slack_ns": "-9.207",
+      "logic_levels": "32",
+      "to": "Memory_reg[73][0]"
+    },
+    {
+      "slack_ns": "-9.207",
+      "logic_levels": "32",
+      "to": "Memory_reg[107][0]"
+    },
+    {
+      "slack_ns": "-9.204",
+      "logic_levels": "33",
+      "to": "Memory_reg[111][7]"
+    },
+    {
+      "slack_ns": "-9.180",
+      "logic_levels": "33",
+      "to": "Memory_reg[52][6]"
+    },
+    {
+      "slack_ns": "-9.177",
+      "logic_levels": "32",
+      "to": "Memory_reg[33][6]"
+    }
+  ],
+  "scope": "Separate lane-1 forwarding experiment, not part of the running implementation. No timing or board result.",
+  "proof": {
+    "scope": "Binary one-edge transition of lane-1 forwarding word; arbitrary four independent pre-edge address buses and arbitrary post-edge valid, store words and fallback. Not the entire cache.",
+    "decisions": {
+      "retimed": "equivalent_after_one_edge",
+      "late_store_address": "counterexample",
+      "include_byte_offset": "counterexample",
+      "omit_bit19": "counterexample",
+      "swapped_tags": "counterexample"
+    },
+    "tool": "Yosys 0.9 (git sha1 1979e0b)",
+    "tool_sha256": "f58d1dfcbc9b48a81357283e93b53e4c78415f6d28f227f0db34a79f316e6a64",
+    "remaining_dependency": {
+      "mshr_sha256": "96ccaabbe67fe9daac896c44d4939cd3c55039982a82a932eccdaa87635a6963",
+      "bit": 19,
+      "slots": 8,
+      "observation": "Unchanged MSHR io_block_hit_1: for each sole valid matching slot and any base, toggling bit 19 changes 1 to 0. No RF endpoint or timing attribution."
+    }
+  },
+  "clocked_parent": {
+    "scope": "Clocked source parents, stub child interfaces and driven internal inputs. Compare forwarding and cached load data, not a cache transaction or SoC test.",
+    "simulator": "Vivado Simulator v2024.2",
+    "child_interface_sha256": {
+      "AMOALU": "b90836735094fd059c127fa389c3112835f6579d1fc24d47ec6ac6792205b18f",
+      "Arbiter2_L1DataWriteReq": "c39076b875c4725d25c9c473622bfd4ed52f856297a105dad40bc07b96c565e5",
+      "Arbiter2_L1MetaWriteReq": "bdb359755ab53b49dc009f81281eef86c699e05e141ec02b63faedbf3310645f",
+      "Arbiter2_TLBundleC_a32d128s4k4z4c": "d2aa7eaead249383ebf8e387d1f53a7ec3ead4661ab796efeab733dfed7340d0",
+      "Arbiter2_WritebackReq": "e99be8bbb9c8a27b3d0a720d5729243d17cef84155d073d74732bb5828712b62",
+      "Arbiter3_BoomL1DataReadReq": "dcff8a93552aba352a2263b7e95ffe3fdded16c1f879bf76228df454d2eff9f1",
+      "Arbiter6_BoomL1MetaReadReq": "5155340abd34e78f9adbeab469934a482100b4634d0dda6c1f39206e7362afab",
+      "BoomDuplicatedDataArray": "60c89b94c65953c086405bcf30353eaa58b96fe48b803bf3d6ee701bd2599b7c",
+      "BoomMSHRFile": "96ccaabbe67fe9daac896c44d4939cd3c55039982a82a932eccdaa87635a6963",
+      "BoomProbeUnit": "5852c4c7d527dc8ba1283da49ca0e407a4d6458f3b1cc7d94ab3b7b7c0e516d7",
+      "BoomWritebackUnit": "8f61cb31698426419dc1dc96830ac3570552a9d0ba570242e96d2f740efcfcd1",
+      "L1MetadataArray": "fa64140c2d22329e2a06e74a99ecf7b40caa7c6c89e5c30720c67916ef040b0a",
+      "MaxPeriodFibonacciLFSR": "85fbc5f8480258c436b30a2499cd9c953ba98ede76c0b9660b0ee905e39f8cc1"
+    },
+    "fixture_sha256": "d5061c4713f26e162b5cc0b9f4f3b0e333dfcc8a72412d4fb80e46ae6c86f63a",
+    "edges": 724,
+    "masked_address_and_valid_cases": 64,
+    "one_bit_misses": 111,
+    "four_state_cases": 6,
+    "partial_unknown_expected_words": 4
+  }
+}
