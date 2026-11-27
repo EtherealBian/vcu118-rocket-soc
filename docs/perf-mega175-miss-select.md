@@ -51,3 +51,22 @@ vivado -mode batch -source scripts/run-mega-route-recovery.tcl -tclargs "$NEW_KI
 ```
 
 此截点新整机没有 WNS、bitstream 或 Linux 板测。未连接硬件，未写入 flash；继续沿用[相同二进制的历史 Rocket 对照](coremark-target-rocket-control.json)，不把它登记为 BOOM 成绩。
+
+### 同一封存候选的整核回放
+
+把物理实现正在使用的整套新 RTL 重新翻译成 `ChipTop` 模型，用[相同严格 ELF 和两份用户态快照](perf-strict-user-replay.md)与归档原版比较。原版物理包和原版仿真包在 549 项 HDL 中仅板壳不同，该壳例化 `ChipTop` 而非被它例化；ROM 一致。新版与原版物理包的 549 项**文件顺序**相同，三个文件内容不同。复核绑定、两份初始 RAM、逐条退休 PC、UART 和事件记录，两个窗口均逐字节相同；对事件流故意附加一个字节的负对照被拒绝。
+
+| 2,000 字节、单上下文，用户态四轮 | 性能种子 | 验证种子 |
+|---|---:|---:|
+| 退休指令数 | 1,347,261 | 1,348,735 |
+| 第 1 / 2 / 3 / 4 轮周期 | 171,404 / 161,746 / 160,691 / 159,606 | 173,150 / 162,949 / 161,180 / 160,257 |
+| 四轮合计；相对原版差值 | 653,447；0 | 657,536；0 |
+
+[本次独立复核的结果与原始轨迹指纹](perf-mega175-recovery-fullcore.json)。本轮优化只改变同拍组合逻辑；这些结果支持它在上述窗口内不改行为，**不证明整机频率提高，也不产生板测成绩**。未模拟真实 MIG/DDR、Linux 冷启动或调度。
+
+```sh
+# MODEL / MODEL_OBJ / STOCK_RUN 是归档的原版 ChipTop 输入、翻译目录和原始轨迹；
+# GUEST 含两种种子的快照；ELF 与归档的严格运行相同。NEW_OUT 必须不存在。
+python3 scripts/test-mega-recovery-fullcore.py run "$MODEL" "$MODEL_OBJ" "$STOCK_RUN" "$KIT" "$NEW_KIT" "$GUEST" "$ELF" "$VERILATOR_ROOT" --out "$NEW_OUT"
+python3 scripts/test-mega-recovery-fullcore.py review "$MODEL" "$MODEL_OBJ" "$STOCK_RUN" "$KIT" "$NEW_KIT" "$GUEST" "$ELF" "$VERILATOR_ROOT" --out "$NEW_OUT"
+```
