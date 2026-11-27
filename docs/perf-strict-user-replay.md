@@ -36,3 +36,5 @@ python3 scripts/test-strict-replay-oracle.py "$PRIVATE/stock" "$PRIVATE/guest" "
 本次负对照实跑：性能热区 PC 摘要仍完全相同，RTL UART 最后的结果从 `K` 变为 `!`，模型按预期以状态 1 拒绝。只核对指令条数、甚至只核对完整 PC 顺序，都抓不到这次数据故障。
 
 [后续：原版与 LVT 寄存器堆在相同两段热区的逐轮对照](perf-strict-user-lvt.md)。
+
+[外部读响应刻意推迟 32 拍：首轮和后三轮的周期分别变了多少？](perf-strict-tl-wait.md)
