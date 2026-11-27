@@ -1,0 +1,28 @@
+{
+  "scope": "Static comparison of two sealed implementation kits only. Generated IP constraints, synthesis elaboration, effective clock coverage, CDC, routed timing/DRC and I/O require review on the four-wide run. No permission to program.",
+  "rocket_reference_kit": "e28f9b3cbadbff993bf9d0861776490e841e1b613dfc5bc81ed194b4c2db571e",
+  "four_wide_kit": "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+  "identical_file_sha256": {
+    "shell.sdc": "6dddf8745955b694762781deb78dd4b0483f15daef50dd8f680ae8db6350d2e1",
+    "shell.xdc": "3cee5e270b2fe3cdeb9fa5ba95d44192a4ead4a24b3ff5c352afdff1ec7eaa96",
+    "shell.vivado.tcl": "2523542e19fb8b963af43d54131bf5edd04720a6e04a3a0e25151388e8daac06",
+    "vcu118mig.vivado.tcl": "c55dde01f37c8297c69f3ab933718e4a0633568f103cd9e3ab3570a3d11e3fdc",
+    "master.xdc": "bb19f26212c25059ed3d540111c3dc1aa3995756ccfd18d0c507b311559eba10"
+  },
+  "pll_file_sha256": {
+    "rocket100": "50aafc268d0a8cb38dce048e82e9f0ca38145e9635ed45451933d3b7b6d87512",
+    "mega175": "4d72b2bcf0852b437ffcb8a005d99cd5bd4c3aad237460175e493a796b198c53"
+  },
+  "pll_change": "Only CLKOUT1 request, allowed range and diagnostic text (100 to 175 MHz).",
+  "primary_clocks_ns": {
+    "sys_clock": 4,
+    "JTCK": 100
+  },
+  "asynchronous_groups": [
+    "MIG UI",
+    "system PLL output",
+    "external JTCK"
+  ],
+  "shell_false_path_through": "fpga_power_on/power_on_reset",
+  "dedicated_route_override_port": "jtag_jtag_TCK"
+}

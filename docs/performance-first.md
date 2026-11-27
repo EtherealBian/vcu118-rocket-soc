@@ -231,3 +231,13 @@ ChipTop 引脚仿真不包含 VCU118 的外层串口接线。用 Vivado 2024.2 x
 `generic-ooo` 相对同次启动的 GCC 15 默认配置，中位数变化 **+0.668%**。不要只归因于指令调度：在这版 GCC 中，该选项还把隐含的 `-mstrict-align` 从启用改为禁用；两份程序的 ISA、ABI 相同，ELF 的非对齐访问标记不同。18 次运行的 CRC 均通过，主机墙钟与客机计时一致。它没有刷新 Rocket 使用 Zba/Zbb 的 254.232 次/秒中位数，也没有给四路 BOOM 产生实板分数。
 
 [九组双种子实测（哈希、CRC、墙钟）](coremark-tune-rocket-board.json) · [本次易失配置与 Linux 启动](linux-tune-rocket-boot.json) · [两份 Linux ELF 的代码和目标选项](linux-tune-code.json)。复现：`VCU_COREMARK_AB=tune` 构建实验镜像，实板采集加 `-BindShell`，运行矩阵加 `-Experiment tune`；最后用 `review-coremark-matrix.py --experiment tune` 从原始 UART 独立复核。
+
+### 四路 175 MHz：上板前能从同一份输入确认什么？
+
+从四路实现实际使用的 ROM 初始化和设备树反查，Linux 应当只见 hart 0，架构标识为 `ucb-bar,boom0`。外设时钟声明 175 MHz、时间基准 175 kHz；CPU 节点里的 `clock-frequency = 0` 是占位值，不能用来计算跑分。[三项待实板核对的设备树属性](perf-mega175-linux-identity.json)。
+
+与已上板的 Rocket 工程相比，四路输入的 shell SDC、板级 XDC、主 XDC、MIG 配置和约束加载脚本逐字节相同。PLL 配置只改变了频率请求和对应允许范围；专用走线例外仍只针对外部 JTAG TCK。**没有把 Rocket 的时序或 CDC 结论移用到 BOOM**：新工程的有效约束、IP 内部时钟、实际布线及 CDC/DRC 必须在该次实现上重新检查。[约束输入比对](perf-mega175-shell-inputs.json)。
+
+根据旧三路路径，另做了一个**未加入正在实现工程**的四路缓存实验：在两个 MSHR 请求口分别把路选择移到已有时钟边界之前。以四路原始 D-cache 为对照，每个端口检查 2,048 组掩码和替换索引，一拍后的 8 位输出相同；故意交换两个端口，两次都被拒绝。这只验证选择逻辑，不证明整个缓存、复位、时序收益或板上性能。[四路双端口 RTL 实验](perf-mega175-dual-way.json)。是否采用要看四路实际布线的慢路径，不能据此声称达到 175 MHz。
+
+复现：对封存工程包运行 `review-mega-linux-contract.py`、`review-mega-shell-constraints.py`；用 Verilator 5.022 执行 `check-mega-way-candidate.py <四路包> <新目录> --verilator <可执行文件>`。有四路最终路径报告后，再以 `review-mega-routed-paths.py <本轮实现> <四路包> <本轮日志>` 核对 CPU 时钟下 setup/hold 各 40 个端点与各 8 条详细路径；样本仅用于定位，不替代完整签核。

@@ -1,0 +1,18 @@
+{
+  "scope": "Static expectation from the exact four-wide implementation ROM. Not a live Linux boot, timing closure or permission to program.",
+  "board_input_seal": "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+  "rom_and_dtb_sha256": "7a561da71813d499a4d396b18702c79184fed4bc08694c7b099bc8af070b000c",
+  "dtb_only_sha256": "2e3ba8cdce15eae801abdb22e76b344bbf9aa1e91510ecc0922a581bf5258237",
+  "expected_online_cpu": "0",
+  "expected_hart": 0,
+  "expected_uarch": "ucb-bar,boom0",
+  "firmware_isa": "rv64imafdczicsr_zifencei_zihpm",
+  "declared_pbus_hz": 175000000,
+  "declared_timebase_hz": 175000,
+  "cpu_node_clock_placeholder_hz": 0,
+  "live_property_sha256": {
+    "/sys/firmware/devicetree/base/cpus/timebase-frequency": "262a28dbbb0c1491028edac70dbc092d512d0098875d0adaf02aad8cd3379534",
+    "/sys/firmware/devicetree/base/cpus/cpu@0/compatible": "1ad5b8b865be71603ae10a5fc5586011cd4472f0e65029f24d59951e3f08a220",
+    "/sys/firmware/devicetree/base/soc/pbus_clock/clock-frequency": "430ab63b50d8e9124d581043b634e9090fb9daf84722eee85615613da6e6922a"
+  }
+}

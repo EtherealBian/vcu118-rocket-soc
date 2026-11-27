@@ -1,0 +1,61 @@
+{
+  "scope": "RTL experiment on the two D-cache MSHR request ports, one-edge two-state comparison for each port using its own tag mask and the common replacement index. No whole-SoC equivalence, reset proof, timing, bitstream or physical score.",
+  "implementation_kit_seal": "b028ea3240ec145dd6a91db10bd716c2b630c527da156ea06fd6b840168d5959",
+  "reference_module_sha256": "fdd20681408038f71c070fc1e8776a43f4ba38af7d5814af6b8e5c61162031d2",
+  "candidate_module_sha256": "df2102790d9b8b75a6f0b08bdfb72d7363322223585b64d8abfe444aa394b344",
+  "other_ordered_hdl_sources_unchanged": 548,
+  "parser": "Verilator 5.022 2024-02-24 rev conda-forge build 1",
+  "cross_port_substitutions_rejected": 2,
+  "ports": [
+    {
+      "port": 0,
+      "shared_mask_bits": 8,
+      "shared_index_bits": 3,
+      "single_edge_vectors": 2048,
+      "multi_hot_vectors": 1976,
+      "high_bit_dropped_witness": {
+        "mask": 129,
+        "index": 0,
+        "reference": 129,
+        "mutant": 1
+      },
+      "extra_register_witness": {
+        "previous": [
+          0,
+          7
+        ],
+        "current": [
+          3,
+          2
+        ],
+        "reference": 3,
+        "mutant": 128
+      }
+    },
+    {
+      "port": 1,
+      "shared_mask_bits": 8,
+      "shared_index_bits": 3,
+      "single_edge_vectors": 2048,
+      "multi_hot_vectors": 1976,
+      "high_bit_dropped_witness": {
+        "mask": 129,
+        "index": 0,
+        "reference": 129,
+        "mutant": 1
+      },
+      "extra_register_witness": {
+        "previous": [
+          0,
+          7
+        ],
+        "current": [
+          3,
+          2
+        ],
+        "reference": 3,
+        "mutant": 128
+      }
+    }
+  ]
+}

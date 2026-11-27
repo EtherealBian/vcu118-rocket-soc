@@ -24,7 +24,7 @@ def only(seq, label):
 
 
 class Cone:
-    def __init__(self, xml):
+    def __init__(self, xml, pin=PIN):
         root = ET.parse(xml)
         self.mod = only((m for m in root.iter('module') if m.get('name') == MODULE), MODULE)
         self.dt = {n.get('id'): n for n in root.findall('.//typetable/basicdtype')}
@@ -34,7 +34,7 @@ class Cone:
             if n.tag in ('assigndly', 'contassign', 'assign') and len(n) == 2 and n[1].tag == 'varref':
                 self.drivers.setdefault(n[1].get('name'), []).append(n)
         inst = only((i for i in self.mod.findall('instance') if i.get('name') == 'mshrs' and i.get('defName') == 'BoomMSHRFile'), 'MSHR instance')
-        self.pin = only(only((p for p in inst.findall('port') if p.get('name') == PIN and p.get('direction') == 'in'), PIN), 'pin expression')
+        self.pin = only(only((p for p in inst.findall('port') if p.get('name') == pin and p.get('direction') == 'in'), pin), 'pin expression')
 
     def width(self, n):
         t = self.dt[n.attrib['dtype_id']]
@@ -132,13 +132,13 @@ def evaluator(node):
     raise ValueError('unknown leaf/operator in reduced way expression: '+op+' '+str(atts))
 
 
-def check_cones(ref, new):
-    tag,idx = [ref.reg_rhs(n) for n in (TAG,REPL)]
+def check_cones(ref, new, tag_register=TAG):
+    tag,idx = [ref.reg_rhs(n) for n in (tag_register,REPL)]
     leaves = {n.get('name') for x in (tag,idx) for n in x.iter('varref')}
     if (ref.width(tag),ref.width(idx),ref.width(ref.pin),new.width(new.pin))!=(8,3,8,8):
         raise ValueError('changed interface widths')
     mt,rt=ref.ast(tag),ref.ast(idx)
-    reference=replace(ref.ast(ref.pin),{var(TAG,8):var('MASK',8),var(REPL,3):var('INDEX',3)})
+    reference=replace(ref.ast(ref.pin,{tag_register,REPL}),{var(tag_register,8):var('MASK',8),var(REPL,3):var('INDEX',3)})
     if ref.pin.tag!='cond' or new.pin.tag!='varref': raise ValueError('MUX has not moved across the boundary')
     pre=new.reg_rhs(new.pin.attrib['name'])
     # Exact, width-aware equality of the old tag/replacement D inputs and the new operands,
